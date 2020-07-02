@@ -93,6 +93,7 @@
                         <i class="fas fa-align-justify"></i>
                     </button>
 
+                    @if(!Auth::user())
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
                             <li class="nav-item active">
@@ -106,6 +107,15 @@
                             </li>
                         </ul>
                     </div>
+                    @else
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary" type="button" id="dropdownMenuButton" >
+                          {{ \Auth::user()->name }}
+                        </button>
+                        
+                      </div>
+                    @endif
 
                 </div>
             </nav>
@@ -125,6 +135,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/moment.js') }}" defer></script>
 
     <script type="text/javascript">
                 $('#sidebar').toggleClass('active');

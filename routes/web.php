@@ -14,9 +14,18 @@
 
 Route::auth();
 
+
 Route::group(['middleware' => 'auth'], function () {
 
-
+	
+	Route::group(['prefix' => 'peserta'], function () {
+		Route::get('dashboard','PesertaController@index');
+		Route::group(['prefix' => 'ujian'], function () {
+			Route::get('pg','PesertaController@ujian_pg');
+			Route::post('pg/save_temp','PesertaController@pg_save_temp');
+			Route::get('essay','PesertaController@ujian_essay');
+		});
+	});
 	
 	Route::group(['middleware' => 'auth.input'], function () {
 		Route::get('', 'HomeController@index');
