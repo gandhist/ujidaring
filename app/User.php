@@ -38,4 +38,8 @@ class User extends Authenticatable
     {
       return $this->belongsTo('App\Role');
     }
+
+    public function peserta(){
+        return $this->belongsTo('App\Peserta','id_peserta');
+    }
 }

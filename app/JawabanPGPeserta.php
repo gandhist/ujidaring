@@ -4,8 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MasterModul extends Model
+class JawabanPGPeserta extends Model
 {
     //
-    protected $table = "ms_modul";
 }
