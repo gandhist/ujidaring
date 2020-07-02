@@ -31,5 +31,15 @@ Route::group(['middleware' => 'auth'], function () {
 		]);
 	});
 
+	// Daftar Kantor
+	Route::resource('jadwal', 'JadwalController');
+
+	// Fungsi Chain Bidang
+	Route::post('bidang/chain','ChainController@bidang');
+	Route::post('getDataModul/chain','ChainController@getDataModul');
+	
+	// Route::post('daftarkantor/filter', 'SuketControllers\DaftarKantorController@filter');
+	// end
+
 	
 });

@@ -95,32 +95,6 @@ function chainedKota(url, id_prov, id_kota) {
     });
 }
 
-// Fungsi ajax untuk chained of jenis_usaha
-function chainedBidangSkp(url, idjenis, idbid) {
-    var valjenis = $('#' + idjenis).val();
-    url = url + valjenis;
-
-    $('#' + idbid).empty();
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    $.ajax({
-        url: url,
-        method: 'POST',
-        success: function (databid) {
-            $("#" + idbid).select2({
-                data: databid
-            }).val(null).trigger('change');
-        },
-        error: function (xhr, status) {
-            alert('terjadi error ketika menampilkan data bidang');
-            console.log(xhr);
-        }
-
-    });
-}
 
 // Fungsi merubah tanggal ke format indonesia javascript format YYYY-MM-DD
 function tanggal_indonesia(string) {
@@ -206,4 +180,36 @@ function selectFilterCache(name){
 function inputFilterCache(name){
     $('#'+name).css('background-color', '#b6f38f');
     $('#'+name).css('font-weight', 'bold');
+}
+
+// fungsi ajax untuk chained of bidnag ke sertitikat alat
+function chainedBidang(url, id_bidang, id_sertifikat_alat, placeholder) {
+    var bid = $('#' + id_bidang).val();
+    var sertf_alat = $('#' + id_sertifikat_alat).val();
+
+    $('#' + id_sertifikat_alat).empty();
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: {
+            bid: bid,
+            sertf_alat: sertf_alat
+        },
+        success: function (data) {
+            $("#" + id_sertifikat_alat).html("<option value='' selected>" + placeholder + "</option>");
+            $("#" + id_sertifikat_alat).select2({
+                data: data
+            }).val(null).trigger('change');
+        },
+        error: function (xhr, status) {
+            alert('terjadi error ketika menampilkan data');
+            console.log(xhr);
+        }
+
+    });
 }
