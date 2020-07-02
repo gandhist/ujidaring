@@ -17,12 +17,13 @@ Route::auth();
 
 Route::group(['middleware' => 'auth'], function () {
 
-	
+	Route::get('sms','PesertaController@kirimSMS');
+	Route::get('wa','PesertaController@kirimWA');
 	Route::group(['prefix' => 'peserta'], function () {
 		Route::get('dashboard','PesertaController@index');
 		Route::group(['prefix' => 'ujian'], function () {
 			Route::get('pg','PesertaController@ujian_pg');
-			Route::post('pg/save_temp','PesertaController@pg_save_temp');
+			Route::post('pg/save','PesertaController@pg_save');
 			Route::get('essay','PesertaController@ujian_essay');
 		});
 	});

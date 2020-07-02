@@ -9,7 +9,7 @@
 
         <div class="col-lg 6">
             <div class="card" >
-                <img class="card-img-top" src="..." alt="Pass Foto {{ $peserta->nama }}">
+                <img class="card-img-top" src="#" alt="Pass Foto {{ $peserta->nama }}">
                 <div class="card-body">
                   <h5 class="card-title">{{ $peserta->nama }}</h5>
                 </div>
@@ -40,7 +40,7 @@
     <hr>
     <h3>Modul & Materi</h3>
     <div class="row">
-        <div class="col-lg-10">
+        <div class="col-lg-8">
             <table class="table table-hover">
                 <thead>
                   <tr>
@@ -51,16 +51,26 @@
                   </tr>
                 </thead>
                 <tbody>
-                    {{-- {{ $peserta->jadwal_r->jadwal_modul_r }} --}}
-                   
+                   @foreach($peserta->jadwal_r->jadwal_modul_r as $key)
+                   <tr>
+                       <td>{{ $loop->iteration }}</td>
+                       <td>{{ $key->modul_r->modul }}</td>
+                       <td>{{ $key->modul_r->jp }} Jam</td>
+                       <td>{{ $key->materi }}</td>
+                   </tr>
+                   <?php $persyaratan = $key->modul_r->persyaratan; $hari = $key->modul_r->hari ?>
+                   @endforeach
                   
                  
                 </tbody>
               </table>
         </div>
-        <div class="col-lg-2">
+        <div class="col-lg-4">
             <p class="lead">Persayaratan
-                Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.
+                <br>
+                {{ $persyaratan }}
+                <br>
+                Hari Pelaksanaan : {{ $hari }}
               </p>
         </div>
     </div>

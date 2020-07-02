@@ -20,4 +20,8 @@ class Peserta extends Model
     public function jadwal_r(){
         return $this->belongsTo('App\JadwalModel','id_kelompok','id_klp_peserta');
     }
+
+    public function jawaban_r(){
+        return $this->hasMany('App\JawabanPeserta','id_peserta');
+    }
 }
