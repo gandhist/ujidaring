@@ -10,6 +10,7 @@ class Peserta extends Model
     //
     use SoftDeletes;
     protected $table = "peserta";
+    protected $guarded = ["id"];
 
     // relasi ke table user
     public function user_r(){
