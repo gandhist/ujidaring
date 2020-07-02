@@ -10,4 +10,5 @@ class SoalPgModel extends Model
     //
     use SoftDeletes;
     protected $table = 'soal_pg';
+    protected $guarded = ["id"];
 }

@@ -10,6 +10,7 @@ class JadwalModel extends Model
     //
     use SoftDeletes;
     protected $table = "jadwal";
+    protected $guarded = ["id"];
 
     // relasi has many ke table soal pg
     public function soalpg_r(){
