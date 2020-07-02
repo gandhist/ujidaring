@@ -108,7 +108,7 @@ th {
 
 
 .customTable thead {
-    background-color: lightblue;
+    background-color: skyblue;
 }
 
 .customTable th {
@@ -159,7 +159,7 @@ th {
 
 .table-Detail thead tr th {
     font-weight: 700 !important;
-    background: lightblue;
+    background: skyblue;
 	border: 1px solid;
 	padding:3px;
 }
@@ -367,7 +367,7 @@ th {
     -moz-box-shadow: none !important;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
-    border: 1px solid #ee0979;
+    border: 1px solid #3c8dbc;
     outline-width: 0;
     transition: All 0.5s ease-in;
     -webkit-transition: All 0.5s ease-in;
@@ -378,7 +378,7 @@ th {
 /*buttons*/
 #msform .action-button {
     width: 100px;
-    background: #ee0979;
+    background: #dd4b39;
     font-weight: bold;
     color: white;
     border: 0 none;
@@ -390,7 +390,7 @@ th {
 
 #msform .action-button:hover,
 #msform .action-button:focus {
-    box-shadow: 0 0 0 2px white, 0 0 0 3px #ee0979;
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #dd4b39;
 }
 
 #msform .action-button-previous {
@@ -440,7 +440,7 @@ th {
     color: black;
     text-transform: uppercase;
     font-size: 9px;
-    width: 33.33%;
+    width: 25%;
     float: left;
     position: relative;
     letter-spacing: 1px;
@@ -466,7 +466,7 @@ th {
     width: 100%;
     height: 2px;
     background: white;
-    position: absolute;
+    position: relative;
     left: -50%;
     top: 9px;
     z-index: -1;
@@ -482,7 +482,7 @@ th {
 /*The number of the step and the connector before it = green*/
 #progressbar li.active:before,
 #progressbar li.active:after {
-    background: #ee0979;
+    background: #dd4b39;
     color: white;
 }
 
@@ -496,7 +496,7 @@ th {
 .dme_link a {
     background: #FFF;
     font-weight: bold;
-    color: #ee0979;
+    color: #dd4b39;
     border: 0 none;
     border-radius: 25px;
     cursor: pointer;

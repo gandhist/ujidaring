@@ -26,12 +26,15 @@
             <!-- MultiStep Form -->
             <div class="row">
                 <div class="col-md-12">
-                    <form id="msform">
+                    <form action="{{ route('jadwal.store') }}" id="msform" name="msform" method="post"
+                        enctype="multipart/form-data">
+                        @csrf
                         <!-- progressbar -->
                         <ul id="progressbar">
                             <li class="active">Jadwal</li>
-                            <li>Social Profiles</li>
-                            <li>Account Setup</li>
+                            <li>Instruktur</li>
+                            <li>Peserta</li>
+                            <li>Soal</li>
                         </ul>
                         <!-- fieldsets -->
                         <fieldset>
@@ -43,17 +46,15 @@
                                             <tr>
                                                 <td>
                                                     <div class="input-group">
-                                                        <input id="f_awal_terbit" name="f_awal_terbit"
-                                                            value="{{ request()->get('f_awal_terbit') }}"
-                                                            autocomplete="off" data-provide="datepicker"
-                                                            data-date-format="dd/mm/yyyy" type="text"
-                                                            class="form-control " placeholder="Tanggal Mulai">
+                                                        <input id="tgl_awal" name="tgl_awal" autocomplete="off"
+                                                            data-provide="datepicker" data-date-format="dd/mm/yyyy"
+                                                            type="text" class="form-control "
+                                                            placeholder="Tanggal Mulai" required>
                                                         <span class="input-group-addon ">s/d</span>
-                                                        <input id="f_akhir_terbit" name="f_akhir_terbit"
-                                                            value="{{ request()->get('f_akhir_terbit') }}"
-                                                            autocomplete="off" data-provide="datepicker"
-                                                            data-date-format="dd/mm/yyyy" type="text"
-                                                            class="form-control " placeholder="Tanggal Selesai">
+                                                        <input id="tgl_akhir" name="tgl_akhir" autocomplete="off"
+                                                            data-provide="datepicker" data-date-format="dd/mm/yyyy"
+                                                            type="text" class="form-control "
+                                                            placeholder="Tanggal Selesai" required>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -61,16 +62,15 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <input name="id_prov_naker" id="id_prov_naker" type="text"
-                                                        class="form-control" placeholder="Tempat Uji Kompetensi"
-                                                        value="">
+                                                    <input name="tuk" id="tuk" type="text" class="form-control"
+                                                        placeholder="Tempat Uji Kompetensi" required>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <div class="input-group">
                                                         <select class="form-control select2" name="id_jenis_usaha"
-                                                            id="id_jenis_usaha">
+                                                            id="id_jenis_usaha" required>
                                                             <option selected value="">Jenis Usaha</option>
                                                             @foreach($jenisusaha as $key)
                                                             <option value="{{ $key->id }}"
@@ -85,7 +85,7 @@
                                                 <td>
                                                     <div class="input-group">
                                                         <select class="form-control select2" name="id_bidang"
-                                                            id="id_bidang">
+                                                            id="id_bidang" required>
                                                             <option selected value="">Bidang</option>
                                                             @foreach($bidang as $key)
                                                             <option value="{{ $key->id }}">{{ $key->nama_bidang }}
@@ -99,7 +99,7 @@
                                                 <td>
                                                     <div class="input-group">
                                                         <select class="form-control select2" name="id_sert_alat"
-                                                            id="id_sert_alat">
+                                                            id="id_sert_alat" required>
                                                             <option selected value="">Sertifikat Alat</option>
                                                         </select>
                                                     </div>
@@ -118,17 +118,15 @@
                                 </div>
                             </div>
 
+                            <input id="id_jumlah_detail" type="hidden" value="">
 
                             <h2 class="fs-title">Modul</h2>
-                            <!-- <h3 class="fs-subtitle">Your presence on the social network</h3> -->
-
-                            <!-- <div class="box-body"> -->
                             <table id="table-modul" class="table table-bordered table-Detail">
                                 <thead>
                                     <tr>
                                         <th style="width:3%">No</th>
                                         <th>Modul</th>
-                                        <th style="width:10%">Pertemuan</th>
+                                        <th style="width:7%">Pertemuan</th>
                                         <th>Hapus</th>
                                     </tr>
                                 </thead>
@@ -136,36 +134,62 @@
 
                                 </tbody>
                             </table>
-                            <!-- </div> -->
-                            <!-- <h3 class="fs-subtitle">Data Jadwal Sertifikasi</h3> -->
-                            <!-- 
-                            <input type="text" name="fname" placeholder="First Name" />
-                            <input type="text" name="lname" placeholder="Last Name" />
-                            <input type="text" name="phone" placeholder="Phone" /> -->
-                            <input type="button" name="next" class="next action-button" value="Next" />
+
+                            <input id="next1" type="button" name="next" class="next action-button" value="Next" />
                         </fieldset>
                         <fieldset>
-                            <h2 class="fs-title">Social Profiles</h2>
-                            <h3 class="fs-subtitle">Your presence on the social network</h3>
-                            <input type="text" name="twitter" placeholder="Twitter" />
-                            <input type="text" name="facebook" placeholder="Facebook" />
-                            <input type="text" name="gplus" placeholder="Google Plus" />
+                            <input type="hidden" id="id_detail_instruktur" value="">
+                            <h2 class="fs-title">Instruktur</h2>
+                            <div class="btn-group btn-lg pull-left" style='padding-left:10px'>
+                                <button id="add_instruktur" type="button" class="btn btn-danger"
+                                    style="border-radius: 25px;"><span class="fa fa-plus"></span> Tambah
+                                    Instruktur</button>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body">
+                                <table id="instruktur-Detail" class="table table-bordered table-Detail">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 3%">No</th>
+                                            <th>NIK</th>
+                                            <th>Nama</th>
+                                            <th style="width:15%">Foto (.jpg/.jpeg/.png)</th>
+                                            <th style="width:15%">KTP (.jpg/.jpeg/.png)</th>
+                                            <th style="width:5%">Instruktur</th>
+                                            <th style="width:5%">Hapus</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
                             <input type="button" name="previous" class="previous action-button-previous"
                                 value="Previous" />
                             <input type="button" name="next" class="next action-button" value="Next" />
                         </fieldset>
                         <fieldset>
-                            <h2 class="fs-title">Create your account</h2>
-                            <h3 class="fs-subtitle">Fill in your credentials</h3>
-                            <input type="text" name="email" placeholder="Email" />
-                            <input type="password" name="pass" placeholder="Password" />
-                            <input type="password" name="cpass" placeholder="Confirm Password" />
+                            <h2 class="fs-title">Peserta</h2>
+                            <span class="pull-left"><b>Import Excel Data Peserta (.xls/.xlsx)</b></span>
+                            <input type="file" name="excel_peserta" />
+                            <input type="button" name="previous" class="previous action-button-previous"
+                                value="Previous" />
+                            <input type="button" name="next" class="next action-button" value="Next" />
+                        </fieldset>
+                        <fieldset>
+                            <h2 class="fs-title">Soal</h2>
+                            <span class="pull-left"><b>Import Excel Soal Pilihan Ganda (.xls/.xlsx)</b></span>
+                            <input type="file" name="excel_soal_pg" />
+                            <br>
+                            <span class="pull-left"><b>Import Excel Soal Essay (.xls/.xlsx)</b></span>
+                            <input type="file" name="excel_soal_essay" />
+
                             <input type="button" name="previous" class="previous action-button-previous"
                                 value="Previous" />
                             <input type="submit" name="submit" class="submit action-button" value="Submit" />
                         </fieldset>
                     </form>
-
                 </div>
             </div>
             <!-- /.MultiStep Form -->
@@ -200,6 +224,33 @@
         var animating; //flag to prevent quick multi-click glitches
 
         $(".next").click(function () {
+            $("#tgl_akhir").css("border-color", "#ccc");
+            $("#tgl_awal").css("border-color", "#ccc");
+            $("#tuk").css("border-color", "#ccc");
+            if ($("#tgl_awal").val() == '') {
+                alert("Tanggal Mulai belum di input");
+                $("#tgl_awal").css("border-color", "red");
+                return false;
+            }
+            if ($("#tgl_akhir").val() == '') {
+                alert("Tanggal Selesai belum di input");
+                $("#tgl_akhir").css("border-color", "red");
+                return false;
+            }
+            if ($("#tuk").val() == '') {
+                alert("Tempat Uji Kompetensi belum di input");
+                $("#tuk").css("border-color", "red");
+                return false;
+            }
+            if ($("#id_bidang").val() == '') {
+                alert("Bidang belum di input");
+                return false;
+            }
+            if ($("#id_sert_alat").val() == '') {
+                alert("Sertifikat Alat belum di input");
+                return false;
+            }
+
             if (animating) return false;
             animating = true;
 
@@ -225,14 +276,14 @@
                     opacity = 1 - now;
                     current_fs.css({
                         'transform': 'scale(' + scale + ')',
-                        'position': 'absolute'
+                        'position': 'relative'
                     });
                     next_fs.css({
                         'left': left,
                         'opacity': opacity
                     });
                 },
-                duration: 400,
+                duration: 10,
                 complete: function () {
                     current_fs.hide();
                     animating = false;
@@ -274,7 +325,7 @@
                         'opacity': opacity
                     });
                 },
-                duration: 400,
+                duration: 10,
                 complete: function () {
                     current_fs.hide();
                     animating = false;
@@ -284,33 +335,74 @@
             });
         });
 
-        $(".submit").click(function () {
-            return false;
-        })
+        // $(".submit").click(function () {
+        //     return false;
+        // });
 
         //Kunci Input No Hp Hanya Angka
-        $('#id_no_telp,#id_hp_p,#id_hp_kp,#id_norek_bank').on('input blur paste', function () {
-            $(this).val($(this).val().replace(/\D/g, ''))
-        })
+        // $('#id_no_telp,#id_hp_p,#id_hp_kp,#id_norek_bank').on('input blur paste', function () {
+        //     $(this).val($(this).val().replace(/\D/g, ''))
+        // })
 
     });
 
     //Initialize Select2 Elements
-    $('.select2').select2()
+    $('.select2').select2();
 
     // Readonly Jenis Usaha 
-    // $("#id_jenis_usaha").parent().find('.select2-container--default').css('pointer-events', '');
+    $("#id_jenis_usaha").parent().find('.select2-container--default').css('pointer-events', 'none');
+    $("#id_jenis_usaha").parent().find('.select2-selection--single').css('background', 'silver');
 
     // Bidang Change
     $('#id_bidang').on('select2:select', function () {
         var url = `{{ url('bidang/chain') }}`;
         chainedBidang(url, 'id_bidang', 'id_sert_alat', "Sertifikat Alat");
+        $("#persyaratan").html("");
+        $("#table-modul tbody").html("");
+        id_detail = [];
+        $('#id_jumlah_detail').val(id_detail);
     });
 
+    // Get Data Modul
     $('#id_sert_alat').on('select2:select', function () {
         id_sert_alat = $(this).val();
         getDataModul(id_sert_alat);
     });
+
+    // Add baris instruktur
+    $('#add_instruktur').on('click', function () {
+        add_row_instruktur(no_instruktur);
+        id_detail_instruktur.push(no_instruktur);
+        $('#id_detail_instruktur').val(id_detail_instruktur);
+        no_instruktur++;
+    });
+
+    //Button Hapus Baris Detail Modul
+    $(document).on('click', '.btn-detail-hapus', function (e) {
+        nomor = $(this).attr('nomor');
+        id_detail = jQuery.grep(id_detail, function (value) {
+            return value != nomor;
+        });
+        $('#id_jumlah_detail').val(id_detail);
+        $(this).closest('tr').remove();
+    });
+
+    // Button hapus instuktur
+    $(document).on('click', '.btn-hapus-intruktur', function (e) {
+        nomor_instruktur = $(this).attr('nomor_instruktur');
+        id_detail_instruktur = jQuery.grep(id_detail_instruktur, function (value) {
+            return value != nomor_instruktur;
+        });
+        $('#id_detail_instruktur').val(id_detail_instruktur);
+        $(this).closest('tr').remove();
+    });
+
+    // Jumlah detail modul
+    var id_detail = [];
+
+    // Jumlah detail instruktur
+    var no_instruktur = 1;
+    var id_detail_instruktur = [];
 
     function getDataModul(id_sert_alat) {
         var url = "{{ url('getDataModul/chain') }}";
@@ -326,32 +418,36 @@
                 id_sert_alat: id_sert_alat
             },
             success: function (data) {
+
                 if (data.length > 0) {
-                    $("#persyaratan").html(data[0]["persyaratan"]+"&#13;&#10;&#13;&#10;Jumlah Hari: "+data[0]["hari"]+" hari");
+                    $("#persyaratan").html(data[0]["persyaratan"] +
+                        "&#13;&#10;&#13;&#10;Jumlah Hari: " + data[0]["hari"] + " hari");
                     $("#table-modul tbody").html("");
                     var number = 1;
                     data.forEach(function (item) {
                         add_row(number, item);
+                        id_detail.push(number);
                         number++;
                     });
                 } else {
+                    id_detail = [];
                     $("#persyaratan").html('Tidak Ada Data');
                     $("#table-modul tbody").html("<tr><td colspan='4'>Tidak Ada Data</td></tr>");
                 }
-
+                $('#id_jumlah_detail').val(id_detail);
 
             },
             error: function (xhr, status) {
                 alert('Error');
             }
         });
-    }
+    };
 
     // Fungsi Tambah Baris Modul
     function add_row(no, item) {
         $('#table-modul > tbody:last').append(`
             <tr>
-                    <input type="hidden" name="id_sert_alat_` + no + `">
+                    <input type="hidden" value="` + item['id'] + `" name="id_sert_alat_` + no + `">
                                 <td>` + no + `</td>
                                             <td><input value="` + item['modul'] + `" type="text" class="form-control" readonly></td>
                                             <td><input type="text" value="` + item['jp'] + `" class="form-control" readonly></td>
@@ -359,12 +455,39 @@
                                         class="btn btn-block btn-danger btn-sm btn-detail-hapus" nomor="` + no + `" ><span class="fa fa-trash"></span></button></td>
                             </tr>
             `);
-    }
+    };
+
+    // Fungsi Tambah Baris Instruktur
+    function add_row_instruktur(no) {
+        $('#instruktur-Detail > tbody:last').append(`
+            <tr>
+                   
+                                <td>` + no + `</td>
+                                            <td><input maxlength="16" id="nik_instruktur_` + no +
+            `" name="nik_instruktur_` + no + `" type="text" class="form-control" placeholder="NIK" required></td>
+                                            <td><input name="nama_instruktur_` + no + `" type="text" class="form-control" placeholder="Nama" required></td>
+                                            <td><input name="foto_instruktur_` + no + `" type="file" class="form-control" style="padding:5px" required></td>
+                                            <td><input name="pdf_instruktur_` + no +
+            `"type="file" class="form-control" style="padding:5px" required></td>
+                                             <td><input style="margin-top: 10px;" name="tipe_instruktur_` + no +
+            `"type="checkbox"></td>
+                                <td style="width:5%"><button type="button"
+                                        class="btn btn-block btn-danger btn-sm btn-hapus-intruktur" nomor_instruktur="` +
+            no + `" ><span class="fa fa-trash"></span></button></td>
+                            </tr>
+            `);
+
+        // Kunci Input NIK Hanya Angka
+        $('#nik_instruktur_' + no).on('input blur paste', function () {
+            $(this).val($(this).val().replace(/\D/g, ''))
+        })
+    };
+
 
     $('.datepicker').datepicker({
         format: 'yyyy/mm/dd',
         autoclose: true
-    })
+    });
 
 </script>
 @endpush
