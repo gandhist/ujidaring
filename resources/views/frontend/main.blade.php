@@ -34,6 +34,7 @@
             <ul class="list-unstyled components">
                 <li class="active">
                     <a href="{{ url('peserta/dashboard') }}">  Dashboard</a>
+                    <a href="{{ url('peserta/presensi') }}">Persensi</a>
                     {{-- <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
                     <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
@@ -46,7 +47,9 @@
                             <a href="#">Home 3</a>
                         </li>
                     </ul> --}}
+                   
                 </li>
+                
 
             </ul>
         </nav>

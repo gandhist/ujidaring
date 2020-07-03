@@ -17,6 +17,11 @@ class JadwalModel extends Model
         return $this->hasMany('App\SoalPgModel','kelompok_soal','id_klp_soal_pg')->orderBy('no_soal','asc');
     }
 
+    // relasi has many ke table soal essay
+    public function soales_r(){
+        return $this->hasMany('App\SoalEssayModel','kelompok_soal','id_klp_soal_essay')->orderBy('no_soal','asc');
+    }
+
     // relasi ke bidang 
     public function bidang_r(){
         return $this->belongsTo('App\MasterBidang','id_bidang');

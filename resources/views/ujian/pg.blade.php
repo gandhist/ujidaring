@@ -2,41 +2,38 @@
 
 @section('content')
 
-<h3>Waktu Pengerjaan <span id="timer"></span></h3>
-
+<h3>Waktu Pengerjaan Tersisa <span id="timer"></span></h3>
+<p>Waktu Ujian: {{ \Carbon\Carbon::parse($peserta->jadwal_r->mulai_ujian)->isoFormat('HH:mm:SS') }} s/d {{ \Carbon\Carbon::parse($peserta->jadwal_r->akhir_ujian)->isoFormat('HH:mm:SS') }}</p>
+<p>Durasi Ujian: {{ $peserta->jadwal_r->durasi_ujian }}</p>
+<p>Jam Anda Mulai Ujian: {{ \Carbon\Carbon::parse($peserta->mulai_ujian)->isoFormat('HH:mm:SS') }}</p>
 
 <div class="containel-fluid">
-    {{ $peserta->jawaban_r }}
+    {{-- pilihan ganda --}}
+    <div class="row">
+        <div class="col-lg-12">
+            <h4>Soal Pilihan Ganda :</h4>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-6">
             <nav aria-label="Navigasi soal ujian">
                 <ul class="nav" role="tablist">
-                    @foreach ($peserta->jadwal_r->soalpg_r as $key)
-                        @foreach ($peserta->jawaban_r as $item)
-                            <?php
-                            if ($peserta->jadwal_r->id == $item->id_jadwal && $key->no_soal == $item->id_soal) {
-                                $is_active = "active";
-                            }
-                            else {
-                                $is_active = "";
-                            }
-                             ?>
-                        @endforeach
-                        <li class="page-item {{ $is_active }}" role="presentation"><a class="page-link" href="#soal-{{ $key->no_soal }}" aria-control="soal-{{ $key->no_soal }}" role="tab" data-toggle="tab">{{ $key->no_soal }}</a></li>
+                    @foreach ($soal as $key)
+                        <li class="page-item {{ $key->jawaban != null ? "active" : "" }}" role="presentation"><a class="page-link" href="#soal-{{ $key->soal_r->no_soal }}" aria-control="soal-{{ $key->soal_r->no_soal }}" role="tab" data-toggle="tab">{{ $key->soal_r->no_soal }}</a></li>
                     @endforeach
                 </ul>
               </nav>
         </div>
     </div>
     
-    <div class="row" style="margin-top:100px">
+    <div class="row" style="margin-top:10px">
         <div class="col-lg-12">
             <div class="tab-content">
-                @foreach ($peserta->jadwal_r->soalpg_r as $key)
-                <div role="tabpanel" class="tab-pane {{ $loop->iteration == 1 ? 'active' : '' }}" id="soal-{{ $key->no_soal }}">
+                @foreach ($soal as $key)
+                <div role="tabpanel" class="tab-pane {{ $loop->iteration == 1 ? 'active' : '' }}" id="soal-{{ $key->soal_r->no_soal }}">
                     <div class="panel panel-default">
                       <div class="panel-heading">
-                        <h4 class="panel-title">{{ $key->no_soal }}. {{ $key->soal }}</h4></div>
+                        <h4 class="panel-title">{{ $key->soal_r->no_soal }}. {{ $key->soal_r->soal }}</h4></div>
                       <div class="panel-body">
                         <div class="radio"> 
                             @if($loop->first)
@@ -44,19 +41,19 @@
                                 <input type="hidden" name="id_jadwal" id="id_jadwal" value="{{ $peserta->jadwal_r->id }}">
                             @endif
                           <label>
-                            <input type="radio" name="jawaban[{{ $key->no_soal }}]" id="jawaban-{{ $key->no_soal }}a" value="{{ $key->id }}#a">A. {{ $key->pg_a }}</label>
+                            <input type="radio" {{ $key->jawaban == "a" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}a" value="{{ $key->soal_r->id }}#a">A. {{ $key->soal_r->pg_a }}</label>
                         </div>
                         <div class="radio">
                           <label>
-                            <input type="radio" name="jawaban[{{ $key->no_soal }}]" id="jawaban-{{ $key->no_soal }}b" value="{{ $key->id }}#b">B. {{ $key->pg_b }}</label>
+                            <input type="radio" {{ $key->jawaban == "b" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}b" value="{{ $key->soal_r->id }}#b">B. {{ $key->soal_r->pg_b }}</label>
                         </div>
                         <div class="radio">
                           <label>
-                            <input type="radio" name="jawaban[{{ $key->no_soal }}]" id="jawaban-{{ $key->no_soal }}c" value="{{ $key->id }}#c">C. {{ $key->pg_c }}</label>
+                            <input type="radio" {{ $key->jawaban == "c" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}c" value="{{ $key->soal_r->id }}#c">C. {{ $key->soal_r->pg_c }}</label>
                         </div>
                         <div class="radio">
                           <label>
-                            <input type="radio" name="jawaban[{{ $key->no_soal }}]" id="jawaban-{{ $key->no_soal }}d" value="{{ $key->id }}#d">D. {{ $key->pg_d }}</label>
+                            <input type="radio" {{ $key->jawaban == "d" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}d" value="{{ $key->soal_r->id }}#d">D. {{ $key->soal_r->pg_d }}</label>
                         </div>
                         @if($loop->last)
                             </form>
@@ -73,10 +70,33 @@
         </div>
         
     </div>
+    {{-- end of pilihan ganda --}}
+<hr>
+    {{-- essay --}}
     <div class="row">
         <div class="col-lg-12">
+            <h4>Soal Essay :</h4>
+        </div>
+    </div>
+    <form name="formEssay" id="formEssay">
+        <input type="hidden" name="id_jadwal" id="id_jadwal" value="{{ $peserta->jadwal_r->id }}">
+    @foreach($soal_essay as $key)
+    <div class="row" style="margin-top:5px">
+        <div class="col-lg-6">
+            <h5>{{ $key->soal_r->no_soal }}. {{ $key->soal_r->soal }}</h5>
+        </div>
+        <div class="col-lg-6">
+            <textarea class="form-control txtEssay" name="essay_{{ $key->id_soal }}" id="essay_{{ $key->id_soal }}">@if($key->jawaban){{ $key->jawaban }}@endif</textarea>
+        </div>
+    </div>
+    @endforeach
+    </form>
+    {{-- end of soal essay --}}
+
+    <div class="row" style="margin-top:10px">
+        <div class="col-lg-12">
             <div align="center">
-                <button type="button" class="btn btn-outline-success" id="btnSelesai"><i class="fa fa-save"></i> Selesai</button>
+                <button type="button" class="btn btn-outline-success" id="btnSelesai"><i class="fa fa-save"></i> Selesaikan Ujian</button>
             </div>
         </div>
     </div>
@@ -99,6 +119,8 @@
 @push('script')
 <script>
     var jml_soal = "{{ $soal }}";
+    var home = "{{ url('peserta/dashboard') }}";
+    var timer;
 $(document).ready(function () {
       // OPSIONAL: Buat event listener untuk pindah
     // ke soal selanjutnya ketika input radio dipilih
@@ -135,40 +157,177 @@ $(document).ready(function () {
             var s = $('[name^="jawaban"]').val()
             // console.log(s)
         storeData();
+        // storeDataEssay();
     }) 
 
+    // on change jawaban essay
+    $('.txtEssay').on('change', function(){
+        var id = $(this).attr('id')
+        var val = $('#'+id+'').val()
+        storeDataParEs(id, val)
+        // console.log(id)
+    })
+
     // timer soal ujian
-    var eventTime= 1366549200; // Timestamp - Sun, 21 Apr 2013 13:00:00 GMT
-    var currentTime = 1366547400; // Timestamp - Sun, 21 Apr 2013 12:30:00 GMT
+    // var currentTime= "{{ strtotime($peserta->mulai_ujian) }}"; // Timestamp - Sun, 21 Apr 2013 13:00:00 GMT
+    var currentTime= "{{ \Carbon\Carbon::now()->timestamp }}"; // Timestamp - Sun, 21 Apr 2013 13:00:00 GMT
+    var eventTime = "{{ strtotime($peserta->jadwal_r->akhir_ujian) }}"; // Timestamp - Sun, 21 Apr 2013 12:30:00 GMT
     var diffTime = eventTime - currentTime;
     var duration = moment.duration(diffTime*1000, 'milliseconds');
     var interval = 1000;
 
-    setInterval(function(){
+    timer = setInterval(function(){
+        
     duration = moment.duration(duration - interval, 'milliseconds');
+    stopTimer(duration);
         $('#timer').text(duration.hours() + ":" + duration.minutes() + ":" + duration.seconds())
         }, interval
     );
 
 })
 
+function stopTimer(duration){
+    if (duration._data.hours <= 0 && duration._data.minutes <= 0 && duration._data.seconds <= 0) {
+    var formData = new FormData($('#formAdd')[0]);
+    var url = "{{ url('peserta/ujian/pg/save') }}";
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $.ajax({
+      url: url,
+      type: 'POST',
+      dataType: "JSON",
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function(response) {
+        if (response.status) {
+          Swal.fire({
+            title: "Waktu Ujian Telah Habis!!",
+            text: "Semua Jawaban Anda Sudah Tersimpan.",
+            type: 'warning',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#AAA',
+            onClose: function() {
+                window.location.replace(home);
+            }
+          })
+        }
+      },
+      error: function(xhr, status) {
+          alert('terjadi error saat menyimpan data');
+      }
+    });
+    // hentikan timer
+        clearInterval(timer);
+        
+    }
+}
+
 // function active nav menu on jawaban filled up
 function is_filled(id, tabsoal){
-    // console.log(id)
-    // console.log(tabsoal)
+    console.log(id)
+    var val = $('#'+id+'').val();
+    storeDataPar(id, val)
     if(id){
     $("a[href$='"+tabsoal+"']").parent().addClass('active')
     }
 }
 
+// store data on click pg
+function storeDataPar(id, val){
+    var url = "{{ url('peserta/ujian/pg/save_parsial') }}";
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $.ajax({
+      url: url,
+      type: 'POST',
+      dataType: "JSON",
+      data: {
+          jawaban : val,
+          id_jadwal : $('#id_jadwal').val()
+      },
+      success: function(response) {
+        
+      },
+      error: function(xhr, status) {
+          alert('terjadi error');
+      }
+    });
+}
+
+// store data on change essay
+function storeDataParEs(id, val){
+    var url = "{{ url('peserta/ujian/essay/save_parsial') }}";
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $.ajax({
+      url: url,
+      type: 'POST',
+      dataType: "JSON",
+      data: {
+          id_soal : id,
+          jawaban : val,
+          id_jadwal : $('#id_jadwal').val()
+      },
+      success: function(response) {
+        
+      },
+      error: function(xhr, status) {
+          alert('terjadi error');
+      }
+    });
+}
+
+// store all data essay
+function storeDataEssay(){
+    var formData = new FormData($('#formEssay')[0]);
+    var url = "{{ url('peserta/ujian/essay/save') }}";
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $.ajax({
+      url: url,
+      type: 'POST',
+      dataType: "JSON",
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function(response) {
+        if (response.status) {
+          Swal.fire({
+            title: response.message,
+            // text: response.success,
+            type: 'success',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#AAA',
+            onClose: function() {
+                window.location.reload();
+            }
+          })
+
+        }
+      },
+      error: function(xhr, status) {
+          alert('terjadi error saat simpan data')
+      }
+    });
+}
+
+
 
 function storeData(){
     var formData = new FormData($('#formAdd')[0]);
-    // for (i = 1; i <= jml_soal; i++) {
-    //     var name = "jawaban["+i+"]";
-    //     value = $('[name="' + name + '"]').val()
-    //     console.log(value)
-    // }
     var url = "{{ url('peserta/ujian/pg/save') }}";
     $.ajaxSetup({
       headers: {
@@ -194,7 +353,7 @@ function storeData(){
             confirmButtonText: 'Close',
             confirmButtonColor: '#AAA',
             onClose: function() {
-                // window.location.replace(home);
+                window.location.replace(home);
             }
           })
 

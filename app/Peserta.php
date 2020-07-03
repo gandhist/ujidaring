@@ -25,4 +25,9 @@ class Peserta extends Model
     public function jawaban_r(){
         return $this->hasMany('App\JawabanPeserta','id_peserta');
     }
+
+    // relasi ke jawaban evaluasi
+    public function jawaban_eva_r(){
+        return $this->hasMany('App\JawabanEvaluasi','id_peserta');
+    }
 }

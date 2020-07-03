@@ -21,9 +21,21 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('wa','PesertaController@kirimWA');
 	Route::group(['prefix' => 'peserta'], function () {
 		Route::get('dashboard','PesertaController@index');
+		Route::get('kuisioner','PesertaController@kuisioner');
+		Route::post('kuisioner/save','PesertaController@kuisioner_store');
+
+		Route::group(['prefix' => 'presensi'], function () {
+			Route::get('/','PesertaController@absen');
+			Route::post('datang','PesertaController@datang');
+			Route::post('pulang','PesertaController@pulang');
+		});
+
 		Route::group(['prefix' => 'ujian'], function () {
 			Route::get('pg','PesertaController@ujian_pg');
 			Route::post('pg/save','PesertaController@pg_save');
+			Route::post('pg/save_parsial','PesertaController@pg_save_parsial');
+			Route::post('essay/save','PesertaController@es_save');
+			Route::post('essay/save_parsial','PesertaController@es_save_parsial');
 			Route::get('essay','PesertaController@ujian_essay');
 		});
 	});
