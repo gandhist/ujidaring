@@ -63,7 +63,7 @@
                                             <tr>
                                                 <td>
                                                     <input name="tuk" id="tuk" type="text" class="form-control"
-                                                        placeholder="Tempat Uji Kompetensi" required>
+                                                        placeholder="Tempat Uji Kompetensi" value="{{old('tuk')}}" required>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -118,7 +118,7 @@
                                 </div>
                             </div>
 
-                            <input id="id_jumlah_detail" type="hidden" value="">
+                            <input id="id_jumlah_detail" name="id_jumlah_detail" type="hidden" value="">
 
                             <h2 class="fs-title">Modul</h2>
                             <table id="table-modul" class="table table-bordered table-Detail">
@@ -135,10 +135,10 @@
                                 </tbody>
                             </table>
 
-                            <input id="next1" type="button" name="next" class="next action-button" value="Next" />
+                            <input id="next1" type="button" name="next" class="next action-button" value="Berikutnya" />
                         </fieldset>
                         <fieldset>
-                            <input type="hidden" id="id_detail_instruktur" value="">
+                            <input type="hidden" id="id_detail_instruktur" name="id_detail_instruktur" value="">
                             <h2 class="fs-title">Instruktur</h2>
                             <div class="btn-group btn-lg pull-left" style='padding-left:10px'>
                                 <button id="add_instruktur" type="button" class="btn btn-danger"
@@ -167,7 +167,7 @@
 
                             <input type="button" name="previous" class="previous action-button-previous"
                                 value="Previous" />
-                            <input type="button" name="next" class="next action-button" value="Next" />
+                            <input type="button" name="next" class="next action-button" value="Berikutnya" />
                         </fieldset>
                         <fieldset>
                             <h2 class="fs-title">Peserta</h2>
@@ -175,7 +175,7 @@
                             <input type="file" name="excel_peserta" />
                             <input type="button" name="previous" class="previous action-button-previous"
                                 value="Previous" />
-                            <input type="button" name="next" class="next action-button" value="Next" />
+                            <input type="button" name="next" class="next action-button" value="Berikutnya" />
                         </fieldset>
                         <fieldset>
                             <h2 class="fs-title">Soal</h2>
@@ -283,7 +283,7 @@
                         'opacity': opacity
                     });
                 },
-                duration: 10,
+                duration: 100,
                 complete: function () {
                     current_fs.hide();
                     animating = false;
@@ -325,7 +325,7 @@
                         'opacity': opacity
                     });
                 },
-                duration: 10,
+                duration: 50,
                 complete: function () {
                     current_fs.hide();
                     animating = false;
@@ -447,7 +447,7 @@
     function add_row(no, item) {
         $('#table-modul > tbody:last').append(`
             <tr>
-                    <input type="hidden" value="` + item['id'] + `" name="id_sert_alat_` + no + `">
+                    <input type="hidden" value="` + item['id'] + `" name="id_modul_` + no + `">
                                 <td>` + no + `</td>
                                             <td><input value="` + item['modul'] + `" type="text" class="form-control" readonly></td>
                                             <td><input type="text" value="` + item['jp'] + `" class="form-control" readonly></td>
@@ -466,9 +466,9 @@
                                             <td><input maxlength="16" id="nik_instruktur_` + no +
             `" name="nik_instruktur_` + no + `" type="text" class="form-control" placeholder="NIK" required></td>
                                             <td><input name="nama_instruktur_` + no + `" type="text" class="form-control" placeholder="Nama" required></td>
-                                            <td><input name="foto_instruktur_` + no + `" type="file" class="form-control" style="padding:5px" required></td>
+                                            <td><input name="foto_instruktur_` + no + `" type="file" class="form-control" style="padding:5px"></td>
                                             <td><input name="pdf_instruktur_` + no +
-            `"type="file" class="form-control" style="padding:5px" required></td>
+            `"type="file" class="form-control" style="padding:5px"></td>
                                              <td><input style="margin-top: 10px;" name="tipe_instruktur_` + no +
             `"type="checkbox"></td>
                                 <td style="width:5%"><button type="button"

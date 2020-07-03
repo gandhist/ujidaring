@@ -36,7 +36,7 @@
                     <div class="col-sm-5">
 
                         <!-- Table Filter -->
-                        <table class="table table-condensed table-filter">
+                        <!-- <table class="table table-condensed table-filter">
                             <tbody>
                                 <tr>
                                     <td>
@@ -109,7 +109,7 @@
                                     </td>
                                 </tr>
                             </tbody>
-                        </table>
+                        </table> -->
                         <!-- End -->
                     </div>
 
@@ -125,14 +125,15 @@
                         <div class="btn-group">
                             <a href="{{ route('jadwal.create') }}" class="btn btn-info"> <i class="fa fa-plus"></i>
                                 Tambah</a>
-                            <button class="btn btn-success" id="btnEdit" name="btnEdit"> <i class="fa fa-edit"></i>
+                            <!-- <button class="btn btn-success" id="btnEdit" name="btnEdit"> <i class="fa fa-edit"></i>
                                 Ubah</button>
                             <button class="btn btn-danger" id="btnHapus" name="btnHapus"> <i class="fa fa-trash"></i>
-                                Hapus</button>
+                                Hapus</button> -->
                         </div>
                     </div>
                 </div>
             </form>
+            <br>
             <!-- /.box-footer -->
             {{-- end of sub menu  --}}
             <!-- <hr> -->
@@ -141,39 +142,28 @@
             <table id="data-tables" class="table table-striped table-bordered dataTable customTable">
                 <thead>
                     <tr>
-                        <th style="text-indent: 12px;"><i class="fa fa-check-square-o"></i></th>
-                        <th style="text-indent: 22px;">No</th>
-                        <th>Jns_Usaha</th>
-                        <th>Naker_Prov</th>
-                        <th>Nama</th>
-                        <th>Prov</th>
-                        <th>Kota</th>
-                        <th>Instansi_Reff</th>
-                        <th>Nama_Pimp</th>
-                        <th>Kontak_P</th>
-                        <th>NPWP</th>
-                        <th>Keterangan</th>
-                        <th>Pdf_NPWP</th>
-                        <th>User_Tgl_Tambah</th>
-                        <th>User_Tgl_Ubah</th>
+                        <th><i class="fa fa-check-square-o"></i></th>
+                        <th>No</th>
+                        <th>TUK</th>
+                        <th>Tanggal Awal</th>
+                        <th>Tanggal Akhir</th>
+                        <th>Jenis Usaha</th>
+                        <th>Bidang</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    @foreach($data as $key)
+                    <tr>
+                        <td style='width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
+                                id="selection[]" name="selection[]"></td>
+                        <td style='width:1%'>{{ $loop->iteration }}</td>
+                        <td style='width:40%'>{{$key->tuk}}</td>
+                        <td style='width:10%'>{{ \Carbon\Carbon::parse($key->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td>
+                        <td style='width:10%'>{{ \Carbon\Carbon::parse($key->tgl_akhir)->isoFormat("DD MMMM YYYY") }}</td>
+                        <td>{{$key->jenis_usaha_r->nama_jns_usaha}}</td>
+                        <td>{{$key->bidang_r->nama_bidang}}</td>
+                    </tr>
+                    @endforeach
                 </tbody>
             </table>
             {{-- </div> --}}
