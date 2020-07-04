@@ -74,7 +74,10 @@
                                             </td>
 											<td>{{$key->jadwal_r->tuk}}
                                             </td>
-											<td style="text-align:center"><a href="{{ url('instruktur/dashboardinstruktur/'.$key->id.'/edit') }}" type="button" class="btn btn-sm bg-olive btn-flat">Mulai Ujian</a></td>
+                                            <td style="text-align:center">
+                                                <a href="{{ url('instruktur/dashboardinstruktur/'.$key->id.'/edit') }}" type="button" class="btn btn-sm bg-olive btn-flat">Mulai Ujian</a>
+                                                <a href="{{ url('instruktur/modul',$key->id) }}" type="button" class="btn btn-sm bg-olive btn-flat">Modul</a>
+                                            </td>
                                         </tr>
                                         @endforeach
                                     </tbody>

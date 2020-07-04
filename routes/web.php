@@ -17,6 +17,8 @@ Route::auth();
 Route::group(['middleware' => 'auth'], function () {
 
 	Route::group(['prefix' => 'instruktur'], function () {
+		Route::get('modul/{id}','DashboardInstrukturController@modul');
+		Route::post('modul/save','DashboardInstrukturController@store_modul');
 		Route::resource('dashboardinstruktur','DashboardInstrukturController');
 	});
 

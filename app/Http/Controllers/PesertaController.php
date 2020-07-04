@@ -14,9 +14,11 @@ use App\AbsenModel;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\GlobalFunction;
 
 class PesertaController extends Controller
 {
+    use GlobalFunction;
     /**
      * Display a listing of the resource.
      *
@@ -28,7 +30,7 @@ class PesertaController extends Controller
         $peserta = Peserta::where('user_id',Auth::id())->first();
         $awal_uji = strtotime($peserta->jadwal_r->mulai_ujian);
         $akhir_uji = strtotime($peserta->jadwal_r->akhir_ujian);
-        $pst_mulai_uji = strtotime($peserta->mulai_ujian);
+        $pst_mulai_uji = $peserta->mulai_ujian ? strtotime($peserta->mulai_ujian) : Carbon::now()->timestamp;
         if($pst_mulai_uji >= $awal_uji && Carbon::now()->timestamp <= $akhir_uji){
             $durasi = $peserta->jadwal_r->durasi_ujian - (($pst_mulai_uji - $awal_uji) / 60);
             $peserta->durasi = $durasi;
@@ -330,53 +332,16 @@ class PesertaController extends Controller
     }
 
     public function kirimSMS(){
-        $userkey = '43c6df9a2fb6';
-        $passkey = 'bry8ntb4y5';
         $telepon = '081240353913';
-        $message = 'Hi Jon Snow, you really know nothing.';
-        $url = 'https://gsm.zenziva.net/api/sendsms/';
-        $curlHandle = curl_init();
-        curl_setopt($curlHandle, CURLOPT_URL, $url);
-        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($curlHandle, CURLOPT_TIMEOUT,30);
-        curl_setopt($curlHandle, CURLOPT_POST, 1);
-        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
-            'userkey' => $userkey,
-            'passkey' => $passkey,
-            'nohp' => $telepon,
-            'pesan' => $message
-        ));
-        $results = json_decode(curl_exec($curlHandle), true);
-        curl_close($curlHandle);
-        return 'SMS berhasil dikirim';
+        // Gunakan NIK Anda dan kode: 9777 untuk login ke env('APP_URL')
+        $message = "Gunakan NIK Anda dan password: $hint untuk login ke ".env('APP_URL');
+        return $this->kirimPesanSMS($telepon, $message);
     }
 
     public function kirimWA(){
-        $userkey = '43c6df9a2fb6';
-        $passkey = 'bry8ntb4y5';
         $telepon = '081240353913';
-        $message = 'Hallo Jon f Snow, this message send automatically from your laralove';
-        $url = 'https://gsm.zenziva.net/api/sendWA/';
-        $curlHandle = curl_init();
-        curl_setopt($curlHandle, CURLOPT_URL, $url);
-        curl_setopt($curlHandle, CURLOPT_HEADER, 0);
-        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($curlHandle, CURLOPT_TIMEOUT,30);
-        curl_setopt($curlHandle, CURLOPT_POST, 1);
-        curl_setopt($curlHandle, CURLOPT_POSTFIELDS, array(
-            'userkey' => $userkey,
-            'passkey' => $passkey,
-            'nohp' => $telepon,
-            'pesan' => $message
-        ));
-        $results = json_decode(curl_exec($curlHandle), true);
-        curl_close($curlHandle);
-        return 'WA berhasil dikirim';
+        $message = 'Hi Jon Snow, you really know nothing.';
+        return $this->kirimPesanWA($telepon, $message);
 
     }
 
@@ -430,7 +395,8 @@ class PesertaController extends Controller
         $peserta = Peserta::where('user_id',Auth::id())->first();
         $awal_uji = strtotime($peserta->jadwal_r->mulai_ujian);
         $akhir_uji = strtotime($peserta->jadwal_r->akhir_ujian);
-        $pst_mulai_uji = strtotime($peserta->mulai_ujian);
+        // $pst_mulai_uji = strtotime($peserta->mulai_ujian);
+        $pst_mulai_uji = $peserta->mulai_ujian ? strtotime($peserta->mulai_ujian) : Carbon::now()->timestamp;
         if($pst_mulai_uji >= $awal_uji && $pst_mulai_uji <= $akhir_uji){
             $durasi = $peserta->jadwal_r->durasi_ujian - (($pst_mulai_uji - $awal_uji) / 60);
             $peserta->durasi = $durasi;
@@ -448,11 +414,17 @@ class PesertaController extends Controller
         $peserta = Peserta::find($id);
         $today = Carbon::now()->isoFormat('YYYY-MM-DD');
         $cek_db = JawabanEvaluasi::where('tanggal', $today)->where('id_peserta', $id)->first();
-        if($cek_db->nilai == null){
-            $allow_cekout = false;
+        // return $cek_db;
+        if($cek_db){
+            if($cek_db->nilai == null){
+                $allow_cekout = false;
+            }
+            else{
+                $allow_cekout = true;
+            }
         }
         else{
-            $allow_cekout = true;
+            $allow_cekout = false;
         }
         return $allow_cekout;
 

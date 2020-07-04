@@ -61,7 +61,8 @@
                     <th scope="col">No</th>
                     <th scope="col">Nama Modul</th>
                     <th scope="col">Jam Pelajaran</th>
-                    <th scope="col">Materi/Link</th>
+                    <th scope="col">Materi</th>
+                    <th scope="col">Link</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -70,7 +71,16 @@
                        <td>{{ $loop->iteration }}</td>
                        <td>{{ $key->modul_r->modul }}</td>
                        <td>{{ $key->modul_r->jp }} Jam</td>
-                       <td>{{ $key->materi }}</td>
+                       <td>
+                        @if($key->materi)
+                        <a href="{{ url('uploads/materi/'.$key->materi) }}" class="btn btn-success">Materi</a>
+                        @endif
+                       </td>
+                       <td>
+                        @if($key->materi)
+                          <a href="{{ $key->link }}" class="btn btn-info">Link</a>
+                        @endif
+                       </td>
                    </tr>
                    <?php $persyaratan = $key->modul_r->persyaratan; $hari = $key->modul_r->hari ?>
                    @endforeach

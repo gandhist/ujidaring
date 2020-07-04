@@ -92,7 +92,10 @@
                             </button>
                             <div class="dropdown-menu">
                             <!-- Dropdown menu links -->
-                            <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
+                            <form method="post" action="{{ url('logout') }}" style="display: inline">
+                                {{ csrf_field() }}
+                                <button class="btn btn-default" type="submit">Sign Out</button>
+                              </form>
                             </div>
                         </div>
                     @endif

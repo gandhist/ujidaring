@@ -15,7 +15,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <nav aria-label="Navigasi soal ujian">
                 <ul class="nav" role="tablist">
                     @foreach ($soal as $key)

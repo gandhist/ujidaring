@@ -21,7 +21,7 @@
 	      <div class="col-md-6  col-md-offset-3">
 
 	        <!-- general form elements -->
-	        <div class="box box-primary">
+	        <div class="box box-primary box-content">
 	          <div class="box-header with-border">
 	            <h3 class="box-title">Create User</h3>
 	          </div>
