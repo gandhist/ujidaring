@@ -84,13 +84,17 @@
                         </ul>
                     </div>
                     @else
-
-                    <div class="dropdown">
-                        <button class="btn btn-secondary" type="button" id="dropdownMenuButton" > <i class="fa fa-user" ></i>
-                          {{ \Auth::user()->name }}
-                        </button>
-                        
-                      </div>
+                      <!-- Default dropleft button -->
+                        <div class="btn-group dropleft">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-user" ></i>
+                                {{ \Auth::user()->name }}
+                            </button>
+                            <div class="dropdown-menu">
+                            <!-- Dropdown menu links -->
+                            <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
+                            </div>
+                        </div>
                     @endif
 
                 </div>

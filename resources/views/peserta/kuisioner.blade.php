@@ -76,7 +76,12 @@
     </div>
     <hr>
     <h3 align="center">Beri Tanggapan</h3>
+    <form name="formAdd" id="formAdd">
     <div class="row">
+      <div class="col-lg-4">
+        <input type="text" class="form-control" name="id_instruktur" id="id_instruktur">
+        <input type="hidden" value="{{ $peserta->jadwal_r->id }}" class="form-control" name="id_jadwal" id="id_jadwal">
+      </div>
         <div class="col-lg-12">
             <table class="table table-hover table-sm">
                 <thead>
@@ -87,7 +92,6 @@
                   </tr>
                 </thead>
                 <tbody>
-                    <form name="formAdd" id="formAdd">
                     @foreach($peserta->jawaban_eva_r as $key)
                     <tr>
                         <th scope="row">{{ $loop->iteration }}</th>
@@ -95,7 +99,7 @@
                         <td>
                             <select name="nilai_{{ $key->id }}" id="nilai_{{ $key->id }}">
                                 @for($i=1; $i<=5; $i++)
-                                <option value="{{ $i }}">{{ $i }}</option>
+                                <option value="{{ $key->id }}#{{ $i }}">{{ $i }}</option>
                                 @endfor
                             </select>
                         </td>
@@ -119,43 +123,48 @@
 @push('script')
 <script>
 $(document).ready(function () {
-    $('#btnSave').on('click', function(){
-        var formData = new FormData($('#formAdd')[0]);
-        var url = "{{ url('peserta/kuisioner/save') }}";
-        $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-        });
-        $.ajax({
-        url: url,
-        type: 'POST',
-        dataType: "JSON",
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function(response) {
-            if (response.status) {
-            Swal.fire({
-                title: response.message,
-                // text: response.success,
-                type: 'success',
-                confirmButtonText: 'Close',
-                confirmButtonColor: '#AAA',
-                onClose: function() {
-                    window.location.reload();
-                }
-            })
-
-            }
-        },
-        error: function(xhr, status) {
-            alert('terjadi error saat simpan data')
-        }
-        });
+    $('#btnSave').on('click', function(e){
+      e.preventDefault();
+      store()
     })
 
 });
+
+function store(){
+  var formData = new FormData($('#formAdd')[0]);
+  var url = "{{ url('peserta/kuisioner/save') }}";
+  $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
+  $.ajax({
+    url: url,
+    type: 'POST',
+    dataType: "JSON",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function(response) {
+        if (response.status) {
+        Swal.fire({
+            title: response.message,
+            // text: response.success,
+            type: 'success',
+            confirmButtonText: 'Close',
+            confirmButtonColor: '#AAA',
+            onClose: function() {
+                // window.location.reload();
+            }
+        })
+
+        }
+    },
+    error: function(xhr, status) {
+        alert('terjadi error saat simpan data')
+    }
+  });
+}
 
 
 </script>
