@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\SoalPgModel;
 use App\SoalEssayModel;
 use App\JawabanPeserta;
+use App\JawabanEssayPeserta;
 use Illuminate\Support\Facades\Auth;
 
 class PenilaianController extends Controller
@@ -87,7 +88,26 @@ class PenilaianController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $x = "jumlah_jawaban_".$id;
+        for ($i=1; $i<=$request->$x ; $i++) { 
+            $y = $id."_id_jawaban_".$i;
+            $idjawaban = $request->$y;
+            $y = $id."_bobot_".$i;
+            $bobot = $request->$y;
+            $y = $id."_istrue_".$i;
+            $istrue = $request->$y;
+  
+            if($istrue=="on"){
+                $istrue = 1;
+            }else{
+                $istrue = 0;
+            }
+        
+            $nilai['is_true'] = $istrue;
+            $nilai['nilai'] = $bobot;
+            JawabanEssayPeserta::find($idjawaban)->update($nilai);
+        }
+        return redirect()->back()->with('message', 'Berhasil!'); 
     }
 
     /**

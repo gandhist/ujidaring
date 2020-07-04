@@ -194,7 +194,7 @@ th {
     height: 35px;
 }
 
-.tableModalDetail>tbody>tr>th,
+.tableModalDetail>thead>tr>th,
 .tableModalDetail>tbody>tr>td {
     height: 30px;
     border: 1px solid black;

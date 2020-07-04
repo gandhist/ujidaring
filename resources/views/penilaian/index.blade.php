@@ -164,9 +164,21 @@
                         <td>{{ \Carbon\Carbon::parse($key->jadwal_r->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
                         </td>
                         <td>{{$key->jadwal_r->tuk}}</td>
-                        <td style="text-align:center"><a
-                                href="{{ url('penilaian/'.$key->id.'/edit') }}" type="button"
-                                class="btn btn-sm bg-olive btn-flat">Nilai</a></td>
+                        @if(\Carbon\Carbon::now()->toDateTimeString() > $key->jadwal_r->akhir_ujian &&
+                        $key->jadwal_r->akhir_ujian!="")
+                        <td style="text-align:center">
+                            <a href="{{ url('penilaian/'.$key->id.'/edit') }}" type="button"
+                                class="btn btn-sm bg-olive btn-flat">Nilai Peserta</a></td>
+
+                        @elseif( \Carbon\Carbon::now()->toDateTimeString() > $key->jadwal_r->awal_ujian &&
+                        \Carbon\Carbon::now()->toDateTimeString() < $key->jadwal_r->akhir_ujian )
+                        <td style="text-align:center">
+                                <button type="button" class="btn btn-sm btn-danger">Sedang Ujian</button></td>
+
+                            @else
+                            <td style="text-align:center">
+                                <button type="button" class="btn btn-sm btn-danger">Belum Ujian</button></td>
+                            @endif
                     </tr>
                     @endforeach
                 </tbody>
@@ -279,7 +291,7 @@
             });
         }).draw();
 
- 
+
         // Input data mask
         $('[data-mask]').inputmask();
 

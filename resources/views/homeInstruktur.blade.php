@@ -60,8 +60,8 @@
                                             <th>No</th>
                                             <th>Tanggal Mulai</th>
                                             <th>Tanggal Selesai</th>
-											<th>TUK</th>
-											<th>Mulai</th>
+                                            <th>TUK</th>
+                                            <th>Mulai</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -72,9 +72,28 @@
                                             </td>
                                             <td>{{ \Carbon\Carbon::parse($key->jadwal_r->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
                                             </td>
-											<td>{{$key->jadwal_r->tuk}}
+                                            <td>{{$key->jadwal_r->tuk}}
                                             </td>
-											<td style="text-align:center"><a href="{{ url('instruktur/dashboardinstruktur/'.$key->id.'/edit') }}" type="button" class="btn btn-sm bg-olive btn-flat">Mulai Ujian</a></td>
+
+                                            @if($key->jadwal_r->akhir_ujian == "" )
+                                            <td style="text-align:center"><a
+                                                    href="{{ url('instruktur/dashboardinstruktur/'.$key->id.'/edit') }}"
+                                                    type="button" class="btn btn-sm bg-olive btn-flat">Mulai Ujian</a>
+                                            </td>
+                                            @elseif( \Carbon\Carbon::now()->toDateTimeString() > $key->jadwal_r->awal_ujian && \Carbon\Carbon::now()->toDateTimeString() < $key->jadwal_r->akhir_ujian )
+                                            <td style="text-align:center">
+                                            <button type="button" class="btn btn-sm btn-danger">Ujian Sedang Berlangsung</button>
+                                            </td>
+                                            @else
+                                            <td style="text-align:center">
+                                            <a
+                                                    href="{{ url('penilaian') }}"
+                                                    type="button" class="btn btn-sm bg-olive btn-flat">Ujian Telah Selesai</a>
+                                                <!-- <button type="button" class="btn btn-sm bg-olive btn-flat">Ujian Telah Selesai</button> -->
+                                            </td>
+                                            @endif
+
+                                           
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -82,7 +101,7 @@
                             </div>
                             <!-- /.table-responsive -->
                         </div>
-                   
+
                     </div>
                     <!-- /.box -->
                 </div>
