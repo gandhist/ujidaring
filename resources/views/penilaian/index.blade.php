@@ -149,7 +149,7 @@
                         <th>Tanggal Mulai</th>
                         <th>Tanggal Selesai</th>
                         <th>TUK</th>
-                        <th>Mulai</th>
+                        <th>Peserta</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -165,8 +165,8 @@
                         </td>
                         <td>{{$key->jadwal_r->tuk}}</td>
                         <td style="text-align:center"><a
-                                href="{{ url('instruktur/dashboardinstruktur/'.$key->id.'/edit') }}" type="button"
-                                class="btn btn-sm bg-olive btn-flat">Mulai Ujian</a></td>
+                                href="{{ url('penilaian/'.$key->id.'/edit') }}" type="button"
+                                class="btn btn-sm bg-olive btn-flat">Nilai</a></td>
                     </tr>
                     @endforeach
                 </tbody>

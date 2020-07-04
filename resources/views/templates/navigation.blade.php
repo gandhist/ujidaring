@@ -77,11 +77,11 @@
         </a>
       </li>
 
-      <!-- <li class="treeview">
+      <li class="treeview">
         <a href="{{ url('instruktur/dashboardinstruktur') }}">
           <i class="fa fa-dashboard"></i> <span>Dashboard Instruktur</span>
         </a>
-      </li> -->
+      </li>
 
       <!-- <li class="treeview">
         <a href="#">

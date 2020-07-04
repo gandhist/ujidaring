@@ -8,6 +8,9 @@ use App\Peserta;
 use Carbon\Carbon;
 use App\SoalPgModel;
 use App\SoalEssayModel;
+use App\JadwalInstruktur;
+use App\InstrukturModel;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardInstrukturController extends Controller
 {
@@ -18,7 +21,12 @@ class DashboardInstrukturController extends Controller
      */
     public function index()
     {
-        return view('homeInstruktur');
+        // return view('homeInstruktur');
+        $id_user = Auth::id();
+        $getIdInstruktur = InstrukturModel::where("id_users","=",$id_user)->first();
+        $data = JadwalInstruktur::where('id_instruktur','=',$getIdInstruktur->id)->orderBy("id_jadwal","asc")->get();
+        $jumlahjadwal = JadwalInstruktur::where('id_instruktur','=',$getIdInstruktur->id)->count();
+        return view('homeInstruktur')->with(compact('data','jumlahjadwal'));
     }
 
     /**
