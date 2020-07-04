@@ -12,6 +12,7 @@ use App\JawabanPeserta;
 use App\JawabanEssayPeserta;
 use App\AbsenModel;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
 
 class PesertaController extends Controller
@@ -54,26 +55,36 @@ class PesertaController extends Controller
 
     // save jawaban kuisioner
     public function kuisioner_store(Request $request){
-        return $request->all();
-        for($i=1; $i<= 10; $i++){
-            if($request->has($px.$i)){
-             //    echo  $request->input($px.$i)."<br>";
-                 JawabanEssayPeserta::updateOrCreate([
+        // return $request->all();
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        $px = "nilai_";
+        $data =[];
+        foreach ($peserta->jawaban_eva_r as $key) {
+            if($request->has($px.$key->id)){
+                $val_exp = explode("#", $request->input($px.$key->id));
+                JawabanEvaluasi::updateOrCreate([
                      'id_jadwal' => $request->id_jadwal,
+                     'tanggal' => Carbon::now()->isoFormat('YYYY-MM-DD'),
                      'id_peserta' => $peserta->id,
-                     'id_soal' => $request->input($px.$i),
+                     'id' => $val_exp[0]
                  ],[
-                     'jawaban' => $request->input($px.$i)
+                     'nilai' => $val_exp[1],
+                     'id_instruktur' => $request->id_instruktur,
                  ]);
             }
         }
+        return response()->json([
+            'status' => true,
+            'message' => 'Memberikan Evaluasi, Penilaian anda di jamin kerahasiaannya',
+        ],200);
     }
 
     // view absen
     public function absen(){
         $peserta = Peserta::where('user_id',Auth::id())->first();
+        $allow_cekout = $this->is_make_eva($peserta->id);
         $data = AbsenModel::where('id_peserta',$peserta->id)->get();
-        return view('peserta.absen')->with(compact('data'));
+        return view('peserta.absen')->with(compact('data','allow_cekout'));
     }
 
     // absen masuk
@@ -398,14 +409,20 @@ class PesertaController extends Controller
     // function generate evaluasi peserta ke table jawaban evaluasi
     public function _generate_soal_eva($id){
         $peserta = Peserta::find($id);
+        $period = CarbonPeriod::create( Carbon::parse($peserta->jadwal_r->tgl_awal), Carbon::parse($peserta->jadwal_r->tgl_akhir));
         $data = EvaluasiSoal::all();
-        foreach($data as $key){
-            $jwb = new JawabanEvaluasi;
-            $jwb->id_evaluasi = $key->id;
-            $jwb->id_jadwal = $peserta->jadwal_r->id;
-            $jwb->id_peserta = $peserta->id;
-            $jwb->save();
+
+        foreach ($period as $key => $date) {
+            foreach($data as $key){
+                $jwb = new JawabanEvaluasi;
+                $jwb->id_evaluasi = $key->id;
+                $jwb->id_jadwal = $peserta->jadwal_r->id;
+                $jwb->id_peserta = $peserta->id;
+                $jwb->tanggal = $date->format('Y-m-d');
+                $jwb->save();
+            }
         }
+        
     }
 
     // function cek in time ujian / tidak
@@ -424,5 +441,20 @@ class PesertaController extends Controller
             $is_allow = false;
         }
         return $is_allow;
+    }
+
+    // function check today peserta already submit evaluasi before checkout?
+    public function is_make_eva($id){
+        $peserta = Peserta::find($id);
+        $today = Carbon::now()->isoFormat('YYYY-MM-DD');
+        $cek_db = JawabanEvaluasi::where('tanggal', $today)->where('id_peserta', $id)->first();
+        if($cek_db->nilai == null){
+            $allow_cekout = false;
+        }
+        else{
+            $allow_cekout = true;
+        }
+        return $allow_cekout;
+
     }
 }

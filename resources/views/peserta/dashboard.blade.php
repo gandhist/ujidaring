@@ -43,9 +43,11 @@
             {{-- <button class="btn btn-outline-info" id="mulaiUjian">Mulai Ujian</button> --}}
             <a href="{{ url('peserta/ujian/pg') }}" class="btn btn-outline-info">Mulai Ujian</a>
             @else
-            <h6>Anda Sudah Melaksanakan Ujian</h6>
-            <p><small>Silahkan Isi Kuisioner</small> <a href="{{ url('peserta/kuisioner') }}" class="btn btn-outline-info">Isi Kuisioner</a></p>
+            {{-- <h6>Anda Sudah Melaksanakan Ujian</h6>
+            <p><small>Silahkan Isi Kuisioner</small> <a href="{{ url('peserta/kuisioner') }}" class="btn btn-outline-info">Isi Kuisioner</a></p> --}}
             @endif
+            <p><a href="{{ url('peserta/presensi') }}" class="btn btn-outline-info">Absen</a></p>
+
         </div>
 
     </div>

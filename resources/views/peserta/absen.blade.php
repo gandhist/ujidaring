@@ -11,8 +11,12 @@
                 <div class="col-md-6">
                     <div id="my_camera"></div>
                     <br/>
-                    <input type=button value="Absen Masuk" onClick="take_snapshot()">
-                    <input type=button value="Absen Keluar" onClick="take_snapshot_out()">
+                    <input type=button class="btn btn-outline-success" value="Absen Masuk" onClick="take_snapshot()">
+                    @if($allow_cekout)
+                    <input type=button class="btn btn-outline-success" value="Absen Keluar" onClick="take_snapshot_out()">
+                    @else
+                    <a href="{{ url('peserta/kuisioner') }}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Isi evaluasi agar bisa absen pulang">Isi Evaluasi</a>
+                    @endif
                     <input type="hidden" name="image" class="image-tag">
                 </div>
                 <div class="col-md-6">
