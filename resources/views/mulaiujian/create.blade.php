@@ -217,34 +217,6 @@
                     }
                     updateDurasi(durasi, idJadwal);
 
-                    // timer soal ujian
-                    // var currentTime= "{{ strtotime($peserta->mulai_ujian) }}"; // Timestamp - Sun, 21 Apr 2013 13:00:00 GMT
-                    // var currentTime ="{{ \Carbon\Carbon::now()->timestamp }}"; // Timestamp - Sun, 21 Apr 2013 13:00:00 GMT
-                    // var eventTime ="{{ strtotime($peserta->jadwal_r->akhir_ujian) }}"; // Timestamp - Sun, 21 Apr 2013 12:30:00 GMT
-                    // var diffTime = eventTime - currentTime;
-                    // var duration = moment.duration(diffTime * 1000, 'milliseconds');
-                    // var interval = 1000;
-
-                    // timer = setInterval(function () {
-
-                    //     duration = moment.duration(duration - interval, 'milliseconds');
-                    //     stopTimer(duration);
-                    //     $('#clock').text(duration.hours() + ":" + duration.minutes() +
-                    //         ":" + duration.seconds())
-                    // }, interval);
-
-                    // var time = durasi;
-                    // var duration = moment.duration(time * 10000, 'milliseconds');
-                    // var interval = 1000;
-
-                    // setInterval(function () {
-                    //     duration = moment.duration(duration.asMilliseconds() - interval,
-                    //         'milliseconds');
-
-                    //     $('#clock').text(moment(duration.asMilliseconds()).format(
-                    //         'h:mm:ss'));
-                    // }, interval);
-
                 });
 
             }
@@ -266,7 +238,50 @@
                     idJadwal: idJadwal
                 },
                 success: function (data) {
-                    console.log("Ujian Dimulai");
+
+                    
+                    // countdown
+                    var $clock = $('#clock'),
+                        eventTime = moment(data, 'YYYY-MM-DD HH:mm:ss').unix(),
+                        currentTime = moment().unix(),
+                        diffTime = eventTime - currentTime,
+                        duration = moment.duration(diffTime * 1000, 'milliseconds'),
+                        interval = 1000;
+
+                    if (diffTime > 0) {
+
+                        // Show clock
+                        // $clock.show();
+                        $('#clock').text("");
+                        var $d = $('<span class="days" ></span>').appendTo($clock),
+                            $h = $('<span class="hours" ></span>').appendTo($clock),
+                            $m = $('<span class="minutes" ></span>').appendTo($clock),
+                            $s = $('<span class="seconds" ></span>').appendTo($clock);
+
+                        setInterval(function () {
+
+                            duration = moment.duration(duration.asMilliseconds() -
+                                interval, 'milliseconds');
+                            var d = moment.duration(duration).days(),
+                                h = moment.duration(duration).hours(),
+                                m = moment.duration(duration).minutes(),
+                                s = moment.duration(duration).seconds();
+
+                            d = $.trim(d).length === 1 ? '0' + d : d;
+                            h = $.trim(h).length === 1 ? '0' + h : h;
+                            m = $.trim(m).length === 1 ? '0' + m : m;
+                            s = $.trim(s).length === 1 ? '0' + s : s;
+
+                            // show how many hours, minutes and seconds are left
+                            // $d.text(d + ":");
+                            $h.text(h + ":");
+                            $m.text(m + ":");
+                            $s.text(s);
+
+                        }, interval);
+
+                    }
+                    // Countdown
                 },
                 error: function (xhr, status) {
                     alert('Error');

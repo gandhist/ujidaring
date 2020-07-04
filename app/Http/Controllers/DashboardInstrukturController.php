@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\JadwalModel;
 use App\Peserta;
+use Carbon\Carbon;
 use App\SoalPgModel;
 use App\SoalEssayModel;
 
@@ -93,6 +94,9 @@ class DashboardInstrukturController extends Controller
     }
 
     public function updateDurasiUjian (Request $request){
+
+        $jadwalUpdate['mulai_ujian'] = Carbon::now()->toDateTimeString();
+        $jadwalUpdate['akhir_ujian'] = Carbon::now()->addMinutes($request->durasi)->toDateTimeString();
         $jadwalUpdate['durasi_ujian'] = $request->durasi; 
         $pesertaUpdate['durasi'] = $request->durasi; 
         JadwalModel::find($request->idJadwal)->update($jadwalUpdate);
@@ -100,7 +104,7 @@ class DashboardInstrukturController extends Controller
         $getIdKelompok = JadwalModel::find($request->idJadwal)->first();
         Peserta::where("id_kelompok","=",$getIdKelompok->id_klp_peserta)->update($pesertaUpdate);
         
-        return "Sukses";
+        return $jadwalUpdate['akhir_ujian'];
     }
 
     
