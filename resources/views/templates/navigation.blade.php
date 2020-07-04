@@ -77,15 +77,27 @@
         </a>
       </li>
 
-      <li class="treeview">
+      <!-- <li class="treeview">
+        <a href="{{ url('instruktur/dashboardinstruktur') }}">
+          <i class="fa fa-dashboard"></i> <span>Dashboard Instruktur</span>
+        </a>
+      </li> -->
+
+      <!-- <li class="treeview">
         <a href="#">
           <i class="fa fa-dashboard"></i> <span>Seminar</span>
         </a>
-      </li>
+      </li> -->
 
       <li class="treeview">
         <a href="{{ url('jadwal') }}">
           <i class="fa fa-dashboard"></i> <span>Jadwal</span>
+        </a>
+      </li>
+
+      <li class="treeview">
+        <a href="{{ url('penilaian') }}">
+          <i class="fa fa-dashboard"></i> <span>Penilaian</span>
         </a>
       </li>
 

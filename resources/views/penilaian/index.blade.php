@@ -4,7 +4,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Jadwal
+        Penilaian
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -123,8 +123,8 @@
 
                     <div class="col-sm-2" style='text-align:right'>
                         <div class="btn-group">
-                            <a href="{{ route('jadwal.create') }}" class="btn btn-info"> <i class="fa fa-plus"></i>
-                                Tambah</a>
+                            <!-- <a href="{{ route('jadwal.create') }}" class="btn btn-info"> <i class="fa fa-plus"></i>
+                                Tambah</a> -->
                             <!-- <button class="btn btn-success" id="btnEdit" name="btnEdit"> <i class="fa fa-edit"></i>
                                 Ubah</button>
                             <button class="btn btn-danger" id="btnHapus" name="btnHapus"> <i class="fa fa-trash"></i>
@@ -139,29 +139,34 @@
             <!-- <hr> -->
             {{-- table data of car  --}}
             {{-- <div class="table-responsive"> --}}
-            <table id="data-tables" class="table table-striped table-bordered dataTable customTable">
+            <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                 <thead>
                     <tr>
-                        <th><i class="fa fa-check-square-o"></i></th>
                         <th>No</th>
-                        <th>TUK</th>
-                        <th>Tanggal Awal</th>
-                        <th>Tanggal Akhir</th>
                         <th>Jenis Usaha</th>
                         <th>Bidang</th>
+                        <th>Sertifikat Alat</th>
+                        <th>Tanggal Mulai</th>
+                        <th>Tanggal Selesai</th>
+                        <th>TUK</th>
+                        <th>Mulai</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($data as $key)
                     <tr>
-                        <td style='width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
-                                id="selection[]" name="selection[]"></td>
-                        <td style='width:1%'>{{ $loop->iteration }}</td>
-                        <td style='width:40%'>{{$key->tuk}}</td>
-                        <td style='width:10%'>{{ \Carbon\Carbon::parse($key->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td>
-                        <td style='width:10%'>{{ \Carbon\Carbon::parse($key->tgl_akhir)->isoFormat("DD MMMM YYYY") }}</td>
-                        <td>{{$key->jenis_usaha_r->nama_jns_usaha}}</td>
-                        <td>{{$key->bidang_r->nama_bidang}}</td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{$key->jadwal_r->jenis_usaha_r->nama_jns_usaha}}</td>
+                        <td>{{$key->jadwal_r->bidang_r->nama_bidang}}</td>
+                        <td>{{$key->jadwal_r->sertifikat_alat_r->nama_srtf_alat}}</td>
+                        <td>{{ \Carbon\Carbon::parse($key->jadwal_r->tgl_awal)->isoFormat("DD MMMM YYYY") }}
+                        </td>
+                        <td>{{ \Carbon\Carbon::parse($key->jadwal_r->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
+                        </td>
+                        <td>{{$key->jadwal_r->tuk}}</td>
+                        <td style="text-align:center"><a
+                                href="{{ url('instruktur/dashboardinstruktur/'.$key->id.'/edit') }}" type="button"
+                                class="btn btn-sm bg-olive btn-flat">Mulai Ujian</a></td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -248,40 +253,33 @@
     var save_method = "add";
     $(function () {
 
-        // Rubah Warna Filter
-        selectFilter("f_pjk3");
-        selectFilter("f_naker_prov");
-        selectFilter("f_provinsi");
-        selectFilter("f_kota");
-        selectFilter("f_instansi");
-        selectFilter("f_jenis_usaha");
-
-        // Cache Warna Filter
-        if ("{{request()->get('f_pjk3')}}" != "") {
-            selectFilterCache("f_pjk3");
-        }
-        if ("{{request()->get('f_naker_prov')}}" != "") {
-            selectFilterCache("f_naker_prov");
-        }
-        if ("{{request()->get('f_provinsi')}}" != "") {
-            selectFilterCache("f_provinsi");
-        }
-        if ("{{request()->get('f_kota')}}" != "") {
-            selectFilterCache("f_kota");
-        }
-        if ("{{request()->get('f_instansi')}}" != "") {
-            selectFilterCache("f_instansi");
-        }
-        if ("{{request()->get('f_jenis_usaha')}}" != "") {
-            selectFilterCache("f_jenis_usaha");
-        }
-
-        // Filter kota berdasarkan provinsi
-        $('#f_provinsi').on('select2:select', function () {
-            var url = `{{ url('register_perusahaan/chain') }}`;
-            chainedProvinsi(url, 'f_provinsi', 'f_kota', "Kota");
+        var dt = $('#custom-table').DataTable({
+            "lengthMenu": [
+                [10, 20, 50],
+                [10, 20, 50]
+            ],
+            "scrollX": true,
+            "scrollY": $(window).height() - 255,
+            "scrollCollapse": true,
+            "autoWidth": false,
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": [0, 1]
+            }],
+            "aaSorting": []
         });
 
+        dt.on('order.dt search.dt', function () {
+            dt.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+ 
         // Input data mask
         $('[data-mask]').inputmask();
 

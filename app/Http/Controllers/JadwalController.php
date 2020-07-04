@@ -6,13 +6,18 @@ use Illuminate\Http\Request;
 use App\MasterJenisUsaha;
 use App\MasterBidang;
 use App\JadwalModel;
+use App\JadwalModul;
+use App\InstrukturModel;
+use App\JadwalInstruktur;
 use App\Peserta;
+use App\User;
 use App\Imports\PesertaImport;
 use App\Imports\SoalPgImport;
 use App\Imports\SoalEssayImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class JadwalController extends Controller
 {
@@ -23,8 +28,8 @@ class JadwalController extends Controller
      */
     public function index()
     {
-        
-        return view('jadwal.index');
+        $data = JadwalModel::all();
+        return view('jadwal.index')->with(compact('data'));
     }
 
     /**
@@ -51,14 +56,34 @@ class JadwalController extends Controller
         // menangkap file excel
 	    $file = $request->file('excel_peserta');
 	    // membuat nama file unik
-        $nama_file = Carbon::now()->timestamp.$file->getClientOriginalName();
+        $nama_file = "Data_Peserta_".Carbon::now()->timestamp."_".$file->getClientOriginalName();
         // upload ke folder file_siswa di dalam folder public
 	    $file->move('File_Peserta',$nama_file);
-    	// import data
+    	// import data excel ke database
         Excel::import(new PesertaImport, public_path('/File_Peserta/'.$nama_file));
-        
+        // Mengambil nilai id_kelompok_peserta
         $x = Excel::toArray(new PesertaImport, public_path('/File_Peserta/'.$nama_file));
         $id_klp_peserta = $x[0][0][2];
+
+        // Search peserta yang id_user = null
+        $createAccountPeserta = Peserta::where('user_id', '=', null)->get();
+            foreach($createAccountPeserta as  $value) {
+                $id_peserta = $value->id;
+                $dataUser['username'] = $value->nik;
+                $dataUser['name'] = $value->nama;
+                $dataUser['role_id'] = 2;
+                $dataUser['is_active'] = 1;
+                $dataUser['hint'] = mt_rand(10000000,99999999);
+                $dataUser['password'] = Hash::make($dataUser['hint']);
+                $dataUser['created_by'] = Auth::id();
+                $dataUser['created_at'] = Carbon::now()->toDateTimeString();
+                $getIdUser = User::create($dataUser);
+                $user_id['user_id'] = $getIdUser->id;
+
+                // Update id_user di table peserta
+                Peserta::find($id_peserta)->update($user_id);
+            }
+        
         }
 
         if($request->hasFile('excel_soal_pg')){
@@ -100,9 +125,88 @@ class JadwalController extends Controller
         $data['id_klp_soal_essay'] = $id_klp_essay;
         $data['created_by'] = Auth::id();
         $data['created_at'] = Carbon::now()->toDateTimeString();
-        JadwalModel::create($data); 
+
+        // Insert ke table jadwal
+        $getIdJadwal = JadwalModel::create($data); 
+        $idJadwal = $getIdJadwal->id;
+
+        if ($request->id_detail_instruktur!='' )
+        {
+            $jumlah_detail = explode(',', $request->id_detail_instruktur);
+            foreach($jumlah_detail as $jumlah_detail) {
+                $x = "nik_instruktur_".$jumlah_detail;
+                $dataDetail['nik'] = $request->$x;
+                $dataUser['username'] = $request->$x;
+                $x = "nama_instruktur_".$jumlah_detail;
+                $dataDetail['nama'] = $request->$x;
+                $dataUser['name'] = $request->$x;
+
+                $x = "foto_instruktur_".$jumlah_detail;
+                // handle upload foto instruktur 
+                if ($files = $request->file($x)) {
+                    $destinationPath = 'FotoInstruktur'; // upload path
+                    $file = "Foto_".$dataDetail['nik']."_".$dataDetail['nama']. "." .$files->getClientOriginalExtension();
+                    $files->move($destinationPath, $file);
+                    $dataDetail['foto'] = $destinationPath."/".$file;
+                 }
+
+                 $x = "pdf_instruktur_".$jumlah_detail;
+                // handle upload ktp instruktur 
+                if ($files = $request->file($x)) {
+                    $destinationPath = 'PdfInstruktur'; // upload path
+                    $file = "Pdf_".$dataDetail['nik']."_".$dataDetail['nama']. "." .$files->getClientOriginalExtension();
+                    $files->move($destinationPath, $file);
+                    $dataDetail['ktp'] = $destinationPath."/".$file;
+                 }
+
+                 // Menetukan role instruktur full / view
+                 $x = "tipe_instruktur_".$jumlah_detail;
+                 if($request->$x=="on"){
+                    $role_id = 3 ;
+                 }else{
+                    $role_id = 4 ;
+                 }
+                 $dataDetail['role_id'] = $role_id;
+                 $dataUser['role_id'] = $role_id;
+                 $dataDetail['created_by'] = Auth::id();
+                 $dataDetail['created_at'] = Carbon::now()->toDateTimeString();
+
+                 $dataUser['is_active'] = 1;
+                 $dataUser['hint'] = mt_rand(10000000,99999999);
+                 $dataUser['password'] = Hash::make($dataUser['hint']);
+                 $dataUser['created_by'] = Auth::id();
+                 $dataUser['created_at'] = Carbon::now()->toDateTimeString();
+
+                 // Insert data user instruktur ke table user
+                 $getIdUser = User::create($dataUser);
+                 $dataDetail['id_users'] = $getIdUser->id;
+
+                 // Insert data instruktur ke table instruktur
+                 $getIdInstruktur = InstrukturModel::create($dataDetail);
+                 $idInstruktur = $getIdInstruktur->id;
+
+                 // Insert ke table jadwal_instruktur
+                 $dataJadwalInstruktur['id_jadwal'] = $idJadwal;
+                 $dataJadwalInstruktur['id_instruktur'] = $idInstruktur;
+                 JadwalInstruktur::create($dataJadwalInstruktur);
+            } 
+        }
+
+        if ($request->id_jumlah_detail!='' ){
+            $jml_dtl_modul = explode(',', $request->id_jumlah_detail);
+            foreach($jml_dtl_modul as $jml_dtl_modul) {
+                $dataModul['id_jadwal'] = $idJadwal;
+                $x = "id_modul_".$jml_dtl_modul;
+                $dataModul['id_modul'] = $request->$x;
+                $dataModul['created_by'] = Auth::id();
+                $dataModul['created_at'] = Carbon::now()->toDateTimeString();
+
+                // Insert data modul yang ada pada jadwal ini
+                JadwalModul::create($dataModul); 
+            }
+        }
             
-        return view('jadwal.index');
+        return redirect('jadwal')->with('message', 'Data berhasil ditambahkan');
     }
 
     /**
