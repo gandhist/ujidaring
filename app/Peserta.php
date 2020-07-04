@@ -56,4 +56,9 @@ class Peserta extends Model
     public function essay_salah_r(){
         return $this->hasMany('App\JawabanEssayPeserta','id_peserta')->where("is_true","=","0");
     }
+
+       // relasi jawaban tugas
+       public function jawaban_tugas(){
+        return $this->belongsTo('App\JawabanTugas','id','id_peserta');
+    }
 }

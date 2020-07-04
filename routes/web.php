@@ -30,6 +30,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::group(['prefix' => 'peserta'], function () {
 		Route::get('dashboard','PesertaController@index');
+		Route::get('tugas','PesertaController@tugas');
+		Route::post('tugas/save','PesertaController@tugas_store');
 		Route::get('kuisioner','PesertaController@kuisioner');
 		Route::post('kuisioner/save','PesertaController@kuisioner_store');
 
