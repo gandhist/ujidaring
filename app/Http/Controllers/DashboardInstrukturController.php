@@ -10,6 +10,7 @@ use App\SoalPgModel;
 use App\SoalEssayModel;
 use App\JadwalInstruktur;
 use App\InstrukturModel;
+use App\JadwalModul;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardInstrukturController extends Controller
@@ -29,7 +30,71 @@ class DashboardInstrukturController extends Controller
         return view('homeInstruktur')->with(compact('data','jumlahjadwal'));
     }
 
-    /**
+    // function view upload modul dan link 
+    public function modul($id){
+        $getIdInstruktur = InstrukturModel::where("id_users",Auth::id())->first();
+        $data = JadwalModul::where('id_jadwal',$id)->orderBy("id_modul","asc")->get();
+        return view('instruktur.modul')->with(compact('data'));
+    }
+
+    // function view upload modul dan link 
+    public function store_modul(Request $request){
+        $instruktur = InstrukturModel::where("id_users",Auth::id())->first();
+        $px_materi = "materi_";
+        $px_link = "link_";
+        $anggota = [];
+        $anggota_msg = [];
+        // return $instruktur->jadwal_r->jadwal_modul_r;
+        foreach ($instruktur->jadwal_r->jadwal_modul_r as $key) {
+            if ($request->has($px_materi.$key->id)) {
+                $anggota += [
+                    $px_materi.$key->id => 'mimes:pdf,docx,xls,xlsx|max:5120',
+                    // $px_link.$i => 'required',
+                ];
+                $anggota_msg += [
+                    $px_materi.$key->id.".mimes" => 'Upload Hanya format PDF,XLS,DOCX!',
+                    $px_materi.$key->id.".max" => 'Maksimal File harus 5MB',
+                ];
+            }
+        }
+       $request->validate($anggota, $anggota_msg); 
+
+        foreach ($instruktur->jadwal_r->jadwal_modul_r as $key) {
+            if($request->has($px_link.$key->id)){
+                $val_mtr = explode("_", $request->input($px_materi.$key->id));
+                $val_link = explode("_", $request->input($px_link.$key->id));
+                // handle upload Premi bpjs kesehatan
+                $data = JadwalModul::find($key->id);
+                if ($files = $request->file($px_materi.$key->id)) {
+                    $destinationPath = 'uploads/materi/'.$instruktur->jadwal_r->id; // upload path
+                    $file = "materi_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
+                    $files->move($destinationPath, $file);
+                    $data->materi= $instruktur->jadwal_r->id."/".$file;
+                }
+                $data->link = $request->input($px_link.$key->id);
+                $data->save();
+                //  JadwalModul::find($key->id)->update([
+                //     'link' => $request->input($px_link.$key->id),
+                //     'materi' => $file,
+                // ]);
+            }
+        }
+       
+    }
+
+    public function uploadtugas(Request $request, $id)
+    {
+        if ($files = $request->file('uploadTugas')) {
+            $destinationPath = 'uploads/Tugas'; // upload path
+            $file = "Tugas_Jadwal_".$id."_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $file);
+            $data['pdf_tugas'] = $destinationPath."/".$file;
+        }
+        $simpan = JadwalModel::find($id)->update($data);
+        return redirect()->back()->with('message', 'Berhasil Upload Tugas!'); 
+    }
+
+     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

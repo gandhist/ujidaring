@@ -79,7 +79,12 @@
     <form name="formAdd" id="formAdd">
     <div class="row">
       <div class="col-lg-4">
-        <input type="text" class="form-control" name="id_instruktur" id="id_instruktur">
+        {{-- <input type="text" class="form-control" name="id_instruktur" id="id_instruktur"> --}}
+        <select name="id_instruktur" class="form-control" id="id_instruktur">
+          @foreach($peserta->jadwal_r->instruktur_r as $key)
+          <option value="{{ $key->instruktur_r->id }}">{{ $key->instruktur_r->nama }}</option>
+          @endforeach
+        </select>
         <input type="hidden" value="{{ $peserta->jadwal_r->id }}" class="form-control" name="id_jadwal" id="id_jadwal">
       </div>
         <div class="col-lg-12">
@@ -122,6 +127,7 @@
 @endsection
 @push('script')
 <script>
+  var home = "{{ url('peserta/presensi') }}";
 $(document).ready(function () {
     $('#btnSave').on('click', function(e){
       e.preventDefault();
@@ -154,7 +160,7 @@ function store(){
             confirmButtonText: 'Close',
             confirmButtonColor: '#AAA',
             onClose: function() {
-                // window.location.reload();
+                window.location.replace(home);
             }
         })
 
