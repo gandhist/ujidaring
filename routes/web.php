@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth'], function () {
 	});
 
 	Route::post('updateDurasiUjian','DashboardInstrukturController@updateDurasiUjian');
+	Route::post('instruktur/dashboardinstruktur/{id}/uploadtugas','DashboardInstrukturController@uploadtugas');
 
 	Route::get('sms','PesertaController@kirimSMS');
 	Route::get('wa','PesertaController@kirimWA');

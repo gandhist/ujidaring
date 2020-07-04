@@ -18,9 +18,11 @@ use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Traits\GlobalFunction;
 
 class JadwalController extends Controller
 {
+    use GlobalFunction;
     /**
      * Display a listing of the resource.
      *
@@ -82,6 +84,11 @@ class JadwalController extends Controller
 
                 // Update id_user di table peserta
                 Peserta::find($id_peserta)->update($user_id);
+
+                $telepon = $value->no_hp;
+                // Gunakan NIK Anda dan kode: 9777 untuk login ke env('APP_URL')
+                $message = "Gunakan NIK Anda dan password: ".$dataUser['hint']." untuk login ke ".env('APP_URL');
+                $this->kirimPesanSMS($telepon, $message);
             }
         
         }
@@ -129,6 +136,14 @@ class JadwalController extends Controller
         // Insert ke table jadwal
         $getIdJadwal = JadwalModel::create($data); 
         $idJadwal = $getIdJadwal->id;
+
+        if ($files = $request->file('gambarJadwal')) {
+            $destinationPath = 'uploads/GambarJadwal'; // upload path
+            $file = "Pdf_Jadwal_".$idJadwal."_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $file);
+            $data2['pdf_jadwal'] = $destinationPath."/".$file;
+        }
+        JadwalModel::find($idJadwal)->update($data2); 
 
         if ($request->id_detail_instruktur!='' )
         {

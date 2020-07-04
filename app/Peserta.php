@@ -37,8 +37,28 @@ class Peserta extends Model
         return $this->hasMany('App\JawabanEvaluasi','id_peserta')->where('tanggal',\Carbon\Carbon::now()->isoFormat('YYYY-MM-DD'));
     }
 
-    // relasi jawaban tugas
-    public function jawaban_tugas(){
+    // relasi ke jawaban pg benar
+    public function pg_benar_r(){
+        return $this->hasMany('App\JawabanPeserta','id_peserta')->where("is_true","=","1");
+    }
+
+    // relasi ke jawaban pg benar
+    public function pg_salah_r(){
+        return $this->hasMany('App\JawabanPeserta','id_peserta')->where("is_true","=","0");
+    }
+
+    // relasi ke jawaban essay benar
+    public function essay_benar_r(){
+        return $this->hasMany('App\JawabanEssayPeserta','id_peserta')->where("is_true","=","1");
+    }
+
+    // relasi ke jawaban essay salah
+    public function essay_salah_r(){
+        return $this->hasMany('App\JawabanEssayPeserta','id_peserta')->where("is_true","=","0");
+    }
+
+       // relasi jawaban tugas
+       public function jawaban_tugas(){
         return $this->belongsTo('App\JawabanTugas','id','id_peserta');
     }
 }

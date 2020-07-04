@@ -82,7 +82,19 @@ class DashboardInstrukturController extends Controller
        
     }
 
-    /**
+    public function uploadtugas(Request $request, $id)
+    {
+        if ($files = $request->file('uploadTugas')) {
+            $destinationPath = 'uploads/Tugas'; // upload path
+            $file = "Tugas_Jadwal_".$id."_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $file);
+            $data['pdf_tugas'] = $destinationPath."/".$file;
+        }
+        $simpan = JadwalModel::find($id)->update($data);
+        return redirect()->back()->with('message', 'Berhasil Upload Tugas!'); 
+    }
+
+     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

@@ -63,7 +63,8 @@
                                             <tr>
                                                 <td>
                                                     <input name="tuk" id="tuk" type="text" class="form-control"
-                                                        placeholder="Tempat Uji Kompetensi" value="{{old('tuk')}}" required>
+                                                        placeholder="Tempat Uji Kompetensi" value="{{old('tuk')}}"
+                                                        required>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -105,13 +106,20 @@
                                                     </div>
                                                 </td>
                                             </tr>
-
+                                            <tr>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <input type="file" id="gambarJadwal" name="gambarJadwal">
+                                                        <p class="help-block">Gambar Jadwal (.pdf)</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="col-sm-6">
                                     <h2 class="fs-title">Persyaratan</h2>
-                                    <textarea id="persyaratan" style="text-align:left;height:195px;resize: none;"
+                                    <textarea id="persyaratan" style="text-align:left;height:262px;resize: none;"
                                         readonly>
 
                                     </textarea>
@@ -248,6 +256,10 @@
             }
             if ($("#id_sert_alat").val() == '') {
                 alert("Sertifikat Alat belum di input");
+                return false;
+            }
+            if ($("#gambarJadwal").val() == '') {
+                alert("Gambar jadwal belum di input");
                 return false;
             }
 

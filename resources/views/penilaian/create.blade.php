@@ -20,6 +20,11 @@
     <!-- Default box -->
     <div class="box box-content">
         <div class="box-body">
+            @if(session()->get('message'))
+            <div class="alert alert-success alert-dismissible fade in"> {{ session()->get('message') }}
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            </div>
+            @endif
             <!-- MultiStep Form -->
             <div class="row">
                 <div class="col-md-7">
@@ -108,9 +113,11 @@
                                 <th>Nama</th>
                                 <th>Tempat Lahir</th>
                                 <th>Tanggal Lahir</th>
-                                <th>Soal Pg Benar</th>
-                                <th>Soal Pg Salah</th>
-                                <th>Soal Essay</th>
+                                <th>Pg Benar</th>
+                                <th>Pg Salah</th>
+                                <th>Essay Benar</th>
+                                <th>Essay Salah</th>
+                                <th>Nilai Essay</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -122,8 +129,10 @@
                                 <td>{{ $key->tmp_lahir }}</td>
                                 <td style="text-align:right">
                                     {{ \Carbon\Carbon::parse($key->tgl_lahir)->isoFormat("DD MMMM YYYY") }}</td>
-                                <td>Benar</td>
-                                <td>Salah</td>
+                                <td style="width:7%">{{count($key->pg_benar_r)}}</td>
+                                <td style="width:7%">{{count($key->pg_salah_r)}}</td>
+                                <td style="width:7%">{{count($key->essay_benar_r)}}</td>
+                                <td style="width:7%">{{count($key->essay_salah_r)}}</td>
                                 <td style="text-align:center"><button type="button" class="btn btn-sm bg-olive btn-flat"
                                         data-toggle="modal" data-target="#modal_{{$key->nik}}">Nilai</button></td>
                             </tr>
@@ -147,32 +156,68 @@
                         </div>
                         <div class="modal-body">
                             <div class="box">
-                                <div class="box-body no-padding">
-                                    <table class="table table-condensed" id="tableModalDetailAhli">
-                                        <thead>
-                                            <tr>
-                                            <th>No</th>
-                                            <th>Jawaban</th>
-                                            </tr>
-                                           
-                                        </thead>
-                                        <tbody>
-                                            @foreach($key->jawaban_essay_r as $jawaban)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>
-                                                    {{ $jawaban->jawaban }}
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <form action="{{ route('penilaian.update', $key->id ) }}" class="form-horizontal"
+                                    id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
+                                    @method("PATCH")
+                                    @csrf
+                                    <div class="box-body no-padding">
+                                        <br>
+                                        <table class="table table-condensed" id="tableModalDetailAhli">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Soal</th>
+                                                    <th>Jawaban Peserta</th>
+                                                    <th>Jawaban Sebenarnya</th>
+                                                    <th>Bobot</th>
+                                                    <th>Ceklis jika benar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <input type="hidden" name="jumlah_jawaban_{{$key->id}}"
+                                                    value="{{count($key->jawaban_essay_r)}}">
+                                                @foreach($key->jawaban_essay_r as $jawaban)
+                                                <tr>
+                                                    <input type="hidden"
+                                                        name="{{$key->id}}_id_jawaban_{{ $loop->iteration }}"
+                                                        value="{{ $jawaban->id }}">
+                                                    <td style="width:1%">{{ $loop->iteration }}</td>
+                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
+                                                            id="" rows="5">{{ $jawaban->soal_r->soal }}</textarea></td>
+                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
+                                                            id="" rows="5">{{ $jawaban->jawaban }}</textarea></td>
+                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
+                                                            id="" rows="5">{{ $jawaban->soal_r->jawaban }}</textarea>
+                                                    </td>
+                                                    <td style="width:2%"><input
+                                                            name="{{$key->id}}_bobot_{{ $loop->iteration }}" type="text"
+                                                            maxlength="2" class="Inputbobot" required></td>
+                                                    <td style="width:10%;text-align:center"><input
+                                                            name="{{$key->id}}_istrue_{{ $loop->iteration }}" type="checkbox"></td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="box-footer">
+                                        <div class="row">
+                                            <div class="col-sm-6" style="text-align:right">
+                                                <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">Batal</button>
+                                            </div>
+                                            <div class="col-sm-6" style="text-align:left">
+                                                <button id="btnUpdateNilai" type="submit" class="btn btn-md btn-danger">
+                                                    <i class="fa fa-save"></i>
+                                                    Simpan Nilai</button>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </form>
                             </div>
                             <!-- End -->
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
 
@@ -232,7 +277,7 @@
         }).draw();
 
         // Kunci Input NIK Hanya Angka
-        $('#durasi').on('input blur paste', function () {
+        $('.Inputbobot').on('input blur paste', function () {
             $(this).val($(this).val().replace(/\D/g, ''))
         });
 
