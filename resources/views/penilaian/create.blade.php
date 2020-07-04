@@ -3,13 +3,13 @@
 @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>
-        Tambah Jadwal
+    <h1 style="padding-left: 40%">
+        Penilaian
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active"><a href="#">Jadwal</a></li>
+        <li class="active"><a href="#">Penilaian</a></li>
     </ol>
 
 
@@ -20,179 +20,167 @@
     <!-- Default box -->
     <div class="box box-content">
         <div class="box-body">
-
-
-
             <!-- MultiStep Form -->
             <div class="row">
-                <div class="col-md-12">
-                    <form action="{{ route('jadwal.store') }}" id="msform" name="msform" method="post"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <!-- progressbar -->
-                        <ul id="progressbar">
-                            <li class="active">Jadwal</li>
-                            <li>Instruktur</li>
-                            <li>Peserta</li>
-                            <li>Soal</li>
-                        </ul>
-                        <!-- fieldsets -->
-                        <fieldset>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <h2 class="fs-title">Jadwal</h2>
-                                    <table class="table table-condensed table-input">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="input-group">
-                                                        <input id="tgl_awal" name="tgl_awal" autocomplete="off"
-                                                            data-provide="datepicker" data-date-format="dd/mm/yyyy"
-                                                            type="text" class="form-control "
-                                                            placeholder="Tanggal Mulai" required>
-                                                        <span class="input-group-addon ">s/d</span>
-                                                        <input id="tgl_akhir" name="tgl_akhir" autocomplete="off"
-                                                            data-provide="datepicker" data-date-format="dd/mm/yyyy"
-                                                            type="text" class="form-control "
-                                                            placeholder="Tanggal Selesai" required>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <input name="tuk" id="tuk" type="text" class="form-control"
-                                                        placeholder="Tempat Uji Kompetensi" value="{{old('tuk')}}" required>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="input-group">
-                                                        <select class="form-control select2" name="id_jenis_usaha"
-                                                            id="id_jenis_usaha" required>
-                                                            <option selected value="">Jenis Usaha</option>
-                                                            @foreach($jenisusaha as $key)
-                                                            <option value="{{ $key->id }}"
-                                                                {{ $key->id == '1'  ? 'selected' : '' }}>
-                                                                {{ $key->nama_jns_usaha }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="input-group">
-                                                        <select class="form-control select2" name="id_bidang"
-                                                            id="id_bidang" required>
-                                                            <option selected value="">Bidang</option>
-                                                            @foreach($bidang as $key)
-                                                            <option value="{{ $key->id }}">{{ $key->nama_bidang }}
-                                                            </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="input-group">
-                                                        <select class="form-control select2" name="id_sert_alat"
-                                                            id="id_sert_alat" required>
-                                                            <option selected value="">Sertifikat Alat</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-sm-6">
-                                    <h2 class="fs-title">Persyaratan</h2>
-                                    <textarea id="persyaratan" style="text-align:left;height:195px;resize: none;"
-                                        readonly>
-
-                                    </textarea>
-                                </div>
-                            </div>
-
-                            <input id="id_jumlah_detail" name="id_jumlah_detail" type="hidden" value="">
-
-                            <h2 class="fs-title">Modul</h2>
-                            <table id="table-modul" class="table table-bordered table-Detail">
+                <div class="col-md-7">
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
                                 <thead>
                                     <tr>
-                                        <th style="width:3%">No</th>
-                                        <th>Modul</th>
-                                        <th style="width:7%">Pertemuan</th>
-                                        <th>Hapus</th>
+                                        <th style="text-align:left;padding: 6px;">Tanggal Mulai</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td>
+                                        <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{$data->jenis_usaha_r->nama_jns_usaha}}</td>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{$data->bidang_r->nama_bidang}}
+                                        </td>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{$data->tuk}}
+                                        </td>
+
                                     </tr>
+                                    <tr>
+                                        <th style="text-align:left;padding: 6px;">Tanggal Selesai</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{ \Carbon\Carbon::parse($data->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
+                                        </td>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Peserta
+                                        </th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{$jumlahPeserta}} Orang</td>
+
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Pg
+                                        </th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{$jumlahSoalPg}} Soal</td>
+
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Essay
+                                        </th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{$jumlahSoalEssay}} Soal</td>
+                                    </tr>
+
                                 </thead>
-                                <tbody>
-
-                                </tbody>
                             </table>
-
-                            <input id="next1" type="button" name="next" class="next action-button" value="Berikutnya" />
-                        </fieldset>
-                        <fieldset>
-                            <input type="hidden" id="id_detail_instruktur" name="id_detail_instruktur" value="">
-                            <h2 class="fs-title">Instruktur</h2>
-                            <div class="btn-group btn-lg pull-left" style='padding-left:10px'>
-                                <button id="add_instruktur" type="button" class="btn btn-danger"
-                                    style="border-radius: 25px;"><span class="fa fa-plus"></span> Tambah
-                                    Instruktur</button>
-                            </div>
-                            <!-- /.box-header -->
-                            <div class="box-body">
-                                <table id="instruktur-Detail" class="table table-bordered table-Detail">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                </div>
+                <div class="col-md-4">
+                    <!-- <form action="{{ route('jadwal.store') }}" id="" name="" method="post"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table class="table no-margin">
                                     <thead>
                                         <tr>
-                                            <th style="width: 3%">No</th>
-                                            <th>NIK</th>
-                                            <th>Nama</th>
-                                            <th style="width:15%">Foto (.jpg/.jpeg/.png)</th>
-                                            <th style="width:15%">KTP (.jpg/.jpeg/.png)</th>
-                                            <th style="width:5%">Instruktur</th>
-                                            <th style="width:5%">Hapus</th>
+                                            <input type="hidden" id="idJadwal" name="idJadwal" value="{{$data->id}}">
+                                            <th style="width:5%"><span style="text-align:right;font-size: 22px;"
+                                                    id="clock">00:00:00</span></th>
+                                            <th style="text-align:right;padding: 6px;width:32%"><input maxlength="4"
+                                                    id="durasi" name="durasi" type="text" class="form-control"
+                                                    placeholder="Durasi Ujian(Menit)"></th>
+                                            <th style="text-align:left;padding: 6px;"><button id="btnmulai"
+                                                    type="button" class="btn btn-block btn-info btn-flat">Mulai
+                                                    Ujian</button>
+                                            </th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-
-                                    </tbody>
                                 </table>
                             </div>
-
-                            <input type="button" name="previous" class="previous action-button-previous"
-                                value="Previous" />
-                            <input type="button" name="next" class="next action-button" value="Berikutnya" />
-                        </fieldset>
-                        <fieldset>
-                            <h2 class="fs-title">Peserta</h2>
-                            <span class="pull-left"><b>Import Excel Data Peserta (.xls/.xlsx)</b></span>
-                            <input type="file" name="excel_peserta" />
-                            <input type="button" name="previous" class="previous action-button-previous"
-                                value="Previous" />
-                            <input type="button" name="next" class="next action-button" value="Berikutnya" />
-                        </fieldset>
-                        <fieldset>
-                            <h2 class="fs-title">Soal</h2>
-                            <span class="pull-left"><b>Import Excel Soal Pilihan Ganda (.xls/.xlsx)</b></span>
-                            <input type="file" name="excel_soal_pg" />
-                            <br>
-                            <span class="pull-left"><b>Import Excel Soal Essay (.xls/.xlsx)</b></span>
-                            <input type="file" name="excel_soal_essay" />
-
-                            <input type="button" name="previous" class="previous action-button-previous"
-                                value="Previous" />
-                            <input type="submit" name="submit" class="submit action-button" value="Submit" />
-                        </fieldset>
-                    </form>
+                        </div>
+                    </form> -->
+                </div>
+                <div class="col-md-12">
+                    <h3>Daftar Peserta</h3>
+                    <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>NIK</th>
+                                <th>Nama</th>
+                                <th>Tempat Lahir</th>
+                                <th>Tanggal Lahir</th>
+                                <th>Soal Pg Benar</th>
+                                <th>Soal Pg Salah</th>
+                                <th>Soal Essay</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($Peserta as $key)
+                            <tr>
+                                <td style="width:1%"></td>
+                                <td>{{ $key->nik }}</td>
+                                <td>{{ $key->nama }}</td>
+                                <td>{{ $key->tmp_lahir }}</td>
+                                <td style="text-align:right">
+                                    {{ \Carbon\Carbon::parse($key->tgl_lahir)->isoFormat("DD MMMM YYYY") }}</td>
+                                <td>Benar</td>
+                                <td>Salah</td>
+                                <td style="text-align:center"><button type="button" class="btn btn-sm bg-olive btn-flat"
+                                        data-toggle="modal" data-target="#modal_{{$key->nik}}">Nilai</button></td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <!-- /.MultiStep Form -->
+
+            <!-- Modal Penilaian -->
+            @foreach($Peserta as $key)
+            <div class="modal fade" id="modal_{{$key->nik}}" role="dialog">
+                <div class="modal-dialog modal-lg" style="width:1500px">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title"><b>{{$key->nama}}</b></h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="box">
+                                <div class="box-body no-padding">
+                                    <table class="table table-condensed" id="tableModalDetailAhli">
+                                        <thead>
+                                            <tr>
+                                            <th>No</th>
+                                            <th>Jawaban</th>
+                                            </tr>
+                                           
+                                        </thead>
+                                        <tbody>
+                                            @foreach($key->jawaban_essay_r as $jawaban)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>
+                                                    {{ $jawaban->jawaban }}
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- End -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            @endforeach
+            <!-- End -->
+
         </div>
         <!-- /.box-body -->
     </div>
@@ -213,276 +201,154 @@
 <script src="{{ asset('AdminLTE-2.3.11/plugins/input-mask/jquery.inputmask.date.extensions.js')}}"></script>
 <script src="{{ asset('AdminLTE-2.3.11/plugins/input-mask/jquery.inputmask.extensions.js')}}"></script>
 <script type="text/javascript">
-    // $('.select2').val(null).trigger('change');
-    var home = "{{ route('jadwal.index') }}";
-
     $(function () {
 
-        //jQuery time
-        var current_fs, next_fs, previous_fs; //fieldsets
-        var left, opacity, scale; //fieldset properties which we will animate
-        var animating; //flag to prevent quick multi-click glitches
+        var dt = $('#custom-table').DataTable({
+            "lengthMenu": [
+                [10, 20, 50],
+                [10, 20, 50]
+            ],
+            "scrollX": true,
+            "scrollY": $(window).height() - 255,
+            "scrollCollapse": true,
+            "bPaginate": false,
+            "searching": false,
+            "autoWidth": false,
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": [0, 1]
+            }],
+            "aaSorting": []
+        });
 
-        $(".next").click(function () {
-            $("#tgl_akhir").css("border-color", "#ccc");
-            $("#tgl_awal").css("border-color", "#ccc");
-            $("#tuk").css("border-color", "#ccc");
-            if ($("#tgl_awal").val() == '') {
-                alert("Tanggal Mulai belum di input");
-                $("#tgl_awal").css("border-color", "red");
-                return false;
-            }
-            if ($("#tgl_akhir").val() == '') {
-                alert("Tanggal Selesai belum di input");
-                $("#tgl_akhir").css("border-color", "red");
-                return false;
-            }
-            if ($("#tuk").val() == '') {
-                alert("Tempat Uji Kompetensi belum di input");
-                $("#tuk").css("border-color", "red");
-                return false;
-            }
-            if ($("#id_bidang").val() == '') {
-                alert("Bidang belum di input");
-                return false;
-            }
-            if ($("#id_sert_alat").val() == '') {
-                alert("Sertifikat Alat belum di input");
-                return false;
-            }
-
-            if (animating) return false;
-            animating = true;
-
-            current_fs = $(this).parent();
-            next_fs = $(this).parent().next();
-
-            //activate next step on progressbar using the index of next_fs
-            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-            //show the next fieldset
-            next_fs.show();
-            //hide the current fieldset with style
-            current_fs.animate({
-                opacity: 0
-            }, {
-                step: function (now, mx) {
-                    //as the opacity of current_fs reduces to 0 - stored in "now"
-                    //1. scale current_fs down to 80%
-                    scale = 1 - (1 - now) * 0.2;
-                    //2. bring next_fs from the right(50%)
-                    left = (now * 50) + "%";
-                    //3. increase opacity of next_fs to 1 as it moves in
-                    opacity = 1 - now;
-                    current_fs.css({
-                        'transform': 'scale(' + scale + ')',
-                        'position': 'relative'
-                    });
-                    next_fs.css({
-                        'left': left,
-                        'opacity': opacity
-                    });
-                },
-                duration: 100,
-                complete: function () {
-                    current_fs.hide();
-                    animating = false;
-                },
-                //this comes from the custom easing plugin
-                easing: 'easeInOutBack'
+        dt.on('order.dt search.dt', function () {
+            dt.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
             });
-        });
-
-        $(".previous").click(function () {
-            if (animating) return false;
-            animating = true;
-
-            current_fs = $(this).parent();
-            previous_fs = $(this).parent().prev();
-
-            //de-activate current step on progressbar
-            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-
-            //show the previous fieldset
-            previous_fs.show();
-            //hide the current fieldset with style
-            current_fs.animate({
-                opacity: 0
-            }, {
-                step: function (now, mx) {
-                    //as the opacity of current_fs reduces to 0 - stored in "now"
-                    //1. scale previous_fs from 80% to 100%
-                    scale = 0.8 + (1 - now) * 0.2;
-                    //2. take current_fs to the right(50%) - from 0%
-                    left = ((1 - now) * 50) + "%";
-                    //3. increase opacity of previous_fs to 1 as it moves in
-                    opacity = 1 - now;
-                    current_fs.css({
-                        'left': left
-                    });
-                    previous_fs.css({
-                        'transform': 'scale(' + scale + ')',
-                        'opacity': opacity
-                    });
-                },
-                duration: 50,
-                complete: function () {
-                    current_fs.hide();
-                    animating = false;
-                },
-                //this comes from the custom easing plugin
-                easing: 'easeInOutBack'
-            });
-        });
-
-        // $(".submit").click(function () {
-        //     return false;
-        // });
-
-        //Kunci Input No Hp Hanya Angka
-        // $('#id_no_telp,#id_hp_p,#id_hp_kp,#id_norek_bank').on('input blur paste', function () {
-        //     $(this).val($(this).val().replace(/\D/g, ''))
-        // })
-
-    });
-
-    //Initialize Select2 Elements
-    $('.select2').select2();
-
-    // Readonly Jenis Usaha 
-    $("#id_jenis_usaha").parent().find('.select2-container--default').css('pointer-events', 'none');
-    $("#id_jenis_usaha").parent().find('.select2-selection--single').css('background', 'silver');
-
-    // Bidang Change
-    $('#id_bidang').on('select2:select', function () {
-        var url = `{{ url('bidang/chain') }}`;
-        chainedBidang(url, 'id_bidang', 'id_sert_alat', "Sertifikat Alat");
-        $("#persyaratan").html("");
-        $("#table-modul tbody").html("");
-        id_detail = [];
-        $('#id_jumlah_detail').val(id_detail);
-    });
-
-    // Get Data Modul
-    $('#id_sert_alat').on('select2:select', function () {
-        id_sert_alat = $(this).val();
-        getDataModul(id_sert_alat);
-    });
-
-    // Add baris instruktur
-    $('#add_instruktur').on('click', function () {
-        add_row_instruktur(no_instruktur);
-        id_detail_instruktur.push(no_instruktur);
-        $('#id_detail_instruktur').val(id_detail_instruktur);
-        no_instruktur++;
-    });
-
-    //Button Hapus Baris Detail Modul
-    $(document).on('click', '.btn-detail-hapus', function (e) {
-        nomor = $(this).attr('nomor');
-        id_detail = jQuery.grep(id_detail, function (value) {
-            return value != nomor;
-        });
-        $('#id_jumlah_detail').val(id_detail);
-        $(this).closest('tr').remove();
-    });
-
-    // Button hapus instuktur
-    $(document).on('click', '.btn-hapus-intruktur', function (e) {
-        nomor_instruktur = $(this).attr('nomor_instruktur');
-        id_detail_instruktur = jQuery.grep(id_detail_instruktur, function (value) {
-            return value != nomor_instruktur;
-        });
-        $('#id_detail_instruktur').val(id_detail_instruktur);
-        $(this).closest('tr').remove();
-    });
-
-    // Jumlah detail modul
-    var id_detail = [];
-
-    // Jumlah detail instruktur
-    var no_instruktur = 1;
-    var id_detail_instruktur = [];
-
-    function getDataModul(id_sert_alat) {
-        var url = "{{ url('getDataModul/chain') }}";
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: url,
-            method: 'POST',
-            data: {
-                id_sert_alat: id_sert_alat
-            },
-            success: function (data) {
-
-                if (data.length > 0) {
-                    $("#persyaratan").html(data[0]["persyaratan"] +
-                        "&#13;&#10;&#13;&#10;Jumlah Hari: " + data[0]["hari"] + " hari");
-                    $("#table-modul tbody").html("");
-                    var number = 1;
-                    data.forEach(function (item) {
-                        add_row(number, item);
-                        id_detail.push(number);
-                        number++;
-                    });
-                } else {
-                    id_detail = [];
-                    $("#persyaratan").html('Tidak Ada Data');
-                    $("#table-modul tbody").html("<tr><td colspan='4'>Tidak Ada Data</td></tr>");
-                }
-                $('#id_jumlah_detail').val(id_detail);
-
-            },
-            error: function (xhr, status) {
-                alert('Error');
-            }
-        });
-    };
-
-    // Fungsi Tambah Baris Modul
-    function add_row(no, item) {
-        $('#table-modul > tbody:last').append(`
-            <tr>
-                    <input type="hidden" value="` + item['id'] + `" name="id_modul_` + no + `">
-                                <td>` + no + `</td>
-                                            <td><input value="` + item['modul'] + `" type="text" class="form-control" readonly></td>
-                                            <td><input type="text" value="` + item['jp'] + `" class="form-control" readonly></td>
-                                <td style="width:5%"><button type="button"
-                                        class="btn btn-block btn-danger btn-sm btn-detail-hapus" nomor="` + no + `" ><span class="fa fa-trash"></span></button></td>
-                            </tr>
-            `);
-    };
-
-    // Fungsi Tambah Baris Instruktur
-    function add_row_instruktur(no) {
-        $('#instruktur-Detail > tbody:last').append(`
-            <tr>
-                   
-                                <td>` + no + `</td>
-                                            <td><input maxlength="16" id="nik_instruktur_` + no +
-            `" name="nik_instruktur_` + no + `" type="text" class="form-control" placeholder="NIK" required></td>
-                                            <td><input name="nama_instruktur_` + no + `" type="text" class="form-control" placeholder="Nama" required></td>
-                                            <td><input name="foto_instruktur_` + no + `" type="file" class="form-control" style="padding:5px"></td>
-                                            <td><input name="pdf_instruktur_` + no +
-            `"type="file" class="form-control" style="padding:5px"></td>
-                                             <td><input style="margin-top: 10px;" name="tipe_instruktur_` + no +
-            `"type="checkbox"></td>
-                                <td style="width:5%"><button type="button"
-                                        class="btn btn-block btn-danger btn-sm btn-hapus-intruktur" nomor_instruktur="` +
-            no + `" ><span class="fa fa-trash"></span></button></td>
-                            </tr>
-            `);
+        }).draw();
 
         // Kunci Input NIK Hanya Angka
-        $('#nik_instruktur_' + no).on('input blur paste', function () {
+        $('#durasi').on('input blur paste', function () {
             $(this).val($(this).val().replace(/\D/g, ''))
-        })
-    };
+        });
 
+        $("#btnmulai").on('click', function () {
+            $("#durasi").css("border-color", "#ccc");
+            var durasi = $("#durasi").val();
+            var idJadwal = $("#idJadwal").val();
+            if (durasi == "") {
+                Swal.fire({
+                    title: "Durasi ujian belum diisi",
+                    type: 'warning',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: '#AAA'
+                });
+                $("#durasi").focus();
+                $("#durasi").css("border-color", "red");
+            } else {
+                Swal.fire({
+                    title: 'Mulai Ujian?',
+                    text: "Apakah anda yakin untuk memulai ujian?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Mulai'
+                }).then((result) => {
+                    if (result.value) {
+                        Swal.fire(
+                            'Ujian dimulai!',
+                            'Waktu dihitung mundur dari sekarang.',
+                            'success'
+                        )
+                    }
+                    updateDurasi(durasi, idJadwal);
+
+                });
+
+            }
+        });
+
+        // Show Modal Penilaian
+        $('.btnnilai').on('click', function () {
+            $('#modaldetailAhli').modal('show');
+        });
+
+
+        // Fungsi Update durasi ujian
+        function updateDurasi(durasi, idJadwal) {
+            var url = "{{ url('updateDurasiUjian') }}";
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    durasi: durasi,
+                    idJadwal: idJadwal
+                },
+                success: function (data) {
+
+
+                    // countdown
+                    var $clock = $('#clock'),
+                        eventTime = moment(data, 'YYYY-MM-DD HH:mm:ss').unix(),
+                        currentTime = moment().unix(),
+                        diffTime = eventTime - currentTime,
+                        duration = moment.duration(diffTime * 1000, 'milliseconds'),
+                        interval = 1000;
+
+                    if (diffTime > 0) {
+
+                        // Show clock
+                        // $clock.show();
+                        $('#clock').text("");
+                        var $d = $('<span class="days" ></span>').appendTo($clock),
+                            $h = $('<span class="hours" ></span>').appendTo($clock),
+                            $m = $('<span class="minutes" ></span>').appendTo($clock),
+                            $s = $('<span class="seconds" ></span>').appendTo($clock);
+
+                        setInterval(function () {
+
+                            duration = moment.duration(duration.asMilliseconds() -
+                                interval, 'milliseconds');
+                            var d = moment.duration(duration).days(),
+                                h = moment.duration(duration).hours(),
+                                m = moment.duration(duration).minutes(),
+                                s = moment.duration(duration).seconds();
+
+                            d = $.trim(d).length === 1 ? '0' + d : d;
+                            h = $.trim(h).length === 1 ? '0' + h : h;
+                            m = $.trim(m).length === 1 ? '0' + m : m;
+                            s = $.trim(s).length === 1 ? '0' + s : s;
+
+                            // show how many hours, minutes and seconds are left
+                            // $d.text(d + ":");
+                            $h.text(h + ":");
+                            $m.text(m + ":");
+                            $s.text(s);
+
+                        }, interval);
+
+                    }
+                    // Countdown
+                },
+                error: function (xhr, status) {
+                    alert('Error');
+                }
+            });
+        }
+
+
+
+    });
 
     $('.datepicker').datepicker({
         format: 'yyyy/mm/dd',

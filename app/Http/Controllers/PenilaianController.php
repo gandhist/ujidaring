@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\JadwalInstruktur;
 use App\InstrukturModel;
+use App\JadwalModel;
+use App\Peserta;
+use Carbon\Carbon;
+use App\SoalPgModel;
+use App\SoalEssayModel;
+use App\JawabanPeserta;
 use Illuminate\Support\Facades\Auth;
 
 class PenilaianController extends Controller
@@ -63,7 +69,13 @@ class PenilaianController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = JadwalModel::find($id);
+        $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->orderBy('nama','asc')->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('penilaian.create')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay'));
+
     }
 
     /**
