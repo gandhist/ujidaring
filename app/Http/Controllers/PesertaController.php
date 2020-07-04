@@ -9,6 +9,7 @@ use App\JadwalModel;
 use App\JawabanEvaluasi;
 use App\EvaluasiSoal;
 use App\JawabanPeserta;
+use App\JawabanTugas;
 use App\JawabanEssayPeserta;
 use App\AbsenModel;
 use Carbon\Carbon;
@@ -41,8 +42,48 @@ class PesertaController extends Controller
             $is_allow = false;
         }
         $is_allow_uji = $is_allow;
+        $is_allow_tugas = $this->_check_allow_tugas();
         // dd($is_allow_uji);
-        return view('peserta.dashboard')->with(compact('peserta','is_allow_uji'));
+        return view('peserta.dashboard')->with(compact('peserta','is_allow_uji','is_allow_tugas'));
+    }
+
+    // view tugas
+    public function tugas(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        return view('peserta.tugas')->with(compact('peserta'));
+    }
+
+    // simpan tugas
+    public function tugas_store(Request $request){
+        $request->validate(
+        [
+            'tugas' => 'required|mimes:pdf|max:5120'
+        ],[
+            'tugas.required' => "PDF Tugas Harus di isi",
+            'tugas.mimes' => "Upload hanya format PDF",
+            'tugas.max' => "Maksimal ukuran file 5MB"
+        ]);
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        // handle upload tugas
+        if ($files = $request->file('tugas')) {
+            $destinationPath = 'uploads/tugas/peserta'; // upload path
+            $file = Auth::id()."_tugas_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $file);
+            $pdf_tugas = $file;
+        }
+        JawabanTugas::updateOrCreate([
+            'id_jadwal' => $peserta->jadwal_r->id,
+            'id_peserta' => $peserta->id
+        ],[
+            'tgl_upload' => Carbon::now()->isoFormat('YYYY-MM-DD'),
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'created_by' => Auth::id(),
+            'pdf_tugas' => $pdf_tugas
+        ]);
+        return response()->json([
+            'status' => true,
+            'message' => 'Berhasil Mengirim Tugas'
+        ],200);
     }
 
     // view kuisioner
@@ -332,9 +373,9 @@ class PesertaController extends Controller
     }
 
     public function kirimSMS(){
-        $telepon = '081240353913';
+        $telepon = '082169761759';
         // Gunakan NIK Anda dan kode: 9777 untuk login ke env('APP_URL')
-        $message = "Gunakan NIK Anda dan password: $hint untuk login ke ".env('APP_URL');
+        $message = "Gunakan NIK Anda dan password: untuk login ke ".env('APP_URL');
         return $this->kirimPesanSMS($telepon, $message);
     }
 
@@ -428,5 +469,22 @@ class PesertaController extends Controller
         }
         return $allow_cekout;
 
+    }
+
+    // fuction check allow input tugas 2 day after date end
+    public function _check_allow_tugas(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        // $awal_uji = strtotime($peserta->jadwal_r->mulai_ujian);
+        $akhir_uji = strtotime($peserta->jadwal_r->akhir_ujian);
+        $akhir_uji = Carbon::parse($akhir_uji)->timestamp;
+        $two_after = Carbon::parse($akhir_uji)->addDays(2)->timestamp;
+        $now = Carbon::now()->timestamp;
+        if($now >= $akhir_uji && $now <= $two_after){
+            $is_allow = true;
+        }
+        else {
+            $is_allow = false;
+        }
+        return $is_allow;
     }
 }

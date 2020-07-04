@@ -36,4 +36,9 @@ class Peserta extends Model
     public function jawaban_eva_r(){
         return $this->hasMany('App\JawabanEvaluasi','id_peserta')->where('tanggal',\Carbon\Carbon::now()->isoFormat('YYYY-MM-DD'));
     }
+
+    // relasi jawaban tugas
+    public function jawaban_tugas(){
+        return $this->belongsTo('App\JawabanTugas','id','id_peserta');
+    }
 }

@@ -15,7 +15,7 @@
 
     <div class="row">
 
-        <div class="col-lg 6">
+        <div class="col-lg 4">
             <div class="card" >
                 <img class="card-img-top" src="#" alt="Pass Foto {{ $peserta->nama }}">
                 <div class="card-body">
@@ -39,14 +39,24 @@
               </div>
         </div>
         <div class="col-lg-2">
-            @if ($is_allow_uji)
-            {{-- <button class="btn btn-outline-info" id="mulaiUjian">Mulai Ujian</button> --}}
-            <a href="{{ url('peserta/ujian/pg') }}" class="btn btn-outline-info">Mulai Ujian</a>
-            @else
-            {{-- <h6>Anda Sudah Melaksanakan Ujian</h6>
-            <p><small>Silahkan Isi Kuisioner</small> <a href="{{ url('peserta/kuisioner') }}" class="btn btn-outline-info">Isi Kuisioner</a></p> --}}
-            @endif
-            <p><a href="{{ url('peserta/presensi') }}" class="btn btn-outline-info">Absen</a></p>
+          <div class="card" >
+            <div class="card-header">
+              Pintasan
+            </div>
+            <ul class="list-group list-group-flush">
+                @if ($is_allow_uji)
+                  <li class="list-group-item">
+                  <a href="{{ url('peserta/ujian/pg') }}" class="btn btn-outline-info">Mulai Ujian</a>
+                  </li>
+                @else
+                  @if($is_allow_tugas)
+                    <a href="{{ url('peserta/tugas') }}" class="btn btn-outline-info">Kerjakan Tugas</a>
+                  @endif
+                @endif
+              <li class="list-group-item"><a target="_blank" href="{{ url('peserta/presensi') }}" class="btn btn-outline-info">Absen</a></li>
+              <li class="list-group-item"><a target="_blank" href="{{ url('uploads/Gambar/Jadwal/'.$peserta->jadwal_r->pdf_jadwal) }}" class="btn btn-outline-info">Jadwal</a></li>
+            </ul>
+          </div>
 
         </div>
 
@@ -78,7 +88,7 @@
                        </td>
                        <td>
                         @if($key->materi)
-                          <a href="{{ $key->link }}" class="btn btn-info">Link</a>
+                          <a href="{{ $key->link }}" class="btn btn-info">{{ $key->link }}</a>
                         @endif
                        </td>
                    </tr>
