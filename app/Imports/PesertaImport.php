@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Peserta;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class PesertaImport implements ToModel
@@ -19,7 +20,7 @@ class PesertaImport implements ToModel
             'id_kelompok' => $row[2], 
             'nik' => $row[3],
             'tmp_lahir' => $row[4],
-            'tgl_lahir' => $row[5],
+            'tgl_lahir' => Carbon::createFromFormat('d-m-Y', $row[5])->toDateString(),
             'no_hp' => $row[6],    
         ]);
     }

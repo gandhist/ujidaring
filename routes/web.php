@@ -14,11 +14,17 @@
 
 Route::auth();
 
-
 Route::group(['middleware' => 'auth'], function () {
+
+	Route::group(['prefix' => 'instruktur'], function () {
+		Route::resource('dashboardinstruktur','DashboardInstrukturController');
+	});
+
+	Route::post('updateDurasiUjian','DashboardInstrukturController@updateDurasiUjian');
 
 	Route::get('sms','PesertaController@kirimSMS');
 	Route::get('wa','PesertaController@kirimWA');
+
 	Route::group(['prefix' => 'peserta'], function () {
 		Route::get('dashboard','PesertaController@index');
 		Route::get('kuisioner','PesertaController@kuisioner');
@@ -55,6 +61,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Daftar Kantor
 	Route::resource('jadwal', 'JadwalController');
+
+	// Daftar Kantor
+	Route::resource('penilaian', 'PenilaianController');
 
 	// Fungsi Chain Bidang
 	Route::post('bidang/chain','ChainController@bidang');
