@@ -12,6 +12,7 @@ use App\SoalPgModel;
 use App\SoalEssayModel;
 use App\JawabanPeserta;
 use App\JawabanEssayPeserta;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 
 class PenilaianController extends Controller
@@ -24,9 +25,17 @@ class PenilaianController extends Controller
     public function index()
     {
         $id_user = Auth::id();
-        $getIdInstruktur = InstrukturModel::where("id_users","=",$id_user)->first();
-        $data = JadwalInstruktur::where('id_instruktur','=',$getIdInstruktur->id)->orderBy("id_jadwal","asc")->get();
-        $jumlahjadwal = JadwalInstruktur::where('id_instruktur','=',$getIdInstruktur->id)->count();
+        $role = User::select('role_id')->where('id','=',$id_user)->first();
+
+        if($role['role_id']==1){
+            $data = JadwalInstruktur::groupBy('id_jadwal')->orderBy("id_jadwal","asc")->get();
+            $jumlahjadwal = JadwalInstruktur::groupBy('id_jadwal')->orderBy("id_jadwal","asc")->count();
+        }else{
+            $getIdInstruktur = InstrukturModel::where("id_users","=",$id_user)->first();
+            $data = JadwalInstruktur::where('id_instruktur','=',$getIdInstruktur->id)->orderBy("id_jadwal","asc")->get();
+            $jumlahjadwal = JadwalInstruktur::where('id_instruktur','=',$getIdInstruktur->id)->count();
+        }
+ 
         return view('penilaian.index')->with(compact('data','jumlahjadwal'));
     }
 

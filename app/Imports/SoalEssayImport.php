@@ -7,6 +7,12 @@ use Maatwebsite\Excel\Concerns\ToModel;
 
 class SoalEssayImport implements ToModel
 {
+    protected $id;
+
+    function __construct($id) {
+        $this->id = $id;
+    }
+    
     /**
     * @param array $row
     *
@@ -15,11 +21,11 @@ class SoalEssayImport implements ToModel
     public function model(array $row)
     {
         return new SoalEssayModel([
-            'kelompok_soal' => $row[1],
-            'no_soal' => $row[2], 
-            'soal' => $row[3],
-            'jawaban' => $row[4], 
-            'bobot' => $row[5], 
+            'kelompok_soal' => $this->id,
+            'no_soal' => $row[1], 
+            'soal' => $row[2],
+            'jawaban' => $row[3], 
+            'bobot' => $row[4], 
         ]);
     }
 }

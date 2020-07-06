@@ -124,10 +124,10 @@ function store(){
             confirmButtonText: 'Close',
             confirmButtonColor: '#AAA',
             onClose: function() {
-                window.location.reload();
+                window.history.back();
             }
         })
-
+        
         }
     },
     error: function(xhr, status) {
@@ -144,6 +144,7 @@ function store(){
                 $('[name="' + key + '"]').next().text(value); //select span help-block class set text error string
             }
         });
+
     }
   });
 }

@@ -19,6 +19,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\GlobalFunction;
+use App\SoalPgModel;
+use App\SoalEssayModel;
 
 class JadwalController extends Controller
 {
@@ -54,72 +56,6 @@ class JadwalController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->hasFile('excel_peserta')){
-        // menangkap file excel
-	    $file = $request->file('excel_peserta');
-	    // membuat nama file unik
-        $nama_file = "Data_Peserta_".Carbon::now()->timestamp."_".$file->getClientOriginalName();
-        // upload ke folder file_siswa di dalam folder public
-	    $file->move('File_Peserta',$nama_file);
-    	// import data excel ke database
-        Excel::import(new PesertaImport, public_path('/File_Peserta/'.$nama_file));
-        // Mengambil nilai id_kelompok_peserta
-        $x = Excel::toArray(new PesertaImport, public_path('/File_Peserta/'.$nama_file));
-        $id_klp_peserta = $x[0][0][2];
-
-        // Search peserta yang id_user = null
-        $createAccountPeserta = Peserta::where('user_id', '=', null)->get();
-            foreach($createAccountPeserta as  $value) {
-                $id_peserta = $value->id;
-                $dataUser['username'] = $value->nik;
-                $dataUser['name'] = $value->nama;
-                $dataUser['role_id'] = 2;
-                $dataUser['is_active'] = 1;
-                $dataUser['hint'] = mt_rand(10000000,99999999);
-                $dataUser['password'] = Hash::make($dataUser['hint']);
-                $dataUser['created_by'] = Auth::id();
-                $dataUser['created_at'] = Carbon::now()->toDateTimeString();
-                $getIdUser = User::create($dataUser);
-                $user_id['user_id'] = $getIdUser->id;
-
-                // Update id_user di table peserta
-                Peserta::find($id_peserta)->update($user_id);
-
-                $telepon = $value->no_hp;
-                // Gunakan NIK Anda dan kode: 9777 untuk login ke env('APP_URL')
-                $message = "Gunakan NIK Anda dan password: ".$dataUser['hint']." untuk login ke ".env('APP_URL');
-                $this->kirimPesanSMS($telepon, $message);
-            }
-        
-        }
-
-        if($request->hasFile('excel_soal_pg')){
-            // menangkap file excel
-            $file2 = $request->file('excel_soal_pg');
-            // membuat nama file unik
-            $nama_file2 = "Soal_PG_".Carbon::now()->timestamp."_".$file2->getClientOriginalName();
-            // upload ke folder file_siswa di dalam folder public
-            $file2->move('Soal',$nama_file2);
-            // import data
-            Excel::import(new SoalPgImport, public_path('/Soal/'.$nama_file2));
-            $x = Excel::toArray(new SoalPgImport, public_path('/Soal/'.$nama_file2));
-            $id_klp_pg = $x[0][0][1];
-     
-        }
-
-        if($request->hasFile('excel_soal_essay')){
-            // menangkap file excel
-            $file3 = $request->file('excel_soal_essay');
-            // membuat nama file unik
-            $nama_file3 = "Soal_Essay_".Carbon::now()->timestamp."_".$file3->getClientOriginalName();
-            // upload ke folder file_siswa di dalam folder public
-            $file3->move('Soal',$nama_file3);
-            // import data
-            Excel::import(new SoalEssayImport, public_path('/Soal/'.$nama_file3));
-            $x = Excel::toArray(new SoalEssayImport, public_path('/Soal/'.$nama_file3));
-            $id_klp_essay = $x[0][0][1];
-         
-        }
 
         $data['tgl_awal'] = Carbon::createFromFormat('d/m/Y',$request->tgl_awal);
         $data['tgl_akhir'] = Carbon::createFromFormat('d/m/Y',$request->tgl_akhir);
@@ -127,9 +63,6 @@ class JadwalController extends Controller
         $data['id_jenis_usaha'] = $request->id_jenis_usaha;
         $data['id_bidang'] = $request->id_bidang;
         $data['id_sert_alat'] = $request->id_sert_alat;
-        $data['id_klp_soal_pg'] = $id_klp_pg;
-        $data['id_klp_peserta'] = $id_klp_peserta;
-        $data['id_klp_soal_essay'] = $id_klp_essay;
         $data['created_by'] = Auth::id();
         $data['created_at'] = Carbon::now()->toDateTimeString();
 
@@ -137,12 +70,51 @@ class JadwalController extends Controller
         $getIdJadwal = JadwalModel::create($data); 
         $idJadwal = $getIdJadwal->id;
 
+        if($request->hasFile('excel_peserta')){
+            // menangkap file excel
+            $file = $request->file('excel_peserta');
+            // membuat nama file unik
+            $nama_file = "Data_Peserta_".Carbon::now()->timestamp."_".$file->getClientOriginalName();
+            // upload ke folder file_siswa di dalam folder public
+            $file->move('File_Peserta',$nama_file);
+            // import data excel ke database
+            Excel::import(new PesertaImport, public_path('/File_Peserta/'.$nama_file));
+            // Mengambil nilai id_kelompok_peserta
+            // $x = Excel::toArray(new PesertaImport, public_path('/File_Peserta/'.$nama_file));
+    
+            // Search peserta yang id_user = null
+            $createAccountPeserta = Peserta::where('user_id', '=', null)->get();
+                foreach($createAccountPeserta as  $value) {
+                    $id_peserta = $value->id;
+                    $dataUser['username'] = $value->nik;
+                    $dataUser['name'] = $value->nama;
+                    $dataUser['role_id'] = 2;
+                    $dataUser['is_active'] = 1;
+                    $dataUser['hint'] = mt_rand(10000000,99999999);
+                    $dataUser['password'] = Hash::make($dataUser['hint']);
+                    $dataUser['created_by'] = Auth::id();
+                    $dataUser['created_at'] = Carbon::now()->toDateTimeString();
+                    $getIdUser = User::create($dataUser);
+                    $user_id['user_id'] = $getIdUser->id;
+                    $user_id['id_kelompok'] = $idJadwal;
+    
+                    // Update id_user di table peserta
+                    Peserta::find($id_peserta)->update($user_id);
+                }
+            }
+
         if ($files = $request->file('gambarJadwal')) {
             $destinationPath = 'uploads/GambarJadwal'; // upload path
             $file = "Pdf_Jadwal_".$idJadwal."_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
             $files->move($destinationPath, $file);
             $data2['pdf_jadwal'] = $destinationPath."/".$file;
         }
+
+        // Memberi Nilai kelompok soal pg dan kelompok soal essay dan idkelompok peserta pada table jadwal
+        $data2['id_klp_peserta'] = $idJadwal;
+        $data2['id_klp_soal_pg'] = $idJadwal;
+        $data2['id_klp_soal_essay'] = $idJadwal;
+
         JadwalModel::find($idJadwal)->update($data2); 
 
         if ($request->id_detail_instruktur!='' )
@@ -243,7 +215,12 @@ class JadwalController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = JadwalModel::find($id);
+        $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->orderBy('nama','asc')->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.show')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay'));
     }
 
     /**
@@ -264,8 +241,23 @@ class JadwalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $idData = explode(',', $request->idHapusData);
+        foreach ($idData as $idData) {
+
+    
+            $user_id =  Peserta::select('user_id','no_hp','nama')->find($idData);
+            $no_hp = $user_id['no_hp'];
+            $nama = $user_id['nama'];
+            $user_account =  User::select('username','hint')->where('id',"=",$user_id['user_id'])->first();
+
+            $telepon = $no_hp;
+            // Gunakan NIK Anda dan kode: 9777 untuk login ke env('APP_URL')
+            $message = "Selamat ".$nama." anda telah terdaftar. Gunakan NIK Anda dan password: ".$user_account['hint']." untuk login ke ".env('APP_URL');
+            $this->kirimPesanSMS($telepon, $message);
+        }   
+        return back()->with('message', 'Account telah dikirim');
     }
+
 }

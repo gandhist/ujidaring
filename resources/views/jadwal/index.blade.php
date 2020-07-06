@@ -123,11 +123,12 @@
 
                     <div class="col-sm-2" style='text-align:right'>
                         <div class="btn-group">
+                            <button class="btn btn-success" id="btnTampil" name="btnTampil"> <i class="fa fa-eye"></i>
+                                Tampil</button>
                             <a href="{{ route('jadwal.create') }}" class="btn btn-info"> <i class="fa fa-plus"></i>
                                 Tambah</a>
-                            <!-- <button class="btn btn-success" id="btnEdit" name="btnEdit"> <i class="fa fa-edit"></i>
-                                Ubah</button>
-                            <button class="btn btn-danger" id="btnHapus" name="btnHapus"> <i class="fa fa-trash"></i>
+
+                            <!--  <button class="btn btn-danger" id="btnHapus" name="btnHapus"> <i class="fa fa-trash"></i>
                                 Hapus</button> -->
                         </div>
                     </div>
@@ -158,8 +159,10 @@
                                 id="selection[]" name="selection[]"></td>
                         <td style='width:1%'>{{ $loop->iteration }}</td>
                         <td style='width:40%'>{{$key->tuk}}</td>
-                        <td style='width:10%'>{{ \Carbon\Carbon::parse($key->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td>
-                        <td style='width:10%'>{{ \Carbon\Carbon::parse($key->tgl_akhir)->isoFormat("DD MMMM YYYY") }}</td>
+                        <td style='width:10%'>{{ \Carbon\Carbon::parse($key->tgl_awal)->isoFormat("DD MMMM YYYY") }}
+                        </td>
+                        <td style='width:10%'>{{ \Carbon\Carbon::parse($key->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
+                        </td>
                         <td>{{$key->jenis_usaha_r->nama_jns_usaha}}</td>
                         <td>{{$key->bidang_r->nama_bidang}}</td>
                     </tr>
@@ -286,7 +289,7 @@
         $('[data-mask]').inputmask();
 
         // Button edit click
-        $('#btnEdit').on('click', function (e) {
+        $('#btnTampil').on('click', function (e) {
             e.preventDefault();
             var id = [];
             $('.selection:checked').each(function () {
@@ -302,7 +305,7 @@
                 // alert('Tidak ada data yang terpilih');
             } else if (id.length > 1) {
                 Swal.fire({
-                    title: "Harap pilih satu data untuk di ubah",
+                    title: "Harap pilih satu data untuk ditampilkan",
                     type: 'warning',
                     confirmButtonText: 'Close',
                     confirmButtonColor: '#AAA'
@@ -310,7 +313,7 @@
                 // alert('Harap pilih satu data untuk di ubah');
             } else {
                 url = id[0];
-                window.location.href = "{{ url('badanusaha') }}/" + url + "/edit";
+                window.location.href = "{{ url('jadwal') }}/" + url + "/edit";
             }
         });
 

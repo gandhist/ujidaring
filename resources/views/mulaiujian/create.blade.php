@@ -250,6 +250,13 @@
 
                     if (diffTime > 0) {
 
+                        $("#durasi").attr('readonly','readonly');
+                        $("#durasi").css('background-color','#ccc');
+                        $("#durasi").val($("#durasi").val()+" Menit");
+                        $("#btnmulai").attr("class","btn btn-block btn-info btn-flat disabled");
+                        $("#durasi").unbind();
+                        $("#btnmulai").unbind();
+
                         // Show clock
                         // $clock.show();
                         $('#clock').text("");

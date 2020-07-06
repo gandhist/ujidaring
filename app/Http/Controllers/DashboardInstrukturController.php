@@ -7,11 +7,14 @@ use App\JadwalModel;
 use App\Peserta;
 use Carbon\Carbon;
 use App\SoalPgModel;
+use App\Imports\SoalPgImport;
 use App\SoalEssayModel;
+use App\Imports\SoalEssayImport;
 use App\JadwalInstruktur;
 use App\InstrukturModel;
 use App\JadwalModul;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DashboardInstrukturController extends Controller
 {
@@ -81,7 +84,7 @@ class DashboardInstrukturController extends Controller
         }
         return response()->json([
             'status' => true,
-            'message' => 'Memberikan Evaluasi, Penilaian anda di jamin kerahasiaannya',
+            'message' => 'Materi berhasil di upload',
         ],200);
        
     }
@@ -94,10 +97,51 @@ class DashboardInstrukturController extends Controller
             $files->move($destinationPath, $file);
             $data['pdf_tugas'] = $destinationPath."/".$file;
         }
-        $simpan = JadwalModel::find($id)->update($data);
+        JadwalModel::find($id)->update($data);
         return redirect()->back()->with('message', 'Berhasil Upload Tugas!'); 
     }
 
+    public function uploadsoal(Request $request, $id)
+    {
+
+        if($request->hasFile('soalPg')){
+            $user_data = [
+                'deleted_by' => Auth::id(),
+                'deleted_at' => Carbon::now()->toDateTimeString()
+            ];
+            SoalPgModel::where('kelompok_soal', $id)->update($user_data);
+            // menangkap file excel
+            $file2 = $request->file('soalPg');
+            // membuat nama file unik
+            $nama_file2 = "Soal_PG_".$id."_".Carbon::now()->timestamp."_".$file2->getClientOriginalName();
+            // upload ke folder file_siswa di dalam folder public
+            $file2->move('uploads/Soal',$nama_file2);
+            // import data
+            Excel::import(new SoalPgImport($id), public_path('uploads/Soal/'.$nama_file2));   
+            $data['f_soal_pg'] = "/uploads/Soal/".$nama_file2 ;
+            JadwalModel::find($id)->update($data); 
+        }
+
+        if($request->hasFile('soalEssay')){
+            $user_data = [
+                'deleted_by' => Auth::id(),
+                'deleted_at' => Carbon::now()->toDateTimeString()
+            ];
+            SoalEssayModel::where('kelompok_soal', $id)->update($user_data);
+            // menangkap file excel
+            $file2 = $request->file('soalEssay');
+            // membuat nama file unik
+            $nama_file2 = "Soal_Essay_".$id."_".Carbon::now()->timestamp."_".$file2->getClientOriginalName();
+            // upload ke folder file_siswa di dalam folder public
+            $file2->move('uploads/Soal',$nama_file2);
+            // import data
+            Excel::import(new SoalEssayImport($id), public_path('uploads/Soal/'.$nama_file2)); 
+            $data['f_soal_essay'] = "/uploads/Soal/".$nama_file2 ;
+            JadwalModel::find($id)->update($data);   
+        }
+        // $simpan = JadwalModel::find($id)->update($data);
+        return redirect()->back()->with('message', 'Berhasil Upload Soal!'); 
+    }
      /**
      * Show the form for creating a new resource.
      *

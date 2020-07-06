@@ -3,13 +3,13 @@
 @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1 style="padding-left: 40%">
-        Penilaian
+    <h1>
+        Tampil
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active"><a href="#">Penilaian</a></li>
+        <li class="active"><a href="#">Tampil</a></li>
     </ol>
 
 
@@ -75,73 +75,59 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-1">
+                <div class="col-md-3">
                 </div>
-                <div class="col-md-4">
-                    <!-- <form action="{{ route('jadwal.store') }}" id="" name="" method="post"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <div class="box-body">
-                            <div class="table-responsive">
-                                <table class="table no-margin">
-                                    <thead>
-                                        <tr>
-                                            <input type="hidden" id="idJadwal" name="idJadwal" value="{{$data->id}}">
-                                            <th style="width:5%"><span style="text-align:right;font-size: 22px;"
-                                                    id="clock">00:00:00</span></th>
-                                            <th style="text-align:right;padding: 6px;width:32%"><input maxlength="4"
-                                                    id="durasi" name="durasi" type="text" class="form-control"
-                                                    placeholder="Durasi Ujian(Menit)"></th>
-                                            <th style="text-align:left;padding: 6px;"><button id="btnmulai"
-                                                    type="button" class="btn btn-block btn-info btn-flat">Mulai
-                                                    Ujian</button>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
+                <div class="col-md-2">
+
+                    <div class="box-body">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left;padding: 6px;"><button id="btnkirim" type="button"
+                                                class="btn btn-block btn-info btn-flat">Kirim User Account</button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
-                    </form> -->
+                    </div>
+
                 </div>
                 <div class="col-md-12">
                     <h3>Daftar Peserta</h3>
                     <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                         <thead>
                             <tr>
+                                <th><i class="fa fa-check-square-o"></i></th>
                                 <th>No</th>
                                 <th>NIK</th>
                                 <th>Nama</th>
                                 <th>Tempat Lahir</th>
                                 <th>Tanggal Lahir</th>
-                                <th>Pg Benar</th>
+                                <th>No Hp</th>
+                                <!-- <th>Pg Benar</th>
                                 <th>Pg Salah</th>
                                 <th>Essay Benar</th>
-                                <th>Essay Salah</th>
-                                <th>Nilai Essay</th>
+                                <th>Essay Salah</th> -->
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($Peserta as $key)
                             <tr>
+                                <td style='width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
+                                        id="selection[]" name="selection[]"></td>
                                 <td style="width:1%"></td>
                                 <td>{{ $key->nik }}</td>
                                 <td>{{ $key->nama }}</td>
                                 <td>{{ $key->tmp_lahir }}</td>
                                 <td style="text-align:right;width:8%">
                                     {{ \Carbon\Carbon::parse($key->tgl_lahir)->isoFormat("DD MMMM YYYY") }}</td>
-                                <td style="width:7%">{{count($key->pg_benar_r)}}</td>
+                                <td style="text-align:center;width:8%">{{ $key->no_hp }}</td>
+                                <!-- <td style="width:7%">{{count($key->pg_benar_r)}}</td>
                                 <td style="width:7%">{{count($key->pg_salah_r)}}</td>
                                 <td style="width:8%">{{count($key->essay_benar_r)}}</td>
-                                <td style="width:8%">{{count($key->essay_salah_r)}}</td>
-                                @if(count($key->essay_benar_r) == 0 && count($key->essay_salah_r) == 0 )
-                                <td style="text-align:center;width:8%"><button type="button" class="btn btn-sm bg-olive btn-flat"
-                                        data-toggle="modal" data-target="#modal_{{$key->id}}">Nilai</button></td>
-                                @else
-                                <td style="text-align:center;width:8%"><button type="button" class="btn btn-sm btn-warning"
-                                        data-toggle="modal" data-target="#modal_jawab_{{$key->id}}">Sudah
-                                        dinilai</button></td>
-                                @endif
-
+                                <td style="width:8%">{{count($key->essay_salah_r)}}</td> -->
                             </tr>
                             @endforeach
                         </tbody>
@@ -289,7 +275,7 @@
                                         </table>
                                     </div>
 
-                                   
+
                                 </form>
                             </div>
                             <!-- End -->
@@ -308,6 +294,35 @@
         <!-- /.box-body -->
     </div>
     <!-- /.box -->
+    <!-- modal konfirmasi -->
+    <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <form action="{{ url('jadwal/kirimaccount') }}" class="form-horizontal" id="formDelete" name="formDelete"
+            method="post" enctype="multipart/form-data">
+            @method("DELETE")
+            @csrf
+            <input type="hidden" value="" name="idHapusData" id="idHapusData">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span
+                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Konfirmasi</h4>
+                    </div>
+                    <div class="modal-body" id="konfirmasi-body">
+                        Apakah anda ingin mengirim account peserta?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
+                        <button type="submit" class="btn btn-danger" data-id=""
+                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Kirim..."
+                            id="confirm-delete">Ya</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- end of modal konfirmais -->
 
 </section>
 <!-- /.content -->
@@ -346,7 +361,7 @@
         });
 
         dt.on('order.dt search.dt', function () {
-            dt.column(0, {
+            dt.column(1, {
                 search: 'applied',
                 order: 'applied'
             }).nodes().each(function (cell, i) {
@@ -399,6 +414,26 @@
         // Show Modal Penilaian
         $('.btnnilai').on('click', function () {
             $('#modaldetailAhli').modal('show');
+        });
+
+        $('#btnkirim').on('click', function (e) {
+            e.preventDefault();
+            var id = [];
+            $('.selection:checked').each(function () {
+                id.push($(this).data('id'));
+            });
+            $("#idHapusData").val(id);
+            if (id.length == 0) {
+                Swal.fire({
+                    title: "Tidak ada data yang terpilih",
+                    type: 'warning',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: '#AAA'
+                });
+                // alert('Tidak ada data yang terpilih');
+            } else {
+                $('#modal-konfirmasi').modal('show');
+            }
         });
 
 

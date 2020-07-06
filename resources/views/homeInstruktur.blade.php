@@ -42,7 +42,7 @@
 
             <div class="row">
                 <!-- Left col -->
-                <div class="col-md-7">
+                <div class="col-md-8">
                     <!-- TABLE: LATEST ORDERS -->
                     <div class="box box-info collapsed-box">
                         <div class="box-header with-border">
@@ -63,12 +63,13 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>Tanggal Mulai</th>
-                                            <th>Tanggal Selesai</th>
+                                            <th style="width:10%">Tanggal Mulai</th>
+                                            <th style="width:10%">Tanggal Selesai</th>
                                             <th>TUK</th>
                                             <th>Ujian</th>
                                             <th>Modul</th>
                                             <th>Tugas</th>
+                                            <th>Soal</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -87,14 +88,13 @@
                                             @if($key->jadwal_r->akhir_ujian == "" )
                                             <td style="text-align:center;width:5%"><a
                                                     href="{{ url('instruktur/dashboardinstruktur/'.$key->id.'/edit') }}"
-                                                    type="button" class="btn btn-sm bg-olive btn-flat">Mulai Ujian</a>
+                                                    type="button" class="btn btn-sm btn-info">Mulai Ujian</a>
                                             </td>
                                             @elseif( \Carbon\Carbon::now()->toDateTimeString() >
                                             $key->jadwal_r->awal_ujian && \Carbon\Carbon::now()->toDateTimeString() <
                                                 $key->jadwal_r->akhir_ujian )
                                                 <td style="text-align:center;width:5%">
-                                                    <button type="button" class="btn btn-sm btn-danger">Ujian Sedang
-                                                        Berlangsung</button>
+                                                    <button type="button" class="btn btn-sm btn-danger">Sedang Ujian</button>
                                                 </td>
                                                 @else
                                                 <td style="text-align:center;width:5%">
@@ -109,14 +109,29 @@
                                                 <td style="text-align:center;width:5%"><button data-toggle="modal"
                                                         data-target="#modalUploadTugas" type="button"
                                                         class="btn btn-sm bg-olive btn-flat">Upload Tugas</button>
-                                                        @if($key->jadwal_r->pdf_tugas == "" )
-                                                        <button class="btn btn-sm btn-danger" target="_blank"
-                                                        >Belum Ada</button>
-                                                        @else
-                                                        <a class="btn btn-sm bg-olive btn-flat" target="_blank"
-                                                        href="/{{$key->jadwal_r->pdf_tugas}}">Lihat</a>
-                                                        @endif
-                                                    
+                                                    @if($key->jadwal_r->pdf_tugas == "" )
+                                                    <button class="btn btn-sm btn-danger" target="_blank">Belum
+                                                        Ada Tugas</button>
+                                                    @else
+                                                    <a class="btn btn-sm bg-olive btn-flat" target="_blank"
+                                                        href="/{{$key->jadwal_r->pdf_tugas}}">Lihat Tugas</a>
+                                                    @endif
+
+                                                </td>
+
+                                                <td style="text-align:left;width:5%"><button data-toggle="modal"
+                                                        data-target="#modalUploadSoal" type="button"
+                                                        class="btn btn-sm bg-olive btn-flat">Upload Soal</button>
+                                                    @if(count($key->jadwal_r->soalpg_r) == 0 )
+                                                    <button class="btn btn-sm btn-danger" target="_blank">Belum
+                                                        Ada Soal</button>
+                                                    @else
+                                                    <a class="btn btn-sm bg-olive btn-flat" target="_blank"
+                                                        href="{{$key->jadwal_r->f_soal_pg}}">Lihat Soal PG</a>
+                                                    <a class="btn btn-sm bg-olive btn-flat" target="_blank"
+                                                        href="{{$key->jadwal_r->f_soal_essay}}">Lihat Soal Essay</a>
+                                                    @endif
+
                                                 </td>
 
                                         </tr>
@@ -142,6 +157,50 @@
                                                                 <label for="exampleInputFile">Pilih File</label>
                                                                 <input required type="file" id="uploadTugas"
                                                                     name="uploadTugas">
+                                                                <p class="help-block">File harus berupa pdf.</p>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button id="btnTugas" type="submit"
+                                                                class="btn btn-md btn-danger">
+                                                                <i class="fa fa-save"></i>
+                                                                Simpan</button>
+                                                            <button type="button" class="btn btn-default"
+                                                                data-dismiss="modal">Batal</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modalUploadSoal" role="dialog">
+                                            <div class="modal-dialog">
+                                                <!-- Modal content-->
+                                                <form
+                                                    action="{{ url('instruktur/dashboardinstruktur/'.$key->jadwal_r->id.'/uploadsoal') }}"
+                                                    class="form-horizontal" id="formAdd" name="formAdd" method="post"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    <div class="modal-content">
+                                                        <div class="modal-header"
+                                                            style="background:#3c8dbc;color:white">
+                                                            <button type="button" class="close"
+                                                                data-dismiss="modal">&times;</button>
+                                                            <h4 class="modal-title">Upload Soal</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <label for="exampleInputFile">Pilih File Soal Pilihan
+                                                                    Ganda</label>
+                                                                <input required type="file" id="soalPg" name="soalPg">
+                                                                <p class="help-block">File harus berupa pdf.</p>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="exampleInputFile">Pilih File Soal
+                                                                    Essay</label>
+                                                                <input required type="file" id="soalEssay"
+                                                                    name="soalEssay">
                                                                 <p class="help-block">File harus berupa pdf.</p>
                                                             </div>
                                                         </div>
