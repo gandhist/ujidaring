@@ -8,14 +8,14 @@
         <div class="col-lg-6">
             <h3>Tugas yang harus anda kerjakan</h3>
             <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="{{ url('uploads/'.$peserta->jadwal_r->pdf_tugas) }}" ></iframe>
+                <iframe class="embed-responsive-item" src="{{ url($peserta->jadwal_r->pdf_tugas) }}" ></iframe>
             </div>
         </div>
         <div class="col-lg-6">
             @if($peserta->jawaban_tugas)
             <h3>Tugas yang sudah di upload</h3>
             <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="{{ url('uploads//tugas/peserta/'.$peserta->jawaban_tugas->pdf_tugas) }}" ></iframe>
+                <iframe class="embed-responsive-item" src="{{ url('uploads/tugas/peserta/'.$peserta->jawaban_tugas->pdf_tugas) }}" ></iframe>
             </div>
             @endif
             <h3>Upload Tugas</h3>

@@ -82,6 +82,10 @@ class DashboardInstrukturController extends Controller
                 // ]);
             }
         }
+        return response()->json([
+            'status' => true,
+            'message' => 'Memberikan Evaluasi, Penilaian anda di jamin kerahasiaannya',
+        ],200);
        
     }
 

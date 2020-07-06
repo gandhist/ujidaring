@@ -1,97 +1,123 @@
 @extends('frontend.main')
 
 @section('content')
+<div class="container-fluid">
+  <div class="row">
 
-<h3>Waktu Pengerjaan Tersisa <span id="timer"></span></h3>
-<p>Waktu Ujian: {{ \Carbon\Carbon::parse($peserta->jadwal_r->mulai_ujian)->isoFormat('HH:mm:SS') }} s/d {{ \Carbon\Carbon::parse($peserta->jadwal_r->akhir_ujian)->isoFormat('HH:mm:SS') }}</p>
-<p>Durasi Ujian: {{ $peserta->jadwal_r->durasi_ujian }}</p>
-<p>Jam Anda Mulai Ujian: {{ \Carbon\Carbon::parse($peserta->mulai_ujian)->isoFormat('HH:mm:SS') }}</p>
+    <div class="col-lg-6">
+      <h3>Waktu Pengerjaan Tersisa <span id="timer"></span></h3>
+      <p>Waktu Ujian: {{ \Carbon\Carbon::parse($peserta->jadwal_r->mulai_ujian)->isoFormat('HH:mm:SS') }} s/d {{ \Carbon\Carbon::parse($peserta->jadwal_r->akhir_ujian)->isoFormat('HH:mm:SS') }}</p>
+      <p>Durasi Ujian: {{ $peserta->jadwal_r->durasi_ujian }}</p>
+      <p>Jam Anda Mulai Ujian: {{ \Carbon\Carbon::parse($peserta->mulai_ujian)->isoFormat('HH:mm:SS') }}</p>
+      
+    </div>
+
+    <div class="col-lg-6">
+      <h5>Pilih Tipe Soal</h5>
+      <ul class="nav nav-pills mb-3 pull-right" id="pills-tab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="pg-tab" data-toggle="pill" href="#pg" role="tab" aria-controls="pg" aria-selected="true">Pilihan Ganda</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="essay-tab" data-toggle="pill" href="#essay" role="tab" aria-controls="essay" aria-selected="false">Essay</a>
+        </li>
+      </ul>
+      {!! $soal->render() !!}
+      
+    </div>
+
+  </div>
+</div>
 
 <div class="containel-fluid">
-    {{-- pilihan ganda --}}
-    <div class="row">
-        <div class="col-lg-12">
-            <h4>Soal Pilihan Ganda :</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <nav aria-label="Navigasi soal ujian">
-                <ul class="nav" role="tablist">
-                    @foreach ($soal as $key)
-                        <li class="page-item {{ $key->jawaban != null ? "active" : "" }}" role="presentation"><a class="page-link" href="#soal-{{ $key->soal_r->no_soal }}" aria-control="soal-{{ $key->soal_r->no_soal }}" role="tab" data-toggle="tab">{{ $key->soal_r->no_soal }}</a></li>
-                    @endforeach
-                </ul>
-              </nav>
-        </div>
-    </div>
-    
-    <div class="row" style="margin-top:10px">
-        <div class="col-lg-12">
-            <div class="tab-content">
-                @foreach ($soal as $key)
-                <div role="tabpanel" class="tab-pane {{ $loop->iteration == 1 ? 'active' : '' }}" id="soal-{{ $key->soal_r->no_soal }}">
-                    <div class="panel panel-default">
-                      <div class="panel-heading">
-                        <h4 class="panel-title">{{ $key->soal_r->no_soal }}. {{ $key->soal_r->soal }}</h4></div>
-                      <div class="panel-body">
-                        <div class="radio"> 
-                            @if($loop->first)
-                                <form name="formAdd" id="formAdd">
-                                <input type="hidden" name="id_jadwal" id="id_jadwal" value="{{ $peserta->jadwal_r->id }}">
-                            @endif
-                          <label>
-                            <input type="radio" {{ $key->jawaban == "a" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}a" value="{{ $key->soal_r->id }}#a">A. {{ $key->soal_r->pg_a }}</label>
-                        </div>
-                        <div class="radio">
-                          <label>
-                            <input type="radio" {{ $key->jawaban == "b" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}b" value="{{ $key->soal_r->id }}#b">B. {{ $key->soal_r->pg_b }}</label>
-                        </div>
-                        <div class="radio">
-                          <label>
-                            <input type="radio" {{ $key->jawaban == "c" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}c" value="{{ $key->soal_r->id }}#c">C. {{ $key->soal_r->pg_c }}</label>
-                        </div>
-                        <div class="radio">
-                          <label>
-                            <input type="radio" {{ $key->jawaban == "d" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}d" value="{{ $key->soal_r->id }}#d">D. {{ $key->soal_r->pg_d }}</label>
-                        </div>
-                        @if($loop->last)
-                            </form>
-                        @endif
-                      </div>
-                    </div>
-                  </div>
-                  <?php $soal = $loop->iteration; ?>
-                @endforeach
-            
-
-
+  <hr>
+  <div class="tab-content" id="pills-tabContent">
+    {{-- tab pilihan ganda --}}
+    <div class="tab-pane fade show active" id="pg" role="tabpanel" aria-labelledby="pg-tab">
+          {{-- pilihan ganda --}}
+          <div class="row">
+              <div class="col-lg-12">
+                  <nav aria-label="Navigasi soal ujian">
+                      <ul class="nav" role="tablist">
+                          @foreach ($soal as $key)
+                              {{-- <li class="page-item {{ $key->jawaban != null ? "active" : "" }}" role="presentation"><a class="page-link" href="#soal-{{ $key->soal_r->no_soal }}" aria-control="soal-{{ $key->soal_r->no_soal }}" role="tab" data-toggle="tab">{{ $key->soal_r->no_soal }}</a></li> --}}
+                              <li class="page-item {{ $key->jawaban != null ? "active" : "" }}" role="presentation"><a class="page-link" href="#soal-{{ $key->soal_r->no_soal }}" aria-control="soal-{{ $key->soal_r->no_soal }}" >{{ $key->soal_r->no_soal }}</a></li>
+                          @endforeach
+                      </ul>
+                    </nav>
               </div>
-        </div>
-        
+          </div>
+          
+          <div class="row" style="margin-top:10px">
+              <div class="col-lg-12">
+                  <div class="tab-content">
+                      @foreach ($soal as $key)
+                      <div role="tabpanel" class="tab-pane active" id="soal-{{ $key->soal_r->no_soal }}">
+                          <div class="panel panel-default">
+                            <div class="panel-heading">
+                              <h4 class="panel-title">{{ $key->soal_r->no_soal }}. {{ $key->soal_r->soal }}</h4></div>
+                            <div class="panel-body">
+                              <div class="radio"> 
+                                  @if($loop->first)
+                                      <form name="formAdd" id="formAdd">
+                                      <input type="hidden" name="id_jadwal" id="id_jadwal" value="{{ $peserta->jadwal_r->id }}">
+                                  @endif
+                                <label>
+                                  <input type="radio" {{ $key->jawaban == "a" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}a" value="{{ $key->soal_r->id }}#a">A. {{ $key->soal_r->pg_a }}</label>
+                              </div>
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" {{ $key->jawaban == "b" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}b" value="{{ $key->soal_r->id }}#b">B. {{ $key->soal_r->pg_b }}</label>
+                              </div>
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" {{ $key->jawaban == "c" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}c" value="{{ $key->soal_r->id }}#c">C. {{ $key->soal_r->pg_c }}</label>
+                              </div>
+                              <div class="radio">
+                                <label>
+                                  <input type="radio" {{ $key->jawaban == "d" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}d" value="{{ $key->soal_r->id }}#d">D. {{ $key->soal_r->pg_d }}</label>
+                              </div>
+                              @if($loop->last)
+                                  </form>
+                              @endif
+                            </div>
+                          </div>
+                        </div>
+                        <?php $soal = $loop->iteration; ?>
+                        <hr>
+                      @endforeach
+                      
+                    </div>
+              </div>
+              
+              
+          </div>
+          
+          {{-- end of pilihan ganda --}}
     </div>
-    {{-- end of pilihan ganda --}}
-<hr>
-    {{-- essay --}}
-    <div class="row">
-        <div class="col-lg-12">
-            <h4>Soal Essay :</h4>
+    {{-- end of tab pilihan ganda --}}
+
+    {{-- tab essat --}}
+    <div class="tab-pane fade" id="essay" role="tabpanel" aria-labelledby="essay-tab">
+        {{-- essay --}}
+      <form name="formEssay" id="formEssay">
+          <input type="hidden" name="id_jadwal" id="id_jadwal" value="{{ $peserta->jadwal_r->id }}">
+        @foreach($soal_essay as $key)
+        <div class="row" style="margin-top:5px">
+            <div class="col-lg-6">
+                <h5>{{ $key->soal_r->no_soal }}. {{ $key->soal_r->soal }}</h5>
+            </div>
+            <div class="col-lg-6">
+                <textarea class="form-control txtEssay" name="essay_{{ $key->id_soal }}" id="essay_{{ $key->id_soal }}">@if($key->jawaban){{ $key->jawaban }}@endif</textarea>
+            </div>
         </div>
+        @endforeach
+      </form>
+      {{-- end of soal essay --}}
     </div>
-    <form name="formEssay" id="formEssay">
-        <input type="hidden" name="id_jadwal" id="id_jadwal" value="{{ $peserta->jadwal_r->id }}">
-    @foreach($soal_essay as $key)
-    <div class="row" style="margin-top:5px">
-        <div class="col-lg-6">
-            <h5>{{ $key->soal_r->no_soal }}. {{ $key->soal_r->soal }}</h5>
-        </div>
-        <div class="col-lg-6">
-            <textarea class="form-control txtEssay" name="essay_{{ $key->id_soal }}" id="essay_{{ $key->id_soal }}">@if($key->jawaban){{ $key->jawaban }}@endif</textarea>
-        </div>
-    </div>
-    @endforeach
-    </form>
-    {{-- end of soal essay --}}
+    {{-- end of tab essay --}}
+  </div>
+    
 
     <div class="row" style="margin-top:10px">
         <div class="col-lg-12">
@@ -121,6 +147,7 @@
     var jml_soal = "{{ $soal }}";
     var home = "{{ url('peserta/dashboard') }}";
     var timer;
+
 $(document).ready(function () {
       // OPSIONAL: Buat event listener untuk pindah
     // ke soal selanjutnya ketika input radio dipilih
@@ -147,15 +174,15 @@ $(document).ready(function () {
 
     // onclick navigasi soal ujian
     $('.page-item').on('click', function(){
+      var $panelSoalAktif = $(this).closest('.tab-pane');
+      console.log($panelSoalAktif.attr('id'))
         //   $('.page-item').removeClass('active')
         // $(this).addClass('active')
     })
 
     // onclick btn save
     $('#btnSelesai').on('click', function(){
-            // console.log($('.formSoal').length)
-            var s = $('[name^="jawaban"]').val()
-            // console.log(s)
+        var s = $('[name^="jawaban"]').val()
         storeData();
         // storeDataEssay();
     }) 
@@ -165,7 +192,6 @@ $(document).ready(function () {
         var id = $(this).attr('id')
         var val = $('#'+id+'').val()
         storeDataParEs(id, val)
-        // console.log(id)
     })
 
     // timer soal ujian
@@ -228,7 +254,6 @@ function stopTimer(duration){
 
 // function active nav menu on jawaban filled up
 function is_filled(id, tabsoal){
-    console.log(id)
     var val = $('#'+id+'').val();
     storeDataPar(id, val)
     if(id){
@@ -324,8 +349,7 @@ function storeDataEssay(){
     });
 }
 
-
-
+// store data
 function storeData(){
     var formData = new FormData($('#formAdd')[0]);
     var url = "{{ url('peserta/ujian/pg/save') }}";
@@ -388,6 +412,21 @@ function storeData(){
             });
       }
     });
+}
+
+// fucntion request data pagination
+function getData(page){
+      $.ajax(
+      {
+          url: '?page=' + page,
+          type: "get",
+          datatype: "html"
+      }).done(function(data){
+          $("#tag_container").empty().html(data);
+          location.hash = page;
+      }).fail(function(jqXHR, ajaxOptions, thrownError){
+            alert('No response from server');
+      });
 }
 
 

@@ -11,12 +11,25 @@
                 <div class="col-md-6">
                     <div id="my_camera"></div>
                     <br/>
+                    @if($allow_cekin)
                     <input type=button class="btn btn-outline-success" value="Absen Masuk" onClick="take_snapshot()">
-                    @if($allow_cekout)
-                    <input type=button class="btn btn-outline-success" value="Absen Keluar" onClick="take_snapshot_out()">
                     @else
-                    <a href="{{ url('peserta/kuisioner') }}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Isi evaluasi agar bisa absen pulang">Isi Evaluasi</a>
+                      @if($allow_cekout)
+                        @if($allow_tugas)
+                          <a href="{{ url('peserta/kuisioner') }}" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Isi evaluasi agar bisa absen pulang">Absen Keluar e</a>
+                        @else
+                          <input type=button class="btn btn-outline-success" value="Absen Keluar" onClick="take_snapshot_out()">
+                        @endif
+                      @else
+                      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        Terimakasih, Anda Sudah Melakukan Absensi Masuk dan Pulang.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      @endif
                     @endif
+                    
                     <input type="hidden" name="image" class="image-tag">
                 </div>
                 <div class="col-md-6">
