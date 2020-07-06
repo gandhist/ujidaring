@@ -125,9 +125,11 @@ class PesertaController extends Controller
     // view absen
     public function absen(){
         $peserta = Peserta::where('user_id',Auth::id())->first();
-        $allow_cekout = $this->is_make_eva($peserta->id);
+        $allow_tugas = $this->is_make_eva($peserta->id);
+        $allow_cekin = $this->is_allow_masuk();
+        $allow_cekout = $this->is_allow_pulang();
         $data = AbsenModel::where('id_peserta',$peserta->id)->get();
-        return view('peserta.absen')->with(compact('data','allow_cekout'));
+        return view('peserta.absen')->with(compact('data','allow_cekout','allow_cekin','allow_tugas'));
     }
 
     // absen masuk
@@ -196,7 +198,7 @@ class PesertaController extends Controller
         if(!$cek){
             $this->_generate_soal($peserta->id);
         }
-        $soal = JawabanPeserta::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->get();
+        $soal = JawabanPeserta::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->paginate(10);
         $soal_essay = JawabanEssayPeserta::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->get();
         return view('ujian.pg')->with(compact('peserta','soal','soal_essay'));
     }
@@ -458,10 +460,10 @@ class PesertaController extends Controller
         // return $cek_db;
         if($cek_db){
             if($cek_db->nilai == null){
-                $allow_cekout = false;
+                $allow_cekout = true;
             }
             else{
-                $allow_cekout = true;
+                $allow_cekout = false;
             }
         }
         else{
@@ -486,5 +488,31 @@ class PesertaController extends Controller
             $is_allow = false;
         }
         return $is_allow;
+    }
+
+    // function check is allow absen masuk
+    public function is_allow_masuk(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        $cek_cekin = AbsenModel::where('tanggal', Carbon::now()->isoFormat('YYYY-MM-DD'))->where('id_peserta', $peserta->id)->first();
+        if($cek_cekin){
+            $allow = false;
+        }
+        else {
+            $allow = true;
+        }
+        return $allow;
+    }
+
+    // function check is allow absen pulang
+    public function is_allow_pulang(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        $cek_cekin = AbsenModel::where('tanggal', Carbon::now()->isoFormat('YYYY-MM-DD'))->where('id_peserta', $peserta->id)->whereNotNull('jam_cekout')->first();
+        if($cek_cekin){
+            $allow = false;
+        }
+        else {
+            $allow = true;
+        }
+        return $allow;
     }
 }

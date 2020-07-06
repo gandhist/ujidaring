@@ -54,7 +54,7 @@
                   @endif
                 @endif
               <li class="list-group-item"><a target="_blank" href="{{ url('peserta/presensi') }}" class="btn btn-outline-info">Absen</a></li>
-              <li class="list-group-item"><a target="_blank" href="{{ url('uploads/Gambar/Jadwal/'.$peserta->jadwal_r->pdf_jadwal) }}" class="btn btn-outline-info">Jadwal</a></li>
+              <li class="list-group-item"><a target="_blank" href="{{ url($peserta->jadwal_r->pdf_jadwal) }}" class="btn btn-outline-info">Lihat Jadwal</a></li>
             </ul>
           </div>
 
@@ -83,12 +83,12 @@
                        <td>{{ $key->modul_r->jp }} Jam</td>
                        <td>
                         @if($key->materi)
-                        <a href="{{ url('uploads/materi/'.$key->materi) }}" class="btn btn-success">Materi</a>
+                        <a target="_blank" href="{{ url('uploads/materi/'.$key->materi) }}" class="btn btn-success">Materi</a>
                         @endif
                        </td>
                        <td>
                         @if($key->materi)
-                          <a href="{{ $key->link }}" class="btn btn-info">{{ $key->link }}</a>
+                          <a target="_blank" href="{{ $key->link }}" class="btn btn-info">{{ $key->link }}</a>
                         @endif
                        </td>
                    </tr>
