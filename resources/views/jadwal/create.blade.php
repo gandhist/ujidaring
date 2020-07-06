@@ -34,7 +34,6 @@
                             <li class="active">Jadwal</li>
                             <li>Instruktur</li>
                             <li>Peserta</li>
-                            <li>Soal</li>
                         </ul>
                         <!-- fieldsets -->
                         <fieldset>
@@ -163,7 +162,7 @@
                                             <th>Nama</th>
                                             <th style="width:15%">Foto (.jpg/.jpeg/.png)</th>
                                             <th style="width:15%">KTP (.jpg/.jpeg/.png)</th>
-                                            <th style="width:5%">Instruktur</th>
+                                            <th style="width:5%">Full Akses</th>
                                             <th style="width:5%">Hapus</th>
                                         </tr>
                                     </thead>
@@ -181,18 +180,6 @@
                             <h2 class="fs-title">Peserta</h2>
                             <span class="pull-left"><b>Import Excel Data Peserta (.xls/.xlsx)</b></span>
                             <input type="file" name="excel_peserta" />
-                            <input type="button" name="previous" class="previous action-button-previous"
-                                value="Previous" />
-                            <input type="button" name="next" class="next action-button" value="Berikutnya" />
-                        </fieldset>
-                        <fieldset>
-                            <h2 class="fs-title">Soal</h2>
-                            <span class="pull-left"><b>Import Excel Soal Pilihan Ganda (.xls/.xlsx)</b></span>
-                            <input type="file" name="excel_soal_pg" />
-                            <br>
-                            <span class="pull-left"><b>Import Excel Soal Essay (.xls/.xlsx)</b></span>
-                            <input type="file" name="excel_soal_essay" />
-
                             <input type="button" name="previous" class="previous action-button-previous"
                                 value="Previous" />
                             <input type="submit" name="submit" class="submit action-button" value="Submit" />

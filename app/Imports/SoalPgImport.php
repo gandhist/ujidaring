@@ -7,6 +7,13 @@ use Maatwebsite\Excel\Concerns\ToModel;
 
 class SoalPgImport implements ToModel
 {
+
+    protected $id;
+
+    function __construct($id) {
+        $this->id = $id;
+    }
+    
     /**
     * @param array $row
     *
@@ -15,7 +22,7 @@ class SoalPgImport implements ToModel
     public function model(array $row)
     {
         return new SoalPgModel([
-            'kelompok_soal' => $row[1],
+            'kelompok_soal' => $this->id,
             'no_soal' => $row[2], 
             'soal' => $row[3],
             'pg_a' => $row[4],
