@@ -22,10 +22,10 @@ class SoalEssayImport implements ToModel
     {
         return new SoalEssayModel([
             'kelompok_soal' => $this->id,
-            'no_soal' => $row[2], 
-            'soal' => $row[3],
-            'jawaban' => $row[4], 
-            'bobot' => $row[5], 
+            'no_soal' => $row[1], 
+            'soal' => $row[2],
+            'jawaban' => $row[3], 
+            'bobot' => $row[4], 
         ]);
     }
 }

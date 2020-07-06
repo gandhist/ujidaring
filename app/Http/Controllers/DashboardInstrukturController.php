@@ -84,7 +84,7 @@ class DashboardInstrukturController extends Controller
         }
         return response()->json([
             'status' => true,
-            'message' => 'Memberikan Evaluasi, Penilaian anda di jamin kerahasiaannya',
+            'message' => 'Materi berhasil di upload',
         ],200);
        
     }

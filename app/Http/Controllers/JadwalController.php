@@ -19,6 +19,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\GlobalFunction;
+use App\SoalPgModel;
+use App\SoalEssayModel;
 
 class JadwalController extends Controller
 {
@@ -213,7 +215,12 @@ class JadwalController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = JadwalModel::find($id);
+        $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->orderBy('nama','asc')->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.show')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay'));
     }
 
     /**
@@ -234,8 +241,23 @@ class JadwalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $idData = explode(',', $request->idHapusData);
+        foreach ($idData as $idData) {
+
+    
+            $user_id =  Peserta::select('user_id','no_hp','nama')->find($idData);
+            $no_hp = $user_id['no_hp'];
+            $nama = $user_id['nama'];
+            $user_account =  User::select('username','hint')->where('id',"=",$user_id['user_id'])->first();
+
+            $telepon = $no_hp;
+            // Gunakan NIK Anda dan kode: 9777 untuk login ke env('APP_URL')
+            $message = "Selamat ".$nama." anda telah terdaftar. Gunakan NIK Anda dan password: ".$user_account['hint']." untuk login ke ".env('APP_URL');
+            $this->kirimPesanSMS($telepon, $message);
+        }   
+        return back()->with('message', 'Account telah dikirim');
     }
+
 }

@@ -88,14 +88,13 @@
                                             @if($key->jadwal_r->akhir_ujian == "" )
                                             <td style="text-align:center;width:5%"><a
                                                     href="{{ url('instruktur/dashboardinstruktur/'.$key->id.'/edit') }}"
-                                                    type="button" class="btn btn-sm bg-olive btn-flat">Mulai Ujian</a>
+                                                    type="button" class="btn btn-sm btn-info">Mulai Ujian</a>
                                             </td>
                                             @elseif( \Carbon\Carbon::now()->toDateTimeString() >
                                             $key->jadwal_r->awal_ujian && \Carbon\Carbon::now()->toDateTimeString() <
                                                 $key->jadwal_r->akhir_ujian )
                                                 <td style="text-align:center;width:5%">
-                                                    <button type="button" class="btn btn-sm btn-danger">Ujian Sedang
-                                                        Berlangsung</button>
+                                                    <button type="button" class="btn btn-sm btn-danger">Sedang Ujian</button>
                                                 </td>
                                                 @else
                                                 <td style="text-align:center;width:5%">
@@ -120,7 +119,7 @@
 
                                                 </td>
 
-                                                <td style="text-align:center;width:5%"><button data-toggle="modal"
+                                                <td style="text-align:left;width:5%"><button data-toggle="modal"
                                                         data-target="#modalUploadSoal" type="button"
                                                         class="btn btn-sm bg-olive btn-flat">Upload Soal</button>
                                                     @if(count($key->jadwal_r->soalpg_r) == 0 )

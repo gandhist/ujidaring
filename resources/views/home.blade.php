@@ -3,10 +3,10 @@
 @section('content')
 <section class="content-header">
     <h1>
-        Dashboard Instruktur
+        Dashboard
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard Instruktur</a></li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
     </ol>
 </section>
 <section class="content">
@@ -66,7 +66,6 @@
                                             <th style="width:10%">Tanggal Mulai</th>
                                             <th style="width:10%">Tanggal Selesai</th>
                                             <th>TUK</th>
-                                            <th>Ujian</th>
                                             <th>Modul</th>
                                             <th>Tugas</th>
                                             <th>Soal</th>
@@ -84,54 +83,36 @@
                                             </td>
                                             <td style="text-align:center;width:40%">{{$key->tuk}}
                                             </td>
-
-                                            @if($key->akhir_ujian == "" )
                                             <td style="text-align:center;width:5%"><a
-                                                    href="{{ url('instruktur/dashboardinstruktur/'.$key->id.'/edit') }}"
-                                                    type="button" class="btn btn-sm bg-olive btn-flat">Mulai Ujian</a>
-                                            </td>
-                                            @elseif( \Carbon\Carbon::now()->toDateTimeString() >
-                                            $key->awal_ujian && \Carbon\Carbon::now()->toDateTimeString() <
-                                                $key->akhir_ujian )
-                                                <td style="text-align:center;width:5%">
-                                                    <button type="button" class="btn btn-sm btn-danger">Ujian Sedang
-                                                        Berlangsung</button>
-                                                </td>
+                                                    href="{{ url('instruktur/modul',$key->id) }}" type="button"
+                                                    class="btn btn-sm bg-olive btn-flat">Upload Modul</a></td>
+                                            <td style="text-align:center;width:5%"><button data-toggle="modal"
+                                                    data-target="#modalUploadTugas" type="button"
+                                                    class="btn btn-sm bg-olive btn-flat">Upload Tugas</button>
+                                                @if($key->pdf_tugas == "" )
+                                                <button class="btn btn-sm btn-danger" target="_blank">Belum
+                                                    Ada</button>
                                                 @else
-                                                <td style="text-align:center;width:5%">
-                                                    <a href="{{ url('penilaian') }}" type="button"
-                                                        class="btn btn-sm bg-olive btn-flat">Ujian Telah Selesai</a>
-                                                    <!-- <button type="button" class="btn btn-sm bg-olive btn-flat">Ujian Telah Selesai</button> -->
-                                                </td>
+                                                <a class="btn btn-sm bg-olive btn-flat" target="_blank"
+                                                    href="/{{$key->pdf_tugas}}">Lihat Tugas</a>
                                                 @endif
-                                                <td style="text-align:center;width:5%"><a
-                                                        href="{{ url('instruktur/modul',$key->id) }}" type="button"
-                                                        class="btn btn-sm bg-olive btn-flat">Upload Modul</a></td>
-                                                <td style="text-align:center;width:5%"><button data-toggle="modal"
-                                                        data-target="#modalUploadTugas" type="button"
-                                                        class="btn btn-sm bg-olive btn-flat">Upload Tugas</button>
-                                                    @if($key->pdf_tugas == "" )
-                                                    <button class="btn btn-sm btn-danger" target="_blank">Belum
-                                                        Ada</button>
-                                                    @else
-                                                    <a class="btn btn-sm bg-olive btn-flat" target="_blank"
-                                                        href="/{{$key->pdf_tugas}}">Lihat Tugas</a>
-                                                    @endif
 
-                                                </td>
+                                            </td>
 
-                                                <td style="text-align:center;width:5%"><button data-toggle="modal"
-                                                        data-target="#modalUploadSoal" type="button"
-                                                        class="btn btn-sm bg-olive btn-flat">Upload Soal</button>
-                                                    @if($key->pdf_tugas == "" )
-                                                    <button class="btn btn-sm btn-danger" target="_blank">Belum
-                                                        Ada</button>
-                                                    @else
-                                                    <a class="btn btn-sm bg-olive btn-flat" target="_blank"
-                                                        href="/{{$key->pdf_tugas}}">Lihat Soal</a>
-                                                    @endif
+                                            <td style="text-align:left;width:5%"><button data-toggle="modal"
+                                                    data-target="#modalUploadSoal" type="button"
+                                                    class="btn btn-sm bg-olive btn-flat">Upload Soal</button>
+                                                @if(count($key->soalpg_r) == 0 )
+                                                <button class="btn btn-sm btn-danger" target="_blank">Belum
+                                                    Ada Soal</button>
+                                                @else
+                                                <a class="btn btn-sm bg-olive btn-flat" target="_blank"
+                                                    href="{{$key->f_soal_pg}}">Lihat Soal PG</a>
+                                                <a class="btn btn-sm bg-olive btn-flat" target="_blank"
+                                                    href="{{$key->f_soal_essay}}">Lihat Soal Essay</a>
+                                                @endif
 
-                                                </td>
+                                            </td>
 
                                         </tr>
 
@@ -190,15 +171,16 @@
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="form-group">
-                                                                <label for="exampleInputFile">Pilih File Soal Pilihan Ganda</label>
-                                                                <input required type="file" id="tgsPg"
-                                                                    name="tgsPg">
+                                                                <label for="exampleInputFile">Pilih File Soal Pilihan
+                                                                    Ganda</label>
+                                                                <input required type="file" id="soalPg" name="soalPg">
                                                                 <p class="help-block">File harus berupa pdf.</p>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label for="exampleInputFile">Pilih File Soal Essay</label>
-                                                                <input required type="file" id="tgsEssay"
-                                                                    name="tgsEssay">
+                                                                <label for="exampleInputFile">Pilih File Soal
+                                                                    Essay</label>
+                                                                <input required type="file" id="soalEssay"
+                                                                    name="soalEssay">
                                                                 <p class="help-block">File harus berupa pdf.</p>
                                                             </div>
                                                         </div>

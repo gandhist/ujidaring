@@ -23,13 +23,13 @@ class SoalPgImport implements ToModel
     {
         return new SoalPgModel([
             'kelompok_soal' => $this->id,
-            'no_soal' => $row[2], 
-            'soal' => $row[3],
-            'pg_a' => $row[4],
-            'pg_b' => $row[5],
-            'pg_c' => $row[6], 
-            'pg_d' => $row[7], 
-            'jawaban' => $row[8],    
+            'no_soal' => $row[1], 
+            'soal' => $row[2],
+            'pg_a' => $row[3],
+            'pg_b' => $row[4],
+            'pg_c' => $row[5], 
+            'pg_d' => $row[6], 
+            'jawaban' => $row[7],    
         ]);
     }
 }
