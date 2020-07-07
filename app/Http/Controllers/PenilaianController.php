@@ -116,7 +116,7 @@ class PenilaianController extends Controller
             $nilai['nilai'] = $bobot;
             JawabanEssayPeserta::find($idjawaban)->update($nilai);
         }
-        return redirect()->back()->with('message', 'Berhasil!'); 
+        return redirect()->back()->with('message', 'Berhasil, Peserta telah dinilai!'); 
     }
 
     /**

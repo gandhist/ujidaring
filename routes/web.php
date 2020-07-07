@@ -67,7 +67,12 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Daftar Kantor
 	Route::resource('jadwal', 'JadwalController');
-
+	Route::get('jadwal/{id}/dashboard','JadwalController@dashboard');
+	Route::get('jadwal/peserta/{id}','JadwalController@peserta');
+	Route::get('jadwal/instruktur/{id}','JadwalController@instruktur');
+	Route::post('jadwal/kirimaccount/instruktur','JadwalController@AccountInstruktur');
+	Route::post('jadwal/kirimaccount/peserta','JadwalController@AccountPeserta');
+	
 	// Daftar Kantor
 	Route::resource('penilaian', 'PenilaianController');
 

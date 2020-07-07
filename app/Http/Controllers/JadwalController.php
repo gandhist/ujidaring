@@ -127,6 +127,8 @@ class JadwalController extends Controller
                 $x = "nama_instruktur_".$jumlah_detail;
                 $dataDetail['nama'] = $request->$x;
                 $dataUser['name'] = $request->$x;
+                $x = "no_hp_instruktur_".$jumlah_detail;
+                $dataDetail['no_hp'] = $request->$x;
 
                 $x = "foto_instruktur_".$jumlah_detail;
                 // handle upload foto instruktur 
@@ -223,6 +225,38 @@ class JadwalController extends Controller
         return view('jadwal.show')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay'));
     }
 
+    public function dashboard($id)
+    {
+        $data = JadwalModel::find($id);
+        $modul = JadwalModul::where('id_jadwal','=',$data->id)->count();
+        $instruktur = JadwalInstruktur::where('id_jadwal','=',$data->id)->count();
+        $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->orderBy('nama','asc')->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.dashboard')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay','instruktur','modul'));
+    }
+
+    public function peserta($id)
+    {
+        $data = JadwalModel::find($id);
+        $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->orderBy('nama','asc')->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.peserta')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay'));
+    }
+
+    public function instruktur($id)
+    {
+        $data = JadwalModel::find($id);
+        $Instruktur = JadwalInstruktur::where("id_jadwal","=",$data->id)->orderBy('id','asc')->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.instruktur')->with(compact('data','jumlahPeserta','Instruktur','jumlahSoalPg','jumlahSoalEssay'));
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -243,15 +277,33 @@ class JadwalController extends Controller
      */
     public function destroy(Request $request)
     {
+
+    }
+
+    public function AccountPeserta(Request $request)
+    {
         $idData = explode(',', $request->idHapusData);
         foreach ($idData as $idData) {
-
-    
             $user_id =  Peserta::select('user_id','no_hp','nama')->find($idData);
             $no_hp = $user_id['no_hp'];
             $nama = $user_id['nama'];
             $user_account =  User::select('username','hint')->where('id',"=",$user_id['user_id'])->first();
 
+            $telepon = $no_hp;
+            $message = "Gunakan NIK Anda dan kode: ".$user_account['hint']." untuk login ke https://uji.disnakerdki.org";
+            $this->kirimPesanSMS($telepon, $message);
+        }   
+        return back()->with('message', 'Account telah dikirim');
+    }
+
+    public function AccountInstruktur(Request $request)
+    {
+        $idData = explode(',', $request->idHapusData);
+        foreach ($idData as $idData) {
+            $user_id =  InstrukturModel::select('id_users','no_hp','nama')->find($idData);
+            $no_hp = $user_id['no_hp'];
+            $nama = $user_id['nama'];
+            $user_account =  User::select('username','hint')->where('id',"=",$user_id['id_users'])->first();
             $telepon = $no_hp;
             $message = "Gunakan NIK Anda dan kode: ".$user_account['hint']." untuk login ke https://uji.disnakerdki.org";
             $this->kirimPesanSMS($telepon, $message);
