@@ -91,6 +91,16 @@ class DashboardInstrukturController extends Controller
 
     public function uploadtugas(Request $request, $id)
     {
+
+        $request->validate([
+            'uploadTugas' => 'required',
+            'uploadTugas'=>'mimes:pdf'
+        ],
+        ['uploadTugas.required'=>'Kolom upload tugas harus diisi',
+        'uploadTugas.mimes'=>'File harus berupa pdf'
+        ]
+        );
+
         if ($files = $request->file('uploadTugas')) {
             $destinationPath = 'uploads/Tugas'; // upload path
             $file = "Tugas_Jadwal_".$id."_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
@@ -103,6 +113,19 @@ class DashboardInstrukturController extends Controller
 
     public function uploadsoal(Request $request, $id)
     {
+
+        $request->validate([
+            'soalPg' => 'required',
+            'soalPg'=>'mimes:xls,xlsx',
+            'soalEssay' => 'required',
+            'soalEssay'=>'mimes:xls,xlsx'
+        ],
+        ['soalPg.required'=>'Kolom upload soal PG harus diisi',
+        'soalPg.mimes'=>'File harus berupa excel',
+        'soalEssay.required'=>'Kolom upload soal essay harus diisi',
+        'soalEssay.mimes'=>'File harus berupa excel'
+        ]
+        );
 
         if($request->hasFile('soalPg')){
             $user_data = [
@@ -228,5 +251,12 @@ class DashboardInstrukturController extends Controller
         return $jadwalUpdate['akhir_ujian'];
     }
 
-    
+    public function cekDurasiUjian (Request $request){
+
+        $data['waktusekarang'] = Carbon::now()->toDateTimeString();
+        $x = JadwalModel::select('akhir_ujian','mulai_ujian')->where('id','=',$request->idJadwal)->first();
+        $data['akhir_ujian'] = $x['akhir_ujian'];
+        $data['mulai_ujian'] = $x['mulai_ujian'];
+        return $data;
+    }
 }

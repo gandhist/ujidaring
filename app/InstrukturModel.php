@@ -12,7 +12,6 @@ class InstrukturModel extends Model
         protected $table = "instruktur";
         protected $guarded = ["id"];
 
-        // relasi ke jadwal
         // relasi ke table jadwal
         public function jadwal_r(){
                 return $this->belongsTo('App\JadwalInstruktur','id','id_instruktur');

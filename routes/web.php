@@ -22,6 +22,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::resource('dashboardinstruktur','DashboardInstrukturController');
 	});
 
+	Route::post('cekDurasiUjian','DashboardInstrukturController@cekDurasiUjian');
 	Route::post('updateDurasiUjian','DashboardInstrukturController@updateDurasiUjian');
 	Route::post('instruktur/dashboardinstruktur/{id}/uploadtugas','DashboardInstrukturController@uploadtugas');
 	Route::post('instruktur/dashboardinstruktur/{id}/uploadsoal','DashboardInstrukturController@uploadsoal');
@@ -70,6 +71,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('jadwal/{id}/dashboard','JadwalController@dashboard');
 	Route::get('jadwal/peserta/{id}','JadwalController@peserta');
 	Route::get('jadwal/instruktur/{id}','JadwalController@instruktur');
+	Route::get('jadwal/soal/{id}','JadwalController@soal');
+	Route::get('jadwal/tugas/{id}','JadwalController@tugas');
+	Route::get('jadwal/absen/{id}','JadwalController@absen');
 	Route::post('jadwal/kirimaccount/instruktur','JadwalController@AccountInstruktur');
 	Route::post('jadwal/kirimaccount/peserta','JadwalController@AccountPeserta');
 	

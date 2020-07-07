@@ -59,24 +59,34 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-1">
                 </div>
-                <div class="col-md-2">
-
-                    <!-- <div class="box-body">
-                        <div class="table-responsive">
-                            <table class="table no-margin">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align:left;padding: 6px;"><button id="btnkirim" type="button"
-                                                class="btn btn-block btn-info btn-flat">Kirim User Account</button>
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
+                <div class="col-md-4">
+                    <form action="{{ route('jadwal.store') }}" id="" name="" method="post"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table class="table no-margin">
+                                    <thead>
+                                        <tr>
+                                            <input type="hidden" id="idJadwal" name="idJadwal" value="{{$data->id}}">
+                                            <th style="width:5%"><span style="text-align:right;font-size: 22px;"
+                                                    id="clock">00:00:00</span></th>
+                                            <th style="text-align:right;padding: 6px;width:32%"><input maxlength="4"
+                                                    id="durasi" name="durasi" type="text" class="form-control"
+                                                    placeholder="Durasi Ujian(Menit)"></th>
+                                            <th style="text-align:left;padding: 6px;"><button id="btnmulai"
+                                                    type="button" class="btn btn-block btn-info btn-flat">Mulai
+                                                    Ujian</button>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
                         </div>
-                    </div> -->
-
+                    </form>
                 </div>
             </div>
             <!-- /.MultiStep Form -->
@@ -92,7 +102,8 @@
                         <div class="icon">
                             <i class="ion ion-person"></i>
                         </div>
-                        <a href="{{ url('jadwal/instruktur', $data->id) }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('jadwal/instruktur', $data->id) }}" class="small-box-footer">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -106,7 +117,8 @@
                         <div class="icon">
                             <i class="fa fa-users" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -126,7 +138,8 @@
                         <div class="icon">
                             <i class="fa fa-book" aria-hidden="true"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -140,7 +153,8 @@
                         <div class="icon">
                             <i class="fa fa-newspaper-o" aria-hidden="true"></i>
                         </div>
-                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('jadwal/soal', $data->id) }}" class="small-box-footer">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -149,13 +163,28 @@
                     <div class="small-box bg-red">
                         <div class="inner">
                             <h3>{{$modul}}</h3>
-
                             <p>Modul</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-folder-open-o" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('instruktur/modul',$data->id) }}" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('instruktur/modul',$data->id) }}" class="small-box-footer">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3>{{$jumlahPeserta}}</h3>
+                            <p>Absen</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                        </div>
+                        <a href="{{ url('jadwal/absen', $data->id) }}" class="small-box-footer">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -165,7 +194,6 @@
             @foreach($Peserta as $key)
             <div class="modal fade" id="modal_{{$key->id}}" role="dialog">
                 <div class="modal-dialog modal-lg" style="width:1500px">
-
                     <!-- Modal content-->
                     <div class="modal-content">
                         <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
@@ -394,8 +422,8 @@
             });
         }).draw();
 
-        // Kunci Input NIK Hanya Angka
-        $('.Inputbobot').on('input blur paste', function () {
+        // Kunci Input durasi Hanya Angka
+        $('#durasi').on('input blur paste', function () {
             $(this).val($(this).val().replace(/\D/g, ''))
         });
 
@@ -436,32 +464,6 @@
             }
         });
 
-        // Show Modal Penilaian
-        $('.btnnilai').on('click', function () {
-            $('#modaldetailAhli').modal('show');
-        });
-
-        $('#btnkirim').on('click', function (e) {
-            e.preventDefault();
-            var id = [];
-            $('.selection:checked').each(function () {
-                id.push($(this).data('id'));
-            });
-            $("#idHapusData").val(id);
-            if (id.length == 0) {
-                Swal.fire({
-                    title: "Tidak ada data yang terpilih",
-                    type: 'warning',
-                    confirmButtonText: 'Close',
-                    confirmButtonColor: '#AAA'
-                });
-                // alert('Tidak ada data yang terpilih');
-            } else {
-                $('#modal-konfirmasi').modal('show');
-            }
-        });
-
-
         // Fungsi Update durasi ujian
         function updateDurasi(durasi, idJadwal) {
             var url = "{{ url('updateDurasiUjian') }}";
@@ -479,7 +481,6 @@
                 },
                 success: function (data) {
 
-
                     // countdown
                     var $clock = $('#clock'),
                         eventTime = moment(data, 'YYYY-MM-DD HH:mm:ss').unix(),
@@ -489,6 +490,13 @@
                         interval = 1000;
 
                     if (diffTime > 0) {
+                        $("#durasi").attr('readonly', 'readonly');
+                        $("#durasi").css('background-color', '#ccc');
+                        $("#durasi").val($("#durasi").val() + " Menit");
+                        $("#btnmulai").text("Ujian Sedang Berlangsung");
+                        $("#btnmulai").attr("class", "btn btn-block btn-warning btn-flat disabled");
+                        $("#durasi").unbind();
+                        $("#btnmulai").unbind();
 
                         // Show clock
                         // $clock.show();
@@ -498,7 +506,7 @@
                             $m = $('<span class="minutes" ></span>').appendTo($clock),
                             $s = $('<span class="seconds" ></span>').appendTo($clock);
 
-                        setInterval(function () {
+                        timer = setInterval(function () {
 
                             duration = moment.duration(duration.asMilliseconds() -
                                 interval, 'milliseconds');
@@ -518,6 +526,18 @@
                             $m.text(m + ":");
                             $s.text(s);
 
+                            if (h == '00' && m == '00' && s == '00') {
+                                $("#btnmulai").text('Ujian Telah Selesai');
+                                $("#btnmulai").attr("class",
+                                    "btn btn-block btn-danger btn-flat disabled");
+                                Swal.fire({
+                                    title: "Ujian telah selesai",
+                                    type: 'success',
+                                    confirmButtonText: 'Ok',
+                                    confirmButtonColor: '#AAA'
+                                });
+                                clearInterval(timer);
+                            }
                         }, interval);
 
                     }
@@ -529,7 +549,108 @@
             });
         }
 
+        cekDurasi();
 
+        // Fungsi Update durasi ujian
+        function cekDurasi() {
+            var idJadwal = $("#idJadwal").val();
+            var url = "{{ url('cekDurasiUjian') }}";
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    idJadwal: idJadwal
+                },
+                success: function (data) {
+         
+                    if(data['akhir_ujian']==null){
+                        
+                    }
+                    else if (data['waktusekarang'] > data['mulai_ujian'] && data['waktusekarang'] < data[
+                            'akhir_ujian']) {
+                        // countdown
+                        var $clock = $('#clock'),
+                            eventTime = moment(data['akhir_ujian'], 'YYYY-MM-DD HH:mm:ss').unix(),
+                            currentTime = moment().unix(),
+                            diffTime = eventTime - currentTime,
+                            duration = moment.duration(diffTime * 1000, 'milliseconds'),
+                            interval = 1000;
+
+                        if (diffTime > 0) {
+
+                            $("#durasi").attr('readonly', 'readonly');
+                            $("#durasi").css('background-color', '#ccc');
+                            $("#durasi").val($("#durasi").val() + " Menit");
+                            $("#btnmulai").text('Ujian Sedang Berlangsung');
+                            $("#btnmulai").attr("class",
+                                "btn btn-block btn-warning btn-flat disabled");
+                            $("#durasi").unbind();
+                            $("#btnmulai").unbind();
+
+                            // Show clock
+                            // $clock.show();
+                            $('#clock').text("");
+                            var $d = $('<span class="days" ></span>').appendTo($clock),
+                                $h = $('<span class="hours" ></span>').appendTo($clock),
+                                $m = $('<span class="minutes" ></span>').appendTo($clock),
+                                $s = $('<span class="seconds" ></span>').appendTo($clock);
+
+                            timer = setInterval(function () {
+
+                                duration = moment.duration(duration.asMilliseconds() -
+                                    interval, 'milliseconds');
+                                var d = moment.duration(duration).days(),
+                                    h = moment.duration(duration).hours(),
+                                    m = moment.duration(duration).minutes(),
+                                    s = moment.duration(duration).seconds();
+
+                                d = $.trim(d).length === 1 ? '0' + d : d;
+                                h = $.trim(h).length === 1 ? '0' + h : h;
+                                m = $.trim(m).length === 1 ? '0' + m : m;
+                                s = $.trim(s).length === 1 ? '0' + s : s;
+
+                                // show how many hours, minutes and seconds are left
+                                // $d.text(d + ":");
+                                $h.text(h + ":");
+                                $m.text(m + ":");
+                                $s.text(s);
+
+                               
+                                if (h == '00' && m == '00' && s == '00') {
+                                    clearInterval(timer);
+                                    Swal.fire({
+                                        title: "Ujian telah selesai",
+                                        type: 'success',
+                                        confirmButtonText: 'Ok',
+                                        confirmButtonColor: '#AAA'
+                                    });
+
+                                }
+                            }, interval);
+
+                        }
+                        // Countdown
+                    } else if (data['waktusekarang'] > data['akhir_ujian']) {
+                        $("#durasi").attr('readonly', 'readonly');
+                        $("#durasi").css('background-color', '#ccc');
+                        $("#btnmulai").text('Ujian Telah Selesai');
+                        $("#btnmulai").attr("class", "btn btn-block btn-danger btn-flat disabled");
+                        $("#durasi").unbind();
+                        $("#btnmulai").unbind();
+                    } else {
+                        console.log('Ujian Belum Selesai');
+                    }
+                },
+                error: function (xhr, status) {
+                    alert('Error');
+                }
+            });
+        }
 
     });
 
