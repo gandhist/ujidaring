@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Traits\GlobalFunction;
 use App\SoalPgModel;
 use App\SoalEssayModel;
+use App\AbsenModel;
 
 class JadwalController extends Controller
 {
@@ -247,6 +248,17 @@ class JadwalController extends Controller
         return view('jadwal.peserta')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay'));
     }
 
+    public function absen($id)
+    {
+        $data = JadwalModel::find($id);
+        $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
+        $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta)->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.absen')->with(compact('data','jumlahPeserta','absen','jumlahSoalPg','jumlahSoalEssay'));
+    }
+
     public function instruktur($id)
     {
         $data = JadwalModel::find($id);
@@ -255,6 +267,28 @@ class JadwalController extends Controller
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
         return view('jadwal.instruktur')->with(compact('data','jumlahPeserta','Instruktur','jumlahSoalPg','jumlahSoalEssay'));
+    }
+
+    public function soal($id)
+    {
+        $data = JadwalModel::find($id);
+        $SoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->orderBy('no_soal','asc')->get();
+        $SoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->orderBy('no_soal','asc')->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.soal')->with(compact('data','jumlahPeserta','SoalPg','SoalEssay','jumlahSoalPg','jumlahSoalEssay'));
+    }
+
+    public function tugas($id)
+    {
+        $data = JadwalModel::find($id);
+        $SoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->orderBy('no_soal','asc')->get();
+        $SoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->orderBy('no_soal','asc')->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.tugas')->with(compact('data','jumlahPeserta','SoalPg','SoalEssay','jumlahSoalPg','jumlahSoalEssay'));
     }
 
     /**

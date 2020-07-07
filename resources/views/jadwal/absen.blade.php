@@ -4,12 +4,12 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Instruktur
+        Absen
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active"><a href="#">Instruktur</a></li>
+        <li class="active"><a href="#">Absen</a></li>
     </ol>
 
 
@@ -27,7 +27,7 @@
             @endif
             <!-- MultiStep Form -->
             <div class="row">
-                <div class="col-md-7">
+                <!-- <div class="col-md-7">
                     <div class="box-body">
                         <div class="table-responsive">
                             <table class="table no-margin">
@@ -78,6 +78,7 @@
                 <div class="col-md-3">
                 </div>
                 <div class="col-md-2">
+
                     <div class="box-body">
                         <div class="table-responsive">
                             <table class="table no-margin">
@@ -92,9 +93,9 @@
                         </div>
                     </div>
 
-                </div>
+                </div> -->
                 <div class="col-md-12">
-                    <h3>Daftar Instruktur</h3>
+                    <h3>Daftar Absensi Peserta</h3>
                     <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                         <thead>
                             <tr>
@@ -102,18 +103,24 @@
                                 <th>No</th>
                                 <th>NIK</th>
                                 <th>Nama</th>
-                                <th>No Hp</th>
+                                <th>Jam Masuk</th>
+                                <th>Foto Masuk</th>
+                                <th>Jam Keluar</th>
+                                <th>Foto Keluar</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($Instruktur as $key)
+                            @foreach($absen as $key)
                             <tr>
-                                <td style='width:1%'><input type="checkbox" data-id="{{ $key->instruktur_r->id }}"
-                                        class="selection" id="selection[]" name="selection[]"></td>
+                                <td style='width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
+                                        id="selection[]" name="selection[]"></td>
                                 <td style="width:1%"></td>
-                                <td>{{ $key->instruktur_r->nik }}</td>
-                                <td>{{ $key->instruktur_r->nama }}</td>
-                                <td style="width:5%">{{ $key->instruktur_r->no_hp }}</td>
+                                <td>{{ $key->peserta_r->nik }}</td>
+                                <td>{{ $key->peserta_r->nama }}</td>
+                                <td>{{ $key->jam_cek_in }}</td>
+                                <td>{{ $key->foto_cek_in }}</td>
+                                <td>{{ $key->jam_cekout }}</td>
+                                <td>{{ $key->foto_cekout }}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -121,18 +128,21 @@
                 </div>
             </div>
             <!-- /.MultiStep Form -->
-            <br>
-            <a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md btn-info"><i
-                    class="fa fa-times-circle"></i> Kembali</a>
-            <br><br>
+
+       
+
         </div>
         <!-- /.box-body -->
+        <br>
+        <a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md btn-info"><i
+                class="fa fa-times-circle"></i> Kembali</a>
+        <br><br>
     </div>
     <!-- /.box -->
     <!-- modal konfirmasi -->
     <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
-        <form action="{{ url('jadwal/kirimaccount/instruktur') }}" class="form-horizontal" id="formDelete"
+        <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formDelete"
             name="formDelete" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" value="" name="idHapusData" id="idHapusData">
@@ -144,7 +154,7 @@
                         <h4 class="modal-title" id="myModalLabel">Konfirmasi</h4>
                     </div>
                     <div class="modal-body" id="konfirmasi-body">
-                        Apakah anda ingin mengirim account instruktur?
+                        Apakah anda ingin mengirim account peserta?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>

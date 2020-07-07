@@ -1,10 +1,16 @@
 @extends('templates.header')
 
 @section('content')
+<style>
+    .dataTables_scrollBody {
+        height: 150px !important;
+    }
+
+</style>
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Instruktur
+        Tugas
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -25,107 +31,49 @@
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             </div>
             @endif
-            <!-- MultiStep Form -->
             <div class="row">
-                <div class="col-md-7">
-                    <div class="box-body">
-                        <div class="table-responsive">
-                            <table class="table no-margin">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align:left;padding: 6px;">Tanggal Mulai</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td>
-                                        <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->jenis_usaha_r->nama_jns_usaha}}</td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->bidang_r->nama_bidang}}
-                                        </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->tuk}}
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <th style="text-align:left;padding: 6px;">Tanggal Selesai</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{ \Carbon\Carbon::parse($data->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
-                                        </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Peserta
-                                        </th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahPeserta}} Orang</td>
-
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Pg
-                                        </th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahSoalPg}} Soal</td>
-
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Essay
-                                        </th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahSoalEssay}} Soal</td>
-                                    </tr>
-
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-md-3">
+                    <h3 style="text-align:center">Upload Tugas</h3>
+                    <form action="{{ url('instruktur/dashboardinstruktur/'.$data->id.'/uploadtugas') }}"
+                        class="form-horizontal" id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <table class="table no-margin">
+                            <tbody>
+                                <tr>
+                                    <td style="width:80%">
+                                        <div class="form-group" style="margin-bottom:0px">
+                                            <label for="" style="">File harus berupa .pdf</label>
+                                            <input type="file" class="form-control" id="uploadTugas" name="uploadTugas"
+                                                value="" required>
+                                            <span id="soalPgSpan"
+                                                class="help-block customspan">{{ $errors->first('uploadTugas') }}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px !important;">
+                                        <div style="text-align:left">
+                                            <button id="btnUpdateNilai" type="submit" class="btn btn-md btn-danger">
+                                                <i class="fa fa-save"></i>
+                                                Upload</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
-                <div class="col-md-2">
-                    <div class="box-body">
-                        <div class="table-responsive">
-                            <table class="table no-margin">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align:left;padding: 6px;"><button id="btnkirim" type="button"
-                                                class="btn btn-block btn-info btn-flat">Kirim User Account</button>
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-md-12">
-                    <h3>Daftar Instruktur</h3>
-                    <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
-                        <thead>
-                            <tr>
-                                <th><i class="fa fa-check-square-o"></i></th>
-                                <th>No</th>
-                                <th>NIK</th>
-                                <th>Nama</th>
-                                <th>No Hp</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($Instruktur as $key)
-                            <tr>
-                                <td style='width:1%'><input type="checkbox" data-id="{{ $key->instruktur_r->id }}"
-                                        class="selection" id="selection[]" name="selection[]"></td>
-                                <td style="width:1%"></td>
-                                <td>{{ $key->instruktur_r->nik }}</td>
-                                <td>{{ $key->instruktur_r->nama }}</td>
-                                <td style="width:5%">{{ $key->instruktur_r->no_hp }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="col-md-9">
+                    <h3 style="text-align:center">Preview</h3>
+                    <embed src="{{ $data->pdf_tugas!= '' ? '/'.$data->pdf_tugas : '' }} " width="100%" height="650px" />
                 </div>
             </div>
-            <!-- /.MultiStep Form -->
-            <br>
+            <br><br>
             <a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md btn-info"><i
                     class="fa fa-times-circle"></i> Kembali</a>
             <br><br>
         </div>
+
         <!-- /.box-body -->
     </div>
     <!-- /.box -->
@@ -175,15 +123,14 @@
 <script type="text/javascript">
     $(function () {
 
-        var dt = $('#custom-table').DataTable({
+        var dt = $('#custom-table,#custom-table2').DataTable({
             "lengthMenu": [
-                [10, 20, 50],
-                [10, 20, 50]
+                [5, 10, 50],
+                [5, 10, 50]
             ],
             "scrollX": true,
             "scrollY": $(window).height() - 255,
             "scrollCollapse": true,
-            "bPaginate": false,
             "searching": false,
             "autoWidth": false,
             "columnDefs": [{

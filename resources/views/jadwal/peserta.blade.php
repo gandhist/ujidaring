@@ -134,22 +134,25 @@
                                 <td style="width:8%">{{count($key->essay_benar_r)}}</td>
                                 <td style="width:8%">{{count($key->essay_salah_r)}}</td>
                                 @if($key->jadwal_r->akhir_ujian == "" )
-                                <td style="text-align:center;width:8%"><button type="button" class="btn btn-sm btn-warning"
-                                        >Belum Ujian</button></td>
-                                @elseif( \Carbon\Carbon::now()->toDateTimeString() > $key->jadwal_r->awal_ujian && \Carbon\Carbon::now()->toDateTimeString() <
-                                                $key->jadwal_r->akhir_ujian )
-                                                <td style="text-align:center;width:8%"><button type="button" class="btn btn-sm btn-danger">Sedang Ujian</button></td>
+                                <td style="text-align:center;width:8%"><button type="button"
+                                        class="btn btn-sm btn-warning">Belum Ujian</button></td>
+                                @elseif( \Carbon\Carbon::now()->toDateTimeString() > $key->jadwal_r->awal_ujian &&
+                                \Carbon\Carbon::now()->toDateTimeString() < $key->jadwal_r->akhir_ujian )
+                                    <td style="text-align:center;width:8%"><button type="button"
+                                            class="btn btn-sm btn-danger">Sedang Ujian</button></td>
 
-                                @elseif( count($key->essay_benar_r) == 0 && count($key->essay_salah_r) == 0 )
-                               
-                                <td style="text-align:center;width:8%"><button type="button" class="btn btn-sm bg-olive btn-flat"
-                                        data-toggle="modal" data-target="#modal_{{$key->id}}">Nilai</button></td>
-                                @else
-                                <td style="text-align:center;width:8%"><button type="button" class="btn btn-sm btn-warning"
-                                        data-toggle="modal" data-target="#modal_jawab_{{$key->id}}">Sudah
-                                        dinilai</button></td>
-                                @endif
-                                <!-- <td style="width:7%">{{count($key->pg_benar_r)}}</td>
+                                    @elseif( count($key->essay_benar_r) == 0 && count($key->essay_salah_r) == 0 )
+
+                                    <td style="text-align:center;width:8%"><button type="button"
+                                            class="btn btn-sm bg-olive btn-flat" data-toggle="modal"
+                                            data-target="#modal_{{$key->id}}">Nilai</button></td>
+                                    @else
+                                    <td style="text-align:center;width:8%"><button type="button"
+                                            class="btn btn-sm btn-warning" data-toggle="modal"
+                                            data-target="#modal_jawab_{{$key->id}}">Sudah
+                                            dinilai</button></td>
+                                    @endif
+                                    <!-- <td style="width:7%">{{count($key->pg_benar_r)}}</td>
                                 <td style="width:7%">{{count($key->pg_salah_r)}}</td>
                                 <td style="width:8%">{{count($key->essay_benar_r)}}</td>
                                 <td style="width:8%">{{count($key->essay_salah_r)}}</td> -->
@@ -300,7 +303,7 @@
                                         </table>
                                     </div>
 
-                                   
+
                                 </form>
                             </div>
                             <!-- End -->
@@ -317,13 +320,17 @@
 
         </div>
         <!-- /.box-body -->
+        <br>
+        <a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md btn-info"><i
+                class="fa fa-times-circle"></i> Kembali</a>
+        <br><br>
     </div>
     <!-- /.box -->
     <!-- modal konfirmasi -->
     <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
-        <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formDelete" name="formDelete"
-            method="post" enctype="multipart/form-data">
+        <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formDelete"
+            name="formDelete" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" value="" name="idHapusData" id="idHapusData">
             <div class="modal-dialog modal-sm">

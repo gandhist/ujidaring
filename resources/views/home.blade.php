@@ -83,9 +83,10 @@
                                             </td>
                                             <td style="text-align:center;width:40%">{{$key->tuk}}
                                             </td>
-                                            <td style="text-align:center;width:5%"><button data-toggle="modal"
+                                            <td style="text-align:center;width:5%">
+                                            <!-- <button data-toggle="modal"
                                                     data-target="#modalUploadTugas" type="button"
-                                                    class="btn btn-sm bg-olive btn-flat">Upload Tugas</button>
+                                                    class="btn btn-sm bg-olive btn-flat">Upload Tugas</button> -->
                                                 @if($key->pdf_tugas == "" )
                                                 <button class="btn btn-sm btn-danger" target="_blank">Belum
                                                     Ada</button>
@@ -96,9 +97,10 @@
 
                                             </td>
 
-                                            <td style="text-align:left;width:5%"><button data-toggle="modal"
+                                            <td style="text-align:left;width:5%">
+                                            <!-- <button data-toggle="modal"
                                                     data-target="#modalUploadSoal" type="button"
-                                                    class="btn btn-sm bg-olive btn-flat">Upload Soal</button>
+                                                    class="btn btn-sm bg-olive btn-flat">Upload Soal</button> -->
                                                 @if(count($key->soalpg_r) == 0 )
                                                 <button class="btn btn-sm btn-danger" target="_blank">Belum
                                                     Ada Soal</button>
