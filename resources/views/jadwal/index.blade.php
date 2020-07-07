@@ -124,7 +124,7 @@
                     <div class="col-sm-2" style='text-align:right'>
                         <div class="btn-group">
                             <button class="btn btn-success" id="btnTampil" name="btnTampil"> <i class="fa fa-eye"></i>
-                                Tampil</button>
+                                Detail</button>
                             <a href="{{ route('jadwal.create') }}" class="btn btn-info"> <i class="fa fa-plus"></i>
                                 Tambah</a>
 
@@ -313,7 +313,7 @@
                 // alert('Harap pilih satu data untuk di ubah');
             } else {
                 url = id[0];
-                window.location.href = "{{ url('jadwal') }}/" + url + "/edit";
+                window.location.href = "{{ url('jadwal') }}/" + url + "/dashboard";
             }
         });
 

@@ -11,8 +11,6 @@
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active"><a href="#">Jadwal</a></li>
     </ol>
-
-
 </section>
 
 <!-- Main content -->
@@ -20,9 +18,6 @@
     <!-- Default box -->
     <div class="box box-content">
         <div class="box-body">
-
-
-
             <!-- MultiStep Form -->
             <div class="row">
                 <div class="col-md-12">
@@ -109,7 +104,7 @@
                                                 <td>
                                                     <div class="form-group">
                                                         <input type="file" id="gambarJadwal" name="gambarJadwal">
-                                                        <p class="help-block">Gambar Jadwal (.pdf)</p>
+                                                        <p class="help-block">Gambar Jadwal (jpeg/jpg/png/pdf)</p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -160,6 +155,7 @@
                                             <th style="width: 3%">No</th>
                                             <th>NIK</th>
                                             <th>Nama</th>
+                                            <th>No Hp</th>
                                             <th style="width:15%">Foto (.jpg/.jpeg/.png)</th>
                                             <th style="width:15%">KTP (.jpg/.jpeg/.png)</th>
                                             <th style="width:5%">Full Akses</th>
@@ -465,6 +461,7 @@
                                             <td><input maxlength="16" id="nik_instruktur_` + no +
             `" name="nik_instruktur_` + no + `" type="text" class="form-control" placeholder="NIK" required></td>
                                             <td><input name="nama_instruktur_` + no + `" type="text" class="form-control" placeholder="Nama" required></td>
+                                            <td><input maxlength="15" id="no_hp_instruktur_` + no +`" name="no_hp_instruktur_` + no + `" type="text" class="form-control" placeholder="No Hp" required></td>
                                             <td><input name="foto_instruktur_` + no + `" type="file" class="form-control" style="padding:5px"></td>
                                             <td><input name="pdf_instruktur_` + no +
             `"type="file" class="form-control" style="padding:5px"></td>
@@ -479,7 +476,10 @@
         // Kunci Input NIK Hanya Angka
         $('#nik_instruktur_' + no).on('input blur paste', function () {
             $(this).val($(this).val().replace(/\D/g, ''))
-        })
+        });
+        $('#no_hp_instruktur_' + no).on('input blur paste', function () {
+            $(this).val($(this).val().replace(/\D/g, ''))
+        });
     };
 
 
