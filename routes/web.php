@@ -52,6 +52,12 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::get('essay','PesertaController@ujian_essay');
 		});
 	});
+
+	// route absensi
+	Route::group(['prefix' => 'absen'], function () {
+		Route::get('/{id_jdwl}','AbsensiController@index');
+	});
+	// end of route absensi
 	
 	Route::group(['middleware' => 'auth.input'], function () {
 		Route::get('', 'HomeController@index');
