@@ -63,10 +63,10 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th style="width:10%">Tanggal Mulai</th>
-                                            <th style="width:10%">Tanggal Selesai</th>
+                                            <th style="width:12%">Tanggal Mulai</th>
+                                            <th style="width:12%">Tanggal Selesai</th>
                                             <th>TUK</th>
-                                            <th>Modul</th>
+                                          
                                             <th>Tugas</th>
                                             <th>Soal</th>
                                         </tr>
@@ -83,9 +83,6 @@
                                             </td>
                                             <td style="text-align:center;width:40%">{{$key->tuk}}
                                             </td>
-                                            <td style="text-align:center;width:5%"><a
-                                                    href="{{ url('instruktur/modul',$key->id) }}" type="button"
-                                                    class="btn btn-sm bg-olive btn-flat">Upload Modul</a></td>
                                             <td style="text-align:center;width:5%"><button data-toggle="modal"
                                                     data-target="#modalUploadTugas" type="button"
                                                     class="btn btn-sm bg-olive btn-flat">Upload Tugas</button>
