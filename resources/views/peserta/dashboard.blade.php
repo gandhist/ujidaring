@@ -17,7 +17,9 @@
 
         <div class="col-lg 4">
             <div class="card" >
-                <img class="card-img-top" src="#" alt="Pass Foto {{ $peserta->nama }}">
+              @if($peserta->foto)
+                <img class="card-img-top" src="{{ asset("uploads/peserta/",$peserta->foto) }}" alt="Pass Foto {{ $peserta->nama }}">
+                @endif
                 <div class="card-body">
                   <h5 class="card-title">{{ $peserta->nama }}</h5>
                 </div>
@@ -39,13 +41,14 @@
               </div>
         </div>
         <div class="col-lg-2">
+          {{-- if in jadwal --}}
           <div class="card" >
             <div class="card-header">
               Pintasan
             </div>
             <ul class="list-group list-group-flush">
                 @if ($is_allow_uji)
-                  <li class="list-group-item">
+                  <li class="list-group list-group-flush">
                   <a href="{{ url('peserta/ujian/pg') }}" class="btn btn-outline-info">Mulai Ujian</a>
                   </li>
                 @else
@@ -53,10 +56,11 @@
                     <a href="{{ url('peserta/tugas') }}" class="btn btn-outline-info">Kerjakan Tugas</a>
                   @endif
                 @endif
-              <li class="list-group-item"><a target="_blank" href="{{ url('peserta/presensi') }}" class="btn btn-outline-info">Absen</a></li>
-              <li class="list-group-item"><a target="_blank" href="{{ url($peserta->jadwal_r->pdf_jadwal) }}" class="btn btn-outline-info">Lihat Jadwal</a></li>
+              <li class="list-group list-group-flush"><a target="_blank" href="{{ url('peserta/presensi') }}" class="btn btn-outline-info">Absen</a></li>
+              <li class="list-group list-group-flush"><a target="_blank" href="{{ url($peserta->jadwal_r->pdf_jadwal) }}" class="btn btn-outline-info">Lihat Jadwal</a></li>
             </ul>
           </div>
+          {{-- if not in jadwal --}}
 
         </div>
 
@@ -70,7 +74,7 @@
                   <tr>
                     <th scope="col">No</th>
                     <th scope="col">Nama Modul</th>
-                    <th scope="col">Jam Pelajaran</th>
+                    <th scope="col">Jam Pertemuan</th>
                     <th scope="col">Materi</th>
                     <th scope="col">Link</th>
                   </tr>
@@ -87,8 +91,8 @@
                         @endif
                        </td>
                        <td>
-                        @if($key->materi)
-                          <a target="_blank" href="{{ $key->link }}" class="btn btn-info">{{ $key->link }}</a>
+                        @if($key->link)
+                          <a target="_blank" href="{{ $key->link }}" class="btn btn-info">Link</a>
                         @endif
                        </td>
                    </tr>

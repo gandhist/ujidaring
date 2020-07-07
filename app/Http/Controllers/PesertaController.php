@@ -29,6 +29,10 @@ class PesertaController extends Controller
     {
         //
         $peserta = Peserta::where('user_id',Auth::id())->first();
+        $cek = JawabanEvaluasi::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->count();
+        if($cek == 0){
+           $this->_generate_soal_eva($peserta->id);
+        }
         $awal_uji = strtotime($peserta->jadwal_r->mulai_ujian);
         $akhir_uji = strtotime($peserta->jadwal_r->akhir_ujian);
         $pst_mulai_uji = $peserta->mulai_ujian ? strtotime($peserta->mulai_ujian) : Carbon::now()->timestamp;
@@ -118,7 +122,7 @@ class PesertaController extends Controller
         }
         return response()->json([
             'status' => true,
-            'message' => 'Memberikan Evaluasi, Penilaian anda di jamin kerahasiaannya',
+            'message' => 'Berhasil memberikan evaluasi, Penilaian anda di jamin kerahasiaannya',
         ],200);
     }
 
