@@ -253,8 +253,7 @@ class JadwalController extends Controller
             $user_account =  User::select('username','hint')->where('id',"=",$user_id['user_id'])->first();
 
             $telepon = $no_hp;
-            // Gunakan NIK Anda dan kode: 9777 untuk login ke env('APP_URL')
-            $message = "Selamat ".$nama." anda telah terdaftar. Gunakan NIK Anda dan password: ".$user_account['hint']." untuk login ke ".env('APP_URL');
+            $message = "Gunakan NIK Anda dan kode: ".$user_account['hint']." untuk login ke https://uji.disnakerdki.org";
             $this->kirimPesanSMS($telepon, $message);
         }   
         return back()->with('message', 'Account telah dikirim');
