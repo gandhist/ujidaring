@@ -345,4 +345,37 @@ class JadwalController extends Controller
         return back()->with('message', 'Account telah dikirim');
     }
 
+    // fungsi tampil form upload jadwal pkl
+    public function upload_pkl($id){
+        return view('jadwal.pkl')->with(compact('id'));
+    }
+
+    // fungsi upload jadwal pkl
+    public function upload_pkl_store(Request $request){
+        // return $request->all();
+        // handle upload Premi bpjs kesehatan
+        $request->validate(
+            [
+                'materiPkl' => 'required|mimes:flv,mp4,avi|max:20480'
+            ],[
+                'materiPkl.required' => "Materi PKL Harus di isi",
+                'materiPkl.mimes' => "Materi PKL hanya format FLV, MP4, AVI",
+                'materiPkl.max' => "Maksimal ukuran file 20MB"
+            ]);
+        $data = JadwalModel::find($request->id_jadwal);
+        if ($files = $request->file('materiPkl')) {
+            // return "test";
+            $destinationPath = 'uploads/pkl/'.$request->id_jadwal; // upload path
+            $file = "materi_PKL_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $file);
+            $data->f_pkl= $request->id_jadwal."/".$file;
+        }
+        
+        // $data->save();
+        // return response()->json([
+        //     'status' => true,
+        //     'message' => 'materi PKL berhasil di upload'
+        // ]);
+    }
+
 }

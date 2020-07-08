@@ -82,6 +82,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('jadwal/absen/{id}','JadwalController@absen');
 	Route::post('jadwal/kirimaccount/instruktur','JadwalController@AccountInstruktur');
 	Route::post('jadwal/kirimaccount/peserta','JadwalController@AccountPeserta');
+	Route::get('jadwal/{id}/upload/pkl','JadwalController@upload_pkl')->name('uploadPkl');
+	Route::post('jadwal/upload/pkl','JadwalController@upload_pkl_store');
 	
 	// Daftar Kantor
 	Route::resource('penilaian', 'PenilaianController');
