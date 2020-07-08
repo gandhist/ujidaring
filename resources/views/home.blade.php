@@ -42,7 +42,7 @@
 
             <div class="row">
                 <!-- Left col -->
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <!-- TABLE: LATEST ORDERS -->
                     <div class="box box-info collapsed-box">
                         <div class="box-header with-border">
@@ -66,53 +66,29 @@
                                             <th style="width:12%">Tanggal Mulai</th>
                                             <th style="width:12%">Tanggal Selesai</th>
                                             <th>TUK</th>
-                                          
-                                            <th>Tugas</th>
-                                            <th>Soal</th>
+                                            <th>Jenis Usaha</th>
+                                            <th>Bidang</th>
+                                            <th>Detail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($data as $key)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                            <td width="1%">{{ $loop->iteration }}</td>
                                             <td style="text-align:center">
                                                 {{ \Carbon\Carbon::parse($key->tgl_awal)->isoFormat("DD MMMM YYYY") }}
                                             </td>
                                             <td style="text-align:center">
                                                 {{ \Carbon\Carbon::parse($key->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
                                             </td>
-                                            <td style="text-align:center;width:40%">{{$key->tuk}}
+                                            <td style="text-align:left;width:40%">{{$key->tuk}}
                                             </td>
-                                            <td style="text-align:center;width:5%">
-                                            <!-- <button data-toggle="modal"
-                                                    data-target="#modalUploadTugas" type="button"
-                                                    class="btn btn-sm bg-olive btn-flat">Upload Tugas</button> -->
-                                                @if($key->pdf_tugas == "" )
-                                                <button class="btn btn-sm btn-danger" target="_blank">Belum
-                                                    Ada</button>
-                                                @else
-                                                <a class="btn btn-sm bg-olive btn-flat" target="_blank"
-                                                    href="/{{$key->pdf_tugas}}">Lihat Tugas</a>
-                                                @endif
-
+                                            <td style="text-align:left;width:10%">{{$key->jenis_usaha_r->nama_jns_usaha}}
                                             </td>
-
-                                            <td style="text-align:left;width:5%">
-                                            <!-- <button data-toggle="modal"
-                                                    data-target="#modalUploadSoal" type="button"
-                                                    class="btn btn-sm bg-olive btn-flat">Upload Soal</button> -->
-                                                @if(count($key->soalpg_r) == 0 )
-                                                <button class="btn btn-sm btn-danger" target="_blank">Belum
-                                                    Ada Soal</button>
-                                                @else
-                                                <a class="btn btn-sm bg-olive btn-flat" target="_blank"
-                                                    href="{{$key->f_soal_pg}}">Lihat Soal PG</a>
-                                                <a class="btn btn-sm bg-olive btn-flat" target="_blank"
-                                                    href="{{$key->f_soal_essay}}">Lihat Soal Essay</a>
-                                                @endif
-
+                                            <td style="text-align:left;width:10%">{{$key->bidang_r->nama_bidang}}
                                             </td>
-
+                                            <td style="text-align:center;width:5%"><a  class="btn btn-success btn-xs" href="{{ url('jadwal/'.$key->id.'/dashboard') }}"><i
+                                            class="fa fa-eye"></i> Detail </a></td>
                                         </tr>
 
                                         <!-- Modal -->
@@ -208,9 +184,9 @@
                 </div>
                 <!-- /.col -->
 
-                <div class="col-md-4">
+                <!-- <div class="col-md-4">
 
-                </div>
+                </div> -->
                 <!-- /.col -->
 
             </div>

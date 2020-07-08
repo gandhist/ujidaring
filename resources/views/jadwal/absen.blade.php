@@ -103,6 +103,7 @@
                                 <th>No</th>
                                 <th>NIK</th>
                                 <th>Nama</th>
+                                <th>Tanggal</th>
                                 <th>Jam Masuk</th>
                                 <th>Foto Masuk</th>
                                 <th>Jam Keluar</th>
@@ -116,11 +117,40 @@
                                         id="selection[]" name="selection[]"></td>
                                 <td style="width:1%"></td>
                                 <td>{{ $key->peserta_r->nik }}</td>
-                                <td>{{ $key->peserta_r->nama }}</td>
-                                <td>{{ $key->jam_cek_in }}</td>
-                                <td>{{ $key->foto_cek_in }}</td>
-                                <td>{{ $key->jam_cekout }}</td>
-                                <td>{{ $key->foto_cekout }}</td>
+                                <td style="text-align:left;width:40%">{{ $key->peserta_r->nama }}</td>
+                                <td style="text-align:center;width:8%">{{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}</td>
+                                <td style="text-align:center;width:8%">
+                                @if (isset($key->jam_cek_in))
+                                {{ \Carbon\Carbon::parse($key->jam_cek_in)->toTimeString() }}
+                                @else
+
+                                @endif
+                                </td>
+                                <td style="text-align:center;width:8%">
+                                    @if (isset($key->foto_cek_in))
+                                    <button class="btn btn-success btn-xs"
+                                        onclick='tampilFoto("{{ asset("uploads/peserta/$key->foto_cek_in") }}","Jam Masuk {{ \Carbon\Carbon::parse($key->jam_cek_in)->toTimeString() }}")'><i
+                                            class="fa fa-picture-o"></i> Lihat </button>
+                                    @else
+                                    <button class="btn btn-danger btn-xs"> Belum Absen </button>
+                                    @endif
+                                </td>
+                                <td style="text-align:center;width:8%">
+                                @if (isset($key->jam_cek_in))
+                                {{ \Carbon\Carbon::parse($key->jam_cekout)->toTimeString() }}
+                                @else
+
+                                @endif
+                                </td>
+                                <td style="text-align:center;width:8%">
+                                    @if (isset($key->foto_cekout))
+                                    <button class="btn btn-success btn-xs"
+                                        onclick='tampilFoto("{{ asset("uploads/peserta/$key->foto_cekout") }}","Jam Keluar {{ \Carbon\Carbon::parse($key->jam_cekout)->toTimeString() }}")'><i
+                                            class="fa fa-picture-o"></i> Lihat </button>
+                                    @else
+                                    <button class="btn btn-danger btn-xs"> Belum Absen </button>
+                                    @endif
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -129,7 +159,7 @@
             </div>
             <!-- /.MultiStep Form -->
 
-       
+
 
         </div>
         <!-- /.box-body -->
@@ -139,6 +169,7 @@
         <br><br>
     </div>
     <!-- /.box -->
+
     <!-- modal konfirmasi -->
     <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
@@ -167,6 +198,32 @@
         </form>
     </div>
     <!-- end of modal konfirmais -->
+
+    <!-- modal lampiran -->
+    <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title" id="lampiranTitle"></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12" style="text-align:center">
+                           <img id="imgFoto" src="" alt=""  width="100%">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- end of modal lampiran -->
 
 </section>
 <!-- /.content -->
@@ -198,10 +255,10 @@
             "autoWidth": false,
             "columnDefs": [{
                 "searchable": false,
-                "orderable": false,
+                "orderable": [[ 3, "desc" ]],
                 "targets": [0, 1]
             }],
-            "aaSorting": []
+            "aaSorting": [[ 4, "desc" ],[ 3, "asc" ]]
         });
 
         dt.on('order.dt search.dt', function () {
@@ -347,8 +404,6 @@
                 }
             });
         }
-
-
 
     });
 
