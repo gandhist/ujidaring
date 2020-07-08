@@ -3,8 +3,8 @@
 @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>
-        Absen
+    <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
+                class="fa fa-caret-left"></i> Kembali</a> Absen
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -26,80 +26,57 @@
             </div>
             @endif
             <!-- MultiStep Form -->
+            <form action="{{ url('jadwal/absen/filter') }}" enctype="multipart/form-data" name="filterData"
+                id="filterData" method="post">
+                @csrf
+                <input type="hidden" name="id_jadwal" value="{{$data->id}}">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table class="table no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:5%">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon customInput">Tanggal</span>
+                                                    <input id="f_tgl_awal" name="f_tgl_awal"
+                                                        value="{{ request()->get('f_tgl_awal') }}" autocomplete="off"
+                                                        data-provide="datepicker" data-date-format="dd/mm/yyyy"
+                                                        type="text" class="form-control customInput"
+                                                        placeholder="Tgl Awal">
+                                                    <span class="input-group-addon customInput">s/d</span>
+                                                    <input id="f_tgl_akhir" name="f_tgl_akhir"
+                                                        value="{{ request()->get('f_tgl_akhir') }}" autocomplete="off"
+                                                        data-provide="datepicker" data-date-format="dd/mm/yyyy"
+                                                        type="text" class="form-control customInput"
+                                                        placeholder="Tgl Akhir">
+                                                </div>
+                                            </th>
+                                            <th style="text-align:left;width:5%">
+                                                <button type="submit" class="btn btn-sm btn-info"> <i
+                                                        class="fa fa-filter"></i>
+                                                    Filter</button>
+                                            </th>
+                                            <th style="text-align:left">
+                                                <a href="{{ url('jadwal/absen', $id_jadwal) }}" class="btn btn-sm btn-default"> <i
+                                                        class="fa fa-refresh"></i>
+                                                    Reset</a>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
             <div class="row">
-                <!-- <div class="col-md-7">
-                    <div class="box-body">
-                        <div class="table-responsive">
-                            <table class="table no-margin">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align:left;padding: 6px;">Tanggal Mulai</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td>
-                                        <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->jenis_usaha_r->nama_jns_usaha}}</td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->bidang_r->nama_bidang}}
-                                        </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->tuk}}
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <th style="text-align:left;padding: 6px;">Tanggal Selesai</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{ \Carbon\Carbon::parse($data->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
-                                        </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Peserta
-                                        </th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahPeserta}} Orang</td>
-
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Pg
-                                        </th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahSoalPg}} Soal</td>
-
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Essay
-                                        </th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahSoalEssay}} Soal</td>
-                                    </tr>
-
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                </div>
-                <div class="col-md-2">
-
-                    <div class="box-body">
-                        <div class="table-responsive">
-                            <table class="table no-margin">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align:left;padding: 6px;"><button id="btnkirim" type="button"
-                                                class="btn btn-block btn-info btn-flat">Kirim User Account</button>
-                                        </th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-
-                </div> -->
                 <div class="col-md-12">
                     <h3>Daftar Absensi Peserta</h3>
                     <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                         <thead>
                             <tr>
-                                <th><i class="fa fa-check-square-o"></i></th>
                                 <th>No</th>
                                 <th>NIK</th>
                                 <th>Nama</th>
@@ -113,18 +90,17 @@
                         <tbody>
                             @foreach($absen as $key)
                             <tr>
-                                <td style='width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
-                                        id="selection[]" name="selection[]"></td>
                                 <td style="width:1%"></td>
                                 <td>{{ $key->peserta_r->nik }}</td>
                                 <td style="text-align:left;width:40%">{{ $key->peserta_r->nama }}</td>
-                                <td style="text-align:center;width:8%">{{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}</td>
                                 <td style="text-align:center;width:8%">
-                                @if (isset($key->jam_cek_in))
-                                {{ \Carbon\Carbon::parse($key->jam_cek_in)->toTimeString() }}
-                                @else
+                                    {{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}</td>
+                                <td style="text-align:center;width:8%">
+                                    @if (isset($key->jam_cek_in))
+                                    {{ \Carbon\Carbon::parse($key->jam_cek_in)->toTimeString() }}
+                                    @else
 
-                                @endif
+                                    @endif
                                 </td>
                                 <td style="text-align:center;width:8%">
                                     @if (isset($key->foto_cek_in))
@@ -136,11 +112,11 @@
                                     @endif
                                 </td>
                                 <td style="text-align:center;width:8%">
-                                @if (isset($key->jam_cek_in))
-                                {{ \Carbon\Carbon::parse($key->jam_cekout)->toTimeString() }}
-                                @else
+                                    @if (isset($key->jam_cek_in))
+                                    {{ \Carbon\Carbon::parse($key->jam_cekout)->toTimeString() }}
+                                    @else
 
-                                @endif
+                                    @endif
                                 </td>
                                 <td style="text-align:center;width:8%">
                                     @if (isset($key->foto_cekout))
@@ -157,16 +133,10 @@
                     </table>
                 </div>
             </div>
-            <!-- /.MultiStep Form -->
-
-
-
         </div>
-        <!-- /.box-body -->
-        <br>
-        <a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md btn-info"><i
-                class="fa fa-times-circle"></i> Kembali</a>
-        <br><br>
+        <!-- /.MultiStep Form -->
+    </div>
+    <!-- /.box-body -->
     </div>
     <!-- /.box -->
 
@@ -212,7 +182,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-12" style="text-align:center">
-                           <img id="imgFoto" src="" alt=""  width="100%">
+                            <img id="imgFoto" src="" alt="" width="100%">
                         </div>
                     </div>
                 </div>
@@ -250,19 +220,23 @@
             "scrollX": true,
             "scrollY": $(window).height() - 255,
             "scrollCollapse": true,
-            "bPaginate": false,
             "searching": false,
             "autoWidth": false,
             "columnDefs": [{
                 "searchable": false,
-                "orderable": [[ 3, "desc" ]],
+                "orderable": [
+                    [3, "desc"]
+                ],
                 "targets": [0, 1]
             }],
-            "aaSorting": [[ 4, "desc" ],[ 3, "asc" ]]
+            "aaSorting": [
+                [4, "desc"],
+                [3, "asc"]
+            ]
         });
 
         dt.on('order.dt search.dt', function () {
-            dt.column(1, {
+            dt.column(0, {
                 search: 'applied',
                 order: 'applied'
             }).nodes().each(function (cell, i) {

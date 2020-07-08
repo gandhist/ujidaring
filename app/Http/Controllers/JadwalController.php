@@ -33,7 +33,16 @@ class JadwalController extends Controller
      */
     public function index()
     {
-        $data = JadwalModel::all();
+        $id_user = Auth::id();
+        $user_role = User::select('role_id')->where('id','=',$id_user)->first();
+        $role =  $user_role['role_id'];
+        if($role==1){
+            $data = JadwalModel::all();
+        }else{
+            $getIdInstruktur = InstrukturModel::where("id_users","=",$id_user)->first();
+            $datajadwal = JadwalInstruktur::select('id_jadwal')->where('id_instruktur','=',$getIdInstruktur->id)->orderBy("id_jadwal","asc")->get();
+            $data = JadwalModel::whereIn('id',$datajadwal)->get();
+        }
         return view('jadwal.index')->with(compact('data'));
     }
 
@@ -253,12 +262,29 @@ class JadwalController extends Controller
     public function absen($id)
     {
         $data = JadwalModel::find($id);
+        $id_jadwal = $id;
         $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
         $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta)->get();
         $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
-        return view('jadwal.absen')->with(compact('data','jumlahPeserta','absen','jumlahSoalPg','jumlahSoalEssay'));
+        return view('jadwal.absen')->with(compact('data','jumlahPeserta','absen','jumlahSoalPg','jumlahSoalEssay','id_jadwal'));
+    }
+
+    public function filter_absen(Request $request)
+    {
+        $id_jadwal = $request->id_jadwal;
+        $data = JadwalModel::find($id_jadwal);
+        $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
+        $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta);
+
+        if($request->f_tgl_awal != null && $request->f_tgl_akhir != null){
+            $absen->whereBetween('tanggal', [Carbon::createFromFormat('d/m/Y',$request->f_tgl_awal), Carbon::createFromFormat('d/m/Y',$request->f_tgl_akhir)]);
+        }
+        $absen->get();
+        $absen = $absen->get();
+
+        return view('jadwal.absen')->with(compact('absen','id_jadwal','data'));
     }
 
     public function instruktur($id)

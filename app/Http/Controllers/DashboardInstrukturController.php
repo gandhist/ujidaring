@@ -35,9 +35,10 @@ class DashboardInstrukturController extends Controller
 
     // function view upload modul dan link 
     public function modul($id){
+        $id_jadwal = $id;
         $getIdInstruktur = InstrukturModel::where("id_users",Auth::id())->first();
         $data = JadwalModul::where('id_jadwal',$id)->orderBy("id_modul","asc")->get();
-        return view('instruktur.modul')->with(compact('data'));
+        return view('instruktur.modul')->with(compact('data','id_jadwal'));
     }
 
     // function view upload modul dan link 
@@ -95,11 +96,13 @@ class DashboardInstrukturController extends Controller
     {
 
         $request->validate([
+            'BatasUpload'=>'required',
             'uploadTugas' => 'required',
             'uploadTugas'=>'mimes:pdf'
         ],
         ['uploadTugas.required'=>'Kolom upload tugas harus diisi',
-        'uploadTugas.mimes'=>'File harus berupa pdf'
+        'uploadTugas.mimes'=>'File harus berupa pdf',
+        'BatasUpload.required' => 'Kolom batas upload harus diisi'
         ]
         );
 
@@ -109,6 +112,7 @@ class DashboardInstrukturController extends Controller
             $files->move($destinationPath, $file);
             $data['pdf_tugas'] = $destinationPath."/".$file;
         }
+        $data['batas_up_tugas'] = Carbon::createFromFormat('d/m/Y',$request->BatasUpload);
         JadwalModel::find($id)->update($data);
         return redirect()->back()->with('message', 'Berhasil Upload Tugas!'); 
     }

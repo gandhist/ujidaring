@@ -42,7 +42,7 @@
 
             <div class="row">
                 <!-- Left col -->
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <!-- TABLE: LATEST ORDERS -->
                     <div class="box box-info collapsed-box">
                         <div class="box-header with-border">
@@ -63,77 +63,32 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th style="width:10%">Tanggal Mulai</th>
-                                            <th style="width:10%">Tanggal Selesai</th>
+                                            <th style="width:12%">Tanggal Mulai</th>
+                                            <th style="width:12%">Tanggal Selesai</th>
                                             <th>TUK</th>
-                                            <th>Ujian</th>
-                                            <th>Modul</th>
-                                            <th>Tugas</th>
-                                            <th>Soal</th>
+                                            <th>Jenis Usaha</th>
+                                            <th>Bidang</th>
+                                            <th>Detail</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($data as $key)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
+                                            <td width="1%">{{ $loop->iteration }}</td>
                                             <td style="text-align:center">
                                                 {{ \Carbon\Carbon::parse($key->jadwal_r->tgl_awal)->isoFormat("DD MMMM YYYY") }}
                                             </td>
                                             <td style="text-align:center">
                                                 {{ \Carbon\Carbon::parse($key->jadwal_r->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
                                             </td>
-                                            <td style="text-align:center;width:40%">{{$key->jadwal_r->tuk}}
+                                            <td style="text-align:left;width:40%">{{$key->jadwal_r->tuk}}
                                             </td>
-
-                                            @if($key->jadwal_r->akhir_ujian == "" )
-                                            <td style="text-align:center;width:5%"><a
-                                                    href="{{ url('instruktur/dashboardinstruktur/'.$key->id.'/edit') }}"
-                                                    type="button" class="btn btn-sm btn-info">Mulai Ujian</a>
+                                            <td style="text-align:left;width:10%">{{$key->jadwal_r->jenis_usaha_r->nama_jns_usaha}}
                                             </td>
-                                            @elseif( \Carbon\Carbon::now()->toDateTimeString() >
-                                            $key->jadwal_r->awal_ujian && \Carbon\Carbon::now()->toDateTimeString() <
-                                                $key->jadwal_r->akhir_ujian )
-                                                <td style="text-align:center;width:5%">
-                                                    <button type="button" class="btn btn-sm btn-danger">Sedang Ujian</button>
-                                                </td>
-                                                @else
-                                                <td style="text-align:center;width:5%">
-                                                    <a href="{{ url('penilaian') }}" type="button"
-                                                        class="btn btn-sm bg-olive btn-flat">Ujian Telah Selesai</a>
-                                                    <!-- <button type="button" class="btn btn-sm bg-olive btn-flat">Ujian Telah Selesai</button> -->
-                                                </td>
-                                                @endif
-                                                <td style="text-align:center;width:5%"><a
-                                                        href="{{ url('instruktur/modul',$key->id) }}" type="button"
-                                                        class="btn btn-sm bg-olive btn-flat">Upload Modul</a></td>
-                                                <td style="text-align:center;width:5%"><button data-toggle="modal"
-                                                        data-target="#modalUploadTugas" type="button"
-                                                        class="btn btn-sm bg-olive btn-flat">Upload Tugas</button>
-                                                    @if($key->jadwal_r->pdf_tugas == "" )
-                                                    <button class="btn btn-sm btn-danger" target="_blank">Belum
-                                                        Ada Tugas</button>
-                                                    @else
-                                                    <a class="btn btn-sm bg-olive btn-flat" target="_blank"
-                                                        href="/{{$key->jadwal_r->pdf_tugas}}">Lihat Tugas</a>
-                                                    @endif
-
-                                                </td>
-
-                                                <td style="text-align:left;width:5%"><button data-toggle="modal"
-                                                        data-target="#modalUploadSoal" type="button"
-                                                        class="btn btn-sm bg-olive btn-flat">Upload Soal</button>
-                                                    @if(count($key->jadwal_r->soalpg_r) == 0 )
-                                                    <button class="btn btn-sm btn-danger" target="_blank">Belum
-                                                        Ada Soal</button>
-                                                    @else
-                                                    <a class="btn btn-sm bg-olive btn-flat" target="_blank"
-                                                        href="{{$key->jadwal_r->f_soal_pg}}">Lihat Soal PG</a>
-                                                    <a class="btn btn-sm bg-olive btn-flat" target="_blank"
-                                                        href="{{$key->jadwal_r->f_soal_essay}}">Lihat Soal Essay</a>
-                                                    @endif
-
-                                                </td>
-
+                                            <td style="text-align:left;width:10%">{{$key->jadwal_r->bidang_r->nama_bidang}}
+                                            </td>
+                                            <td style="text-align:center;width:5%"><a  class="btn btn-success btn-xs" href="{{ url('jadwal/'.$key->jadwal_r->id.'/dashboard') }}"><i
+                                            class="fa fa-eye"></i> Detail </a></td>
                                         </tr>
 
                                         <!-- Modal -->
@@ -229,9 +184,9 @@
                 </div>
                 <!-- /.col -->
 
-                <div class="col-md-4">
+                <!-- <div class="col-md-4">
 
-                </div>
+                </div> -->
                 <!-- /.col -->
 
             </div>
