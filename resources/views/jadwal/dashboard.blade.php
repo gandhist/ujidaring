@@ -177,7 +177,7 @@
                     <!-- small box -->
                     <div class="small-box bg-yellow">
                         <div class="inner">
-                            <h3>{{$jumlahPeserta}}</h3>
+                            <h3>{{$jumlahabsen}}</h3>
                             <p>Absen</p>
                         </div>
                         <div class="icon">
@@ -189,164 +189,15 @@
                 </div>
                 <!-- ./col -->
             </div>
-
-            <!-- Modal Penilaian -->
-            @foreach($Peserta as $key)
-            <div class="modal fade" id="modal_{{$key->id}}" role="dialog">
-                <div class="modal-dialog modal-lg" style="width:1500px">
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"><b>{{$key->nama}}</b></h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="box">
-                                <form action="{{ route('penilaian.update', $key->id ) }}" class="form-horizontal"
-                                    id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
-                                    @method("PATCH")
-                                    @csrf
-                                    <div class="box-body no-padding">
-                                        <br>
-                                        <table class="table table-condensed" id="tableModalDetailAhli">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Soal</th>
-                                                    <th>Jawaban Peserta</th>
-                                                    <th>Jawaban Sebenarnya</th>
-                                                    <th>Bobot</th>
-                                                    <th>Ceklis jika benar</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <input type="hidden" name="jumlah_jawaban_{{$key->id}}"
-                                                    value="{{count($key->jawaban_essay_r)}}">
-                                                @foreach($key->jawaban_essay_r as $jawaban)
-                                                <tr>
-                                                    <input type="hidden"
-                                                        name="{{$key->id}}_id_jawaban_{{ $loop->iteration }}"
-                                                        value="{{ $jawaban->id }}">
-                                                    <td style="width:1%">{{ $loop->iteration }}</td>
-                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
-                                                            id="" rows="5">{{ $jawaban->soal_r->soal }}</textarea></td>
-                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
-                                                            id="" rows="5">{{ $jawaban->jawaban }}</textarea></td>
-                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
-                                                            id="" rows="5">{{ $jawaban->soal_r->jawaban }}</textarea>
-                                                    </td>
-                                                    <td style="width:2%"><input
-                                                            name="{{$key->id}}_bobot_{{ $loop->iteration }}" type="text"
-                                                            maxlength="2" class="Inputbobot" required></td>
-                                                    <td style="width:10%;text-align:center"><input
-                                                            name="{{$key->id}}_istrue_{{ $loop->iteration }}"
-                                                            type="checkbox"></td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div class="box-footer">
-                                        <div class="row">
-                                            <div class="col-sm-6" style="text-align:right">
-                                                <button type="button" class="btn btn-default"
-                                                    data-dismiss="modal">Batal</button>
-                                            </div>
-                                            <div class="col-sm-6" style="text-align:left">
-                                                <button id="btnUpdateNilai" type="submit" class="btn btn-md btn-danger">
-                                                    <i class="fa fa-save"></i>
-                                                    Simpan Nilai</button>
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                </form>
-                            </div>
-                            <!-- End -->
-                        </div>
-                    </div>
-
-                </div>
+            <div class="row" style="text-align:center">
+                <a href="#" onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")'><img width="45%" src="/{{$data->pdf_jadwal}}" alt=""></a>
             </div>
-
-            <div class="modal fade" id="modal_jawab_{{$key->id}}" role="dialog">
-                <div class="modal-dialog modal-lg" style="width:1500px">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"><b>{{$key->nama}}</b></h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="box">
-                                <form action="{{ route('penilaian.update', $key->id ) }}" class="form-horizontal"
-                                    id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
-                                    @method("PATCH")
-                                    @csrf
-                                    <div class="box-body no-padding">
-                                        <br>
-                                        <table class="table table-condensed" id="tableModalDetailAhli">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Soal</th>
-                                                    <th>Jawaban Peserta</th>
-                                                    <th>Jawaban Sebenarnya</th>
-                                                    <th>Bobot</th>
-                                                    <th>Benar/Salah</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <input type="hidden" name="jumlah_jawaban_{{$key->id}}"
-                                                    value="{{count($key->jawaban_essay_r)}}">
-                                                @foreach($key->jawaban_essay_r as $jawaban)
-                                                <tr>
-                                                    <input type="hidden"
-                                                        name="{{$key->id}}_id_jawaban_{{ $loop->iteration }}"
-                                                        value="{{ $jawaban->id }}">
-                                                    <td style="width:1%">{{ $loop->iteration }}</td>
-                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
-                                                            id="" rows="5">{{ $jawaban->soal_r->soal }}</textarea></td>
-                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
-                                                            id="" rows="5">{{ $jawaban->jawaban }}</textarea></td>
-                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
-                                                            id="" rows="5">{{ $jawaban->soal_r->jawaban }}</textarea>
-                                                    </td>
-                                                    <td style="width:2%"><input
-                                                            name="{{$key->id}}_bobot_{{ $loop->iteration }}" type="text"
-                                                            maxlength="2" class="Inputbobot"
-                                                            value="{{ $jawaban->nilai }}" readonly></td>
-                                                    <td style="width:10%;text-align:center"><span><i
-                                                                class="fa {{ $jawaban->is_true==1 ? 'fa-check' : 'fa-times' }} "
-                                                                aria-hidden="true"></i></span></td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
-                                </form>
-                            </div>
-                            <!-- End -->
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            @endforeach
-            <!-- End -->
 
         </div>
         <!-- /.box-body -->
     </div>
     <!-- /.box -->
+
     <!-- modal konfirmasi -->
     <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
@@ -376,6 +227,32 @@
         </form>
     </div>
     <!-- end of modal konfirmais -->
+
+    <!-- modal lampiran -->
+    <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title" id="lampiranTitle"></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12" style="text-align:center">
+                            <img id="imgFoto" src="" alt="" width="100%">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- end of modal lampiran -->
 
 </section>
 <!-- /.content -->
@@ -567,11 +444,11 @@
                     idJadwal: idJadwal
                 },
                 success: function (data) {
-         
-                    if(data['akhir_ujian']==null){
-                        
-                    }
-                    else if (data['waktusekarang'] > data['mulai_ujian'] && data['waktusekarang'] < data[
+
+                    if (data['akhir_ujian'] == null) {
+
+                    } else if (data['waktusekarang'] > data['mulai_ujian'] && data[
+                        'waktusekarang'] < data[
                             'akhir_ujian']) {
                         // countdown
                         var $clock = $('#clock'),
@@ -620,7 +497,7 @@
                                 $m.text(m + ":");
                                 $s.text(s);
 
-                               
+
                                 if (h == '00' && m == '00' && s == '00') {
                                     clearInterval(timer);
                                     Swal.fire({

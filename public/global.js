@@ -37,6 +37,15 @@ function tampilLampiran(url, title) {
     $('#lampiranTitle').html(` <a href="` + url + `" target="_blank" > ` + title + ` </a> `);
 }
 
+// pop up pdf
+function tampilFoto(url, title) {
+    // alert('dumbass');
+    $('#modalFoto').modal('show');
+    $('#imgFoto').attr('src',url)
+    // $('#iframeLampiran').attr('src', url);
+    $('#lampiranTitle').html(` <a href="` + url + `" target="_blank" > ` + title + ` </a> `);
+}
+
 // fungsi ajax untuk chained of provinsi
 function chainedProvinsi(url, id_prov, id_kota, placeholder) {
     var prov = $('#' + id_prov).val();
@@ -111,10 +120,10 @@ function tanggal_indonesia(string) {
 
 // Fungsi Cek nilai value kosong/NULL atau tidak
 function cekNull(value) {
-    return (value==null ||  value=='null' ? '' : value);
-  }
-  
-  // Fungsi Rubah warna filter
+    return (value == null || value == 'null' ? '' : value);
+}
+
+// Fungsi Rubah warna filter
 function selectFilter(name) {
     $('#' + name).on('change', function () {
         idfilter = $(this).attr('id');
@@ -145,15 +154,15 @@ function inputFilter(name) {
 }
 
 // Fungsi merubah Cache warna filter input tipe select2
-function selectFilterCache(name){
-    $('#select2-'+name+'-container').parent().css('background-color', '#b6f38f');
-    $('#select2-'+name+'-container').parent().css('font-weight', 'bold');
+function selectFilterCache(name) {
+    $('#select2-' + name + '-container').parent().css('background-color', '#b6f38f');
+    $('#select2-' + name + '-container').parent().css('font-weight', 'bold');
 }
 
 // Fungsi merubah Cache warna filter input biasa
-function inputFilterCache(name){
-    $('#'+name).css('background-color', '#b6f38f');
-    $('#'+name).css('font-weight', 'bold');
+function inputFilterCache(name) {
+    $('#' + name).css('background-color', '#b6f38f');
+    $('#' + name).css('font-weight', 'bold');
 }
 
 // Fungsi Rubah warna filter
@@ -171,15 +180,15 @@ function inputFilter(name) {
 }
 
 // Fungsi merubah Cache warna filter input tipe select2
-function selectFilterCache(name){
-    $('#select2-'+name+'-container').parent().css('background-color', '#b6f38f');
-    $('#select2-'+name+'-container').parent().css('font-weight', 'bold');
+function selectFilterCache(name) {
+    $('#select2-' + name + '-container').parent().css('background-color', '#b6f38f');
+    $('#select2-' + name + '-container').parent().css('font-weight', 'bold');
 }
 
 // Fungsi merubah Cache warna filter input biasa
-function inputFilterCache(name){
-    $('#'+name).css('background-color', '#b6f38f');
-    $('#'+name).css('font-weight', 'bold');
+function inputFilterCache(name) {
+    $('#' + name).css('background-color', '#b6f38f');
+    $('#' + name).css('font-weight', 'bold');
 }
 
 // fungsi ajax untuk chained of bidnag ke sertitikat alat

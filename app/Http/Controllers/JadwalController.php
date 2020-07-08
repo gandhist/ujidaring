@@ -229,13 +229,15 @@ class JadwalController extends Controller
     public function dashboard($id)
     {
         $data = JadwalModel::find($id);
+        $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
+        $jumlahabsen = AbsenModel::whereIn("id_peserta",$id_klp_peserta)->count();
         $modul = JadwalModul::where('id_jadwal','=',$data->id)->count();
         $instruktur = JadwalInstruktur::where('id_jadwal','=',$data->id)->count();
         $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->orderBy('nama','asc')->get();
         $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
-        return view('jadwal.dashboard')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay','instruktur','modul'));
+        return view('jadwal.dashboard')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay','instruktur','modul','jumlahabsen'));
     }
 
     public function peserta($id)
