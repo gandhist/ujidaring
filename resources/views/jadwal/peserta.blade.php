@@ -3,8 +3,8 @@
 @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>
-        Peserta
+    <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
+                class="fa fa-caret-left"></i> Kembali</a> Peserta
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -191,7 +191,7 @@
                                                     <th>Jawaban Peserta</th>
                                                     <th>Jawaban Sebenarnya</th>
                                                     <th>Bobot</th>
-                                                    <th>Ceklis jika benar</th>
+                                                    <th>Ceklis jika sesuai</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -271,7 +271,7 @@
                                                     <th>Jawaban Peserta</th>
                                                     <th>Jawaban Sebenarnya</th>
                                                     <th>Bobot</th>
-                                                    <th>Benar/Salah</th>
+                                                    <th>Sesuai/Tidak Sesuai</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -320,10 +320,6 @@
 
         </div>
         <!-- /.box-body -->
-        <br>
-        <a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md btn-info"><i
-                class="fa fa-times-circle"></i> Kembali</a>
-        <br><br>
     </div>
     <!-- /.box -->
     <!-- modal konfirmasi -->

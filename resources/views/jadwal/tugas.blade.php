@@ -9,8 +9,8 @@
 </style>
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>
-        Tugas
+    <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
+                class="fa fa-caret-left"></i> Kembali</a> Tugas
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -37,30 +37,22 @@
                     <form action="{{ url('instruktur/dashboardinstruktur/'.$data->id.'/uploadtugas') }}"
                         class="form-horizontal" id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
                         @csrf
-                        <table class="table no-margin">
-                            <tbody>
-                                <tr>
-                                    <td style="width:80%">
-                                        <div class="form-group" style="margin-bottom:0px">
-                                            <label for="" style="">File harus berupa .pdf</label>
-                                            <input type="file" class="form-control" id="uploadTugas" name="uploadTugas"
-                                                value="" required>
-                                            <span id="soalPgSpan"
-                                                class="help-block customspan">{{ $errors->first('uploadTugas') }}</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 8px !important;">
-                                        <div style="text-align:left">
-                                            <button id="btnUpdateNilai" type="submit" class="btn btn-md btn-danger">
-                                                <i class="fa fa-save"></i>
-                                                Upload</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <label for="" style="">Batas Upload</label>
+                        <input id="BatasUpload" name="BatasUpload" autocomplete="off"
+                                                            data-provide="datepicker" data-date-format="dd/mm/yyyy"
+                                                            type="text" class="form-control "
+                                                            placeholder="Batas Upload">
+                        <span id="BatasUploadSpan" class="help-block customspan">{{ $errors->first('BatasUpload') }}</span>
+                        <br>
+                        <label for="" style="">File (extension .pdf)</label>
+                        <div class="input-group input-group-md">
+                            <input type="file" class="form-control" id="uploadTugas" name="uploadTugas" required>
+                            <span class="input-group-btn">
+                                <button id="btnUpdateNilai" type="submit" type="button"
+                                    class="btn btn-danger btn-flat"><i class="fa fa-save"></i> Upload</button>
+                            </span>
+                        </div>
+                        <span id="uploadTugasSpan" class="help-block customspan">{{ $errors->first('uploadTugas') }}</span>
                     </form>
                 </div>
                 <div class="col-md-9">
@@ -68,43 +60,11 @@
                     <embed src="{{ $data->pdf_tugas!= '' ? '/'.$data->pdf_tugas : '' }} " width="100%" height="650px" />
                 </div>
             </div>
-            <br><br>
-            <a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md btn-info"><i
-                    class="fa fa-times-circle"></i> Kembali</a>
-            <br><br>
         </div>
 
         <!-- /.box-body -->
     </div>
     <!-- /.box -->
-    <!-- modal konfirmasi -->
-    <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
-        <form action="{{ url('jadwal/kirimaccount/instruktur') }}" class="form-horizontal" id="formDelete"
-            name="formDelete" method="post" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" value="" name="idHapusData" id="idHapusData">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span
-                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Konfirmasi</h4>
-                    </div>
-                    <div class="modal-body" id="konfirmasi-body">
-                        Apakah anda ingin mengirim account instruktur?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
-                        <button type="submit" class="btn btn-danger" data-id=""
-                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Kirim..."
-                            id="confirm-delete">Ya</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <!-- end of modal konfirmais -->
 
 </section>
 <!-- /.content -->
@@ -288,6 +248,7 @@
 
 
     });
+    
 
     $('.datepicker').datepicker({
         format: 'yyyy/mm/dd',
