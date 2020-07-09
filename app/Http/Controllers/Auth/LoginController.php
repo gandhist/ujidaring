@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\GlobalFunction;
 
 class LoginController extends Controller
 {
+    use GlobalFUnction;
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -87,7 +89,14 @@ class LoginController extends Controller
     protected function authenticated()
     {
         if (Auth::user()->role_id == 2){
-            return redirect('peserta/presensi');
+            $allow_absen_masuk = $this->_is_allow_masuk();
+            $allow_absen_pulang = $this->_is_allow_pulang();
+            if($allow_absen_masuk){
+                return redirect('peserta/presensi');
+            }
+            else {
+                return redirect('peserta/dashboard');
+            }
         }
         $user = Auth::user();
         $user->last_login = date("Y-m-d H:i:s");

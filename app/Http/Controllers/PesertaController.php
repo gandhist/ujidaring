@@ -12,6 +12,8 @@ use App\JawabanPeserta;
 use App\JawabanTugas;
 use App\JawabanEssayPeserta;
 use App\AbsenModel;
+use App\JawabanPkl;
+use App\JawabanPpt;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
@@ -313,9 +315,82 @@ class PesertaController extends Controller
         return $jwb;
     }
 
-    // function menampilkan form ujian essay
-    public function ujian_essay(){
+    // function menampilkan form upload makalah
+    public function makalah(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        return view('peserta.makalah')->with(compact('peserta'));
+    }
 
+    // simpan makalah
+    public function makalah_store(Request $request){
+        $request->validate(
+        [
+            'pdf_makalah' => 'required|mimes:pdf|max:5120'
+        ],[
+            'pdf_makalah.required' => "PDF Tugas Harus di isi",
+            'pdf_makalah.mimes' => "Upload hanya format PDF",
+            'pdf_makalah.max' => "Maksimal ukuran file 5MB"
+        ]);
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        // handle upload tugas
+        if ($files = $request->file('pdf_makalah')) {
+            $destinationPath = 'uploads/makalah/peserta'; // upload path
+            $file = Auth::id()."_makalah_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $file);
+            $pdf_tugas = $file;
+        }
+        JawabanPkl::updateOrCreate([
+            'id_jadwal' => $peserta->jadwal_r->id,
+            'id_peserta' => $peserta->id
+        ],[
+            'tgl_upload' => Carbon::now()->isoFormat('YYYY-MM-DD'),
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'created_by' => Auth::id(),
+            'pdf_makalah' => $pdf_tugas
+        ]);
+        return response()->json([
+            'status' => true,
+            'message' => 'Berhasil Mengirim Makalah'
+        ],200);
+    }
+
+    // function menampilkan form upload presentasi
+    public function presentasi(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        return view('peserta.presentasi')->with(compact('peserta'));
+    }
+
+    // simpan presentasi
+    public function presentasi_store(Request $request){
+        $request->validate(
+        [
+            'f_ppt' => 'required|mimes:pptx,ppt|max:5120'
+        ],[
+            'f_ppt.required' => "PDF Tugas Harus di isi",
+            'f_ppt.mimes' => "Upload hanya format PPT",
+            'f_ppt.max' => "Maksimal ukuran file 5MB"
+        ]);
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        // handle upload tugas
+        if ($files = $request->file('f_ppt')) {
+            $destinationPath = 'uploads/ppt/peserta'; // upload path
+            $file = Auth::id()."_makalah_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $file);
+            $pdf_tugas = $file;
+        }
+        JawabanPpt::updateOrCreate([
+            'id_jadwal' => $peserta->jadwal_r->id,
+            'id_peserta' => $peserta->id
+        ],[
+            'tgl_upload' => Carbon::now()->isoFormat('YYYY-MM-DD'),
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'created_by' => Auth::id(),
+            'f_ppt' => $pdf_tugas
+        ]);
+        return response()->json([
+            'status' => true,
+            'message' => 'Berhasil Mengirim Presentasi'
+        ],200);
     }
 
     /**

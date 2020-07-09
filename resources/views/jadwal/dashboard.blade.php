@@ -190,18 +190,17 @@
                     <div class="small-box bg-green">
                         <div class="inner">
                             <h3>-</h3>
-                            <p>Upload Materi Video PKL</p>
+                            <p>Makalah/PKL</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-film" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ route('uploadPkl', $data->id) }}" class="small-box-footer">More info
-                            <i class="fa fa-arrow-circle-right"></i></a>
+                        <a target="_blank" href="{{ route('pkl', $data->id) }}" class="small-box-footer">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+
                 <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
                     <div class="small-box bg-blue">
                         <div class="inner">
                             <h3>-</h3>
@@ -214,6 +213,7 @@
                             info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+
                 <!-- ./col -->
             </div>
             <div class="row" style="text-align:center">

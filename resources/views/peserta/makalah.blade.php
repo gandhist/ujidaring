@@ -3,21 +3,20 @@
 @section('content')
 
 <div class="containel-fluid">
-
     <div class="row">
         <div class="col-lg-6">
             <div id="wkt">
-                <h3>Waktu Pengerjaan Tugas Tersisa: <span id="timer"></span></h3>
+                <h3>Waktu Pengerjaan Tugas Makalah Tersisa: <span id="timer"></span></h3>
             </div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-lg-6">
-            @if($peserta->pdf_tugas)
-            <h3>Tugas yang harus anda kerjakan</h3>
+            @if($peserta->jadwal_r->f_pkl)
+            <h3>Tugas PKL yang diberikan oleh instruktur</h3>
             <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="{{ url($peserta->jadwal_r->pdf_tugas) }}" ></iframe>
+                <iframe class="embed-responsive-item" src="{{ url("uploads/pkl/".$peserta->jadwal_r->f_pkl) }}" ></iframe>
             </div>
             @else
             <div class="alert alert-warning" role="alert">
@@ -26,10 +25,10 @@
             @endif
         </div>
         <div class="col-lg-6">
-            @if($peserta->jawaban_tugas->pdf_tugas)
-            <h3>Tugas yang sudah di upload</h3>
+            @if($peserta->jawaban_pkl_r->pdf_makalah)
+            <h3>Tugas makalah yang sudah di upload</h3>
             <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="{{ url('uploads/tugas/peserta/'.$peserta->jawaban_tugas->pdf_tugas) }}" ></iframe>
+                <iframe class="embed-responsive-item" src="{{ url('uploads/makalah/peserta/'.$peserta->jawaban_pkl_r->pdf_makalah) }}" ></iframe>
             </div>
             @else
             <div class="alert alert-warning" role="alert">
@@ -37,10 +36,10 @@
             </div>
             @endif
             <div id="upload">
-                <h3>Upload Tugas</h3>
+                <h3>Upload Makalah dari tugas PKL yang diberikan</h3>
                 <form id="formAdd" name="formAdd">
-                    <input type="file" class="form-control" name="tugas" id="tugas">
-                    <span id="tugas" class="invalid-feedback" > {{ $errors->first('tugas') }}</span>
+                    <input type="file" class="form-control" name="pdf_makalah" id="pdf_makalah">
+                    <span id="pdf_makalah" class="invalid-feedback" > {{ $errors->first('pdf_makalah') }}</span>
 
                     <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" id="btnSave" name="btnSave">Kirim Tugas</button>
@@ -60,10 +59,10 @@ $(document).ready(function () {
       store()
     })
 
-     // timer 
+    // timer 
     // var currentTime= "{{ strtotime($peserta->mulai_ujian) }}"; // Timestamp - Sun, 21 Apr 2013 13:00:00 GMT
     var currentTime= "{{ \Carbon\Carbon::now()->timestamp }}"; // Timestamp - Sun, 21 Apr 2013 13:00:00 GMT
-    var eventTime = "{{ strtotime($peserta->jadwal_r->batas_up_tugas) }}"; // Timestamp - Sun, 21 Apr 2013 12:30:00 GMT
+    var eventTime = "{{ strtotime($peserta->jadwal_r->batas_up_makalah) }}"; // Timestamp - Sun, 21 Apr 2013 12:30:00 GMT
     var diffTime = eventTime - currentTime;
     var duration = moment.duration(diffTime*1000, 'milliseconds');
     var interval = 1000;
@@ -75,7 +74,6 @@ $(document).ready(function () {
         $('#timer').text(duration.hours() + ":" + duration.minutes() + ":" + duration.seconds())
         }, interval
     );
-
 })
 
 // timer
@@ -84,7 +82,7 @@ function stopTimer(duration){
     // hentikan timer
         clearInterval(timer);
         Swal.fire({
-            title: "Waktu upload tugas telah berakhir!",
+            title: "Waktu upload makalah telah berakhir!",
             text: "Anda tidak dapat melakukan upload tugas lagi",
             type: 'warning',
             confirmButtonText: 'OK',
@@ -93,7 +91,7 @@ function stopTimer(duration){
                 $('#upload').remove();
                 $('#wkt').html(`
                 <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <strong>Waktu Upload Berakhir!</strong> Anda sudah tidak bisa melakukan upload tugas.
+                <strong>Waktu Upload Berakhir!</strong> Anda sudah tidak bisa melakukan upload tugas PKL.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -107,7 +105,7 @@ function stopTimer(duration){
 
 function store(){
   var formData = new FormData($('#formAdd')[0]);
-  var url = "{{ url('peserta/tugas/save') }}";
+  var url = "{{ url('peserta/makalah/save') }}";
   $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
