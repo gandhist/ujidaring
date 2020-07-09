@@ -9,6 +9,7 @@ use App\JadwalModel;
 use App\JadwalModul;
 use App\InstrukturModel;
 use App\JadwalInstruktur;
+use App\JawabanPkl;
 use App\Peserta;
 use App\User;
 use App\Imports\PesertaImport;
@@ -374,9 +375,11 @@ class JadwalController extends Controller
     }
 
     // fungsi tampil form upload jadwal pkl
-    public function upload_pkl($id){
+    public function pkl($id){
         $jadwal = JadwalModel::find($id);
-        return view('jadwal.pkl')->with(compact('id','jadwal'));
+        $makalah = JawabanPkl::where('id_jadwal',$id)->orderBy('id');
+        $makalah = $makalah->get();
+        return view('jadwal.pkl')->with(compact('id','jadwal','makalah'));
     }
 
     // fungsi upload jadwal pkl

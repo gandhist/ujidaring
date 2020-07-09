@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Peserta;
+use App\AbsenModel;
 
 trait GlobalFunction {
     // fungsi kirim sms
@@ -157,6 +158,32 @@ trait GlobalFunction {
 
         return $kelompok;
         // return "jumlah kelompok : $jml_klp sisa peserta : $sisa";
+    }
+
+    // function check is allow absen masuk
+    public function _is_allow_masuk(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        $cek_cekin = AbsenModel::where('tanggal', Carbon::now()->isoFormat('YYYY-MM-DD'))->where('id_peserta', $peserta->id)->first();
+        if($cek_cekin){
+            $allow = false;
+        }
+        else {
+            $allow = true;
+        }
+        return $allow;
+    }
+
+    // function check is allow absen pulang
+    public function _is_allow_pulang(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        $cek_cekin = AbsenModel::where('tanggal', Carbon::now()->isoFormat('YYYY-MM-DD'))->where('id_peserta', $peserta->id)->whereNotNull('jam_cekout')->first();
+        if($cek_cekin){
+            $allow = false;
+        }
+        else {
+            $allow = true;
+        }
+        return $allow;
     }
 
 

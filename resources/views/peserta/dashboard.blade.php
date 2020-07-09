@@ -47,20 +47,23 @@
               Pintasan
             </div>
             <ul class="list-group list-group-flush">
+                <li class="list-group list-group-flush"><a target="_blank" href="{{ url($peserta->jadwal_r->pdf_jadwal) }}" class="btn btn-outline-info">Lihat Jadwal</a></li>
+                <li class="list-group list-group-flush"><a target="_blank" href="{{ url('peserta/presensi') }}" class="btn btn-outline-info">Absen</a></li>
                 <li class="list-group list-group-flush">
-                  <a href="{{ url('peserta/ujian/pg') }}" class="btn btn-outline-info">Upload Makalah</a>
+                  <a href="{{ url('peserta/makalah') }}" class="btn btn-outline-info">Upload Makalah</a>
                 </li>
                 @if ($is_allow_uji)
                   <li class="list-group list-group-flush">
-                  <a href="{{ url('peserta/ujian/pg') }}" class="btn btn-outline-info">Mulai Ujian</a>
+                    <a href="{{ url('peserta/ujian/pg') }}" class="btn btn-outline-info">Mulai Ujian</a>
                   </li>
                 @else
                   @if($is_allow_tugas)
+                  <li class="list-group list-group-flush">
                     <a href="{{ url('peserta/tugas') }}" class="btn btn-outline-info">Kerjakan Tugas</a>
+                  </li>
                   @endif
                 @endif
-              <li class="list-group list-group-flush"><a target="_blank" href="{{ url('peserta/presensi') }}" class="btn btn-outline-info">Absen</a></li>
-              <li class="list-group list-group-flush"><a target="_blank" href="{{ url($peserta->jadwal_r->pdf_jadwal) }}" class="btn btn-outline-info">Lihat Jadwal</a></li>
+                <li class="list-group list-group-flush"><a target="_blank" href="{{ url('peserta/presentasi') }}" class="btn btn-outline-info">Presentasi</a></li>
             </ul>
           </div>
           {{-- if not in jadwal --}}

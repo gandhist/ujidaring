@@ -35,6 +35,10 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('tugas','PesertaController@tugas');
 		Route::post('tugas/save','PesertaController@tugas_store');
 		Route::get('kuisioner','PesertaController@kuisioner');
+		Route::get('makalah','PesertaController@makalah');
+		Route::get('presentasi','PesertaController@presentasi');
+		Route::post('presentasi/save','PesertaController@presentasi_store');
+		Route::post('makalah/save','PesertaController@makalah_store');
 		Route::post('kuisioner/save','PesertaController@kuisioner_store');
 		Route::post('pkl/save','JadwalController@upload_pkl_store');
 
@@ -83,7 +87,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('jadwal/absen/{id}','JadwalController@absen');
 	Route::post('jadwal/kirimaccount/instruktur','JadwalController@AccountInstruktur');
 	Route::post('jadwal/kirimaccount/peserta','JadwalController@AccountPeserta');
-	Route::get('jadwal/{id}/upload/pkl','JadwalController@upload_pkl')->name('uploadPkl');
+	Route::get('jadwal/pkl/{id}','JadwalController@pkl')->name('pkl');
 	Route::post('jadwal/upload/pkl','JadwalController@upload_pkl_store');
 	Route::post('jadwal/absen/filter', 'JadwalController@filter_absen');
 	// Daftar Kantor

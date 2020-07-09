@@ -7,7 +7,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Upload Materi PKL
+        Daftar Makalah/PKL
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -40,6 +40,7 @@
                 <div class="col-lg-5">
                     <div class="form-group">
                           <input type='text' class="form-control" id='batas_up_makalah' name="batas_up_makalah" />
+                            <span id="batas_up_makalah" class="help-block customspan">{{ $errors->first('batas_up_makalah') }}</span>
                       </div>
                 </div>
                 </form>
@@ -65,6 +66,35 @@
                       </div>
                 </div>
             </div>
+            <hr>
+            <table id="data-tables" class="table table-striped table-bordered dataTable customTable">
+                <thead>
+                    <tr>
+                        <th><i class="fa fa-check-square-o"></i></th>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Tanggal Upload</th>
+                        <th>File</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($makalah as $key)
+                    <tr>
+                        <td>
+                            <input type="checkbox" data-id="{{ $key->id }}" class="selection" id="selection[]" name="selection[]">
+                        </td>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $key->peserta_r->nama }}</td>
+                        <td>{{ $key->created_at }}</td>
+                        <td>
+                            @if($key->pdf_makalah)
+                                <a href="{{ url('uploads/makalah/peserta/'.$key->pdf_makalah) }}" class="btn btn-success">Makalah</a>
+                            @endif
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
 
             
         </div>
@@ -97,7 +127,15 @@
     $(function () {
         $('#btnUploadPkl').on('click', function(e){
             e.preventDefault();
-            store()
+            if($('#batas_up_makalah').val() == ""){
+                alert('tanggal tidak boleh kosong')
+            }
+            else if($('#materiPkl').val() == ""){
+                alert('materi tidak boleh kosong')
+            }
+            else {
+                store()
+            }
         })
         $('#batas_up_makalah').datetimepicker({
             locale : 'id',
