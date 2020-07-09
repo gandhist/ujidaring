@@ -33,7 +33,7 @@
                 <div class="row">
                     <div class="col-md-7">
                         <div class="box-body">
-                            <div class="table-responsive">
+                            <div class="table-responsive" style="margin-left: -18px;">
                                 <table class="table no-margin">
                                     <thead>
                                         <tr>

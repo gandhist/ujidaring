@@ -86,6 +86,7 @@ class DashboardInstrukturController extends Controller
             }
         }
         return response()->json([
+            'id_jadwal' => $request->id_jadwal,
             'status' => true,
             'message' => 'Materi berhasil di upload',
         ],200);

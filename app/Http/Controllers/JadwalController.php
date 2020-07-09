@@ -66,7 +66,6 @@ class JadwalController extends Controller
      */
     public function store(Request $request)
     {
-
         $data['tgl_awal'] = Carbon::createFromFormat('d/m/Y',$request->tgl_awal);
         $data['tgl_akhir'] = Carbon::createFromFormat('d/m/Y',$request->tgl_akhir);
         $data['tuk'] = $request->tuk;
