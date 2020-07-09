@@ -47,8 +47,13 @@ class PesertaController extends Controller
         }
         $is_allow_uji = $is_allow;
         $is_allow_tugas = $this->_check_allow_tugas();
-        // dd($is_allow_uji);
-        return view('peserta.dashboard')->with(compact('peserta','is_allow_uji','is_allow_tugas'));
+        $is_absen = $this->is_allow_masuk();
+        if($is_absen){
+            return redirect('peserta/presensi')->with('status', 'Anda harus absen, untuk bisa mengakses halaman dashboard');
+        }
+        else {
+            return view('peserta.dashboard')->with(compact('peserta','is_allow_uji','is_allow_tugas'));
+        }
     }
 
     // view tugas
@@ -209,6 +214,7 @@ class PesertaController extends Controller
 
     // function save pilihan ke table temp
     public function pg_save(Request $request){
+        // return $request->all();
         if(!$request->has('jawaban')){
             return response()->json([
                 'status' => false,
@@ -379,15 +385,15 @@ class PesertaController extends Controller
     }
 
     public function kirimSMS(){
-        $telepon = '082169761759';
+        $telepon = '081240353913';
         // Gunakan NIK Anda dan kode: 9777 untuk login ke env('APP_URL')
-        $message = "Gunakan NIK Anda dan password: untuk login ke ".env('APP_URL');
+        $message = "Gunakan NIK Anda dan password: untuk login ke ";
         return $this->kirimPesanSMS($telepon, $message);
     }
 
     public function kirimWA(){
         $telepon = '081240353913';
-        $message = 'Hi Jon Snow, you really know nothing.';
+        $message = 'Hi Jon F Snow, you really know nothing. this message sent automatically from your F-word code';
         return $this->kirimPesanWA($telepon, $message);
 
     }

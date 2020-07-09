@@ -40,6 +40,7 @@
     <form action="{{ url('login') }}" method="post">
       {{ csrf_field() }}
       <div class="form-group has-feedback">
+        <input type="hidden" id="is_active" name="is_active" value="1">
         <input type="text" class="form-control" placeholder="Username" name="username">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>

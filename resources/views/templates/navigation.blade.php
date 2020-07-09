@@ -71,18 +71,21 @@
     <ul class="sidebar-menu">
       <li class="header">MAIN NAVIGATION</li>
       
+      @if(Auth::user()->role_id== 1 )
       <li class="treeview">
         <a href="{{ url('') }}">
           <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
       </li>
+      @endif
 
+      @if(Auth::user()->role_id== 3 || Auth::user()->role_id== 3 )
       <li class="treeview">
         <a href="{{ url('instruktur/dashboardinstruktur') }}">
           <i class="fa fa-dashboard"></i> <span>Dashboard Instruktur</span>
         </a>
       </li>
-
+      @endif
       <!-- <li class="treeview">
         <a href="#">
           <i class="fa fa-dashboard"></i> <span>Seminar</span>

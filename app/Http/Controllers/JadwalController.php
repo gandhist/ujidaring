@@ -351,7 +351,8 @@ class JadwalController extends Controller
             $user_account =  User::select('username','hint')->where('id',"=",$user_id['user_id'])->first();
 
             $telepon = $no_hp;
-            $message = "Gunakan NIK Anda dan kode: ".$user_account['hint']." untuk login ke https://uji.disnakerdki.org";
+            $message = "Gunakan NIK Anda dan kode: ".$user_account['hint']." untuk login ke cdg.sh/ujitulis";
+            // $message = "Gunakan NIK Anda dan kode: 1234 untuk login ke uji.disnakerdki.org";
             $this->kirimPesanSMS($telepon, $message);
         }   
         return back()->with('message', 'Account telah dikirim');
@@ -374,7 +375,8 @@ class JadwalController extends Controller
 
     // fungsi tampil form upload jadwal pkl
     public function upload_pkl($id){
-        return view('jadwal.pkl')->with(compact('id'));
+        $jadwal = JadwalModel::find($id);
+        return view('jadwal.pkl')->with(compact('id','jadwal'));
     }
 
     // fungsi upload jadwal pkl
@@ -383,13 +385,16 @@ class JadwalController extends Controller
         // handle upload Premi bpjs kesehatan
         $request->validate(
             [
-                'materiPkl' => 'required|mimes:flv,mp4,avi|max:20480'
+                'materiPkl' => 'mimes:flv,mp4,avi|max:20480',
+                'batas_up_makalah' => 'required'
             ],[
                 'materiPkl.required' => "Materi PKL Harus di isi",
+                'batas_up_makalah.required' => "Batas Waktu Makalah Harus di isi",
                 'materiPkl.mimes' => "Materi PKL hanya format FLV, MP4, AVI",
                 'materiPkl.max' => "Maksimal ukuran file 20MB"
             ]);
         $data = JadwalModel::find($request->id_jadwal);
+        $data->batas_up_makalah = $request->batas_up_makalah;
         if ($files = $request->file('materiPkl')) {
             // return "test";
             $destinationPath = 'uploads/pkl/'.$request->id_jadwal; // upload path
@@ -398,11 +403,16 @@ class JadwalController extends Controller
             $data->f_pkl= $request->id_jadwal."/".$file;
         }
         
-        // $data->save();
-        // return response()->json([
-        //     'status' => true,
-        //     'message' => 'materi PKL berhasil di upload'
-        // ]);
+        $data->save();
+        return response()->json([
+            'status' => true,
+            'message' => 'materi PKL berhasil di upload'
+        ]);
+    }
+
+    // function generate kelompok peserta 
+    public function gen($id_jadwal){
+        return $this->generate_kelompok($id_jadwal);
     }
 
 }

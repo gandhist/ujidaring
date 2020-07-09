@@ -6,6 +6,15 @@
 <div class="containel-fluid">
 
 
+@if(session()->get('status'))
+<div class="row">
+  <div class="col-lg-6">
+    <div class="alert alert-warning" role="alert">
+      {{ session()->get('status') }}
+    </div>
+  </div>
+</div>
+@endif
         <form method="POST" name="formAdd" id="formAdd">
             <div class="row">
                 <div class="col-md-6">
