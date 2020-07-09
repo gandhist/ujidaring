@@ -22,6 +22,9 @@ use App\Traits\GlobalFunction;
 use App\SoalPgModel;
 use App\SoalEssayModel;
 use App\AbsenModel;
+use App\JadwalRundown;
+use App\InsRundown;
+use App\ModulRundown;
 
 class JadwalController extends Controller
 {
@@ -66,6 +69,7 @@ class JadwalController extends Controller
      */
     public function store(Request $request)
     {
+
         $data['tgl_awal'] = Carbon::createFromFormat('d/m/Y',$request->tgl_awal);
         $data['tgl_akhir'] = Carbon::createFromFormat('d/m/Y',$request->tgl_akhir);
         $data['tuk'] = $request->tuk;
@@ -78,6 +82,19 @@ class JadwalController extends Controller
         // Insert ke table jadwal
         $getIdJadwal = JadwalModel::create($data); 
         $idJadwal = $getIdJadwal->id;
+
+        // Insert ke table rowndown
+        $from = Carbon::parse(Carbon::createFromFormat('d/m/Y', $request->tgl_awal)->format('Y-m-d'));
+        $to = Carbon::parse(Carbon::createFromFormat('d/m/Y', $request->tgl_akhir)->format('Y-m-d'));
+        $dates = [];
+        
+        for($d = $from; $d->lte($to); $d->addDay()) {
+            $data_schedule['id_jadwal'] = $idJadwal;
+            $data_schedule['tanggal'] = $d->format('Y-m-d'); 
+            $data_schedule['created_by'] = Auth::id();
+            $data_schedule['created_at'] = Carbon::now()->toDateTimeString();
+            JadwalRundown::create($data_schedule);
+        }
 
         if($request->hasFile('excel_peserta')){
             // menangkap file excel
@@ -207,6 +224,45 @@ class JadwalController extends Controller
         return redirect('jadwal')->with('message', 'Data berhasil ditambahkan');
     }
 
+    public function aturjadwalstore(Request $request)
+    {
+        for ($i=1; $i<=$request->jumlah ; $i++) {
+            // Insert ke table instruktur rowndown
+            $x = "instruktur_".$i;
+            $loop = $request->$x;
+            if($loop==null || $loop==""){
+
+            }else{
+                $length = count($loop);
+                for ($j=0; $j < $length ; $j++) { 
+                    $y = "id_rowdown_".$i;
+                    $datarowins['id_rundown'] = $request->$y;
+                    $datarowins['id_jadwal_instruktur'] = $loop[$j];
+                    $datarowins['created_by'] = Auth::id();
+                    $datarowins['created_at'] = Carbon::now()->toDateTimeString();
+                    InsRundown::create($datarowins);
+                }
+            }
+            // Insert ke table modul rowndown
+            $x = "modul_".$i;
+            $loop = $request->$x;
+            if($loop==null || $loop==""){
+
+            }else{
+                $length = count($loop);
+                for ($j=0; $j < $length ; $j++) { 
+                    $y = "id_rowdown_".$i;
+                    $datarowmodul['id_rundown'] = $request->$y;
+                    $datarowmodul['id_jadwal_modul'] = $loop[$j];
+                    $datarowmodul['created_by'] = Auth::id();
+                    $datarowmodul['created_at'] = Carbon::now()->toDateTimeString();
+                    ModulRundown::create($datarowmodul);
+                }
+            }
+        }
+        return redirect()->back()->with('message', 'Berhasil Input Rundown!'); 
+    }
+
     /**
      * Display the specified resource.
      *
@@ -256,6 +312,16 @@ class JadwalController extends Controller
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
         return view('jadwal.peserta')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay'));
+    }
+
+    public function aturjadwal($id)
+    {
+        // $data = JadwalModel::find($id);
+        $id_jadwal = $id;
+        $rundown = JadwalRundown::where('id_jadwal','=',$id_jadwal)->get();
+        $instrukturjadwal = JadwalInstruktur::where('id_jadwal','=',$id_jadwal)->get();
+        $JadwalModul = JadwalModul::where('id_jadwal','=',$id_jadwal)->get();
+        return view('jadwal.aturjadwal')->with(compact('rundown','id_jadwal','JadwalModul','instrukturjadwal'));
     }
 
     public function absen($id)

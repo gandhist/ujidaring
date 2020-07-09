@@ -10,6 +10,7 @@ class InsRundown extends Model
     //
     use SoftDeletes;
     protected $table = "instruktur_rundown";
+    protected $guarded = ["id"];
 
     // relasi belong to instruktur
     public function instruktur_r(){

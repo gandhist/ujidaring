@@ -10,6 +10,7 @@ class JadwalRundown extends Model
     //
     use SoftDeletes;
     protected $table = "jadwal_rundown";
+    protected $guarded = ["id"];
 
     // relasi has many ke table ins rundown
     public function ins_rundown_r(){

@@ -10,6 +10,7 @@ class ModulRundown extends Model
     //
     use SoftDeletes;
     protected $table = "modul_rundown";
+    protected $guarded = ["id"];
 
     // relasi belong to modul
     public function modul_r(){
