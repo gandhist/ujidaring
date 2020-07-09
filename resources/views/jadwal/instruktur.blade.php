@@ -3,8 +3,8 @@
 @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>
-        Instruktur
+    <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
+                class="fa fa-caret-left"></i> Kembali</a> Instruktur
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -121,10 +121,6 @@
                 </div>
             </div>
             <!-- /.MultiStep Form -->
-            <br>
-            <a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md btn-info"><i
-                    class="fa fa-times-circle"></i> Kembali</a>
-            <br><br>
         </div>
         <!-- /.box-body -->
     </div>

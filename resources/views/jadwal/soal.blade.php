@@ -3,24 +3,21 @@
 @section('content')
 <style>
     .dataTables_scrollBody {
-        height: 150px !important;
+        height: 500px !important;
     }
 
 </style>
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>
-        Soal
+    <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
+                class="fa fa-caret-left"></i> Kembali</a> Soal
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active"><a href="#">Instruktur</a></li>
     </ol>
-
-
 </section>
-
 <!-- Main content -->
 <section class="content">
     <!-- Default box -->
@@ -87,120 +84,168 @@
 
                 </div>
             </div> -->
-            <!-- Upload Soal -->
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 style="text-align:center">Upload Soal</h3>
-                    <form action="{{ url('instruktur/dashboardinstruktur/'.$data->id.'/uploadsoal') }}"
-                        class="form-horizontal" id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <table class="table no-margin">
-                            <thead>
-                                <tr>
-                                    <th>Upload Soal Pilihan Ganda (.xls/.xlsx)</th>
-                                    <th></th>
-                                    <th>Upload Soal Essay (.xls/.xlsx)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td style="width:50%">
-                                        <div class="form-group">
-                                            <input type="file" class="form-control" id="soalPg" name="soalPg" value=""
-                                                required>
-                                            <span id="soalPgSpan"
-                                                class="help-block customspan">{{ $errors->first('soalPg') }}</span>
-                                        </div>
-                                    </td>
-                                    <td></td>
-                                    <td style="width:50%">
-                                        <div class="form-group">
-                                            <input type="file" class="form-control" id="soalEssay" name="soalEssay"
-                                                value="" required>
-                                            <span id="soalEssaySpan"
-                                                class="help-block customspan">{{ $errors->first('soalEssay') }}</span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div class="row">
-                            <div class="col-sm-12" style="text-align:left">
-                                <button id="btnUpdateNilai" type="submit" class="btn btn-md btn-danger">
-                                    <i class="fa fa-save"></i>
-                                    Upload</button>
+            <hr>
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#upload">Upload Soal</a></li>
+                <li><a data-toggle="tab" href="#soal_pg">Soal Pilihan Ganda</a></li>
+                <li><a data-toggle="tab" href="#soal_essay">Soal Essay</a></li>
+            </ul>
+            <div class="tab-content">
+                <div id="upload" class="tab-pane fade in active">
+                    <!-- Upload Soal -->
+                    <div class="box box-info">
+                        <div class="box-header with-border" style="text-align:center">
+                            <h3 class="box-title">Upload Soal</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                        class="fa fa-times"></i></button>
                             </div>
                         </div>
+                        <div class="box-body">
 
-                    </form>
+                            <form action="{{ url('instruktur/dashboardinstruktur/'.$data->id.'/uploadsoal') }}"
+                                class="form-horizontal" id="formAdd" name="formAdd" method="post"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <table class="table no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th>Upload Soal Pilihan Ganda (.xls/.xlsx)</th>
+                                            <th></th>
+                                            <th>Upload Soal Essay (.xls/.xlsx)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <input type="file" class="form-control" id="soalPg" name="soalPg"
+                                                        value="" required>
+                                                    <span id="soalPgSpan"
+                                                        class="help-block customspan">{{ $errors->first('soalPg') }}</span>
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <input type="file" class="form-control" id="soalEssay"
+                                                        name="soalEssay" value="" required>
+                                                    <span id="soalEssaySpan"
+                                                        class="help-block customspan">{{ $errors->first('soalEssay') }}</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="row">
+                                    <div class="col-sm-12" style="text-align:left">
+                                        <button id="btnUpdateNilai" type="submit" class="btn btn-md btn-danger">
+                                            <i class="fa fa-save"></i>
+                                            Upload</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div id="soal_pg" class="tab-pane fade in">
+                    <div class="box box-info">
+                        <div class="box-header with-border" style="text-align:center">
+                            <h3 class="box-title">Soal Pilihan Ganda</h3>
+
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                        class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table class="table no-margin dataTable customTable">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Soal</th>
+                                            <th>PG A</th>
+                                            <th>PG B</th>
+                                            <th>PG C</th>
+                                            <th>PG D</th>
+                                            <th>Jawaban</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($SoalPg as $key)
+                                        <tr>
+                                            <td style="width:1%">{{ $loop->iteration }}</td>
+                                            <td>{{ $key->soal }}</td>
+                                            <td style="width:5%">{{ $key->pg_a }}</td>
+                                            <td style="width:5%">{{ $key->pg_b }}</td>
+                                            <td style="width:5%">{{ $key->pg_c }}</td>
+                                            <td style="width:5%">{{ $key->pg_d }}</td>
+                                            <td>{{ $key->jawaban }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- Soal Pilihan Ganda -->
+                </div>
+
+                <div id="soal_essay" class="tab-pane fade">
+
+                    <div class="box box-info">
+                        <div class="box-header with-border" style="text-align:center">
+                            <h3 class="box-title">Soal Essay</h3>
+
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                        class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table class="table no-margin dataTable customTable">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Soal</th>
+                                            <th>Jawaban</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($SoalEssay as $key)
+                                        <tr>
+                                            <td style="width:1%">{{ $loop->iteration }}</td>
+                                            <td>{{ $key->soal }}</td>
+                                            <td>{{ $key->jawaban }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- Soal Essay -->
                 </div>
             </div>
-            <hr>
-            <!-- Soal Pilihan Ganda -->
-            <div class="row">
-                <div class="col-md-12">
-                    <h3>Soal Pilihan Ganda</h3>
-                    <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
-                        <thead>
-                            <tr>
-                                <th><i class="fa fa-check-square-o"></i></th>
-                                <th>No</th>
-                                <th>Soal</th>
-                                <th>PG A</th>
-                                <th>PG B</th>
-                                <th>PG C</th>
-                                <th>PG D</th>
-                                <th>Jawaban</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($SoalPg as $key)
-                            <tr>
-                                <td style='width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
-                                        id="selection[]" name="selection[]"></td>
-                                <td style="width:1%"></td>
-                                <td>{{ $key->soal }}</td>
-                                <td>{{ $key->pg_a }}</td>
-                                <td>{{ $key->pg_b }}</td>
-                                <td>{{ $key->pg_c }}</td>
-                                <td>{{ $key->pg_d }}</td>
-                                <td>{{ $key->jawaban }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <!-- Soal Essay -->
-            <div class="row">
-                <div class="col-md-12">
-                    <h3>Soal Essay</h3>
-                    <table id="custom-table2" class="table table-striped table-bordered dataTable customTable">
-                        <thead>
-                            <tr>
-                                <th><i class="fa fa-check-square-o"></i></th>
-                                <th>No</th>
-                                <th>Soal</th>
-                                <th>Jawaban</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($SoalEssay as $key)
-                            <tr>
-                                <td style='width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
-                                        id="selection[]" name="selection[]"></td>
-                                <td style="width:1%">{{ $loop->iteration }}</td>
-                                <td>{{ $key->soal }}</td>
-                                <td>{{ $key->jawaban }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md btn-info"><i
-                    class="fa fa-times-circle"></i> Kembali</a>
         </div>
         <br>
         <!-- /.box-body -->
@@ -251,34 +296,6 @@
 <script src="{{ asset('AdminLTE-2.3.11/plugins/input-mask/jquery.inputmask.extensions.js')}}"></script>
 <script type="text/javascript">
     $(function () {
-
-        var dt = $('#custom-table,#custom-table2').DataTable({
-            "lengthMenu": [
-                [5, 10, 50],
-                [5, 10, 50]
-            ],
-            "scrollX": true,
-            "scrollY": $(window).height() - 255,
-            "scrollCollapse": true,
-            "searching": false,
-            "autoWidth": false,
-            "columnDefs": [{
-                "searchable": false,
-                "orderable": false,
-                "targets": [0, 1]
-            }],
-            "aaSorting": []
-        });
-
-        dt.on('order.dt search.dt', function () {
-            dt.column(1, {
-                search: 'applied',
-                order: 'applied'
-            }).nodes().each(function (cell, i) {
-                cell.innerHTML = i + 1;
-            });
-        }).draw();
-
         // Kunci Input NIK Hanya Angka
         $('.Inputbobot').on('input blur paste', function () {
             $(this).val($(this).val().replace(/\D/g, ''))
@@ -414,7 +431,32 @@
             });
         }
 
+        var dt = $('#custom-table,#custom-table2').DataTable({
+            "lengthMenu": [
+                [10, 20, 50],
+                [10, 20, 50]
+            ],
+            "scrollX": true,
+            "scrollY": $(window).height() - 255,
+            "scrollCollapse": true,
+            "searching": false,
+            "autoWidth": false,
+            "columnDefs": [{
+                "searchable": false,
+                "orderable": false,
+                "targets": [0, 1]
+            }],
+            "aaSorting": []
+        });
 
+        dt.on('order.dt search.dt', function () {
+            dt.column(1, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
 
     });
 

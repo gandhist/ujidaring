@@ -2,7 +2,8 @@
 
 @section('content')
 <section class="content-header">
-    <h1>
+    <h1><a href="{{ url('jadwal/'.$id_jadwal.'/dashboard') }}" class="btn btn-md bg-purple"><i
+                class="fa fa-caret-left"></i> Kembali</a>
         Modul Pelatihan
     </h1>
     <ol class="breadcrumb">
