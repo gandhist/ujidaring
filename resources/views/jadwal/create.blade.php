@@ -104,7 +104,7 @@
                                                 <td>
                                                     <div class="form-group">
                                                         <input type="file" id="gambarJadwal" name="gambarJadwal">
-                                                        <p class="help-block">Gambar Jadwal (jpeg/jpg/png/pdf)</p>
+                                                        <p class="help-block">Gambar Jadwal (extension jpeg/jpg/png)</p>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -170,15 +170,15 @@
 
                             <input type="button" name="previous" class="previous action-button-previous"
                                 value="Previous" />
-                            <input type="button" name="next" class="next action-button" value="Berikutnya" />
+                            <input id="next2" type="button" name="next" class="next action-button" value="Berikutnya" />
                         </fieldset>
                         <fieldset>
                             <h2 class="fs-title">Peserta</h2>
                             <span class="pull-left"><b>Import Excel Data Peserta (.xls/.xlsx)</b></span>
-                            <input type="file" name="excel_peserta" />
+                            <input type="file" id="excel_peserta" name="excel_peserta" />
                             <input type="button" name="previous" class="previous action-button-previous"
                                 value="Previous" />
-                            <input type="submit" name="submit" class="submit action-button" value="Submit" />
+                            <input id="submit" type="submit" name="submit" class="submit action-button" value="Submit" />
                         </fieldset>
                     </form>
                 </div>
@@ -209,41 +209,146 @@
 
     $(function () {
 
+        $("#submit").click(function () {
+            var val_excel = $("#excel_peserta").val();
+            if(val_excel==""){
+                alert("Excel peserta belum diinput");
+                return false;
+            }
+        });
+
+        $('#gambarJadwal').change(function () {
+            var ext = this.value.match(/\.(.+)$/)[1];
+            ext = ext.toLowerCase();
+            switch (ext) {
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                    break;
+                default:
+                    this.value = '';
+                    alert('Extension file tidak sesuai!');
+            }
+        });
+
+        $('#excel_peserta').change(function () {
+            var ext = this.value.match(/\.(.+)$/)[1];
+            ext = ext.toLowerCase();
+            switch (ext) {
+                case 'xls':
+                case 'xlsx':
+                    break;
+                default:
+                    this.value = '';
+                    alert('Extension file tidak sesuai!');
+            }
+        });
+
+        $(document).on('change', '.foto_instruktur', function (e) {
+            var id = $(this).attr("id");
+            var ext = $("#" + id).val().match(/\.(.+)$/)[1];
+            ext = ext.toLowerCase();
+            switch (ext) {
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                    break;
+                default:
+                    this.value = '';
+                    alert('Extension file tidak sesuai!');
+            }
+        });
+
+        $(document).on('change', '.pdf_instruktur', function (e) {
+            var id = $(this).attr("id");
+            var ext = $("#" + id).val().match(/\.(.+)$/)[1];
+            ext = ext.toLowerCase();
+            switch (ext) {
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                    break;
+                default:
+                    this.value = '';
+                    alert('Extension file tidak sesuai!');
+            }
+        });
+
         //jQuery time
         var current_fs, next_fs, previous_fs; //fieldsets
         var left, opacity, scale; //fieldset properties which we will animate
         var animating; //flag to prevent quick multi-click glitches
 
         $(".next").click(function () {
-            $("#tgl_akhir").css("border-color", "#ccc");
-            $("#tgl_awal").css("border-color", "#ccc");
-            $("#tuk").css("border-color", "#ccc");
-            if ($("#tgl_awal").val() == '') {
-                alert("Tanggal Mulai belum di input");
-                $("#tgl_awal").css("border-color", "red");
-                return false;
+
+            halaman = $(this).attr('id');
+
+            if (halaman == "next1") {
+                $("#tgl_akhir").css("border-color", "#ccc");
+                $("#tgl_awal").css("border-color", "#ccc");
+                $("#gambarJadwal").css("border-color", "#ccc");
+                $("#tuk").css("border-color", "#ccc");
+                if ($("#tgl_awal").val() == '') {
+                    alert("Tanggal Mulai belum di input");
+                    $("#tgl_awal").css("border-color", "red");
+                    return false;
+                }
+                if ($("#tgl_akhir").val() == '') {
+                    alert("Tanggal Selesai belum di input");
+                    $("#tgl_akhir").css("border-color", "red");
+                    return false;
+                }
+                if ($("#tuk").val() == '') {
+                    alert("Tempat Uji Kompetensi belum di input");
+                    $("#tuk").css("border-color", "red");
+                    return false;
+                }
+                if ($("#id_bidang").val() == '') {
+                    alert("Bidang belum di input");
+                    return false;
+                }
+                if ($("#id_sert_alat").val() == '') {
+                    alert("Sertifikat Alat belum di input");
+                    return false;
+                }
+                if ($("#gambarJadwal").val() == '') {
+                    alert("Gambar jadwal belum di input");
+                    $("#gambarJadwal").css("border-color", "red");
+                    return false;
+                }
+                if ($("#gambarJadwal-error").text() == "Please enter a value with a valid extension.") {
+                    alert("Extension Gambar Jadwal Harus Berupa .jpg/.jpeg/.png");
+                    return false;
+                }
             }
-            if ($("#tgl_akhir").val() == '') {
-                alert("Tanggal Selesai belum di input");
-                $("#tgl_akhir").css("border-color", "red");
-                return false;
-            }
-            if ($("#tuk").val() == '') {
-                alert("Tempat Uji Kompetensi belum di input");
-                $("#tuk").css("border-color", "red");
-                return false;
-            }
-            if ($("#id_bidang").val() == '') {
-                alert("Bidang belum di input");
-                return false;
-            }
-            if ($("#id_sert_alat").val() == '') {
-                alert("Sertifikat Alat belum di input");
-                return false;
-            }
-            if ($("#gambarJadwal").val() == '') {
-                alert("Gambar jadwal belum di input");
-                return false;
+
+            if (halaman == "next2") {
+                var status;
+                for (var i = 0; i < id_detail_instruktur.length; i++) {
+                    nik = $('#nik_instruktur_' + id_detail_instruktur[i]).val();
+                    if (nik == "") {
+                        alert('NIK Instruktur No ' + id_detail_instruktur[i] + ' belum diisi');
+                        status = false;
+                    }else{
+                        if(nik.length!=16){
+                            alert('Jumlah NIK Instruktur No ' + id_detail_instruktur[i] + ' kurang');
+                            status = false;
+                        }
+                    }
+                    nama = $('#nama_instruktur_' + id_detail_instruktur[i]).val();
+                    if (nama == "") {
+                        alert('Nama Instruktur No ' + id_detail_instruktur[i] + ' belum diisi');
+                        status = false;
+                    }
+                    no_hp = $('#no_hp_instruktur_' + id_detail_instruktur[i]).val();
+                    if (no_hp == "") {
+                        alert('No HP Instruktur No ' + id_detail_instruktur[i] + ' belum diisi');
+                        status = false;
+                    }
+                }
+                if (status == false) {
+                    return status;
+                }
             }
 
             if (animating) return false;
@@ -251,7 +356,6 @@
 
             current_fs = $(this).parent();
             next_fs = $(this).parent().next();
-
             //activate next step on progressbar using the index of next_fs
             $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
@@ -460,11 +564,11 @@
                                 <td>` + no + `</td>
                                             <td><input maxlength="16" id="nik_instruktur_` + no +
             `" name="nik_instruktur_` + no + `" type="text" class="form-control" placeholder="NIK" required></td>
-                                            <td><input name="nama_instruktur_` + no + `" type="text" class="form-control" placeholder="Nama" required></td>
-                                            <td><input maxlength="15" id="no_hp_instruktur_` + no +`" name="no_hp_instruktur_` + no + `" type="text" class="form-control" placeholder="No Hp" required></td>
-                                            <td><input name="foto_instruktur_` + no + `" type="file" class="form-control" style="padding:5px"></td>
-                                            <td><input name="pdf_instruktur_` + no +
-            `"type="file" class="form-control" style="padding:5px"></td>
+                                            <td><input id="nama_instruktur_` + no + `" name="nama_instruktur_` + no + `" type="text" class="form-control" placeholder="Nama" required></td>
+                                            <td><input maxlength="15" id="no_hp_instruktur_` + no +
+            `" name="no_hp_instruktur_` + no + `" type="text" class="form-control" placeholder="No Hp" required></td>
+                                            <td><input id="foto_instruktur_` + no + `" name="foto_instruktur_` + no + `" type="file" class="form-control foto_instruktur" style="padding:5px"></td>
+                                            <td><input id="pdf_instruktur_` + no + `" name="pdf_instruktur_` + no + `" type="file" class="form-control pdf_instruktur" style="padding:5px"></td>
                                              <td><input style="margin-top: 10px;" name="tipe_instruktur_` + no +
             `"type="checkbox"></td>
                                 <td style="width:5%"><button type="button"

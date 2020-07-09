@@ -115,6 +115,7 @@ function store(){
     contentType: false,
     processData: false,
     success: function(response) {
+        console.log(response['id_jadwal']);
         if (response.status) {
         Swal.fire({
             title: response.message,
@@ -123,7 +124,7 @@ function store(){
             confirmButtonText: 'Close',
             confirmButtonColor: '#AAA',
             onClose: function() {
-                window.history.back();
+                window.location = document.referrer;
             }
         })
         
