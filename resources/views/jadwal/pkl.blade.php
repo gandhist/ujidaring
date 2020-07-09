@@ -6,7 +6,8 @@
 @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>
+    <h1><a href="{{ url('jadwal/'.$id.'/dashboard') }}" class="btn btn-md bg-purple"><i
+                class="fa fa-caret-left"></i> Kembali</a>
         Upload Materi PKL
         {{-- <small>it all starts here</small>  --}}
     </h1>

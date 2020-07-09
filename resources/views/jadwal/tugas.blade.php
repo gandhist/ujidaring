@@ -1,5 +1,8 @@
 @extends('templates.header')
-
+@push('style')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+@endpush
 @section('content')
 <style>
     .dataTables_scrollBody {
@@ -38,11 +41,8 @@
                         class="form-horizontal" id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
                         @csrf
                         <label for="" style="">Batas Upload</label>
-                        <input id="BatasUpload" name="BatasUpload" autocomplete="off"
-                                                            data-provide="datepicker" data-date-format="dd/mm/yyyy"
-                                                            type="text" class="form-control "
-                                                            placeholder="Batas Upload">
-                        <span id="BatasUploadSpan" class="help-block customspan">{{ $errors->first('BatasUpload') }}</span>
+                        <input id="BatasUpload" name="BatasUpload" type="text" class="form-control" placeholder="Batas Upload" value="{{old('BatasUpload') ? old('BatasUpload') : $data->batas_up_tugas}} {{$data->batas_up_tugas}}">
+                        <span id="BatasUploadSpan" class="help-block" style="color:red">{{ $errors->first('BatasUpload') }}</span>
                         <br>
                         <label for="" style="">File (extension .pdf)</label>
                         <div class="input-group input-group-md">
@@ -52,7 +52,7 @@
                                     class="btn btn-danger btn-flat"><i class="fa fa-save"></i> Upload</button>
                             </span>
                         </div>
-                        <span id="uploadTugasSpan" class="help-block customspan">{{ $errors->first('uploadTugas') }}</span>
+                        <span id="uploadTugasSpan" class="help-block" style="color:red">{{ $errors->first('uploadTugas') }}</span>
                     </form>
                 </div>
                 <div class="col-md-9">
@@ -82,6 +82,11 @@
 <script src="{{ asset('AdminLTE-2.3.11/plugins/input-mask/jquery.inputmask.extensions.js')}}"></script>
 <script type="text/javascript">
     $(function () {
+
+        $('#BatasUpload').datetimepicker({
+            locale : 'id',
+            format : 'YYYY-MM-DD HH:mm:ss'
+        });
 
         var dt = $('#custom-table,#custom-table2').DataTable({
             "lengthMenu": [
@@ -244,11 +249,6 @@
                 }
             });
         }
-    });
-    
-    $('.datepicker').datepicker({
-        format: 'yyyy/mm/dd',
-        autoclose: true
     });
 
 </script>
