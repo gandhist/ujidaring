@@ -47,6 +47,9 @@
               Pintasan
             </div>
             <ul class="list-group list-group-flush">
+                <li class="list-group list-group-flush">
+                  <a href="{{ url('peserta/ujian/pg') }}" class="btn btn-outline-info">Upload Makalah</a>
+                </li>
                 @if ($is_allow_uji)
                   <li class="list-group list-group-flush">
                   <a href="{{ url('peserta/ujian/pg') }}" class="btn btn-outline-info">Mulai Ujian</a>
@@ -87,12 +90,12 @@
                        <td>{{ $key->modul_r->jp }} Jam</td>
                        <td>
                         @if($key->materi)
-                        <a target="_blank" href="{{ url('uploads/materi/'.$key->materi) }}" class="btn btn-success">Materi</a>
+                        <a target="_blank" href="{{ url('uploads/materi/'.$key->materi) }}" class="btn btn-success btn-sm"><i class="fa fa-file" ></i></a>
                         @endif
                        </td>
                        <td>
                         @if($key->link)
-                          <a target="_blank" href="{{ $key->link }}" class="btn btn-info">Link</a>
+                          <a target="_blank" href="{{ $key->link }}" class="btn btn-info btn-sm"><i class="fa fa-link"></i></a>
                         @endif
                        </td>
                    </tr>

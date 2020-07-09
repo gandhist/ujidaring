@@ -1,5 +1,11 @@
 @extends('frontend.main')
-
+@push('style')
+<style>
+html {
+  scroll-behavior: smooth;
+}
+</style>
+@endpush
 @section('content')
 <div class="container-fluid">
   <div class="row">
@@ -37,7 +43,7 @@
           {{-- pilihan ganda --}}
           <div class="row">
               <div class="col-lg-12">
-                  <nav aria-label="Navigasi soal ujian">
+                  <nav aria-label="Navigasi soal ujian">No Soal : 
                       <ul class="nav" role="tablist">
                           @foreach ($soal as $key)
                               {{-- <li class="page-item {{ $key->jawaban != null ? "active" : "" }}" role="presentation"><a class="page-link" href="#soal-{{ $key->soal_r->no_soal }}" aria-control="soal-{{ $key->soal_r->no_soal }}" role="tab" data-toggle="tab">{{ $key->soal_r->no_soal }}</a></li> --}}
@@ -83,7 +89,7 @@
                             </div>
                           </div>
                         </div>
-                        <?php $soal = $loop->iteration; ?>
+                        <?php $soall = $loop->iteration; ?>
                         <hr>
                       @endforeach
                       
@@ -121,10 +127,14 @@
 
     <div class="row" style="margin-top:10px">
         <div class="col-lg-12">
-            <div align="center">
+          <div align="center">
                 <button type="button" class="btn btn-outline-success" id="btnSelesai"><i class="fa fa-save"></i> Selesaikan Ujian</button>
             </div>
         </div>
+        <div class="col-lg-6 offset-lg-3 py-5 d-flex" style="text-align: center!important;justify-content: center!important;">
+          <div >Halaman: {!! $soal->render() !!}</div>
+        </div>
+        
     </div>
 
 </div>
@@ -144,7 +154,7 @@
 @endsection
 @push('script')
 <script>
-    var jml_soal = "{{ $soal }}";
+    var jml_soal = "{{ $soall }}";
     var home = "{{ url('peserta/dashboard') }}";
     var timer;
 

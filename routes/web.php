@@ -13,7 +13,7 @@
 
 
 Route::auth();
-
+Route::get('test','JadwalController@gen');
 Route::group(['middleware' => 'auth'], function () {
 
 	Route::group(['prefix' => 'instruktur'], function () {
@@ -36,6 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('tugas/save','PesertaController@tugas_store');
 		Route::get('kuisioner','PesertaController@kuisioner');
 		Route::post('kuisioner/save','PesertaController@kuisioner_store');
+		Route::post('pkl/save','JadwalController@upload_pkl_store');
 
 		Route::group(['prefix' => 'presensi'], function () {
 			Route::get('/','PesertaController@absen');

@@ -19,7 +19,7 @@
             <div class="card border-info mb-3">
                 <div class="card-header">Keterangan</div>
                 <div class="card-body text-info">
-                  <h5 class="card-title">Info card title</h5>
+                  {{-- <h5 class="card-title">Info card title</h5> --}}
                   <p class="card-text">
                     Dalam rangka meningkatkan mutu penyelenggaraan pelatihan di masa mendatang, serta pengukuran kepuasan pelanggan, maka kami mohon kesediaan Anda untuk mengisi kuisioner ini dengan memberikan nilai 1-5 pada kotak yang sesuai. Penilaian Anda di jamin kerahasiaannya. 
                 </p>
