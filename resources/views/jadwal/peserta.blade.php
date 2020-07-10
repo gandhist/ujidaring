@@ -135,11 +135,11 @@
                                 <td style="width:8%">{{count($key->essay_salah_r)}}</td>
                                 @if($key->jadwal_r->akhir_ujian == "" )
                                 <td style="text-align:center;width:8%"><button type="button"
-                                        class="btn btn-sm btn-warning">Belum Ujian</button></td>
+                                        class="btn btn-sm btn-warning disabled">Belum Ujian</button></td>
                                 @elseif( \Carbon\Carbon::now()->toDateTimeString() > $key->jadwal_r->awal_ujian &&
                                 \Carbon\Carbon::now()->toDateTimeString() < $key->jadwal_r->akhir_ujian )
                                     <td style="text-align:center;width:8%"><button type="button"
-                                            class="btn btn-sm btn-danger">Sedang Ujian</button></td>
+                                            class="btn btn-sm btn-danger disabled">Sedang Ujian</button></td>
 
                                     @elseif( count($key->essay_benar_r) == 0 && count($key->essay_salah_r) == 0 )
 

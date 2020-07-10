@@ -117,7 +117,7 @@ class JadwalController extends Controller
                     $dataUser['name'] = $value->nama;
                     $dataUser['role_id'] = 2;
                     $dataUser['is_active'] = 1;
-                    $dataUser['hint'] = mt_rand(10000000,99999999);
+                    $dataUser['hint'] = str_random(8);
                     $dataUser['password'] = Hash::make($dataUser['hint']);
                     $dataUser['created_by'] = Auth::id();
                     $dataUser['created_at'] = Carbon::now()->toDateTimeString();
@@ -188,7 +188,7 @@ class JadwalController extends Controller
                  $dataDetail['created_at'] = Carbon::now()->toDateTimeString();
 
                  $dataUser['is_active'] = 1;
-                 $dataUser['hint'] = mt_rand(10000000,99999999);
+                 $dataUser['hint'] = str_random(8);
                  $dataUser['password'] = Hash::make($dataUser['hint']);
                  $dataUser['created_by'] = Auth::id();
                  $dataUser['created_at'] = Carbon::now()->toDateTimeString();
@@ -389,6 +389,16 @@ class JadwalController extends Controller
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
         return view('jadwal.instruktur')->with(compact('data','jumlahPeserta','Instruktur','jumlahSoalPg','jumlahSoalEssay'));
+    }
+
+    public function evaluasi($id)
+    {
+        $data = JadwalModel::find($id);
+        $Instruktur = JadwalInstruktur::where("id_jadwal","=",$data->id)->orderBy('id','asc')->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.evaluasi')->with(compact('data','jumlahPeserta','Instruktur','jumlahSoalPg','jumlahSoalEssay'));
     }
 
     public function soal($id)
