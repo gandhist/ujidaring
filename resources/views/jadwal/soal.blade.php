@@ -123,7 +123,7 @@
                                             <td>
                                                 <div class="form-group">
                                                     <input type="file" class="form-control" id="soalPg" name="soalPg"
-                                                        value="" required>
+                                                        value="" >
                                                     <span id="soalPgSpan"
                                                         class="help-block customspan">{{ $errors->first('soalPg') }}</span>
                                                 </div>
@@ -132,7 +132,7 @@
                                             <td>
                                                 <div class="form-group">
                                                     <input type="file" class="form-control" id="soalEssay"
-                                                        name="soalEssay" value="" required>
+                                                        name="soalEssay" value="" >
                                                     <span id="soalEssaySpan"
                                                         class="help-block customspan">{{ $errors->first('soalEssay') }}</span>
                                                 </div>

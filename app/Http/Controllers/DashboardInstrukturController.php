@@ -123,9 +123,9 @@ class DashboardInstrukturController extends Controller
     {
 
         $request->validate([
-            'soalPg' => 'required',
+            // 'soalPg' => 'required',
             'soalPg'=>'mimes:xls,xlsx',
-            'soalEssay' => 'required',
+            // 'soalEssay' => 'required',
             'soalEssay'=>'mimes:xls,xlsx'
         ],
         ['soalPg.required'=>'Kolom upload soal PG harus diisi',
