@@ -101,7 +101,7 @@
                             <i class="ion ion-person"></i>
                         </div>
                         <a target="_blank" href="{{ url('jadwal/instruktur', $data->id) }}"
-                            class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -115,8 +115,8 @@
                         <div class="icon">
                             <i class="fa fa-users" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">More
-                            info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a target="_blank" href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">Detail
+                            <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -136,7 +136,7 @@
                         <div class="icon">
                             <i class="fa fa-book" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">More info
+                        <a target="_blank" href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">Detail
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -151,7 +151,7 @@
                         <div class="icon">
                             <i class="fa fa-newspaper-o" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/soal', $data->id) }}" class="small-box-footer">More info
+                        <a target="_blank" href="{{ url('jadwal/soal', $data->id) }}" class="small-box-footer">Detail
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -166,8 +166,8 @@
                         <div class="icon">
                             <i class="fa fa-folder-open-o" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('instruktur/modul',$data->id) }}" class="small-box-footer">More
-                            info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a target="_blank" href="{{ url('instruktur/modul',$data->id) }}"
+                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -181,8 +181,8 @@
                         <div class="icon">
                             <i class="fa fa-users" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/absen', $data->id) }}" class="small-box-footer">More
-                            info <i class="fa fa-arrow-circle-right"></i></a>
+                        <a target="_blank" href="{{ url('jadwal/absen', $data->id) }}" class="small-box-footer">Detail
+                            <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -201,11 +201,10 @@
                         <div class="icon">
                             <i class="fa fa-film" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ route('pkl', $data->id) }}" class="small-box-footer">More info <i
+                        <a target="_blank" href="{{ route('pkl', $data->id) }}" class="small-box-footer">Detail <i
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-blue">
                         <div class="inner">
@@ -216,17 +215,32 @@
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                         </div>
                         <a target="_blank" href="{{ url('jadwal/aturjadwal', $data->id) }}"
-                            class="small-box-footer">More
-                            info <i class="fa fa-arrow-circle-right"></i></a>
+                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-blue">
+                        <div class="inner">
+                            <h3>{{$instruktur}}</h3>
+                            <p>Evaluasi</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-person"></i>
+                        </div>
+                        <a target="_blank" href="{{ url('jadwal/evaluasi', $data->id) }}"
+                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- ./col -->
 
+                <div class="col-lg-12 col-xs-12" style="text-align:center">
+                    <button onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")' type="button"
+                        class="btn btn-block btn-info btn-flat">Jadwal</button>
+                </div>
                 <!-- ./col -->
             </div>
-            <div class="row" style="text-align:center">
-                <a href="#" onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")'><img width="45%"
-                        src="/{{$data->pdf_jadwal}}" alt=""></a>
-            </div>
+
 
         </div>
         <!-- /.box-body -->
@@ -266,7 +280,7 @@
     <!-- modal lampiran -->
     <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" style="width: 95%;" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
