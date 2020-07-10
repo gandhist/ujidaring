@@ -13,7 +13,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a> Tugas
+                class="fa fa-caret-left"></i> Kembali</a> Presentasi
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -34,32 +34,10 @@
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             </div>
             @endif
-            <div class="row">
-                <div class="col-md-3">
-                    <h3 style="text-align:center">Upload Tugas</h3>
-                    <form action="{{ url('instruktur/dashboardinstruktur/'.$data->id.'/uploadtugas') }}"
-                        class="form-horizontal" id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <label for="" style="">Batas Upload</label>
-                        <input id="BatasUpload" name="BatasUpload" type="text" class="form-control" placeholder="Batas Upload" value="{{old('BatasUpload') ? old('BatasUpload') : $data->batas_up_tugas}} {{$data->batas_up_tugas}}">
-                        <span id="BatasUploadSpan" class="help-block" style="color:red">{{ $errors->first('BatasUpload') }}</span>
-                        <br>
-                        <label for="" style="">File (extension .pdf)</label>
-                        <div class="input-group input-group-md">
-                            <input type="file" class="form-control" id="uploadTugas" name="uploadTugas" required>
-                            <span class="input-group-btn">
-                                <button id="btnUpdateNilai" type="submit" type="button"
-                                    class="btn btn-danger btn-flat"><i class="fa fa-save"></i> Upload</button>
-                            </span>
-                        </div>
-                        <span id="uploadTugasSpan" class="help-block" style="color:red">{{ $errors->first('uploadTugas') }}</span>
-                    </form>
-                </div>
-                <div class="col-md-9">
-                    <h3 style="text-align:center">Preview</h3>
-                    <embed src="{{ $data->pdf_tugas!= '' ? '/'.$data->pdf_tugas : '' }} " width="100%" height="650px" />
-                </div>
-            </div>
+            <br>
+
+            <br>
+
             <div class="row">
                 <div class="col-lg-12">
                     <table id="data-tables" class="table table-striped table-bordered dataTable customTable">
@@ -69,7 +47,7 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Tanggal Upload</th>
-                                <th>Tugas</th>
+                                <th>File</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -79,10 +57,10 @@
                                     id="selection[]" name="selection[]"></td>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $key->nama }}</td>
-                                <td>{{ $key->jawaban_tugas ? $key->jawaban_tugas->created_at : '' }}</td>
+                                <td>{{ $key->jawaban_ppt_r ? $key->jawaban_ppt_r->created_at : '' }}</td>
                                 <td>
-                                    @if($key->jawaban_tugas)
-                                        <a href="{{ url('uploads/tugas/peserta/'.$key->jawaban_tugas->pdf_tugas) }}" class="btn btn-success">Tugas</a>
+                                    @if($key->jawaban_ppt_r)
+                                        <a href="{{ url('uploads/ppt/peserta/'.$key->jawaban_ppt_r->f_ppt) }}" class="btn btn-success">Presentasi</a>
                                     @endif
                                 </td>
                             </tr>

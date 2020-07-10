@@ -47,5 +47,10 @@ class JadwalModel extends Model
         return $this->hasMany('App\JadwalInstruktur','id_jadwal');
     }
 
+    // relasi ke has manny ke table peserta
+    public function peserta_r(){
+        return $this->hasMany('App\Peserta','id_kelompok','id_klp_peserta');
+    }
+
 
 }

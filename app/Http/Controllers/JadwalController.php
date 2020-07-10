@@ -507,6 +507,12 @@ class JadwalController extends Controller
         ]);
     }
 
+    // fungsi tampil daftar presentasi
+    public function presentasi($id){
+        $data = JadwalModel::find($id);
+        return view('jadwal.presentasi')->with(compact('data'));
+    }
+
     // function generate kelompok peserta 
     public function gen($id_jadwal){
         return $this->generate_kelompok($id_jadwal);

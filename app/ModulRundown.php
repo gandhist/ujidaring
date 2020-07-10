@@ -25,6 +25,6 @@ class ModulRundown extends Model
     // relasi ke jadwal modul
     // agar dapat materi dan link zoom
     public function jadwal_modul_r(){
-        return $this->hasMany('App\JadwalModul','id_jadwal_modul');
+        return $this->belongsTo('App\JadwalModul','id_jadwal_modul');
     }
 }

@@ -14,6 +14,7 @@ use App\JawabanEssayPeserta;
 use App\AbsenModel;
 use App\JawabanPkl;
 use App\JawabanPpt;
+use App\JadwalRundown;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
@@ -50,11 +51,12 @@ class PesertaController extends Controller
         $is_allow_uji = $is_allow;
         $is_allow_tugas = $this->_check_allow_tugas();
         $is_absen = $this->is_allow_masuk();
+        $rd = JadwalRundown::where('id_jadwal',$peserta->jadwal_r->id)->get();
         if($is_absen){
             return redirect('peserta/presensi')->with('status', 'Anda harus absen, untuk bisa mengakses halaman dashboard');
         }
         else {
-            return view('peserta.dashboard')->with(compact('peserta','is_allow_uji','is_allow_tugas'));
+            return view('peserta.dashboard')->with(compact('peserta','is_allow_uji','is_allow_tugas','rd'));
         }
     }
 
@@ -104,7 +106,8 @@ class PesertaController extends Controller
         if($cek == 0){
            $this->_generate_soal_eva($peserta->id);
         }
-        return view('peserta.kuisioner')->with(compact('peserta'));
+        $rd = JadwalRundown::where('id_jadwal',$peserta->jadwal_r->id)->where('tanggal',Carbon::now()->isoFormat('YYYY-MM-DD'))->first();
+        return view('peserta.kuisioner')->with(compact('peserta','rd'));
     }
 
     // save jawaban kuisioner

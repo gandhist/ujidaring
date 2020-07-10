@@ -21,4 +21,10 @@ class InsRundown extends Model
     public function jadwal_rundown_r(){
         return $this->belongsTo('App\JadwalRundown','id_rundown');
     }
+
+    // relasi ke jadwal modul
+    // agar dapat materi dan link zoom
+    public function jadwal_instruktur_r(){
+        return $this->belongsTo('App\JadwalInstruktur','id_jadwal_instruktur');
+    }
 }
