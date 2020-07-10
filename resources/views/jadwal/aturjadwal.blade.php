@@ -1,24 +1,29 @@
 @extends('templates.header')
-@push('style')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
-@endpush
+
 @section('content')
+<!-- Content Header (Page header) -->
 <style>
-    .dataTables_scrollBody {
-        height: 150px !important;
+    .customselect2 {
+        width: 45%;
+    }
+
+    .customselect2>.select2-container {
+        width: 100% !important;
+    }
+
+    .select2-selection__choice {
+        color: black !important;
     }
 
 </style>
-<!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a> Tugas
+    <h1><a href="{{ url('jadwal/'.$id_jadwal.'/dashboard') }}" class="btn btn-md bg-purple"><i
+                class="fa fa-caret-left"></i> Kembali</a> Atur Jadwal
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active"><a href="#">Instruktur</a></li>
+        <li class="active"><a href="#">Atur Jadwal</a></li>
     </ol>
 
 
@@ -34,37 +39,105 @@
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             </div>
             @endif
+            <!-- MultiStep Form -->
+
             <div class="row">
-                <div class="col-md-3">
-                    <h3 style="text-align:center">Upload Tugas</h3>
-                    <form action="{{ url('instruktur/dashboardinstruktur/'.$data->id.'/uploadtugas') }}"
-                        class="form-horizontal" id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
+                <div class="col-md-12">
+                    <h3>Atur Jadwal / Tanggal</h3>
+                    <form action="{{ url('jadwal/aturjadwalstore') }}" class="form-horizontal" id="formAdd"
+                        name="formAdd" method="post" enctype="multipart/form-data">
                         @csrf
-                        <label for="" style="">Batas Upload</label>
-                        <input id="BatasUpload" name="BatasUpload" type="text" class="form-control" placeholder="Batas Upload" value="{{old('BatasUpload') ? old('BatasUpload') : $data->batas_up_tugas}} {{$data->batas_up_tugas}}">
-                        <span id="BatasUploadSpan" class="help-block" style="color:red">{{ $errors->first('BatasUpload') }}</span>
-                        <br>
-                        <label for="" style="">File (extension .pdf)</label>
-                        <div class="input-group input-group-md">
-                            <input type="file" class="form-control" id="uploadTugas" name="uploadTugas" required>
-                            <span class="input-group-btn">
-                                <button id="btnUpdateNilai" type="submit" type="button"
-                                    class="btn btn-danger btn-flat"><i class="fa fa-save"></i> Upload</button>
-                            </span>
+                        <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Instruktur</th>
+                                    <th>Modul</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <input type="hidden" name="jumlah" value="{{ count($rundown) }}">
+                                @foreach($rundown as $key)
+                                <tr>
+                                    <input type="hidden" name="id_rowdown_{{ $loop->iteration }}" value="{{$key->id}}">
+                                    <td style="width:1%">{{ $loop->iteration }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}</td>
+                                    <td class="customselect2">
+                                        <select class="js-example-basic-multiple"
+                                            name="instruktur_{{ $loop->iteration }}[]" multiple="multiple">
+                                            @foreach($instrukturjadwal as $datainstrukturjadwal)
+                                            <option value="{{$datainstrukturjadwal->id}}" 
+                                            @php 
+                                            $selected = DB::table('instruktur_rundown')->select('id')->where('id_jadwal_instruktur','=',$datainstrukturjadwal->id)->where('id_rundown','=',$key->id)->where('deleted_by','=',null)->first();
+                                            if($selected!=null){
+                                                echo "selected";
+                                            }
+                                            @endphp
+                                            >
+                                                {{$datainstrukturjadwal->instruktur_r->nama}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td class="customselect2">
+                                        <select class="js-example-basic-multiple" name="modul_{{ $loop->iteration }}[]"
+                                            multiple="multiple">
+                                            @foreach($JadwalModul as $dataJadwalModul)
+                                            <option value="{{$dataJadwalModul->id}}"
+                                            @php 
+                                            $selected = DB::table('modul_rundown')->select('id')->where('id_jadwal_modul','=',$dataJadwalModul->id)->where('id_rundown','=',$key->id)->where('deleted_by','=',null)->first();
+                                            if($selected!=null){
+                                                echo "selected";
+                                            }
+                                            @endphp
+                                            >
+                                                {{$dataJadwalModul->modul_r->modul}}</option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div class="box-footer" style="text-align:left">
+                            <button type="submit" class="btn btn-md btn-info"> <i class="fa fa-save"></i>
+                                Simpan</button>
                         </div>
-                        <span id="uploadTugasSpan" class="help-block" style="color:red">{{ $errors->first('uploadTugas') }}</span>
                     </form>
-                </div>
-                <div class="col-md-9">
-                    <h3 style="text-align:center">Preview</h3>
-                    <embed src="{{ $data->pdf_tugas!= '' ? '/'.$data->pdf_tugas : '' }} " width="100%" height="650px" />
                 </div>
             </div>
         </div>
-
-        <!-- /.box-body -->
+        <!-- /.MultiStep Form -->
+    </div>
+    <!-- /.box-body -->
     </div>
     <!-- /.box -->
+
+    <!-- modal lampiran -->
+    <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title" id="lampiranTitle"></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12" style="text-align:center">
+                            <img id="imgFoto" src="" alt="" width="100%">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- end of modal lampiran -->
 
 </section>
 <!-- /.content -->
@@ -83,15 +156,12 @@
 <script type="text/javascript">
     $(function () {
 
-        $('#BatasUpload').datetimepicker({
-            locale : 'id',
-            format : 'YYYY-MM-DD HH:mm:ss'
-        });
+        $('.js-example-basic-multiple').select2();
 
-        var dt = $('#custom-table,#custom-table2').DataTable({
+        var dt = $('#custom-table').DataTable({
             "lengthMenu": [
-                [5, 10, 50],
-                [5, 10, 50]
+                [10, 20, 50],
+                [10, 20, 50]
             ],
             "scrollX": true,
             "scrollY": $(window).height() - 255,
@@ -100,14 +170,19 @@
             "autoWidth": false,
             "columnDefs": [{
                 "searchable": false,
-                "orderable": false,
+                "orderable": [
+                    [3, "desc"]
+                ],
                 "targets": [0, 1]
             }],
-            "aaSorting": []
+            "aaSorting": [
+                [4, "desc"],
+                [3, "asc"]
+            ]
         });
 
         dt.on('order.dt search.dt', function () {
-            dt.column(1, {
+            dt.column(0, {
                 search: 'applied',
                 order: 'applied'
             }).nodes().each(function (cell, i) {
@@ -249,6 +324,12 @@
                 }
             });
         }
+
+    });
+
+    $('.datepicker').datepicker({
+        format: 'yyyy/mm/dd',
+        autoclose: true
     });
 
 </script>

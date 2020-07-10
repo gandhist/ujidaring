@@ -113,7 +113,8 @@ class DashboardInstrukturController extends Controller
             $files->move($destinationPath, $file);
             $data['pdf_tugas'] = $destinationPath."/".$file;
         }
-        $data['batas_up_tugas'] = Carbon::createFromFormat('d/m/Y',$request->BatasUpload);
+        $data['tgl_upload_tugas'] = Carbon::now()->toDateTimeString();
+        $data['batas_up_tugas'] = $request->BatasUpload;
         JadwalModel::find($id)->update($data);
         return redirect()->back()->with('message', 'Berhasil Upload Tugas!'); 
     }

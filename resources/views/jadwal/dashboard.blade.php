@@ -3,8 +3,7 @@
 @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1><a href="{{ url('jadwal') }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a>
+    <h1><a href="{{ url('jadwal') }}" class="btn btn-md bg-purple"><i class="fa fa-caret-left"></i> Kembali</a>
         Dashboard
         {{-- <small>it all starts here</small>  --}}
     </h1>
@@ -12,8 +11,6 @@
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active"><a href="#">Tampil</a></li>
     </ol>
-
-
 </section>
 
 <!-- Main content -->
@@ -95,7 +92,7 @@
             <div class="row">
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
-                    <div class="small-box bg-aqua">
+                    <div class="small-box bg-blue">
                         <div class="inner">
                             <h3>{{$instruktur}}</h3>
                             <p>Instruktur</p>
@@ -103,8 +100,8 @@
                         <div class="icon">
                             <i class="ion ion-person"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/instruktur', $data->id) }}" class="small-box-footer">More info <i
-                                class="fa fa-arrow-circle-right"></i></a>
+                        <a target="_blank" href="{{ url('jadwal/instruktur', $data->id) }}"
+                            class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -118,8 +115,8 @@
                         <div class="icon">
                             <i class="fa fa-users" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">More info <i
-                                class="fa fa-arrow-circle-right"></i></a>
+                        <a target="_blank" href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">More
+                            info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -139,8 +136,8 @@
                         <div class="icon">
                             <i class="fa fa-book" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">More info <i
-                                class="fa fa-arrow-circle-right"></i></a>
+                        <a target="_blank" href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">More info
+                            <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -154,8 +151,8 @@
                         <div class="icon">
                             <i class="fa fa-newspaper-o" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/soal', $data->id) }}" class="small-box-footer">More info <i
-                                class="fa fa-arrow-circle-right"></i></a>
+                        <a target="_blank" href="{{ url('jadwal/soal', $data->id) }}" class="small-box-footer">More info
+                            <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -169,8 +166,8 @@
                         <div class="icon">
                             <i class="fa fa-folder-open-o" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('instruktur/modul',$data->id) }}" class="small-box-footer">More info <i
-                                class="fa fa-arrow-circle-right"></i></a>
+                        <a target="_blank" href="{{ url('instruktur/modul',$data->id) }}" class="small-box-footer">More
+                            info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -184,15 +181,21 @@
                         <div class="icon">
                             <i class="fa fa-users" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/absen', $data->id) }}" class="small-box-footer">More info <i
-                                class="fa fa-arrow-circle-right"></i></a>
+                        <a target="_blank" href="{{ url('jadwal/absen', $data->id) }}" class="small-box-footer">More
+                            info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
                 <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-yellow">
+                    <div class="small-box bg-green">
                         <div class="inner">
-                            <h3>{{$jumlahPeserta}}</h3>
+                            <h3>
+                                @if($data->f_pkl == "" )
+                                0
+                                @else
+                                1
+                                @endif
+                            </h3>
                             <p>Makalah/PKL</p>
                         </div>
                         <div class="icon">
@@ -202,10 +205,27 @@
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-blue">
+                        <div class="inner">
+                            <h3>{{$jumlahJadwal}}</h3>
+                            <p>Atur Jadwal</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </div>
+                        <a target="_blank" href="{{ url('jadwal/aturjadwal', $data->id) }}"
+                            class="small-box-footer">More
+                            info <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+
                 <!-- ./col -->
             </div>
             <div class="row" style="text-align:center">
-                <a href="#" onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")'><img width="45%" src="/{{$data->pdf_jadwal}}" alt=""></a>
+                <a href="#" onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")'><img width="45%"
+                        src="/{{$data->pdf_jadwal}}" alt=""></a>
             </div>
 
         </div>
@@ -463,7 +483,7 @@
                     if (data['akhir_ujian'] == null) {
 
                     } else if (data['waktusekarang'] > data['mulai_ujian'] && data[
-                        'waktusekarang'] < data[
+                            'waktusekarang'] < data[
                             'akhir_ujian']) {
                         // countdown
                         var $clock = $('#clock'),
@@ -523,7 +543,7 @@
                                     });
                                     $("#btnmulai").text('Ujian Telah Selesai');
                                     $("#btnmulai").attr("class",
-                                    "btn btn-block btn-danger btn-flat disabled");
+                                        "btn btn-block btn-danger btn-flat disabled");
 
                                 }
                             }, interval);
