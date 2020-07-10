@@ -26,6 +26,7 @@ use App\AbsenModel;
 use App\JadwalRundown;
 use App\InsRundown;
 use App\ModulRundown;
+use App\JawabanEvaluasi;
 
 class JadwalController extends Controller
 {
@@ -399,6 +400,30 @@ class JadwalController extends Controller
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
         return view('jadwal.evaluasi')->with(compact('data','jumlahPeserta','Instruktur','jumlahSoalPg','jumlahSoalEssay'));
+    }
+
+    public function evaluasishow($id_jadwal,$id)
+    {
+        $instruktur = InstrukturModel::find($id);
+        $data = JadwalModel::find($id_jadwal);
+        $jawEvaluasi = JawabanEvaluasi::where('id_jadwal','=',$id_jadwal)->where('id_instruktur','=',$id)->groupBy('tanggal')->orderBy('tanggal','asc')->get();
+        $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.evaluasishow')->with(compact('data','jawEvaluasi','jumlahPeserta','jumlahSoalPg','jumlahSoalEssay','id_jadwal','instruktur'));
+    }
+
+    public function evaluasipeserta($id_jadwal,$id)
+    {
+        $jaw_evaluasi = JawabanEvaluasi::select('id','id_instruktur')->where('id','=',$id)->first();
+        $id_instruktur = $jaw_evaluasi['id_instruktur']; 
+        $id_jaw_evaluasi = $jaw_evaluasi['id']; 
+        // $tgl_eva = JawabanEvaluasi::select('tanggal','id_instruktur')->where('id','=',$id)->first();
+        // $jawEvaluasi = JawabanEvaluasi::where('id_jadwal','=',$id_jadwal)->where('id_instruktur','=',$tgl_eva['id_instruktur'])->where('tanggal','=',$tgl_eva['tanggal'])->groupBy('id_peserta')->orderBy('tanggal','asc')->get();
+        $data = JadwalModel::find($id_jadwal);
+        $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->get();
+        return view('jadwal.evaluasipeserta')->with(compact('Peserta','id','id_jadwal','id_instruktur','id_jaw_evaluasi'));
     }
 
     public function soal($id)

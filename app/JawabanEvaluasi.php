@@ -16,4 +16,14 @@ class JawabanEvaluasi extends Model
     public function soal_r(){
         return $this->belongsTo('App\EvaluasiSoal','id_evaluasi');
     }
+
+    // relasi ke bidang 
+    public function instruktur_r(){
+        return $this->belongsTo('App\InstrukturModel','id_instruktur');
+    }
+
+    // relasi ke bidang 
+    public function peserta_r(){
+        return $this->belongsTo('App\Peserta','id_peserta');
+    }
 }
