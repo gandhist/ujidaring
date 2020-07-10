@@ -24,13 +24,13 @@
                     <input type=button class="btn btn-outline-success" value="Absen Masuk" onClick="take_snapshot()">
                     @else
                       @if($allow_cekout)
-                        <a href="{{ url('peserta/kuisioner') }}" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Isi evaluasi agar bisa absen pulang">Absen Keluar</a>
+                        {{-- <a href="{{ url('peserta/kuisioner') }}" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Isi evaluasi agar bisa absen pulang">Absen Keluar</a> --}}
 
-                        {{-- @if($allow_tugas)
+                        @if($allow_tugas)
                           <a href="{{ url('peserta/kuisioner') }}" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Isi evaluasi agar bisa absen pulang">Absen Keluar</a>
                         @else
                           <input type=button class="btn btn-outline-success" value="Absen Keluar" onClick="take_snapshot_out()">
-                        @endif --}}
+                        @endif
                       @else
                       <div class="alert alert-warning alert-dismissible fade show" role="alert">
                         Terimakasih, Anda Sudah Melakukan Absensi Masuk dan Pulang.
