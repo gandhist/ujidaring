@@ -497,7 +497,7 @@ class JadwalController extends Controller
             $nama = $user_id['nama'];
             $user_account =  User::select('username','hint')->where('id',"=",$user_id['id_users'])->first();
             $telepon = $no_hp;
-            $message = "Gunakan NIK Anda dan kode: ".$user_account['hint']." untuk login ke https://uji.disnakerdki.org";
+            $message = "Gunakan NIK Anda dan kode: ".$user_account['hint']." untuk login ke cdg.sh/ujitulis";
             $this->kirimPesanSMS($telepon, $message);
         }   
         return back()->with('message', 'Account telah dikirim');
@@ -540,6 +540,12 @@ class JadwalController extends Controller
             'status' => true,
             'message' => 'materi PKL berhasil di upload'
         ]);
+    }
+
+    // fungsi tampil daftar presentasi
+    public function presentasi($id){
+        $data = JadwalModel::find($id);
+        return view('jadwal.presentasi')->with(compact('data'));
     }
 
     // function generate kelompok peserta 

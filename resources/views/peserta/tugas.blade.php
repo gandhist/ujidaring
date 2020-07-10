@@ -14,7 +14,7 @@
 
     <div class="row">
         <div class="col-lg-6">
-            @if($peserta->pdf_tugas)
+            @if($peserta->jadwal_r->pdf_tugas)
             <h3>Tugas yang harus anda kerjakan</h3>
             <div class="embed-responsive embed-responsive-16by9">
                 <iframe class="embed-responsive-item" src="{{ url($peserta->jadwal_r->pdf_tugas) }}" ></iframe>
@@ -26,7 +26,7 @@
             @endif
         </div>
         <div class="col-lg-6">
-            @if($peserta->jawaban_tugas->pdf_tugas)
+            @if($peserta->jawaban_tugas)
             <h3>Tugas yang sudah di upload</h3>
             <div class="embed-responsive embed-responsive-16by9">
                 <iframe class="embed-responsive-item" src="{{ url('uploads/tugas/peserta/'.$peserta->jawaban_tugas->pdf_tugas) }}" ></iframe>

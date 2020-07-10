@@ -63,15 +63,35 @@
     <hr>
     <h3 align="center">Detail Pelatihan</h3>
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-6">
             <div class="card border-info mb-5">
-                <div class="card-header">Detail Pelatihan</div>
+                <div class="card-header">Pelatihan anda</div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">Nama Pelatihan : {{ $peserta->jadwal_r->jenis_usaha_r->nama_jns_usaha }}</li>
                     <li class="list-group-item">Tanggal Pelatihan : {{ \Carbon\Carbon::parse($peserta->jadwal_r->tgl_awal)->isoFormat('DD MMMM YYYY') }} - {{ \Carbon\Carbon::parse($peserta->jadwal_r->tgl_akhir)->isoFormat('DD MMMM YYYY') }}</li>
                     <li class="list-group-item">Nama Peserta : {{ $peserta->nama }}</li>
                   </ul>
             </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card border-info mb-5">
+              <div class="card-header">Modul Pelatihan Hari Ini</div>
+              <ul class="list-group list-group-flush">
+                  @foreach($rd->modul_rundown_r as $key)
+                  <li class="list-group-item">{{ $loop->iteration }}. {{ $key->jadwal_modul_r->modul_r->modul }}</li>
+                  @endforeach
+                </ul>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="card border-info mb-5">
+              <div class="card-header">Instruktur Pelatihan Hari Ini</div>
+              <ul class="list-group list-group-flush">
+                  @foreach($rd->ins_rundown_r as $key)
+                  <li class="list-group-item">{{ $loop->iteration }}. {{ $key->jadwal_instruktur_r->instruktur_r->nama}}</li>
+                  @endforeach
+                </ul>
+          </div>
         </div>
     </div>
     <hr>
@@ -81,8 +101,8 @@
       <div class="col-lg-4">
         {{-- <input type="text" class="form-control" name="id_instruktur" id="id_instruktur"> --}}
         <select name="id_instruktur" class="form-control" id="id_instruktur">
-          @foreach($peserta->jadwal_r->instruktur_r as $key)
-          <option value="{{ $key->instruktur_r->id }}">{{ $key->instruktur_r->nama }}</option>
+          @foreach($rd->ins_rundown_r as $key)
+          <option value="{{ $key->jadwal_instruktur_r->instruktur_r->id}}">{{ $key->jadwal_instruktur_r->instruktur_r->nama}}</option>
           @endforeach
         </select>
         <input type="hidden" value="{{ $peserta->jadwal_r->id }}" class="form-control" name="id_jadwal" id="id_jadwal">

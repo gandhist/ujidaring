@@ -24,6 +24,8 @@
                     <input type=button class="btn btn-outline-success" value="Absen Masuk" onClick="take_snapshot()">
                     @else
                       @if($allow_cekout)
+                        {{-- <a href="{{ url('peserta/kuisioner') }}" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Isi evaluasi agar bisa absen pulang">Absen Keluar</a> --}}
+
                         @if($allow_tugas)
                           <a href="{{ url('peserta/kuisioner') }}" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Isi evaluasi agar bisa absen pulang">Absen Keluar</a>
                         @else

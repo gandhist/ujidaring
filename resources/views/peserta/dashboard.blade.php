@@ -72,8 +72,47 @@
 
     </div>
     <hr>
-    <h3>Modul & Materi</h3>
+    <h3>Jadwal Pelatihan</h3>
     <div class="row">
+      <div class="col-lg-12">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Tanggal</th>
+              <th scope="col">Materi</th>
+              <th scope="col">Instruktur</th>
+            </tr>
+          </thead>
+          <tbody>
+             @foreach($rd as $key)
+             <tr>
+                 <td>{{ $loop->iteration }}</td>
+                 <td>{{ $key->tanggal }}</td>
+                 <td>
+                  @foreach($key->modul_rundown_r as $md)
+                  {{ $loop->iteration }}. <a target="_blank" href="{{ url('uploads/materi/'.$md->jadwal_modul_r->materi) }}"> {{ $md->jadwal_modul_r->modul_r->modul }} </a> 
+                    @if($md->jadwal_modul_r->link) 
+                    | <a target="_blank" href="{{ $md->jadwal_modul_r->link}}" class="btn btn-info btn-sm"><i class="fa fa-link"></i></a>
+                    @endif
+                  <br>
+                  @endforeach
+                 </td>
+                 <td>
+                  @foreach($key->ins_rundown_r as $ins)
+                  {{ $loop->iteration }}. {{ $ins->jadwal_instruktur_r->instruktur_r->nama}} <br>
+                  @endforeach
+                 </td>
+             </tr>
+             @endforeach
+            
+           
+          </tbody>
+      </table>
+      </div>
+      
+    </div>
+    {{-- <div class="row">
         <div class="col-lg-8">
             <table class="table table-hover">
                 <thead>
@@ -102,22 +141,20 @@
                         @endif
                        </td>
                    </tr>
-                   <?php $persyaratan = $key->modul_r->persyaratan; $hari = $key->modul_r->hari ?>
                    @endforeach
                   
                  
                 </tbody>
-              </table>
+            </table>
         </div>
         <div class="col-lg-4">
             <p class="lead">Persayaratan
                 <br>
-                {{ $persyaratan }}
                 <br>
                 Hari Pelaksanaan : {{ $hari }}
               </p>
         </div>
-    </div>
+    </div> --}}
 
 </div>
 

@@ -25,7 +25,7 @@
             @endif
         </div>
         <div class="col-lg-6">
-            @if($peserta->jawaban_pkl_r->pdf_makalah)
+            @if($peserta->jawaban_pkl_r)
             <h3>Tugas makalah yang sudah di upload</h3>
             <div class="embed-responsive embed-responsive-16by9">
                 <iframe class="embed-responsive-item" src="{{ url('uploads/makalah/peserta/'.$peserta->jawaban_pkl_r->pdf_makalah) }}" ></iframe>
