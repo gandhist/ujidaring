@@ -24,6 +24,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::post('cekDurasiUjian','DashboardInstrukturController@cekDurasiUjian');
 	Route::post('updateDurasiUjian','DashboardInstrukturController@updateDurasiUjian');
+	Route::post('instruktur/lihatevaluasi','DashboardInstrukturController@lihatevaluasi');
 	Route::post('instruktur/dashboardinstruktur/{id}/uploadtugas','DashboardInstrukturController@uploadtugas');
 	Route::post('instruktur/dashboardinstruktur/{id}/uploadsoal','DashboardInstrukturController@uploadsoal');
 
@@ -82,7 +83,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('jadwal/{id}/dashboard','JadwalController@dashboard');
 	Route::get('jadwal/peserta/{id}','JadwalController@peserta');
 	Route::get('jadwal/instruktur/{id}','JadwalController@instruktur');
-	Route::get('jadwal/evaluasi/{id}','JadwalController@evaluasi');
 	Route::get('jadwal/soal/{id}','JadwalController@soal');
 	Route::get('jadwal/tugas/{id}','JadwalController@tugas');
 	Route::get('jadwal/absen/{id}','JadwalController@absen');
@@ -94,6 +94,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('jadwal/upload/pkl','JadwalController@upload_pkl_store');
 	Route::post('jadwal/absen/filter', 'JadwalController@filter_absen');
 	Route::post('jadwal/aturjadwalstore','JadwalController@aturjadwalstore');
+	Route::get('jadwal/evaluasi/{id}','JadwalController@evaluasi');
+	Route::get('jadwal/evaluasi/{id_jadwal}/{id}/show','JadwalController@evaluasishow');
+	Route::get('jadwal/evaluasi/{id_jadwal}/{id}/peserta','JadwalController@evaluasipeserta');
 	// Daftar Kantor
 	Route::resource('penilaian', 'PenilaianController');
 

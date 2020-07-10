@@ -65,7 +65,7 @@
                                     <td>{{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}</td>
                                     <td class="customselect2">
                                         <select class="js-example-basic-multiple"
-                                            name="instruktur_{{ $loop->iteration }}[]" multiple="multiple">
+                                            name="instruktur_{{ $loop->iteration }}[]" multiple="multiple" required>
                                             @foreach($instrukturjadwal as $datainstrukturjadwal)
                                             <option value="{{$datainstrukturjadwal->id}}" 
                                             @php 
@@ -81,7 +81,7 @@
                                     </td>
                                     <td class="customselect2">
                                         <select class="js-example-basic-multiple" name="modul_{{ $loop->iteration }}[]"
-                                            multiple="multiple">
+                                            multiple="multiple" required>
                                             @foreach($JadwalModul as $dataJadwalModul)
                                             <option value="{{$dataJadwalModul->id}}"
                                             @php 

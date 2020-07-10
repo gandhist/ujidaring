@@ -13,6 +13,7 @@ use App\Imports\SoalEssayImport;
 use App\JadwalInstruktur;
 use App\InstrukturModel;
 use App\JadwalModul;
+use App\JawabanEvaluasi;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -266,5 +267,11 @@ class DashboardInstrukturController extends Controller
         $data['akhir_ujian'] = $x['akhir_ujian'];
         $data['mulai_ujian'] = $x['mulai_ujian'];
         return $data;
+    }
+
+    public function lihatevaluasi (Request $request){
+        $jaw_evaluasi = JawabanEvaluasi::select('id_instruktur','id_jadwal','tanggal')->where('id','=',$request->id_jaw_ev)->first();
+        $jaw_eval_all = JawabanEvaluasi::where('id_jadwal','=',$jaw_evaluasi['id_jadwal'])->where('id_instruktur','=',$jaw_evaluasi['id_instruktur'])->where('id_peserta','=',$request->id_peserta)->where('tanggal','=',$jaw_evaluasi['tanggal'])->with('soal_r')->with('peserta_r')->get();
+        return $jaw_eval_all;
     }
 }

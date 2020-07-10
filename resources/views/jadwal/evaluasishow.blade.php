@@ -3,13 +3,13 @@
 @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a> Evaluasi
+    <h1><a href="{{ url('jadwal/evaluasi/'.$id_jadwal) }}" class="btn btn-md bg-purple"><i
+                class="fa fa-caret-left"></i> Kembali</a> Detail Evaluasi
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active"><a href="#">Evaluasi</a></li>
+        <li class="active"><a href="#">Detail Evaluasi</a></li>
     </ol>
 </section>
 
@@ -24,91 +24,85 @@
             </div>
             @endif
             <!-- MultiStep Form -->
-            <div class="row">
-                <div class="col-md-7">
-                    <div class="box-body">
-                        <div class="table-responsive">
-                            <table class="table no-margin">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align:left;padding: 6px;">Tanggal Mulai</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td>
-                                        <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->jenis_usaha_r->nama_jns_usaha}}</td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->bidang_r->nama_bidang}}
-                                        </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->tuk}}
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <th style="text-align:left;padding: 6px;">Tanggal Selesai</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{ \Carbon\Carbon::parse($data->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
-                                        </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Peserta
-                                        </th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahPeserta}} Orang</td>
-
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Pg
-                                        </th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahSoalPg}} Soal</td>
-
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Essay
-                                        </th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahSoalEssay}} Soal</td>
-                                    </tr>
-                                </thead>
-                            </table>
+            <form action="{{ url('jadwal/absen/filter') }}" enctype="multipart/form-data" name="filterData"
+                id="filterData" method="post">
+                @csrf
+                <input type="hidden" name="id_jadwal" value="{{$data->id}}">
+                <div class="row">
+                    <div class="col-md-7">
+                        <div class="box-body">
+                            <div class="table-responsive" style="margin-left: -18px;">
+                                <table class="table no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:5%">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon customInput">Tanggal</span>
+                                                    <input id="f_tgl_awal" name="f_tgl_awal"
+                                                        value="{{ request()->get('f_tgl_awal') }}" autocomplete="off"
+                                                        data-provide="datepicker" data-date-format="dd/mm/yyyy"
+                                                        type="text" class="form-control customInput"
+                                                        placeholder="Tgl Awal">
+                                                    <span class="input-group-addon customInput">s/d</span>
+                                                    <input id="f_tgl_akhir" name="f_tgl_akhir"
+                                                        value="{{ request()->get('f_tgl_akhir') }}" autocomplete="off"
+                                                        data-provide="datepicker" data-date-format="dd/mm/yyyy"
+                                                        type="text" class="form-control customInput"
+                                                        placeholder="Tgl Akhir">
+                                                </div>
+                                            </th>
+                                            <th style="text-align:left;width:5%">
+                                                <button type="submit" class="btn btn-sm btn-info"> <i
+                                                        class="fa fa-filter"></i>
+                                                    Filter</button>
+                                            </th>
+                                            <th style="text-align:left">
+                                                <a href="{{ url('jadwal/absen', $id_jadwal) }}"
+                                                    class="btn btn-sm btn-default"> <i class="fa fa-refresh"></i>
+                                                    Reset</a>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-
+            </form>
+            <div class="row">
                 <div class="col-md-12">
-                    <h3>Daftar Instruktur</h3>
+                    <h3 style="text-align:center">{{$instruktur->nama}}</h3>
                     <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>NIK</th>
-                                <th>Nama</th>
-                                <th>No Hp</th>
-                                <th>Evaluasi</th>
+                                <th>Tanggal</th>
+                                <th>Detail Peserta</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($Instruktur as $key)
+                            @foreach($jawEvaluasi as $key)
                             <tr>
                                 <td style="width:1%"></td>
-                                <td>{{ $key->instruktur_r->nik }}</td>
-                                <td>{{ $key->instruktur_r->nama }}</td>
-                                <td style="width:5%">{{ $key->instruktur_r->no_hp }}</td>
-                                <td style="text-align:center;width:8%"><a href="{{ url('jadwal/evaluasi/'.$data->id.'/'.$key->instruktur_r->id.'/show') }}" type="button"
-                                            class="btn btn-sm bg-olive btn-flat">Lihat</a></td>
+                                <td>{{ \Carbon\Carbon::parse( $key->tanggal )->isoFormat("DD MMMM YYYY") }}</td>
+                                <td style="text-align:center;width:10%"><a href="{{ url('jadwal/evaluasi/'.$id_jadwal.'/'.$key->id.'/peserta') }}" style="width:100%" type="button" class="btn btn-sm bg-olive btn-flat">Lihat</a></td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
-            <!-- /.MultiStep Form -->
         </div>
-        <!-- /.box-body -->
+        <!-- /.MultiStep Form -->
+    </div>
+    <!-- /.box-body -->
     </div>
     <!-- /.box -->
+
     <!-- modal konfirmasi -->
     <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
-        <form action="{{ url('jadwal/kirimaccount/instruktur') }}" class="form-horizontal" id="formDelete"
+        <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formDelete"
             name="formDelete" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" value="" name="idHapusData" id="idHapusData">
@@ -120,7 +114,7 @@
                         <h4 class="modal-title" id="myModalLabel">Konfirmasi</h4>
                     </div>
                     <div class="modal-body" id="konfirmasi-body">
-                        Apakah anda ingin mengirim account instruktur?
+                        Apakah anda ingin mengirim account peserta?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
@@ -133,6 +127,32 @@
         </form>
     </div>
     <!-- end of modal konfirmais -->
+
+    <!-- modal lampiran -->
+    <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title" id="lampiranTitle"></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12" style="text-align:center">
+                            <img id="imgFoto" src="" alt="" width="100%">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- end of modal lampiran -->
 
 </section>
 <!-- /.content -->
@@ -159,15 +179,16 @@
             "scrollX": true,
             "scrollY": $(window).height() - 255,
             "scrollCollapse": true,
-            "bPaginate": false,
             "searching": false,
+            "bPaginate": false,
             "autoWidth": false,
             "columnDefs": [{
                 "searchable": false,
-                "orderable": false,
+                "orderable": [
+                    [3, "desc"]
+                ],
                 "targets": [0, 1]
-            }],
-            "aaSorting": []
+            }]
         });
 
         dt.on('order.dt search.dt', function () {
@@ -313,8 +334,6 @@
                 }
             });
         }
-
-
 
     });
 
