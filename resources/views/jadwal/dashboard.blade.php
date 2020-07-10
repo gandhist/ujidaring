@@ -189,7 +189,13 @@
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-green">
                         <div class="inner">
-                            <h3>-</h3>
+                            <h3>
+                                @if($data->f_pkl == "" )
+                                0
+                                @else
+                                1
+                                @endif
+                            </h3>
                             <p>Makalah/PKL</p>
                         </div>
                         <div class="icon">
@@ -203,13 +209,14 @@
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-blue">
                         <div class="inner">
-                            <h3>-</h3>
+                            <h3>{{$jumlahJadwal}}</h3>
                             <p>Atur Jadwal</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/aturjadwal', $data->id) }}" class="small-box-footer">More
+                        <a target="_blank" href="{{ url('jadwal/aturjadwal', $data->id) }}"
+                            class="small-box-footer">More
                             info <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>

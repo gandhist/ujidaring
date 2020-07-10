@@ -44,8 +44,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <h3>Atur Jadwal / Tanggal</h3>
-                    <form action="{{ url('jadwal/aturjadwalstore') }}" class="form-horizontal" id="formAdd" name="formAdd" method="post"
-                        enctype="multipart/form-data">
+                    <form action="{{ url('jadwal/aturjadwalstore') }}" class="form-horizontal" id="formAdd"
+                        name="formAdd" method="post" enctype="multipart/form-data">
                         @csrf
                         <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                             <thead>
@@ -57,25 +57,40 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <input type="hidden" name="jumlah" value="{{ count($rundown) }}">
+                                <input type="hidden" name="jumlah" value="{{ count($rundown) }}">
                                 @foreach($rundown as $key)
                                 <tr>
                                     <input type="hidden" name="id_rowdown_{{ $loop->iteration }}" value="{{$key->id}}">
                                     <td style="width:1%">{{ $loop->iteration }}</td>
                                     <td>{{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}</td>
                                     <td class="customselect2">
-                                        <select class="js-example-basic-multiple" name="instruktur_{{ $loop->iteration }}[]"
-                                            multiple="multiple">
+                                        <select class="js-example-basic-multiple"
+                                            name="instruktur_{{ $loop->iteration }}[]" multiple="multiple">
                                             @foreach($instrukturjadwal as $datainstrukturjadwal)
-                                            <option value="{{$datainstrukturjadwal->id}}">
+                                            <option value="{{$datainstrukturjadwal->id}}" 
+                                            @php 
+                                            $selected = DB::table('instruktur_rundown')->select('id')->where('id_jadwal_instruktur','=',$datainstrukturjadwal->id)->where('id_rundown','=',$key->id)->where('deleted_by','=',null)->first();
+                                            if($selected!=null){
+                                                echo "selected";
+                                            }
+                                            @endphp
+                                            >
                                                 {{$datainstrukturjadwal->instruktur_r->nama}}</option>
                                             @endforeach
                                         </select>
                                     </td>
                                     <td class="customselect2">
-                                        <select class="js-example-basic-multiple" name="modul_{{ $loop->iteration }}[]" multiple="multiple">
+                                        <select class="js-example-basic-multiple" name="modul_{{ $loop->iteration }}[]"
+                                            multiple="multiple">
                                             @foreach($JadwalModul as $dataJadwalModul)
-                                            <option value="{{$dataJadwalModul->id}}">
+                                            <option value="{{$dataJadwalModul->id}}"
+                                            @php 
+                                            $selected = DB::table('modul_rundown')->select('id')->where('id_jadwal_modul','=',$dataJadwalModul->id)->where('id_rundown','=',$key->id)->where('deleted_by','=',null)->first();
+                                            if($selected!=null){
+                                                echo "selected";
+                                            }
+                                            @endphp
+                                            >
                                                 {{$dataJadwalModul->modul_r->modul}}</option>
                                             @endforeach
                                         </select>
@@ -84,8 +99,8 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        <div class="box-footer" style="text-align:center">
-                            <button type="submit" class="btn btn-md btn-danger"> <i class="fa fa-save"></i>
+                        <div class="box-footer" style="text-align:left">
+                            <button type="submit" class="btn btn-md btn-info"> <i class="fa fa-save"></i>
                                 Simpan</button>
                         </div>
                     </form>

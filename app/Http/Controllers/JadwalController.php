@@ -225,45 +225,6 @@ class JadwalController extends Controller
         return redirect('jadwal')->with('message', 'Data berhasil ditambahkan');
     }
 
-    public function aturjadwalstore(Request $request)
-    {
-        for ($i=1; $i<=$request->jumlah ; $i++) {
-            // Insert ke table instruktur rowndown
-            $x = "instruktur_".$i;
-            $loop = $request->$x;
-            if($loop==null || $loop==""){
-
-            }else{
-                $length = count($loop);
-                for ($j=0; $j < $length ; $j++) { 
-                    $y = "id_rowdown_".$i;
-                    $datarowins['id_rundown'] = $request->$y;
-                    $datarowins['id_jadwal_instruktur'] = $loop[$j];
-                    $datarowins['created_by'] = Auth::id();
-                    $datarowins['created_at'] = Carbon::now()->toDateTimeString();
-                    InsRundown::create($datarowins);
-                }
-            }
-            // Insert ke table modul rowndown
-            $x = "modul_".$i;
-            $loop = $request->$x;
-            if($loop==null || $loop==""){
-
-            }else{
-                $length = count($loop);
-                for ($j=0; $j < $length ; $j++) { 
-                    $y = "id_rowdown_".$i;
-                    $datarowmodul['id_rundown'] = $request->$y;
-                    $datarowmodul['id_jadwal_modul'] = $loop[$j];
-                    $datarowmodul['created_by'] = Auth::id();
-                    $datarowmodul['created_at'] = Carbon::now()->toDateTimeString();
-                    ModulRundown::create($datarowmodul);
-                }
-            }
-        }
-        return redirect()->back()->with('message', 'Berhasil Input Rundown!'); 
-    }
-
     /**
      * Display the specified resource.
      *
@@ -294,6 +255,7 @@ class JadwalController extends Controller
     public function dashboard($id)
     {
         $data = JadwalModel::find($id);
+        $jumlahJadwal = JadwalRundown::where('id_jadwal','=',$id)->count();
         $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
         $jumlahabsen = AbsenModel::whereIn("id_peserta",$id_klp_peserta)->count();
         $modul = JadwalModul::where('id_jadwal','=',$data->id)->count();
@@ -302,7 +264,7 @@ class JadwalController extends Controller
         $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
-        return view('jadwal.dashboard')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay','instruktur','modul','jumlahabsen'));
+        return view('jadwal.dashboard')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay','instruktur','modul','jumlahabsen','jumlahJadwal'));
     }
 
     public function peserta($id)
@@ -323,6 +285,72 @@ class JadwalController extends Controller
         $instrukturjadwal = JadwalInstruktur::where('id_jadwal','=',$id_jadwal)->get();
         $JadwalModul = JadwalModul::where('id_jadwal','=',$id_jadwal)->get();
         return view('jadwal.aturjadwal')->with(compact('rundown','id_jadwal','JadwalModul','instrukturjadwal'));
+    }
+
+    public function aturjadwalstore(Request $request)
+    {
+        for ($i=1; $i<=$request->jumlah ; $i++) {
+            $dataNotdeleteIns = [];
+            $dataNotdeleteModul = [];
+            // Insert ke table instruktur rowndown
+            $x = "instruktur_".$i;
+            $loop = $request->$x;
+
+            $y = "id_rowdown_".$i;
+            $idrundown = $request->$y;
+            
+            if($loop==null || $loop==""){
+
+            }else{
+                $length = count($loop);
+                for ($j=0; $j < $length ; $j++) { 
+                    $datarowins['id_rundown'] = $idrundown;
+                    $datarowins['id_jadwal_instruktur'] = $loop[$j];
+                    $datarowins['created_by'] = Auth::id();
+                    $datarowins['created_at'] = Carbon::now()->toDateTimeString();
+                    $cekdata = InsRundown::select('id')->where('id_rundown','=',$datarowins['id_rundown'])->where('id_jadwal_instruktur','=',$datarowins['id_jadwal_instruktur'])->first();
+                    if($cekdata==null){
+                        $insertInsRun = InsRundown::create($datarowins);
+                        array_push($dataNotdeleteIns,$insertInsRun->id);
+                    }else{
+                        array_push($dataNotdeleteIns,$cekdata['id']);
+                    }
+                }
+            }
+            $user_data = [
+                'deleted_by' => Auth::id(),
+                'deleted_at' => Carbon::now()->toDateTimeString()
+            ];
+            InsRundown::where('id_rundown','=',$idrundown)->whereNotIn('id', $dataNotdeleteIns)->update($user_data);
+
+            // Insert ke table modul rowndown
+            $x = "modul_".$i;
+            $loop = $request->$x;
+            if($loop==null || $loop==""){
+
+            }else{
+                $length = count($loop);
+                for ($j=0; $j < $length ; $j++) { 
+                    $datarowmodul['id_rundown'] = $idrundown;
+                    $datarowmodul['id_jadwal_modul'] = $loop[$j];
+                    $datarowmodul['created_by'] = Auth::id();
+                    $datarowmodul['created_at'] = Carbon::now()->toDateTimeString();
+                    $cekdata = ModulRundown::select('id')->where('id_rundown','=',$datarowmodul['id_rundown'])->where('id_jadwal_modul','=',$datarowmodul['id_jadwal_modul'])->first();
+                    if($cekdata==null){
+                        $insertModRun = ModulRundown::create($datarowmodul);
+                        array_push($dataNotdeleteModul,$insertModRun->id);
+                    }else{
+                        array_push($dataNotdeleteModul,$cekdata['id']);
+                    }
+                }
+            }
+            $user_data = [
+                'deleted_by' => Auth::id(),
+                'deleted_at' => Carbon::now()->toDateTimeString()
+            ];
+            ModulRundown::where('id_rundown','=',$idrundown)->whereNotIn('id', $dataNotdeleteModul)->update($user_data);
+        }
+        return redirect()->back()->with('message', 'Berhasil Input Rundown!'); 
     }
 
     public function absen($id)
