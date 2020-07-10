@@ -91,8 +91,12 @@
                  <td>{{ $key->tanggal }}</td>
                  <td>
                   @foreach($key->modul_rundown_r as $md)
-                  {{ $loop->iteration }}. <a target="_blank" href="{{ url('uploads/materi/'.$md->jadwal_modul_r->materi) }}"> {{ $md->jadwal_modul_r->modul_r->modul }} </a> 
-                    @if($md->jadwal_modul_r->link) 
+                  @if(substr($md->jadwal_modul_r->materi,0,4) == "http")
+                    {{ $loop->iteration }}. <a target="_blank" href="{{ $md->jadwal_modul_r->materi }}"> {{ $md->jadwal_modul_r->modul_r->modul }} </a> 
+                  @else 
+                    {{ $loop->iteration }}. <a target="_blank" href="{{ url('uploads/materi/'.$md->jadwal_modul_r->materi) }}"> {{ $md->jadwal_modul_r->modul_r->modul }} </a> 
+                  @endif
+                  @if($md->jadwal_modul_r->link) 
                     | <a target="_blank" href="{{ $md->jadwal_modul_r->link}}" class="btn btn-info btn-sm"><i class="fa fa-link"></i></a>
                     @endif
                   <br>
