@@ -2,18 +2,17 @@
 
 namespace App\Imports;
 
-use App\SoalEssayModel;
+use App\SoalPgPreModel;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class SoalEssayImport implements ToModel , WithStartRow
+class SoalPgPreImport implements ToModel , WithStartRow
 {
     protected $id;
 
     function __construct($id) {
         $this->id = $id;
     }
-    
     /**
     * @param array $row
     *
@@ -21,12 +20,15 @@ class SoalEssayImport implements ToModel , WithStartRow
     */
     public function model(array $row)
     {
-        return new SoalEssayModel([
-            'kelompok_soal' => $this->id,
+        return new SoalPgPreModel([
+            'id_jadwal_modul' => $this->id,
             'no_soal' => $row[1], 
             'soal' => $row[2],
-            'jawaban' => $row[3], 
-            'bobot' => $row[4], 
+            'pg_a' => $row[3],
+            'pg_b' => $row[4],
+            'pg_c' => $row[5], 
+            'pg_d' => $row[6], 
+            'jawaban' => $row[7],    
         ]);
     }
 
@@ -34,4 +36,5 @@ class SoalEssayImport implements ToModel , WithStartRow
     {
         return 2;
     }
+
 }
