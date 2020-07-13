@@ -43,21 +43,23 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <h3>Atur Jadwal / Tanggal</h3>
+                    <h3>Atur Jadwal Instruktur & Modul</h3>
                     <form action="{{ url('jadwal/aturjadwalstore') }}" class="form-horizontal" id="formAdd"
                         name="formAdd" method="post" enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" name="jumlah" value="{{count($rundown)}}">
                         <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
+                        
                             <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Tanggal</th>
                                     <th>Instruktur</th>
                                     <th>Modul</th>
+                                    <th>Quiz</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <input type="hidden" name="jumlah" value="{{ count($rundown) }}">
                                 @foreach($rundown as $key)
                                 <tr>
                                     <input type="hidden" name="id_rowdown_{{ $loop->iteration }}" value="{{$key->id}}">
@@ -95,6 +97,8 @@
                                             @endforeach
                                         </select>
                                     </td>
+                                    <td style="text-align:center;width:5%"><a  class="btn btn-success btn-xs" href="{{ url('aturjadwal/'.$id_jadwal.'/'.$key->id.'/uploadquiz') }}"><i
+                                            class="fa fa-upload"></i> Upload </a></td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -155,7 +159,6 @@
 <script src="{{ asset('AdminLTE-2.3.11/plugins/input-mask/jquery.inputmask.extensions.js')}}"></script>
 <script type="text/javascript">
     $(function () {
-
         $('.js-example-basic-multiple').select2();
 
         var dt = $('#custom-table').DataTable({
@@ -174,11 +177,7 @@
                     [3, "desc"]
                 ],
                 "targets": [0, 1]
-            }],
-            "aaSorting": [
-                [4, "desc"],
-                [3, "asc"]
-            ]
+            }]
         });
 
         dt.on('order.dt search.dt', function () {

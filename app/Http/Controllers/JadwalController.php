@@ -15,6 +15,8 @@ use App\User;
 use App\Imports\PesertaImport;
 use App\Imports\SoalPgImport;
 use App\Imports\SoalEssayImport;
+use App\Imports\SoalPgPreImport;
+use App\Imports\SoalPgPostImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -22,11 +24,14 @@ use Illuminate\Support\Facades\Hash;
 use App\Traits\GlobalFunction;
 use App\SoalPgModel;
 use App\SoalEssayModel;
+use App\SoalPgPreModel;
+use App\SoalPgPostModel;
 use App\AbsenModel;
 use App\JadwalRundown;
 use App\InsRundown;
 use App\ModulRundown;
 use App\JawabanEvaluasi;
+
 
 class JadwalController extends Controller
 {
@@ -107,6 +112,7 @@ class JadwalController extends Controller
             $file->move('File_Peserta',$nama_file);
             // import data excel ke database
             Excel::import(new PesertaImport, public_path('/File_Peserta/'.$nama_file));
+
             // Mengambil nilai id_kelompok_peserta
             // $x = Excel::toArray(new PesertaImport, public_path('/File_Peserta/'.$nama_file));
     
@@ -282,7 +288,7 @@ class JadwalController extends Controller
     {
         // $data = JadwalModel::find($id);
         $id_jadwal = $id;
-        $rundown = JadwalRundown::where('id_jadwal','=',$id_jadwal)->get();
+        $rundown = JadwalRundown::where('id_jadwal','=',$id_jadwal)->orderBy('tanggal','asc')->get();
         $instrukturjadwal = JadwalInstruktur::where('id_jadwal','=',$id_jadwal)->get();
         $JadwalModul = JadwalModul::where('id_jadwal','=',$id_jadwal)->get();
         return view('jadwal.aturjadwal')->with(compact('rundown','id_jadwal','JadwalModul','instrukturjadwal'));
@@ -352,6 +358,79 @@ class JadwalController extends Controller
             ModulRundown::where('id_rundown','=',$idrundown)->whereNotIn('id', $dataNotdeleteModul)->update($user_data);
         }
         return redirect()->back()->with('message', 'Berhasil Input Rundown!'); 
+    }
+
+    public function uploadquiz($id_jadwal,$id)
+    {
+        $tanggal = JadwalRundown::select('tanggal')->where('id','=',$id)->first();
+        $tanggal = $tanggal['tanggal'];
+        $modulrundown = ModulRundown::where('id_rundown','=',$id)->orderBy('id','asc')->get();
+       
+        return view('jadwal.uploadquiz')->with(compact('modulrundown','id_jadwal','tanggal'));
+    }
+    
+    public function uploadquizstore(Request $request)
+    {
+        $id_jadwal = $request->id_jadwal;
+        for ($i=1; $i<=$request->jumlah ; $i++) {
+            $x = "id_modul_rundown_".$i;
+            $id_modul_rundown = $request->$x;
+            $tanggal_jadwal_rundown = ModulRundown::where('id','=',$id_modul_rundown)->first();
+            $tanggal_awal_jadwal = JadwalModel::select('tgl_awal')->where('id','=',$request->id_jadwal)->first();
+    
+            if($tanggal_awal_jadwal['tgl_awal']==$tanggal_jadwal_rundown->jadwal_rundown_r->tanggal){
+                // $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1);
+                // $dataDetail['akhir_pre_quiz']='';
+                // $dataDetail['awal_post_quiz']='';
+                // $dataDetail['awal_post_quiz']='';
+                // dd($dataDetail['awal_pre_quiz']);
+            }else{
+                // dd('beda');
+            }
+            
+            $x = "id_jadwalmodul_".$i;
+            $id_jadwal_modul = $request->$x;
+            $x = "pre_quiz_".$i;
+            if ($files = $request->file($x)) {
+                // Delete Jika ada file soal sebelumnya
+                $user_data = [
+                    'deleted_by' => Auth::id(),
+                    'deleted_at' => Carbon::now()->toDateTimeString()
+                ];
+                SoalPgPreModel::where('id_jadwal_modul','=', $id_jadwal_modul)->update($user_data);
+
+                $destinationPath = 'uploads/soal_prequiz'; // upload path
+                $file = "Soal_Prequiz_Jadwal_Modul_".$id_jadwal_modul."_".Carbon::now()->timestamp.".".$files->getClientOriginalExtension();
+                $files->move($destinationPath, $file);
+                $dataDetail['f_pre_quiz'] = $destinationPath."/".$file;
+                $f_pre_quiz = JadwalModul::find($id_jadwal_modul)->update($dataDetail);
+                // import data excel ke database
+                Excel::import(new SoalPgPreImport($id_jadwal_modul), public_path('/uploads/soal_prequiz/'.$file));
+             } 
+             
+             $x = "post_quiz_".$i;
+             if ($files = $request->file($x)) {
+                 // Delete Jika ada file soal sebelumnya
+                 $user_data = [
+                     'deleted_by' => Auth::id(),
+                     'deleted_at' => Carbon::now()->toDateTimeString()
+                 ];
+                 SoalPgPostModel::where('id_jadwal_modul','=', $id_jadwal_modul)->update($user_data);
+ 
+                 $destinationPath = 'uploads/soal_postquiz'; // upload path
+                 $file = "Soal_Postquiz_Jadwal_Modul_".$id_jadwal_modul."_".Carbon::now()->timestamp.".".$files->getClientOriginalExtension();
+                 $files->move($destinationPath, $file);
+                 $dataDetail['f_post_quiz'] = $destinationPath."/".$file;
+                 $f_pre_quiz = JadwalModul::find($id_jadwal_modul)->update($dataDetail);
+                 // import data excel ke database
+                 Excel::import(new SoalPgPostImport($id_jadwal_modul), public_path('/uploads/soal_postquiz/'.$file));
+              } 
+              $x = "tm_".$i;
+              $dataDetail['jumlah_tm'] = $request->$x;
+              JadwalModul::find($id_jadwal_modul)->update($dataDetail);
+        }
+        return redirect()->back()->with('message', 'Soal Quiz Berhasil di Upload');
+        // return redirect('jadwal/aturjadwal/'.$id_jadwal)->with('message', 'Soal Quiz Berhasil di Upload');
     }
 
     public function absen($id)
@@ -479,7 +558,6 @@ class JadwalController extends Controller
             $no_hp = $user_id['no_hp'];
             $nama = $user_id['nama'];
             $user_account =  User::select('username','hint')->where('id',"=",$user_id['user_id'])->first();
-
             $telepon = $no_hp;
             $message = "Gunakan NIK Anda dan kode: ".$user_account['hint']." untuk login ke cdg.sh/ujitulis";
             // $message = "Gunakan NIK Anda dan kode: 1234 untuk login ke uji.disnakerdki.org";
@@ -551,6 +629,16 @@ class JadwalController extends Controller
     // function generate kelompok peserta 
     public function gen($id_jadwal){
         return $this->generate_kelompok($id_jadwal);
+    }
+
+    public function lihatsoalpre (Request $request){
+        $datasoal = SoalPgPreModel::where('id_jadwal_modul','=',$request->value_id)->with('jadwal_modul_r.modul_r')->get();
+        return $datasoal;
+    }
+
+    public function lihatsoalpost (Request $request){
+        $datasoal = SoalPgPostModel::where('id_jadwal_modul','=',$request->value_id)->with('jadwal_modul_r.modul_r')->get();
+        return $datasoal;
     }
 
 }

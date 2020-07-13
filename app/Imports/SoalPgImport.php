@@ -4,10 +4,10 @@ namespace App\Imports;
 
 use App\SoalPgModel;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class SoalPgImport implements ToModel
+class SoalPgImport implements ToModel , WithStartRow
 {
-
     protected $id;
 
     function __construct($id) {
@@ -32,4 +32,10 @@ class SoalPgImport implements ToModel
             'jawaban' => $row[7],    
         ]);
     }
+
+    public function startRow(): int
+    {
+        return 2;
+    }
+    
 }

@@ -96,12 +96,9 @@
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
-
                 </div>
             </div>
-
             <!-- End -->
-
         </div>
         <!-- /.box-body -->
     </div>
@@ -159,7 +156,7 @@
             lihatEvaluasi(id_jaw_ev, id_peserta);
         });
 
-        // Fungsi Update durasi ujian
+        // Fungsi Lihat Evaluasi
         function lihatEvaluasi(id_jaw_ev, id_peserta) {
             var url = "{{ url('instruktur/lihatevaluasi') }}";
             $.ajaxSetup({
