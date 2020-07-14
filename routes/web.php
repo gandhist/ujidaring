@@ -82,6 +82,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('jadwal', 'JadwalController');
 	Route::get('jadwal/{id}/dashboard','JadwalController@dashboard');
 	Route::get('jadwal/peserta/{id}','JadwalController@peserta');
+	Route::get('jadwal/peserta/{id_jadwal}/{id_peserta}','JadwalController@pesertadetail');
 	Route::get('jadwal/instruktur/{id}','JadwalController@instruktur');
 	Route::get('jadwal/soal/{id}','JadwalController@soal');
 	Route::get('jadwal/tugas/{id}','JadwalController@tugas');
