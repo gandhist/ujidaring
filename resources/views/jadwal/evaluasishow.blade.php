@@ -24,8 +24,8 @@
             </div>
             @endif
             <!-- MultiStep Form -->
-            <form action="{{ url('jadwal/absen/filter') }}" enctype="multipart/form-data" name="filterData"
-                id="filterData" method="post">
+            <form action="{{ url('jadwal/evaluasi/'.$id_jadwal.'/'.$instruktur->id.'/filter') }}" enctype="multipart/form-data" name="filterData"
+                id="filterData">
                 @csrf
                 <input type="hidden" name="id_jadwal" value="{{$data->id}}">
                 <div class="row">
@@ -57,7 +57,7 @@
                                                     Filter</button>
                                             </th>
                                             <th style="text-align:left">
-                                                <a href="{{ url('jadwal/absen', $id_jadwal) }}"
+                                                <a href="{{ url('jadwal/evaluasi/'.$id_jadwal.'/'.$instruktur->id.'/show') }}"
                                                     class="btn btn-sm btn-default"> <i class="fa fa-refresh"></i>
                                                     Reset</a>
                                             </th>
@@ -71,7 +71,7 @@
             </form>
             <div class="row">
                 <div class="col-md-12">
-                    <h3 style="text-align:center">{{$instruktur->nama}}</h3>
+                    <h3 style="text-align:left">{{$instruktur->nama}}</h3>
                     <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                         <thead>
                             <tr>

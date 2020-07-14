@@ -377,21 +377,21 @@ class JadwalController extends Controller
             $id_modul_rundown = $request->$x;
             $tanggal_jadwal_rundown = ModulRundown::where('id','=',$id_modul_rundown)->first();
             $tanggal_awal_jadwal = JadwalModel::select('tgl_awal')->where('id','=',$request->id_jadwal)->first();
-    
-            if($tanggal_awal_jadwal['tgl_awal']==$tanggal_jadwal_rundown->jadwal_rundown_r->tanggal){
-                // $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1);
-                // $dataDetail['akhir_pre_quiz']='';
-                // $dataDetail['awal_post_quiz']='';
-                // $dataDetail['awal_post_quiz']='';
-                // dd($dataDetail['awal_pre_quiz']);
-            }else{
-                // dd('beda');
-            }
             
             $x = "id_jadwalmodul_".$i;
             $id_jadwal_modul = $request->$x;
+            
             $x = "pre_quiz_".$i;
             if ($files = $request->file($x)) {
+                // Update waktu awal dan akhir quiz
+                if($tanggal_awal_jadwal['tgl_awal']==$tanggal_jadwal_rundown->jadwal_rundown_r->tanggal){
+                    $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 08:00:00');
+                    $dataDetail['akhir_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 22:00:00');
+                }else{
+                    $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 13:00:00');
+                    $dataDetail['akhir_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 22:00:00');
+                }
+
                 // Delete Jika ada file soal sebelumnya
                 $user_data = [
                     'deleted_by' => Auth::id(),
@@ -410,6 +410,11 @@ class JadwalController extends Controller
              
              $x = "post_quiz_".$i;
              if ($files = $request->file($x)) {
+                // Update waktu awal dan akhir quiz
+         
+                $dataDetail['awal_post_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->format('Y-m-d 13:00:00');
+                $dataDetail['akhir_post_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->format('Y-m-d 22:00:00');                
+                
                  // Delete Jika ada file soal sebelumnya
                  $user_data = [
                      'deleted_by' => Auth::id(),
@@ -426,8 +431,8 @@ class JadwalController extends Controller
                  Excel::import(new SoalPgPostImport($id_jadwal_modul), public_path('/uploads/soal_postquiz/'.$file));
               } 
               $x = "tm_".$i;
-              $dataDetail['jumlah_tm'] = $request->$x;
-              JadwalModul::find($id_jadwal_modul)->update($dataDetail);
+              $dataDetail2['jumlah_tm'] = $request->$x;
+              JadwalModul::find($id_jadwal_modul)->update($dataDetail2);
         }
         return redirect()->back()->with('message', 'Soal Quiz Berhasil di Upload');
         // return redirect('jadwal/aturjadwal/'.$id_jadwal)->with('message', 'Soal Quiz Berhasil di Upload');
@@ -486,6 +491,24 @@ class JadwalController extends Controller
         $instruktur = InstrukturModel::find($id);
         $data = JadwalModel::find($id_jadwal);
         $jawEvaluasi = JawabanEvaluasi::where('id_jadwal','=',$id_jadwal)->where('id_instruktur','=',$id)->groupBy('tanggal')->orderBy('tanggal','asc')->get();
+        $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.evaluasishow')->with(compact('data','jawEvaluasi','jumlahPeserta','jumlahSoalPg','jumlahSoalEssay','id_jadwal','instruktur'));
+    }
+
+    public function evaluasifilter(Request $request , $id_jadwal,$id)
+    {
+        $instruktur = InstrukturModel::find($id);
+        $data = JadwalModel::find($id_jadwal);
+        $jawEvaluasi = JawabanEvaluasi::where('id_jadwal','=',$id_jadwal)->where('id_instruktur','=',$id)->groupBy('tanggal')->orderBy('tanggal','asc');
+        if($request->f_tgl_awal != null && $request->f_tgl_akhir != null){
+            $jawEvaluasi->whereBetween('tanggal', [Carbon::createFromFormat('d/m/Y',$request->f_tgl_awal), Carbon::createFromFormat('d/m/Y',$request->f_tgl_akhir)]);
+        }
+        $jawEvaluasi->get();
+        $jawEvaluasi = $jawEvaluasi->get();
+
         $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
         $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();

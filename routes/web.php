@@ -99,6 +99,7 @@ Route::group(['middleware' => 'auth'], function () {
 	
 	Route::get('jadwal/evaluasi/{id}','JadwalController@evaluasi');
 	Route::get('jadwal/evaluasi/{id_jadwal}/{id}/show','JadwalController@evaluasishow');
+	Route::get('jadwal/evaluasi/{id_jadwal}/{id}/filter','JadwalController@evaluasifilter');
 	Route::get('jadwal/evaluasi/{id_jadwal}/{id}/peserta','JadwalController@evaluasipeserta');
 
 	Route::post('jadwal/lihatsoalpre','JadwalController@lihatsoalpre');

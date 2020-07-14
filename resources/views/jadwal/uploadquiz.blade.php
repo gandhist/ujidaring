@@ -94,7 +94,7 @@
                                     </td>
                                     <td><input value="{{$key->jadwal_modul_r->jumlah_tm}}" style="width:100%"
                                             name="tm_{{ $loop->iteration }}" class="InputTugasMandiri" type="text"
-                                            maxlength="2"></td>
+                                            maxlength="1"></td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -306,9 +306,9 @@
                 success: function (data) {
                     // console.log(data)
                     console.log(data)
-                    $('#tablemodalSoalPre > tbody').html();
+                    $('#tablemodalSoalPre > tbody').html("");
                     if (data.length > 0) {
-                        $("#title-modalSoalPre").text("Soal Quiz Pre" + data[0]['jadwal_modul_r'][
+                        $("#title-modalSoalPre").text("Soal Quiz Pre " + data[0]['jadwal_modul_r'][
                             'modul_r'
                         ]['modul']);
                         for (index = 0; index < data.length; index++) {
@@ -368,9 +368,9 @@
                 success: function (data) {
                     // console.log(data)
                     console.log(data)
-                    $('#tablemodalSoalPost > tbody').html();
+                    $('#tablemodalSoalPost > tbody').html("");
                     if (data.length > 0) {
-                        $("#title-modalSoalPost").text("Soal Quiz Post" + data[0]['jadwal_modul_r'][
+                        $("#title-modalSoalPost").text("Soal Quiz Post " + data[0]['jadwal_modul_r'][
                             'modul_r'
                         ]['modul']);
                         for (index = 0; index < data.length; index++) {

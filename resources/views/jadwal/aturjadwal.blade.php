@@ -43,7 +43,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <h3>Atur Jadwal Instruktur & Modul</h3>
+                    <h3>Instruktur, Modul, & Quiz</h3>
                     <form action="{{ url('jadwal/aturjadwalstore') }}" class="form-horizontal" id="formAdd"
                         name="formAdd" method="post" enctype="multipart/form-data">
                         @csrf
