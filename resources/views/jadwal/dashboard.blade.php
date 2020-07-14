@@ -100,7 +100,7 @@
                         <div class="icon">
                             <i class="ion ion-person"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/instruktur', $data->id) }}"
+                        <a href="{{ url('jadwal/instruktur', $data->id) }}"
                             class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                         <div class="icon">
                             <i class="fa fa-users" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">Detail
+                        <a href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">Detail
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -136,7 +136,7 @@
                         <div class="icon">
                             <i class="fa fa-book" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">Detail
+                        <a href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">Detail
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -151,7 +151,7 @@
                         <div class="icon">
                             <i class="fa fa-newspaper-o" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/soal', $data->id) }}" class="small-box-footer">Detail
+                        <a href="{{ url('jadwal/soal', $data->id) }}" class="small-box-footer">Detail
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -166,7 +166,7 @@
                         <div class="icon">
                             <i class="fa fa-folder-open-o" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('instruktur/modul',$data->id) }}"
+                        <a href="{{ url('instruktur/modul',$data->id) }}"
                             class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -181,7 +181,7 @@
                         <div class="icon">
                             <i class="fa fa-users" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/absen', $data->id) }}" class="small-box-footer">Detail
+                        <a href="{{ url('jadwal/absen', $data->id) }}" class="small-box-footer">Detail
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -201,7 +201,7 @@
                         <div class="icon">
                             <i class="fa fa-film" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ route('pkl', $data->id) }}" class="small-box-footer">Detail <i
+                        <a href="{{ route('pkl', $data->id) }}" class="small-box-footer">Detail <i
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -214,7 +214,7 @@
                         <div class="icon">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/aturjadwal', $data->id) }}"
+                        <a href="{{ url('jadwal/aturjadwal', $data->id) }}"
                             class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -228,7 +228,7 @@
                         <div class="icon">
                             <i class="ion ion-person"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/evaluasi', $data->id) }}"
+                        <a href="{{ url('jadwal/evaluasi', $data->id) }}"
                             class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>

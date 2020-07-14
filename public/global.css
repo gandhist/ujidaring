@@ -200,6 +200,10 @@ th {
     border: 1px solid black;
 }
 
+.tableModalDetail>thead>tr {
+    border-top: 1px solid black;
+}
+
 .main-header {
     position: fixed;
     width: 100%;

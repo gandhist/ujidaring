@@ -127,7 +127,7 @@
                     <div class="box">
                         <div class="box-body no-padding">
                             <br>
-                            <table class="table table-condensed" id="tablemodalSoalPre">
+                            <table class="table table-condensed tableModalDetail" id="tablemodalSoalPre">
                                 <thead>
                                     <tr>
                                         <th>
@@ -183,7 +183,7 @@
                     <div class="box">
                         <div class="box-body no-padding">
                             <br>
-                            <table class="table table-condensed" id="tablemodalSoalPost">
+                            <table class="table table-condensed tableModalDetail" id="tablemodalSoalPost">
                                 <thead>
                                     <tr>
                                         <th>
