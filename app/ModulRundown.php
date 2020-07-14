@@ -27,4 +27,9 @@ class ModulRundown extends Model
     public function jadwal_modul_r(){
         return $this->belongsTo('App\JadwalModul','id_jadwal_modul');
     }
+
+    // relasi has many ke table modul rundown
+    // public function pg_pre_benar_r(){
+    //     return $this->hasMany('App\JawabanPesertaPgPre','id_modul_rundown');
+    // }
 }

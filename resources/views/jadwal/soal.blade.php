@@ -95,7 +95,7 @@
                     <!-- Upload Soal -->
                     <div class="box box-info">
                         <div class="box-header with-border" style="text-align:center">
-                            <h3 class="box-title">Upload Soal</h3>
+                            <!-- <h3 class="box-title">Upload Soal</h3> -->
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                         class="fa fa-minus"></i>
@@ -156,7 +156,7 @@
                 <div id="soal_pg" class="tab-pane fade in">
                     <div class="box box-info">
                         <div class="box-header with-border" style="text-align:center">
-                            <h3 class="box-title">Soal Pilihan Ganda</h3>
+                            <!-- <h3 class="box-title">Soal Pilihan Ganda</h3> -->
 
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
@@ -207,7 +207,7 @@
 
                     <div class="box box-info">
                         <div class="box-header with-border" style="text-align:center">
-                            <h3 class="box-title">Soal Essay</h3>
+                            <!-- <h3 class="box-title">Soal Essay</h3> -->
 
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i

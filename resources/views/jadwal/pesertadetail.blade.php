@@ -3,8 +3,8 @@
 @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a> Peserta
+    <h1><a href="{{ url('jadwal/peserta/'.$data->id) }}" class="btn btn-md bg-purple"><i class="fa fa-caret-left"></i>
+            Kembali</a> Detail Peserta
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -54,20 +54,22 @@
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{ \Carbon\Carbon::parse($data->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
                                         </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Peserta
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">NIK
                                         </th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahPeserta}} Orang</td>
+                                            {{$Peserta->nik}}</td>
 
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Pg
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Nama
                                         </th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahSoalPg}} Soal</td>
+                                            {{$Peserta->nama}}</td>
 
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Essay
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Tmp,Tgl_Lahir
                                         </th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahSoalEssay}} Soal</td>
+                                            {{$Peserta->tmp_lahir}},
+                                            {{ \Carbon\Carbon::parse($Peserta->tgl_lahir)->isoFormat("DD MMMM YYYY") }}
+                                        </td>
                                     </tr>
 
                                 </thead>
@@ -75,7 +77,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                 </div>
                 <div class="col-md-2">
 
@@ -84,12 +86,14 @@
                             <table class="table no-margin">
                                 <thead>
                                     <tr>
-                                        <th style="text-align:left;padding-bottom:0px;padding-top:0px"><button id="btnkirim" type="button"
+                                        <th style="text-align:left;padding-bottom:0px;padding-top:0px"><button
+                                                id="btnkirim" type="button"
                                                 class="btn btn-block btn-info btn-flat">Kirim User Account</button>
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th style="text-align:left;padding-bottom:0px;padding-top:2px"><button id="btndetail" type="button"
+                                        <th style="text-align:left;padding-bottom:0px;padding-top:2px"><button
+                                                id="btndetail" type="button"
                                                 class="btn btn-block btn-warning btn-flat">Detail</button>
                                         </th>
                                     </tr>
@@ -98,91 +102,246 @@
                         </div>
                     </div>
 
-                </div>
+                </div> -->
                 <div class="col-md-12">
-                    <h3 style="margin-top: 0px;text-align: left;">Daftar Peserta</h3>
-                    <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
-                        <thead>
-                            <tr>
-                                <th><i class="fa fa-check-square-o"></i></th>
-                                <th>No</th>
-                                <th>NIK</th>
-                                <th>Nama</th>
-                                <th>Tempat Lahir</th>
-                                <th>Tanggal Lahir</th>
-                                <th>No Hp</th>
-                                <!-- <th>Pg Benar</th>
-                                <th>Pg Salah</th>
-                                <th>Essay Benar</th>
-                                <th>Essay Salah</th>
-                                <th>Nilai Essay</th> -->
-                                <!-- <th>Pg Benar</th>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#hasilujian">Hasil Ujian</a></li>
+                        <li><a data-toggle="tab" href="#nilaiharian">Nilai Harian</a></li>
+                        <li><a data-toggle="tab" href="#postquiz">Quisioner</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="hasilujian" class="tab-pane fade in active">
+                            <div class="box box-info">
+                                <div class="box-header with-border" style="text-align:center">
+                                    <!-- <h3 class="box-title">Upload Soal</h3> -->
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                class="fa fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                                class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <table id="custom-table"
+                                        class="table table-striped table-bordered dataTable customTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Jumlah Soal PG</th>
+                                                <th>Pg Benar</th>
+                                                <th>Pg Salah</th>
+                                                <th>Jumlah Soal Essay</th>
+                                                <th>Essay Benar</th>
+                                                <th>Essay Salah</th>
+                                                <th>Nilai Essay</th>
+                                                <!-- <th>Pg Benar</th>
                                 <th>Pg Salah</th>
                                 <th>Essay Benar</th>
                                 <th>Essay Salah</th> -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($Peserta as $key)
-                            <tr>
-                                <td style='width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
-                                        id="selection[]" name="selection[]"></td>
-                                <td style="width:1%"></td>
-                                <td style="width:30%">{{ $key->nik }}</td>
-                                <td>{{ $key->nama }}</td>
-                                <td style="text-align:left;width:10%">{{ $key->tmp_lahir }}</td>
-                                <td style="text-align:right;width:10%">
-                                    {{ \Carbon\Carbon::parse($key->tgl_lahir)->isoFormat("DD MMMM YYYY") }}</td>
-                                <td style="text-align:center;width:8%">{{ $key->no_hp }}</td>
-                                <!-- <td style="width:7%">{{count($key->pg_benar_r)}}</td>
-                                <td style="width:7%">{{count($key->pg_salah_r)}}</td>
-                                <td style="width:8%">{{count($key->essay_benar_r)}}</td>
-                                <td style="width:8%">{{count($key->essay_salah_r)}}</td>
-                                @if($key->jadwal_r->akhir_ujian == "" )
-                                <td style="text-align:center;width:8%"><button type="button"
-                                        class="btn btn-sm btn-warning disabled">Belum Ujian</button></td>
-                                @elseif( \Carbon\Carbon::now()->toDateTimeString() > $key->jadwal_r->awal_ujian &&
-                                \Carbon\Carbon::now()->toDateTimeString() < $key->jadwal_r->akhir_ujian )
-                                    <td style="text-align:center;width:8%"><button type="button"
-                                            class="btn btn-sm btn-danger disabled">Sedang Ujian</button></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                    @elseif( count($key->essay_benar_r) == 0 && count($key->essay_salah_r) == 0 )
+                                            <tr>
+                                                <td style="width:7%">{{$jumlahSoalPg}}</td>
+                                                <td style="width:5%">{{count($Peserta->pg_benar_r)}}</td>
+                                                <td style="width:5%">{{count($Peserta->pg_salah_r)}}</td>
+                                                <td style="width:7%">{{$jumlahSoalEssay}}</td>
+                                                <td style="width:5%">{{count($Peserta->essay_benar_r)}}</td>
+                                                <td style="width:5%">{{count($Peserta->essay_salah_r)}}</td>
+                                                @if($Peserta->jadwal_r->akhir_ujian == "" )
+                                                <td style="text-align:center;width:8%"><button type="button"
+                                                        class="btn btn-sm btn-warning disabled">Belum Ujian</button>
+                                                </td>
+                                                @elseif( \Carbon\Carbon::now()->toDateTimeString() >
+                                                $Peserta->jadwal_r->awal_ujian &&
+                                                \Carbon\Carbon::now()->toDateTimeString() < $Peserta->
+                                                    jadwal_r->akhir_ujian )
+                                                    <td style="text-align:center;width:8%"><button type="button"
+                                                            class="btn btn-sm btn-danger disabled">Sedang Ujian</button>
+                                                    </td>
 
-                                    <td style="text-align:center;width:8%"><button type="button"
-                                            class="btn btn-sm bg-olive btn-flat" data-toggle="modal"
-                                            data-target="#modal_{{$key->id}}">Nilai</button></td>
-                                    @else
-                                    <td style="text-align:center;width:8%"><button type="button"
-                                            class="btn btn-sm btn-warning" data-toggle="modal"
-                                            data-target="#modal_jawab_{{$key->id}}">Sudah
-                                            dinilai</button></td>
-                                    @endif -->
-                                    <!-- <td style="width:7%">{{count($key->pg_benar_r)}}</td>
-                                <td style="width:7%">{{count($key->pg_salah_r)}}</td>
-                                <td style="width:8%">{{count($key->essay_benar_r)}}</td>
-                                <td style="width:8%">{{count($key->essay_salah_r)}}</td> -->
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                                    @elseif( count($Peserta->essay_benar_r) == 0 &&
+                                                    count($Peserta->essay_salah_r) == 0
+                                                    )
+
+                                                    <td style="text-align:center;width:8%"><button type="button"
+                                                            class="btn btn-sm bg-olive btn-flat" data-toggle="modal"
+                                                            data-target="#modal_{{$Peserta->id}}">Nilai</button></td>
+                                                    @else
+                                                    <td style="text-align:center;width:8%"><button type="button"
+                                                            class="btn btn-sm btn-warning" data-toggle="modal"
+                                                            data-target="#modal_jawab_{{$Peserta->id}}">Sudah
+                                                            dinilai</button></td>
+                                                    @endif
+
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="nilaiharian" class="tab-pane fade in active">
+                            <div class="box box-info">
+                                <div class="box-header with-border" style="text-align:center">
+                                    <!-- <h3 class="box-title">Upload Soal</h3> -->
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                class="fa fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                                class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <table id="custom-table"
+                                        class="table table-striped table-bordered dataTable customTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Modul</th>
+                                                <th>Pre Quiz Benar</th>
+                                                <th>Pre Quiz Salah</th>
+                                                <th>Post Quiz Benar</th>
+                                                <th>Post Quiz Salah</th>
+                                                <th >TM</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                            $a = '';
+                                            @endphp
+                                            @foreach($modul_rundown as $key)
+                                            <tr>
+                                                @if($a==$key->jadwal_rundown_r->tanggal)
+
+                                                @else
+                                                @php
+                                                $rowspan =
+                                                DB::table('modul_rundown')->where('id_rundown','=',$key->id_rundown)->where('deleted_by','=',null)->count();
+                                                @endphp
+                                                <td style="width:8%;text-align:center" rowspan="{{$rowspan}}">
+                                                    {{ \Carbon\Carbon::parse($key->jadwal_rundown_r->tanggal)->isoFormat("DD MMMM YYYY") }}
+                                                </td>
+                                                @endif
+                                                <td>{{$key->jadwal_modul_r->modul_r->modul}}</td>
+
+                                                @php
+                                                $prequizbenar =
+                                                DB::table('jawaban_peserta_pg_pre')->where('id_modul_rundown','=',$key->id)->where('is_true','=',1)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                                $prequizsalah =
+                                                DB::table('jawaban_peserta_pg_pre')->where('id_modul_rundown','=',$key->id)->where('is_true','=',0)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                                $postquizbenar =
+                                                DB::table('jawaban_peserta_pg_post')->where('id_modul_rundown','=',$key->id)->where('is_true','=',1)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                                $postquizsalah =
+                                                DB::table('jawaban_peserta_pg_post')->where('id_modul_rundown','=',$key->id)->where('is_true','=',0)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                                @endphp
+                                                <td style="width:10%">{{$prequizbenar}}</td>
+                                                <td style="width:10%">{{$prequizsalah}}</td>
+                                                <td style="width:10%">{{$postquizbenar}}</td>
+                                                <td style="width:10%">{{$postquizsalah}}</td>
+                                                <td style="width:5%;text-align:center"><button type="button"
+                                                        class="btn btn-sm btn-success" data-toggle="modal"
+                                                        data-target="#modal_tm">Lihat</button></td>
+                                                @php
+                                                $a = $key->jadwal_rundown_r->tanggal;
+                                                @endphp
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="postquiz" class="tab-pane fade in active">
+                            <div class="box box-info">
+                                <div class="box-header with-border" style="text-align:center">
+                                    <!-- <h3 class="box-title">Upload Soal</h3> -->
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                class="fa fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                                class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <table id="custom-table"
+                                        class="table table-striped table-bordered dataTable customTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Pg Benar</th>
+                                                <th>Pg Salah</th>
+                                                <th>Essay Benar</th>
+                                                <th>Essay Salah</th>
+                                                <th>Nilai Essay</th>
+                                                <!-- <th>Pg Benar</th>
+                                <th>Pg Salah</th>
+                                <th>Essay Benar</th>
+                                <th>Essay Salah</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td style="width:7%">{{count($Peserta->pg_benar_r)}}</td>
+                                                <td style="width:7%">{{count($Peserta->pg_salah_r)}}</td>
+                                                <td style="width:8%">{{count($Peserta->essay_benar_r)}}</td>
+                                                <td style="width:8%">{{count($Peserta->essay_salah_r)}}</td>
+                                                @if($Peserta->jadwal_r->akhir_ujian == "" )
+                                                <td style="text-align:center;width:8%"><button type="button"
+                                                        class="btn btn-sm btn-warning disabled">Belum Ujian</button>
+                                                </td>
+                                                @elseif( \Carbon\Carbon::now()->toDateTimeString() >
+                                                $Peserta->jadwal_r->awal_ujian &&
+                                                \Carbon\Carbon::now()->toDateTimeString() < $Peserta->
+                                                    jadwal_r->akhir_ujian )
+                                                    <td style="text-align:center;width:8%"><button type="button"
+                                                            class="btn btn-sm btn-danger disabled">Sedang Ujian</button>
+                                                    </td>
+
+                                                    @elseif( count($Peserta->essay_benar_r) == 0 &&
+                                                    count($Peserta->essay_salah_r) == 0
+                                                    )
+
+                                                    <td style="text-align:center;width:8%"><button type="button"
+                                                            class="btn btn-sm bg-olive btn-flat" data-toggle="modal"
+                                                            data-target="#modal_{{$Peserta->id}}">Nilai</button></td>
+                                                    @else
+                                                    <td style="text-align:center;width:8%"><button type="button"
+                                                            class="btn btn-sm btn-warning" data-toggle="modal"
+                                                            data-target="#modal_jawab_{{$Peserta->id}}">Sudah
+                                                            dinilai</button></td>
+                                                    @endif
+
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- /.MultiStep Form -->
 
             <!-- Modal Penilaian -->
-            @foreach($Peserta as $key)
-            <div class="modal fade" id="modal_{{$key->id}}" role="dialog">
+
+            <div class="modal fade" id="modal_{{$Peserta->id}}" role="dialog">
                 <div class="modal-dialog modal-lg" style="width:1500px">
 
                     <!-- Modal content-->
                     <div class="modal-content">
                         <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"><b>{{$key->nama}}</b></h4>
+                            <h4 class="modal-title"><b>{{$Peserta->nama}}</b></h4>
                         </div>
                         <div class="modal-body">
                             <div class="box">
-                                <form action="{{ route('penilaian.update', $key->id ) }}" class="form-horizontal"
+                                <form action="{{ route('penilaian.update', $Peserta->id ) }}" class="form-horizontal"
                                     id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
                                     @method("PATCH")
                                     @csrf
@@ -200,12 +359,12 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <input type="hidden" name="jumlah_jawaban_{{$key->id}}"
-                                                    value="{{count($key->jawaban_essay_r)}}">
-                                                @foreach($key->jawaban_essay_r as $jawaban)
+                                                <input type="hidden" name="jumlah_jawaban_{{$Peserta->id}}"
+                                                    value="{{count($Peserta->jawaban_essay_r)}}">
+                                                @foreach($Peserta->jawaban_essay_r as $jawaban)
                                                 <tr>
                                                     <input type="hidden"
-                                                        name="{{$key->id}}_id_jawaban_{{ $loop->iteration }}"
+                                                        name="{{$Peserta->id}}_id_jawaban_{{ $loop->iteration }}"
                                                         value="{{ $jawaban->id }}">
                                                     <td style="width:1%">{{ $loop->iteration }}</td>
                                                     <td><textarea style="width: 100%;resize: none;" readonly name=""
@@ -216,10 +375,10 @@
                                                             id="" rows="5">{{ $jawaban->soal_r->jawaban }}</textarea>
                                                     </td>
                                                     <td style="width:2%"><input
-                                                            name="{{$key->id}}_bobot_{{ $loop->iteration }}" type="text"
-                                                            maxlength="2" class="Inputbobot" required></td>
+                                                            name="{{$Peserta->id}}_bobot_{{ $loop->iteration }}"
+                                                            type="text" maxlength="2" class="Inputbobot" required></td>
                                                     <td style="width:10%;text-align:center"><input
-                                                            name="{{$key->id}}_istrue_{{ $loop->iteration }}"
+                                                            name="{{$Peserta->id}}_istrue_{{ $loop->iteration }}"
                                                             type="checkbox"></td>
                                                 </tr>
                                                 @endforeach
@@ -239,8 +398,6 @@
                                                     Simpan Nilai</button>
                                             </div>
                                         </div>
-
-
                                     </div>
                                 </form>
                             </div>
@@ -251,18 +408,18 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="modal_jawab_{{$key->id}}" role="dialog">
+            <div class="modal fade" id="modal_jawab_{{$Peserta->id}}" role="dialog">
                 <div class="modal-dialog modal-lg" style="width:1500px">
 
                     <!-- Modal content-->
                     <div class="modal-content">
                         <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"><b>{{$key->nama}}</b></h4>
+                            <h4 class="modal-title"><b>{{$Peserta->nama}}</b></h4>
                         </div>
                         <div class="modal-body">
                             <div class="box">
-                                <form action="{{ route('penilaian.update', $key->id ) }}" class="form-horizontal"
+                                <form action="{{ route('penilaian.update', $Peserta->id ) }}" class="form-horizontal"
                                     id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
                                     @method("PATCH")
                                     @csrf
@@ -280,12 +437,12 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <input type="hidden" name="jumlah_jawaban_{{$key->id}}"
-                                                    value="{{count($key->jawaban_essay_r)}}">
-                                                @foreach($key->jawaban_essay_r as $jawaban)
+                                                <input type="hidden" name="jumlah_jawaban_{{$Peserta->id}}"
+                                                    value="{{count($Peserta->jawaban_essay_r)}}">
+                                                @foreach($Peserta->jawaban_essay_r as $jawaban)
                                                 <tr>
                                                     <input type="hidden"
-                                                        name="{{$key->id}}_id_jawaban_{{ $loop->iteration }}"
+                                                        name="{{$Peserta->id}}_id_jawaban_{{ $loop->iteration }}"
                                                         value="{{ $jawaban->id }}">
                                                     <td style="width:1%">{{ $loop->iteration }}</td>
                                                     <td><textarea style="width: 100%;resize: none;" readonly name=""
@@ -296,8 +453,8 @@
                                                             id="" rows="5">{{ $jawaban->soal_r->jawaban }}</textarea>
                                                     </td>
                                                     <td style="width:2%"><input
-                                                            name="{{$key->id}}_bobot_{{ $loop->iteration }}" type="text"
-                                                            maxlength="2" class="Inputbobot"
+                                                            name="{{$Peserta->id}}_bobot_{{ $loop->iteration }}"
+                                                            type="text" maxlength="2" class="Inputbobot"
                                                             value="{{ $jawaban->nilai }}" readonly></td>
                                                     <td style="width:10%;text-align:center"><span><i
                                                                 class="fa {{ $jawaban->is_true==1 ? 'fa-check' : 'fa-times' }} "
@@ -320,7 +477,7 @@
 
                 </div>
             </div>
-            @endforeach
+
             <!-- End -->
 
         </div>
@@ -393,12 +550,7 @@
         });
 
         dt.on('order.dt search.dt', function () {
-            dt.column(1, {
-                search: 'applied',
-                order: 'applied'
-            }).nodes().each(function (cell, i) {
-                cell.innerHTML = i + 1;
-            });
+
         }).draw();
 
         // Kunci Input NIK Hanya Angka
@@ -446,7 +598,7 @@
                     confirmButtonColor: '#AAA'
                 });
                 // alert('Tidak ada data yang terpilih');
-            }else if (id.length > 1) {
+            } else if (id.length > 1) {
                 Swal.fire({
                     title: "Harap pilih satu data untuk detail",
                     type: 'warning',

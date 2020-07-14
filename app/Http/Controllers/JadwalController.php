@@ -284,6 +284,18 @@ class JadwalController extends Controller
         return view('jadwal.peserta')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay'));
     }
 
+    public function pesertadetail($id_jadwal,$id_peserta)
+    {
+        $data = JadwalModel::find($id_jadwal);
+        $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->where('id','=',$id_peserta)->first();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        $modul_rundown = ModulRundown::whereHas('jadwal_rundown_r', function ($query) use($id_jadwal){
+            return $query->where('id_jadwal', '=', $id_jadwal);
+        })->get();
+        return view('jadwal.pesertadetail')->with(compact('data','Peserta','modul_rundown','jumlahSoalPg','jumlahSoalEssay'));
+    }
+
     public function aturjadwal($id)
     {
         // $data = JadwalModel::find($id);
