@@ -174,7 +174,7 @@
                         </fieldset>
                         <fieldset>
                             <h2 class="fs-title">Peserta</h2>
-                            <span class="pull-left"><b>Import Excel Data Peserta (.xls/.xlsx)</b></span>
+                            <span class="pull-left"><b>Import Excel Data Peserta (.xls/.xlsx)</b><a class="btn btn-success btn-xs" href="{{ url('template_upload/peserta.xlsx') }}"> <i class="fa fa-file-excel-o" ></i> Template</a></span>
                             <input type="file" id="excel_peserta" name="excel_peserta" />
                             <input type="button" name="previous" class="previous action-button-previous"
                                 value="Previous" />

@@ -55,7 +55,7 @@ class DashboardInstrukturController extends Controller
         foreach ($jadwal->jadwal_modul_r as $key) {
             if ($request->has($px_materi.$key->id)) {
                 $anggota += [
-                    $px_materi.$key->id => 'mimes:pdf,docx,xls,xlsx|max:5120',
+                    $px_materi.$key->id => 'mimes:pdf,docx,xls,xlsx|max:10240',
                     // $px_link.$i => 'required',
                 ];
                 $anggota_msg += [

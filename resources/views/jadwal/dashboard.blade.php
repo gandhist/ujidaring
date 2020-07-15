@@ -90,6 +90,7 @@
             <!-- /.MultiStep Form -->
 
             <div class="row">
+                {{-- instruktur --}}
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
                     <div class="small-box bg-blue">
@@ -104,7 +105,8 @@
                             class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+                {{-- end of instruktur --}}
+                {{-- peserta --}}
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
                     <div class="small-box bg-green">
@@ -116,27 +118,6 @@
                             <i class="fa fa-users" aria-hidden="true"></i>
                         </div>
                         <a href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">Detail
-                            <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-xs-6">
-                    <!-- small box -->
-                    <div class="small-box bg-yellow">
-                        <div class="inner">
-                            <h3>
-                                @if($data->pdf_tugas == "" )
-                                0
-                                @else
-                                1
-                                @endif
-                            </h3>
-                            <p>Tugas</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fa fa-book" aria-hidden="true"></i>
-                        </div>
-                        <a href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">Detail
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -155,7 +136,8 @@
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+                <!-- end of soal -->
+                <!-- modul -->
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
                     <div class="small-box bg-red">
@@ -170,7 +152,23 @@
                             class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+                <!-- end of modul -->
+                <!-- atur jadwal -->
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-blue">
+                        <div class="inner">
+                            <h3>{{$jumlahJadwal}}</h3>
+                            <p>Atur Jadwal</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                        </div>
+                        <a target="_blank" href="{{ url('jadwal/aturjadwal', $data->id) }}"
+                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- end of atur jadwal -->
+                <!-- absen -->
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
                     <div class="small-box bg-yellow">
@@ -185,7 +183,8 @@
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+                <!-- end of absen -->
+                <!-- makalah/pkl -->
                 <div class="col-lg-3 col-xs-6">
                     <div class="small-box bg-green">
                         <div class="inner">
@@ -205,19 +204,30 @@
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+                <!-- end of makalah/pkl -->
+                {{-- tugas --}}
                 <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-blue">
+                    <!-- small box -->
+                    <div class="small-box bg-yellow">
                         <div class="inner">
-                            <h3>{{$jumlahJadwal}}</h3>
-                            <p>Atur Jadwal</p>
+                            <h3>
+                                @if($data->pdf_tugas == "" )
+                                0
+                                @else
+                                1
+                                @endif
+                            </h3>
+                            <p>Tugas</p>
                         </div>
                         <div class="icon">
-                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            <i class="fa fa-book" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('jadwal/aturjadwal', $data->id) }}"
-                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
+                        <a target="_blank" href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">Detail
+                            <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
+                <!-- end of tugas -->
+                <!-- evaluasi -->
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
                     <div class="small-box bg-blue">
@@ -232,7 +242,7 @@
                             class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
-                <!-- ./col -->
+                <!-- end of evaluasi -->
 
                 <div class="col-lg-12 col-xs-12" style="text-align:center">
                     <button onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")' type="button"
@@ -371,6 +381,7 @@
                     title: 'Mulai Ujian?',
                     text: "Apakah anda yakin untuk memulai ujian?",
                     icon: 'warning',
+                    buttons: true,
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
@@ -382,8 +393,8 @@
                             'Waktu dihitung mundur dari sekarang.',
                             'success'
                         )
-                    }
                     updateDurasi(durasi, idJadwal);
+                    }
 
                 });
 
