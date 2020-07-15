@@ -481,7 +481,7 @@ class JadwalController extends Controller
             $user_account =  User::select('username','hint')->where('id',"=",$user_id['user_id'])->first();
 
             $telepon = $no_hp;
-            $message = "Gunakan NIK Anda dan kode: ".$user_account['hint']." untuk login ke cdg.sh/ujitulis";
+            $message = "Gunakan NIK Anda dan kode: ".$user_account['hint']." untuk login ke https://bit.ly/2AMNeS3";
             // $message = "Gunakan NIK Anda dan kode: 1234 untuk login ke uji.disnakerdki.org";
             $this->kirimPesanSMS($telepon, $message);
         }   
@@ -497,7 +497,7 @@ class JadwalController extends Controller
             $nama = $user_id['nama'];
             $user_account =  User::select('username','hint')->where('id',"=",$user_id['id_users'])->first();
             $telepon = $no_hp;
-            $message = "Gunakan NIK Anda dan kode: ".$user_account['hint']." untuk login ke cdg.sh/ujitulis";
+            $message = "Gunakan NIK Anda dan kode: ".$user_account['hint']." untuk login ke https://bit.ly/2AMNeS3";
             $this->kirimPesanSMS($telepon, $message);
         }   
         return back()->with('message', 'Account telah dikirim');

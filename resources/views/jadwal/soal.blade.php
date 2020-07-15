@@ -113,9 +113,9 @@
                                 <table class="table no-margin">
                                     <thead>
                                         <tr>
-                                            <th>Upload Soal Pilihan Ganda (.xls/.xlsx)</th>
+                                            <th>Upload Soal Pilihan Ganda (.xls/.xlsx) <a class="btn btn-success btn-xs" href="{{ url('template_upload/pilihan_ganda.xlsx') }}"> <i class="fa fa-file-excel-o" ></i> Template</a></th>
                                             <th></th>
-                                            <th>Upload Soal Essay (.xls/.xlsx)</th>
+                                            <th>Upload Soal Essay (.xls/.xlsx) <a class="btn btn-success btn-xs" href="{{ url('template_upload/essay.xlsx') }}"> <i class="fa fa-file-excel-o" ></i> Template</a></th>
                                         </tr>
                                     </thead>
                                     <tbody>
