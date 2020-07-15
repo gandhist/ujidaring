@@ -84,8 +84,13 @@
                             <table class="table no-margin">
                                 <thead>
                                     <tr>
-                                        <th style="text-align:left;padding: 6px;"><button id="btnkirim" type="button"
+                                        <th style="text-align:left;padding-bottom:0px;padding-top:0px"><button id="btnkirim" type="button"
                                                 class="btn btn-block btn-info btn-flat">Kirim User Account</button>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:left;padding-bottom:0px;padding-top:2px"><button id="btndetail" type="button"
+                                                class="btn btn-block btn-warning btn-flat">Detail</button>
                                         </th>
                                     </tr>
                                 </thead>
@@ -95,7 +100,7 @@
 
                 </div>
                 <div class="col-md-12">
-                    <h3>Daftar Peserta</h3>
+                    <h3 style="margin-top: 0px;text-align: left;">Daftar Peserta</h3>
                     <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                         <thead>
                             <tr>
@@ -106,11 +111,11 @@
                                 <th>Tempat Lahir</th>
                                 <th>Tanggal Lahir</th>
                                 <th>No Hp</th>
-                                <th>Pg Benar</th>
+                                <!-- <th>Pg Benar</th>
                                 <th>Pg Salah</th>
                                 <th>Essay Benar</th>
                                 <th>Essay Salah</th>
-                                <th>Nilai Essay</th>
+                                <th>Nilai Essay</th> -->
                                 <!-- <th>Pg Benar</th>
                                 <th>Pg Salah</th>
                                 <th>Essay Benar</th>
@@ -123,13 +128,13 @@
                                 <td style='width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
                                         id="selection[]" name="selection[]"></td>
                                 <td style="width:1%"></td>
-                                <td>{{ $key->nik }}</td>
+                                <td style="width:30%">{{ $key->nik }}</td>
                                 <td>{{ $key->nama }}</td>
-                                <td>{{ $key->tmp_lahir }}</td>
-                                <td style="text-align:right;width:8%">
+                                <td style="text-align:left;width:10%">{{ $key->tmp_lahir }}</td>
+                                <td style="text-align:right;width:10%">
                                     {{ \Carbon\Carbon::parse($key->tgl_lahir)->isoFormat("DD MMMM YYYY") }}</td>
                                 <td style="text-align:center;width:8%">{{ $key->no_hp }}</td>
-                                <td style="width:7%">{{count($key->pg_benar_r)}}</td>
+                                <!-- <td style="width:7%">{{count($key->pg_benar_r)}}</td>
                                 <td style="width:7%">{{count($key->pg_salah_r)}}</td>
                                 <td style="width:8%">{{count($key->essay_benar_r)}}</td>
                                 <td style="width:8%">{{count($key->essay_salah_r)}}</td>
@@ -151,7 +156,7 @@
                                             class="btn btn-sm btn-warning" data-toggle="modal"
                                             data-target="#modal_jawab_{{$key->id}}">Sudah
                                             dinilai</button></td>
-                                    @endif
+                                    @endif -->
                                     <!-- <td style="width:7%">{{count($key->pg_benar_r)}}</td>
                                 <td style="width:7%">{{count($key->pg_salah_r)}}</td>
                                 <td style="width:8%">{{count($key->essay_benar_r)}}</td>
@@ -401,43 +406,6 @@
             $(this).val($(this).val().replace(/\D/g, ''))
         });
 
-        $("#btnmulai").on('click', function () {
-            $("#durasi").css("border-color", "#ccc");
-            var durasi = $("#durasi").val();
-            var idJadwal = $("#idJadwal").val();
-            if (durasi == "") {
-                Swal.fire({
-                    title: "Durasi ujian belum diisi",
-                    type: 'warning',
-                    confirmButtonText: 'Close',
-                    confirmButtonColor: '#AAA'
-                });
-                $("#durasi").focus();
-                $("#durasi").css("border-color", "red");
-            } else {
-                Swal.fire({
-                    title: 'Mulai Ujian?',
-                    text: "Apakah anda yakin untuk memulai ujian?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Mulai'
-                }).then((result) => {
-                    if (result.value) {
-                        Swal.fire(
-                            'Ujian dimulai!',
-                            'Waktu dihitung mundur dari sekarang.',
-                            'success'
-                        )
-                    }
-                    updateDurasi(durasi, idJadwal);
-
-                });
-
-            }
-        });
-
         // Show Modal Penilaian
         $('.btnnilai').on('click', function () {
             $('#modaldetailAhli').modal('show');
@@ -463,6 +431,34 @@
             }
         });
 
+        $('#btndetail').on('click', function (e) {
+            e.preventDefault();
+            var id = [];
+            $('.selection:checked').each(function () {
+                id.push($(this).data('id'));
+            });
+            $("#idHapusData").val(id);
+            if (id.length == 0) {
+                Swal.fire({
+                    title: "Tidak ada data yang terpilih",
+                    type: 'warning',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: '#AAA'
+                });
+                // alert('Tidak ada data yang terpilih');
+            }else if (id.length > 1) {
+                Swal.fire({
+                    title: "Harap pilih satu data untuk detail",
+                    type: 'warning',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: '#AAA'
+                });
+                // alert('Tidak ada data yang terpilih');
+            } else {
+                idpeserta = id[0];
+                window.location.href = "{{ url('jadwal/peserta/'.$data->id) }}/" + idpeserta;
+            }
+        });
 
         // Fungsi Update durasi ujian
         function updateDurasi(durasi, idJadwal) {

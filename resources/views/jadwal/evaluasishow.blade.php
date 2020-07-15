@@ -24,8 +24,8 @@
             </div>
             @endif
             <!-- MultiStep Form -->
-            <form action="{{ url('jadwal/absen/filter') }}" enctype="multipart/form-data" name="filterData"
-                id="filterData" method="post">
+            <form action="{{ url('jadwal/evaluasi/'.$id_jadwal.'/'.$instruktur->id.'/filter') }}" enctype="multipart/form-data" name="filterData"
+                id="filterData">
                 @csrf
                 <input type="hidden" name="id_jadwal" value="{{$data->id}}">
                 <div class="row">
@@ -57,7 +57,7 @@
                                                     Filter</button>
                                             </th>
                                             <th style="text-align:left">
-                                                <a href="{{ url('jadwal/absen', $id_jadwal) }}"
+                                                <a href="{{ url('jadwal/evaluasi/'.$id_jadwal.'/'.$instruktur->id.'/show') }}"
                                                     class="btn btn-sm btn-default"> <i class="fa fa-refresh"></i>
                                                     Reset</a>
                                             </th>
@@ -71,7 +71,7 @@
             </form>
             <div class="row">
                 <div class="col-md-12">
-                    <h3 style="text-align:center">{{$instruktur->nama}}</h3>
+                    <h3 style="text-align:left">{{$instruktur->nama}}</h3>
                     <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                         <thead>
                             <tr>
@@ -203,43 +203,6 @@
         // Kunci Input NIK Hanya Angka
         $('.Inputbobot').on('input blur paste', function () {
             $(this).val($(this).val().replace(/\D/g, ''))
-        });
-
-        $("#btnmulai").on('click', function () {
-            $("#durasi").css("border-color", "#ccc");
-            var durasi = $("#durasi").val();
-            var idJadwal = $("#idJadwal").val();
-            if (durasi == "") {
-                Swal.fire({
-                    title: "Durasi ujian belum diisi",
-                    type: 'warning',
-                    confirmButtonText: 'Close',
-                    confirmButtonColor: '#AAA'
-                });
-                $("#durasi").focus();
-                $("#durasi").css("border-color", "red");
-            } else {
-                Swal.fire({
-                    title: 'Mulai Ujian?',
-                    text: "Apakah anda yakin untuk memulai ujian?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Mulai'
-                }).then((result) => {
-                    if (result.value) {
-                        Swal.fire(
-                            'Ujian dimulai!',
-                            'Waktu dihitung mundur dari sekarang.',
-                            'success'
-                        )
-                    }
-                    updateDurasi(durasi, idJadwal);
-
-                });
-
-            }
         });
 
         // Show Modal Penilaian
