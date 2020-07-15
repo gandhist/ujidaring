@@ -64,7 +64,7 @@
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{$Peserta->nama}}</td>
 
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Tmp,Tgl_Lahir
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Tmp, Tgl_Lahir
                                         </th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{$Peserta->tmp_lahir}},
@@ -107,7 +107,7 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#hasilujian">Hasil Ujian</a></li>
                         <li><a data-toggle="tab" href="#nilaiharian">Nilai Harian</a></li>
-                        <li><a data-toggle="tab" href="#postquiz">Quisioner</a></li>
+                        <li><a data-toggle="tab" href="#quisioner">Quisioner</a></li>
                     </ul>
                     <div class="tab-content">
                         <div id="hasilujian" class="tab-pane fade in active">
@@ -205,7 +205,8 @@
                                                 <th>Pre Quiz Salah</th>
                                                 <th>Post Quiz Benar</th>
                                                 <th>Post Quiz Salah</th>
-                                                <th >TM</th>
+                                                <th>Tugas Mandiri</th>
+                                                <th>Total Nilai</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -221,29 +222,51 @@
                                                 $rowspan =
                                                 DB::table('modul_rundown')->where('id_rundown','=',$key->id_rundown)->where('deleted_by','=',null)->count();
                                                 @endphp
-                                                <td style="width:8%;text-align:center" rowspan="{{$rowspan}}">
+                                                <td style="width:5%;text-align:center" rowspan="{{$rowspan}}">
                                                     {{ \Carbon\Carbon::parse($key->jadwal_rundown_r->tanggal)->isoFormat("DD MMMM YYYY") }}
                                                 </td>
                                                 @endif
                                                 <td>{{$key->jadwal_modul_r->modul_r->modul}}</td>
-
                                                 @php
                                                 $prequizbenar =
-                                                DB::table('jawaban_peserta_pg_pre')->where('id_modul_rundown','=',$key->id)->where('is_true','=',1)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                                DB::table('jawaban_peserta_pg_pre')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',1)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
                                                 $prequizsalah =
-                                                DB::table('jawaban_peserta_pg_pre')->where('id_modul_rundown','=',$key->id)->where('is_true','=',0)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                                DB::table('jawaban_peserta_pg_pre')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',0)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
                                                 $postquizbenar =
-                                                DB::table('jawaban_peserta_pg_post')->where('id_modul_rundown','=',$key->id)->where('is_true','=',1)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                                DB::table('jawaban_peserta_pg_post')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',1)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
                                                 $postquizsalah =
-                                                DB::table('jawaban_peserta_pg_post')->where('id_modul_rundown','=',$key->id)->where('is_true','=',0)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                                DB::table('jawaban_peserta_pg_post')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',0)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+
+                                                $nilaiakhir = ($prequizbenar+$postquizbenar)*10/2;
                                                 @endphp
-                                                <td style="width:10%">{{$prequizbenar}}</td>
-                                                <td style="width:10%">{{$prequizsalah}}</td>
-                                                <td style="width:10%">{{$postquizbenar}}</td>
-                                                <td style="width:10%">{{$postquizsalah}}</td>
-                                                <td style="width:5%;text-align:center"><button type="button"
-                                                        class="btn btn-sm btn-success" data-toggle="modal"
-                                                        data-target="#modal_tm">Lihat</button></td>
+                                                <td style="width:10%;text-align:right">{{$prequizbenar}}</td>
+                                                <td style="width:10%;text-align:right">{{$prequizsalah}}</td>
+                                                <td style="width:10%;text-align:right">{{$postquizbenar}}</td>
+                                                <td style="width:10%;text-align:right">{{$postquizsalah}}</td>
+                                                <td style="width:10%;text-align:center">
+                                                    @php
+                                                    $jumlahtm =
+                                                    DB::table('jawaban_tm')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                                    @endphp
+
+                                                    @if($jumlahtm>0)
+                                                    <button type="button" class="btn btn-sm btn-success btnLihatTm"
+                                                        id_jadwal_modul="{{$key->jadwal_modul_r->id}}"
+                                                        id_peserta="{{$Peserta->id}}">Lihat</button>
+                                                    @else
+                                                    <button type="button" class="btn btn-sm btn-danger">Tidak
+                                                        Ada</button>
+                                                    @endif
+                                                </td>
+                                                <td style="width:7%;text-align:right"><b>
+                                                        @if($nilaiakhir < 60 && $jumlahtm>0)
+                                                            60*
+                                                            @elseif($nilaiakhir>=60)
+                                                            {{$nilaiakhir}}
+                                                            @else
+                                                            Tidak Lulus
+                                                            @endif
+                                                    </b></td>
                                                 @php
                                                 $a = $key->jadwal_rundown_r->tanggal;
                                                 @endphp
@@ -254,7 +277,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="postquiz" class="tab-pane fade in active">
+                        <div id="quisioner" class="tab-pane fade in active">
                             <div class="box box-info">
                                 <div class="box-header with-border" style="text-align:center">
                                     <!-- <h3 class="box-title">Upload Soal</h3> -->
@@ -271,52 +294,23 @@
                                         class="table table-striped table-bordered dataTable customTable">
                                         <thead>
                                             <tr>
-                                                <th>Pg Benar</th>
-                                                <th>Pg Salah</th>
-                                                <th>Essay Benar</th>
-                                                <th>Essay Salah</th>
-                                                <th>Nilai Essay</th>
-                                                <!-- <th>Pg Benar</th>
-                                <th>Pg Salah</th>
-                                <th>Essay Benar</th>
-                                <th>Essay Salah</th> -->
+                                                <th>No</th>
+                                                <th>Tanggal</th>
+                                                <th>NIK</th>
+                                                <th>Nama</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-
+                                            @foreach($jawaban_evaluasi as $key)
                                             <tr>
-                                                <td style="width:7%">{{count($Peserta->pg_benar_r)}}</td>
-                                                <td style="width:7%">{{count($Peserta->pg_salah_r)}}</td>
-                                                <td style="width:8%">{{count($Peserta->essay_benar_r)}}</td>
-                                                <td style="width:8%">{{count($Peserta->essay_salah_r)}}</td>
-                                                @if($Peserta->jadwal_r->akhir_ujian == "" )
-                                                <td style="text-align:center;width:8%"><button type="button"
-                                                        class="btn btn-sm btn-warning disabled">Belum Ujian</button>
+                                                <td style="width:1%">{{$loop->iteration}}</td>
+                                                <td style="width:5%;text-align:center">
+                                                    {{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}
                                                 </td>
-                                                @elseif( \Carbon\Carbon::now()->toDateTimeString() >
-                                                $Peserta->jadwal_r->awal_ujian &&
-                                                \Carbon\Carbon::now()->toDateTimeString() < $Peserta->
-                                                    jadwal_r->akhir_ujian )
-                                                    <td style="text-align:center;width:8%"><button type="button"
-                                                            class="btn btn-sm btn-danger disabled">Sedang Ujian</button>
-                                                    </td>
-
-                                                    @elseif( count($Peserta->essay_benar_r) == 0 &&
-                                                    count($Peserta->essay_salah_r) == 0
-                                                    )
-
-                                                    <td style="text-align:center;width:8%"><button type="button"
-                                                            class="btn btn-sm bg-olive btn-flat" data-toggle="modal"
-                                                            data-target="#modal_{{$Peserta->id}}">Nilai</button></td>
-                                                    @else
-                                                    <td style="text-align:center;width:8%"><button type="button"
-                                                            class="btn btn-sm btn-warning" data-toggle="modal"
-                                                            data-target="#modal_jawab_{{$Peserta->id}}">Sudah
-                                                            dinilai</button></td>
-                                                    @endif
-
+                                                <td style="width:40%">{{$key->instruktur_r->nik}}</td>
+                                                <td>{{$key->instruktur_r->nama}}</td>
                                             </tr>
-
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -477,7 +471,43 @@
 
                 </div>
             </div>
+            <!-- End -->
 
+            <!-- Modal TM -->
+            <div class="modal fade" id="modal_tm" role="dialog">
+                <div class="modal-dialog modal-lg" style="width:1500px">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title"><b id="title-modal"></b></h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="box">
+                                <div class="box-body no-padding">
+                                    <br>
+                                    <table class="table table-condensed tableModalDetail" id="tableModalTm">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Soal</th>
+                                                <th>Jawaban</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- End -->
 
         </div>
@@ -485,7 +515,7 @@
     </div>
     <!-- /.box -->
     <!-- modal konfirmasi -->
-    <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    <!-- <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formDelete"
             name="formDelete" method="post" enctype="multipart/form-data">
@@ -510,7 +540,7 @@
                 </div>
             </div>
         </form>
-    </div>
+    </div> -->
     <!-- end of modal konfirmais -->
 
 </section>
@@ -541,6 +571,7 @@
             "bPaginate": false,
             "searching": false,
             "autoWidth": false,
+            "ordering": false,
             "columnDefs": [{
                 "searchable": false,
                 "orderable": false,
@@ -563,58 +594,17 @@
             $('#modaldetailAhli').modal('show');
         });
 
-        $('#btnkirim').on('click', function (e) {
-            e.preventDefault();
-            var id = [];
-            $('.selection:checked').each(function () {
-                id.push($(this).data('id'));
-            });
-            $("#idHapusData").val(id);
-            if (id.length == 0) {
-                Swal.fire({
-                    title: "Tidak ada data yang terpilih",
-                    type: 'warning',
-                    confirmButtonText: 'Close',
-                    confirmButtonColor: '#AAA'
-                });
-                // alert('Tidak ada data yang terpilih');
-            } else {
-                $('#modal-konfirmasi').modal('show');
-            }
+        // Show Modal TM
+        $('.btnLihatTm').on('click', function () {
+            id_jadwal_modul = $(this).attr("id_jadwal_modul");
+            id_peserta = $(this).attr("id_peserta");
+            lihatTm(id_jadwal_modul, id_peserta);
+            // $('#modaldetailAhli').modal('show');
         });
 
-        $('#btndetail').on('click', function (e) {
-            e.preventDefault();
-            var id = [];
-            $('.selection:checked').each(function () {
-                id.push($(this).data('id'));
-            });
-            $("#idHapusData").val(id);
-            if (id.length == 0) {
-                Swal.fire({
-                    title: "Tidak ada data yang terpilih",
-                    type: 'warning',
-                    confirmButtonText: 'Close',
-                    confirmButtonColor: '#AAA'
-                });
-                // alert('Tidak ada data yang terpilih');
-            } else if (id.length > 1) {
-                Swal.fire({
-                    title: "Harap pilih satu data untuk detail",
-                    type: 'warning',
-                    confirmButtonText: 'Close',
-                    confirmButtonColor: '#AAA'
-                });
-                // alert('Tidak ada data yang terpilih');
-            } else {
-                idpeserta = id[0];
-                window.location.href = "{{ url('jadwal/peserta/'.$data->id) }}/" + idpeserta;
-            }
-        });
-
-        // Fungsi Update durasi ujian
-        function updateDurasi(durasi, idJadwal) {
-            var url = "{{ url('updateDurasiUjian') }}";
+        // Fungsi Lihat TM
+        function lihatTm(id_jadwal_modul, id_peserta) {
+            var url = "{{ url('jadwal/peserta/tm') }}";
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -624,61 +614,40 @@
                 url: url,
                 method: 'POST',
                 data: {
-                    durasi: durasi,
-                    idJadwal: idJadwal
+                    id_jadwal_modul: id_jadwal_modul,
+                    id_peserta: id_peserta
                 },
                 success: function (data) {
-
-
-                    // countdown
-                    var $clock = $('#clock'),
-                        eventTime = moment(data, 'YYYY-MM-DD HH:mm:ss').unix(),
-                        currentTime = moment().unix(),
-                        diffTime = eventTime - currentTime,
-                        duration = moment.duration(diffTime * 1000, 'milliseconds'),
-                        interval = 1000;
-
-                    if (diffTime > 0) {
-
-                        // Show clock
-                        // $clock.show();
-                        $('#clock').text("");
-                        var $d = $('<span class="days" ></span>').appendTo($clock),
-                            $h = $('<span class="hours" ></span>').appendTo($clock),
-                            $m = $('<span class="minutes" ></span>').appendTo($clock),
-                            $s = $('<span class="seconds" ></span>').appendTo($clock);
-
-                        setInterval(function () {
-
-                            duration = moment.duration(duration.asMilliseconds() -
-                                interval, 'milliseconds');
-                            var d = moment.duration(duration).days(),
-                                h = moment.duration(duration).hours(),
-                                m = moment.duration(duration).minutes(),
-                                s = moment.duration(duration).seconds();
-
-                            d = $.trim(d).length === 1 ? '0' + d : d;
-                            h = $.trim(h).length === 1 ? '0' + h : h;
-                            m = $.trim(m).length === 1 ? '0' + m : m;
-                            s = $.trim(s).length === 1 ? '0' + s : s;
-
-                            // show how many hours, minutes and seconds are left
-                            // $d.text(d + ":");
-                            $h.text(h + ":");
-                            $m.text(m + ":");
-                            $s.text(s);
-
-                        }, interval);
-
+                    console.log(data);
+                    $('#tableModalTm > tbody').html('');
+                    if (data.length > 0) {
+                        $("#title-modal").text(data[0]['jadwal_modul_r']['modul_r'][
+                            'modul'
+                        ]);
+                        for (index = 0; index < data.length; index++) {
+                            $('#tableModalTm > tbody:last').append(`
+                            <tr>
+                                <td style='width:1%;text-align:center'>
+                                    ` + (index + 1) + `
+                                </td>
+                                <td style='width:40%;text-align:left'>
+                                    ` + data[index]['soal'] + `
+                                </td>
+                                <td style='text-align:left;width:59%'>
+                                    ` + data[index]['jawaban'] + `
+                                </td>
+                            </tr>`);
+                        }
+                        $('#modal_tm').modal('show');
+                    } else {
+                        alert('Peserta Belum Mengerjakan Tugas Mandiri');
                     }
-                    // Countdown
                 },
                 error: function (xhr, status) {
                     alert('Error');
                 }
             });
         }
-
 
 
     });
