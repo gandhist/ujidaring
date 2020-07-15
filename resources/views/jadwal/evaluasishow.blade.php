@@ -205,43 +205,6 @@
             $(this).val($(this).val().replace(/\D/g, ''))
         });
 
-        $("#btnmulai").on('click', function () {
-            $("#durasi").css("border-color", "#ccc");
-            var durasi = $("#durasi").val();
-            var idJadwal = $("#idJadwal").val();
-            if (durasi == "") {
-                Swal.fire({
-                    title: "Durasi ujian belum diisi",
-                    type: 'warning',
-                    confirmButtonText: 'Close',
-                    confirmButtonColor: '#AAA'
-                });
-                $("#durasi").focus();
-                $("#durasi").css("border-color", "red");
-            } else {
-                Swal.fire({
-                    title: 'Mulai Ujian?',
-                    text: "Apakah anda yakin untuk memulai ujian?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Mulai'
-                }).then((result) => {
-                    if (result.value) {
-                        Swal.fire(
-                            'Ujian dimulai!',
-                            'Waktu dihitung mundur dari sekarang.',
-                            'success'
-                        )
-                    }
-                    updateDurasi(durasi, idJadwal);
-
-                });
-
-            }
-        });
-
         // Show Modal Penilaian
         $('.btnnilai').on('click', function () {
             $('#modaldetailAhli').modal('show');
