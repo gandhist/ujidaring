@@ -638,12 +638,12 @@ class JadwalController extends Controller
         // handle upload Premi bpjs kesehatan
         $request->validate(
             [
-                'materiPkl' => 'mimes:flv,mp4,avi|max:20480',
+                'materiPkl' => 'mimes:flv,mp4,avi,pdf|max:20480',
                 'batas_up_makalah' => 'required'
             ],[
                 'materiPkl.required' => "Materi PKL Harus di isi",
                 'batas_up_makalah.required' => "Batas Waktu Makalah Harus di isi",
-                'materiPkl.mimes' => "Materi PKL hanya format FLV, MP4, AVI",
+                'materiPkl.mimes' => "Materi PKL hanya format FLV, MP4, AVI, PDF",
                 'materiPkl.max' => "Maksimal ukuran file 20MB"
             ]);
         $data = JadwalModel::find($request->id_jadwal);

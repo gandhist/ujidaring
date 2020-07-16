@@ -49,6 +49,16 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::post('pulang','PesertaController@pulang');
 		});
 
+		Route::group(['prefix' => 'quis'], function () {
+			// pre
+			Route::group(['prefix' => 'pre'], function () {
+				Route::get('/','PrequisController@index');
+				Route::get('kerjakan/{id_p}/{id_jdwl_mod}','PrequisController@show');
+				Route::post('pulang','PesertaController@pulang');
+			});
+
+		});
+
 		Route::group(['prefix' => 'ujian'], function () {
 			Route::get('pg','PesertaController@ujian_pg');
 			Route::post('pg/save','PesertaController@pg_save');
