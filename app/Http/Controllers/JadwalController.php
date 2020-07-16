@@ -291,7 +291,7 @@ class JadwalController extends Controller
         $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->where('id','=',$id_peserta)->first();
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
-        $jawaban_evaluasi = JawabanEvaluasi::where('id_peserta','=',$id_peserta)->where('id_jadwal','=',$id_jadwal)->groupBy('id_instruktur')->groupBy('tanggal')->orderBy('tanggal','asc')->get();
+        $jawaban_evaluasi = JawabanEvaluasi::where('id_peserta','=',$id_peserta)->where('id_jadwal','=',$id_jadwal)->groupBy('id_instruktur')->groupBy('tanggal')->orderBy('tanggal','asc')->orderBy('id_instruktur','asc')->get();
         $modul_rundown = ModulRundown::whereHas('jadwal_rundown_r', function ($query) use($id_jadwal){
             return $query->where('id_jadwal', '=', $id_jadwal);
         })->get();
@@ -302,6 +302,13 @@ class JadwalController extends Controller
         // $jaw_eval_all = JawabanEvaluasi::where('id_jadwal','=',$jaw_evaluasi['id_jadwal'])->where('id_instruktur','=',$jaw_evaluasi['id_instruktur'])->where('id_peserta','=',$request->id_peserta)->where('tanggal','=',$jaw_evaluasi['tanggal'])->with('soal_r')->with('peserta_r')->get();
         $data = JawabanTMPeserta::where('id_jadwal_modul','=',$request->id_jadwal_modul)->where('id_peserta','=',$request->id_peserta)->with('jadwal_modul_r.modul_r')->get();
         return $data;
+    }
+
+    public function pesertaquisioner(Request $request){
+        $jaw_eval = JawabanEvaluasi::select('id_jadwal','id_instruktur','id_peserta','tanggal')->where('id','=',$request->id_jawaban)->first();
+        $jaw_eval_group = JawabanEvaluasi::where('id_jadwal','=',$jaw_eval['id_jadwal'])->where('id_instruktur','=',$jaw_eval['id_instruktur'])->where('id_peserta','=',$jaw_eval['id_peserta'])->where('tanggal','=',$jaw_eval['tanggal'])->with('instruktur_r')->with('soal_r')->get();
+        // $data = JawabanTMPeserta::where('id_jadwal_modul','=',$request->id_jadwal_modul)->where('id_peserta','=',$request->id_peserta)->with('jadwal_modul_r.modul_r')->get();
+        return $jaw_eval_group;
     }
 
     public function aturjadwal($id)

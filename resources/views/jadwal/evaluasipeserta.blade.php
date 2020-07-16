@@ -6,7 +6,6 @@
     .checked {
         color: orange;
     }
-
 </style>
 
 <section class="content-header">

@@ -2,6 +2,12 @@
 
 @section('content')
 <!-- Content Header (Page header) -->
+<style>
+    .checked {
+        color: orange;
+    }
+
+</style>
 <section class="content-header">
     <h1><a href="{{ url('jadwal/peserta/'.$data->id) }}" class="btn btn-md bg-purple"><i class="fa fa-caret-left"></i>
             Kembali</a> Detail Peserta
@@ -294,21 +300,25 @@
                                         class="table table-striped table-bordered dataTable customTable">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
                                                 <th>Tanggal</th>
                                                 <th>NIK</th>
                                                 <th>Nama</th>
+                                                <th>Hasil</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @php
+                                            $a = '';
+                                            @endphp
                                             @foreach($jawaban_evaluasi as $key)
                                             <tr>
-                                                <td style="width:1%">{{$loop->iteration}}</td>
                                                 <td style="width:5%;text-align:center">
                                                     {{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}
                                                 </td>
                                                 <td style="width:40%">{{$key->instruktur_r->nik}}</td>
                                                 <td>{{$key->instruktur_r->nama}}</td>
+                                                <td style="width:1%"><button type="button" id_jawaban="{{$key->id}}"
+                                                        class="btn btn-sm btn-success btnLihatQ">Lihat</button></td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -349,7 +359,7 @@
                                                     <th>Jawaban Peserta</th>
                                                     <th>Jawaban Sebenarnya</th>
                                                     <th>Bobot</th>
-                                                    <th>Ceklis jika sesuai</th>
+                                                    <th>Sesuai/Tidak Sesuai</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -510,6 +520,44 @@
             </div>
             <!-- End -->
 
+            <!-- Modal Quisioner -->
+            <div class="modal fade" id="modal_qs" role="dialog">
+                <div class="modal-dialog modal-lg" style="width:1500px">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title"><b id="title-modal-qs"></b></h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="box">
+                                <div class="box-body no-padding">
+                                    <br>
+                                    <table class="table table-condensed" id="tableModalQs">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Soal</th>
+                                                <th></th>
+                                                <th>Nilai</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End -->
+
         </div>
         <!-- /.box-body -->
     </div>
@@ -589,17 +637,18 @@
             $(this).val($(this).val().replace(/\D/g, ''))
         });
 
-        // Show Modal Penilaian
-        $('.btnnilai').on('click', function () {
-            $('#modaldetailAhli').modal('show');
-        });
-
         // Show Modal TM
         $('.btnLihatTm').on('click', function () {
             id_jadwal_modul = $(this).attr("id_jadwal_modul");
             id_peserta = $(this).attr("id_peserta");
             lihatTm(id_jadwal_modul, id_peserta);
             // $('#modaldetailAhli').modal('show');
+        });
+
+        $('.btnLihatQ').on('click', function () {
+            id_jawaban = $(this).attr("id_jawaban");
+            lihatQuisioner(id_jawaban);
+            // $('#modal_qs').modal('show');
         });
 
         // Fungsi Lihat TM
@@ -641,6 +690,62 @@
                         $('#modal_tm').modal('show');
                     } else {
                         alert('Peserta Belum Mengerjakan Tugas Mandiri');
+                    }
+                },
+                error: function (xhr, status) {
+                    alert('Error');
+                }
+            });
+        }
+
+        // Fungsi Lihat Quisioner
+        function lihatQuisioner(id_jawaban) {
+            var url = "{{ url('jadwal/peserta/quisioner') }}";
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    id_jawaban: id_jawaban
+                },
+                success: function (data) {
+                    console.log(data);
+                    $('#tableModalQs > tbody').html('');
+                    if (data.length > 0) {
+                        $("#title-modal-qs").text(data[0]['instruktur_r']['nama']);
+                        for (index = 0; index < data.length; index++) {
+                            jumlahbintang = data[index]['nilai'];
+                            bintang = "";
+                            for (index2 = 1; index2 <= 5; index2++) {
+                                if (index2 <= jumlahbintang) {
+                                    bintang += "<span class='fa fa-star checked'></span>";
+                                } else {
+                                    bintang += "<span class='fa fa-star'></span>";
+                                }
+                            }
+                            $('#tableModalQs > tbody:last').append(`
+                            <tr>
+                                <td style='width:1%;text-align:center'>
+                                    ` + (index + 1) + `
+                                </td>
+                                <td style='text-align:left'>
+                                    ` + data[index]['soal_r']['materi'] + `
+                                </td>
+                                <td style='text-align:right;width:5%'>
+                                    ` + data[index]['nilai'] + `
+                                </td>
+                                <td style='text-align:left;width:5%'>
+                                    ` + bintang + `
+                                </td>
+                            </tr>`);
+                        }
+                        $('#modal_qs').modal('show');
+                    } else {
+                        alert('Peserta Belum Memberikan Nilai');
                     }
                 },
                 error: function (xhr, status) {
