@@ -140,7 +140,7 @@
                 <!-- modul -->
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
-                    <div class="small-box bg-red">
+                    <div class="small-box bg-yellow">
                         <div class="inner">
                             <h3>{{$modul}}</h3>
                             <p>Modul</p>
@@ -155,7 +155,7 @@
                 <!-- end of modul -->
                 <!-- atur jadwal -->
                 <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-blue">
+                    <div class="small-box bg-yellow">
                         <div class="inner">
                             <h3>{{$jumlahJadwal}}</h3>
                             <p>Atur Jadwal</p>
@@ -171,7 +171,7 @@
                 <!-- absen -->
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
-                    <div class="small-box bg-yellow">
+                    <div class="small-box bg-red">
                         <div class="inner">
                             <h3>{{$jumlahabsen}}</h3>
                             <p>Absen</p>
@@ -208,7 +208,7 @@
                 {{-- tugas --}}
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
-                    <div class="small-box bg-yellow">
+                    <div class="small-box bg-blue">
                         <div class="inner">
                             <h3>
                                 @if($data->pdf_tugas == "" )
@@ -246,7 +246,7 @@
 
                 <div class="col-lg-12 col-xs-12" style="text-align:center">
                     <button onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")' type="button"
-                        class="btn btn-block btn-info btn-flat">Jadwal</button>
+                        class="btn btn-block btn-primary btn-flat">Jadwal</button>
                 </div>
                 <!-- ./col -->
             </div>
