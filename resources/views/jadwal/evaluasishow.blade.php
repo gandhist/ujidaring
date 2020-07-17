@@ -4,7 +4,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1><a href="{{ url('jadwal/evaluasi/'.$id_jadwal) }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a> Detail Evaluasi
+                class="fa fa-arrow-left"></i></a> {{$instruktur->nama}}
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -71,7 +71,7 @@
             </form>
             <div class="row">
                 <div class="col-md-12">
-                    <h3 style="text-align:left">{{$instruktur->nama}}</h3>
+                    <!-- <h3 style="text-align:left">{{$instruktur->nama}}</h3> -->
                     <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                         <thead>
                             <tr>

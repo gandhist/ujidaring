@@ -4,7 +4,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a> Evaluasi
+                class="fa fa-arrow-left"></i></a> Evaluasi
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">

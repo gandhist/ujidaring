@@ -4,7 +4,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a> Peserta
+                class="fa fa-arrow-left"></i></a> Peserta
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -100,7 +100,7 @@
 
                 </div>
                 <div class="col-md-12">
-                    <h3 style="margin-top: 0px;text-align: left;">Daftar Peserta</h3>
+                    <!-- <h3 style="margin-top: 0px;text-align: left;">Daftar Peserta</h3> -->
                     <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                         <thead>
                             <tr>
@@ -381,7 +381,7 @@
             "scrollX": true,
             "scrollY": $(window).height() - 255,
             "scrollCollapse": true,
-            "bPaginate": false,
+        
             "searching": false,
             "autoWidth": false,
             "columnDefs": [{

@@ -3,7 +3,7 @@
 @section('content')
 <section class="content-header">
     <h1><a href="{{ url('jadwal/'.$id_jadwal.'/dashboard') }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a>
+                class="fa fa-arrow-left"></i></a>
         Modul Pelatihan
     </h1>
     <ol class="breadcrumb">
@@ -15,12 +15,12 @@
         <div class="box-body">
 
             <div class="row">
-                <div class="col-lg-12"><h1>MODUL PELATIHAN</h1></div>
+                <!-- <div class="col-lg-12"><h1>MODUL PELATIHAN</h1></div> -->
                 <!-- Left col -->
                 <div class="col-md-12">
                     <!-- TABLE: LATEST ORDERS -->
-                    <div class="box box-info collapsed-box">
-                        <div class="box-header with-border">
+                    <!-- <div class="box box-info collapsed-box"> -->
+                        <!-- <div class="box-header with-border">
                             <h3 class="box-title">Detail Modul</h3>
 
                             <div class="box-tools pull-right">
@@ -30,7 +30,7 @@
                                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i
                                         class="fa fa-times"></i></button>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- /.box-header -->
                         <div class="box-body" style="display: block;">
                             <div class="table-responsive">
@@ -75,7 +75,7 @@
                             <!-- /.table-responsive -->
                         </div>
                    
-                    </div>
+                    <!-- </div> -->
                     <!-- /.box -->
                 </div>
                 <!-- /.col -->
