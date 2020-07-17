@@ -1,6 +1,11 @@
 @extends('templates/header')
 
 @section('content')
+<style>
+.customTable{
+    
+}
+</style>
 <section class="content-header">
     <h1><a href="{{ url('jadwal/'.$id_jadwal.'/dashboard') }}" class="btn btn-md bg-purple"><i
                 class="fa fa-arrow-left"></i></a>
@@ -34,7 +39,7 @@
                         <!-- /.box-header -->
                         <div class="box-body" style="display: block;">
                             <div class="table-responsive">
-                                <table class="table">
+                                <table class="table table table-striped table-bordered dataTable customTable">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -50,9 +55,9 @@
                                             @foreach($data as $key)
                                             <input type="hidden" name="id_jadwal" id="id_jadwal" value="{{ $key->id_jadwal }}">
                                                 <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $key->modul_r->modul }}</td>
-                                                    <td style="text-align:center" >{{ $key->modul_r->jp }}</td>
+                                                    <td style="width:1%">{{ $loop->iteration }}</td>
+                                                    <td >{{ $key->modul_r->modul }}</td>
+                                                    <td style="text-align:center;width:10%" >{{ $key->modul_r->jp }}</td>
                                                     <td style="text-align:center" > 
                                                         @if($key->materi)
                                                         <a href="{{ url('uploads/materi/'.$key->materi) }}" class="btn btn-success">Materi</a>
