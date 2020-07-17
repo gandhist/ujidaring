@@ -85,7 +85,7 @@
                             <tr>
                                 <td style="width:1%"></td>
                                 <td>{{ \Carbon\Carbon::parse( $key->tanggal )->isoFormat("DD MMMM YYYY") }}</td>
-                                <td style="text-align:center;width:10%"><a href="{{ url('jadwal/evaluasi/'.$id_jadwal.'/'.$key->id.'/peserta') }}" style="width:100%" type="button" class="btn btn-sm bg-olive btn-flat">Lihat</a></td>
+                                <td style="text-align:center;width:10%"><a href="{{ url('jadwal/evaluasi/'.$id_jadwal.'/'.$key->id.'/peserta') }}" type="button" class="btn btn-sm bg-olive btn-flat">Lihat</a></td>
                             </tr>
                             @endforeach
                         </tbody>
