@@ -94,9 +94,49 @@
 
                                 </tbody>
                             </table>
-                            <!-- </div>
-                            </div> -->
                             <!-- End -->
+                            <div>
+                                <table class="table table-condensed">
+                                    <tbody>
+                                        <tr>
+                                            <td style="padding: 0px 25px 0px 0px;text-align:right">Buruk = <span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star'></span><span class='fa fa-star'></span><span
+                                                    class='fa fa-star'></span><span class='fa fa-star'></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px 25px 0px 0px;text-align:right">Kurang = <span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star'></span><span class='fa fa-star'></span><span
+                                                    class='fa fa-star'></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px 25px 0px 0px;text-align:right">Cukup = <span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star'></span><span class='fa fa-star'></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px 25px 0px 0px;text-align:right">Bagus = <span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star checked'></span><span class='fa fa-star'></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0px 25px 0px 0px;text-align:right">Memuaskan = <span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star checked'></span><span
+                                                    class='fa fa-star checked'></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

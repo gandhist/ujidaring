@@ -55,14 +55,18 @@
                                     <th>No</th>
                                     <th>Modul</th>
                                     <th>Pre Quiz</th>
+                                    <th>Mulai Pre</th>
+                                    <th>Durasi Pre</th>
                                     <th>Post Quiz</th>
+                                    <th>Mulai Post</th>
+                                    <th>Durasi Post</th>
                                     <th width="8%">Tugas Mandiri</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($modulrundown as $key)
                                 <tr>
-                                <input type="hidden" name="id_modul_rundown_{{ $loop->iteration }}"
+                                    <input type="hidden" name="id_modul_rundown_{{ $loop->iteration }}"
                                         value="{{$key->id}}">
                                     <input type="hidden" name="id_jadwalmodul_{{ $loop->iteration }}"
                                         value="{{$key->jadwal_modul_r->id}}">
@@ -80,6 +84,14 @@
                                             @endif
                                         </div>
                                     </td>
+                                    <td>
+                                        <input id="awal_pre_{{ $loop->iteration }}"
+                                            name="awal_pre_{{ $loop->iteration }}" autocomplete="off"
+                                            data-provide="datepicker" data-date-format="dd/mm/yyyy" type="text"
+                                            class="form-control " placeholder="Mulai"
+                                            value="{{$key->jadwal_modul_r->awal_pre_quiz}}" required>
+                                    </td>
+                                    <td><input type="text" value="{{$key->jadwal_modul_r->durasi_pre}}"></td>
                                     <td style="width:15%">
                                         <div class="input-group input-group-sm">
                                             <input name="post_quiz_{{ $loop->iteration }}" type="file">
@@ -92,6 +104,14 @@
                                             @endif
                                         </div>
                                     </td>
+                                    <td>
+                                        <input id="awal_post_{{ $loop->iteration }}"
+                                            name="awal_post_{{ $loop->iteration }}" autocomplete="off"
+                                            data-provide="datepicker" data-date-format="dd/mm/yyyy" type="text"
+                                            class="form-control " placeholder="Mulai"
+                                            value="{{$key->jadwal_modul_r->awal_post_quiz}}" required>
+                                    </td>
+                                    <td><input type="text" value="{{$key->jadwal_modul_r->durasi_post}}"></td>
                                     <td><input value="{{$key->jadwal_modul_r->jumlah_tm}}" style="width:100%"
                                             name="tm_{{ $loop->iteration }}" class="InputTugasMandiri" type="text"
                                             maxlength="1"></td>
@@ -169,8 +189,8 @@
     </div>
     <!-- End -->
 
-       <!-- Modal Soal Post -->
-       <div class="modal fade" id="modalSoalPost" role="dialog">
+    <!-- Modal Soal Post -->
+    <div class="modal fade" id="modalSoalPost" role="dialog">
         <div class="modal-dialog modal-lg" style="width:1500px">
 
             <!-- Modal content-->
@@ -370,9 +390,10 @@
                     console.log(data)
                     $('#tablemodalSoalPost > tbody').html("");
                     if (data.length > 0) {
-                        $("#title-modalSoalPost").text("Soal Quiz Post " + data[0]['jadwal_modul_r'][
-                            'modul_r'
-                        ]['modul']);
+                        $("#title-modalSoalPost").text("Soal Quiz Post " + data[0]['jadwal_modul_r']
+                            [
+                                'modul_r'
+                            ]['modul']);
                         for (index = 0; index < data.length; index++) {
                             $('#tablemodalSoalPost > tbody:last').append(`
                             <tr>

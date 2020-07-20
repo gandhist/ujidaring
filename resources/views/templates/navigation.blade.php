@@ -98,6 +98,12 @@
         </a>
       </li>
 
+      <li class="treeview">
+        <a href="{{ url('mastermodul') }}">
+          <i class="fa fa-dashboard"></i> <span>Mater Modul</span>
+        </a>
+      </li>
+
       @if(Auth::user()->role_id==1)
 
       <li class="treeview {{Request::is('user*') ? 'active' : ''}}">

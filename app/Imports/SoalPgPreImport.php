@@ -28,7 +28,7 @@ class SoalPgPreImport implements ToModel , WithStartRow
             'pg_b' => $row[4],
             'pg_c' => $row[5], 
             'pg_d' => $row[6], 
-            'jawaban' => $row[7],    
+            'jawaban' => strtolower($row[7]),    
         ]);
     }
 

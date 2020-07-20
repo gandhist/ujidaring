@@ -22,6 +22,8 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::resource('dashboardinstruktur','DashboardInstrukturController');
 	});
 
+	Route::post('modul/save','ModulController@store');
+
 	Route::post('cekDurasiUjian','DashboardInstrukturController@cekDurasiUjian');
 	Route::post('updateDurasiUjian','DashboardInstrukturController@updateDurasiUjian');
 	Route::post('instruktur/lihatevaluasi','DashboardInstrukturController@lihatevaluasi');
@@ -111,6 +113,9 @@ Route::group(['middleware' => 'auth'], function () {
 	
 	// Daftar Kantor
 	Route::resource('penilaian', 'PenilaianController');
+
+	// Master Modul 
+	Route::resource('mastermodul', 'ModulController');
 
 	// Fungsi Chain Bidang
 	Route::post('bidang/chain','ChainController@bidang');

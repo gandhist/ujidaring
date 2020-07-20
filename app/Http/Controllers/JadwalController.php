@@ -45,13 +45,8 @@ class JadwalController extends Controller
      */
     public function index()
     {
-        // $data = DB::table("peserta")
-        // ->select("id" ,"created_at",DB::raw("CONCAT(YEAR(created_at),'-',MONTH(created_at)) as tahun"))
-        //     ->orderBy('created_at')
-        //     ->groupBy(DB::raw("MONTH(created_at)"))
-        //     ->groupBy(DB::raw("YEAR(created_at)"))
-        //     ->get();
-        // dd($data);
+        // generate_kelompok(1);
+        // dd('x');
         $id_user = Auth::id();
         $user_role = User::select('role_id')->where('id','=',$id_user)->first();
         $role =  $user_role['role_id'];
@@ -422,8 +417,8 @@ class JadwalController extends Controller
                     $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 08:00:00');
                     $dataDetail['akhir_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 22:00:00');
                 }else{
-                    $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 13:00:00');
-                    $dataDetail['akhir_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 22:00:00');
+                    $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->addDay(-1)->format('Y-m-d 13:00:00');
+                    $dataDetail['akhir_pre_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->addDay(-1)->format('Y-m-d 22:00:00');
                 }
 
                 // Delete Jika ada file soal sebelumnya
