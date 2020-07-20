@@ -10,7 +10,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a> Soal
+                class="fa fa-arrow-left"></i></a> Ujian Akhir
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -84,7 +84,8 @@
 
                 </div>
             </div> -->
-            <hr>
+            <!-- <hr> -->
+            <br>
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#upload">Upload Soal</a></li>
                 <li><a data-toggle="tab" href="#soal_pg">Soal Pilihan Ganda</a></li>
@@ -93,9 +94,9 @@
             <div class="tab-content">
                 <div id="upload" class="tab-pane fade in active">
                     <!-- Upload Soal -->
-                    <div class="box box-info">
-                        <div class="box-header with-border" style="text-align:center">
-                            <!-- <h3 class="box-title">Upload Soal</h3> -->
+                    <!-- <div class="box box-info"> -->
+                        <!-- <div class="box-header with-border" style="text-align:center">
+                            <h3 class="box-title">Upload Soal</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                         class="fa fa-minus"></i>
@@ -103,7 +104,7 @@
                                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i
                                         class="fa fa-times"></i></button>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="box-body">
 
                             <form action="{{ url('instruktur/dashboardinstruktur/'.$data->id.'/uploadsoal') }}"
@@ -150,13 +151,13 @@
                             </form>
 
                         </div>
-                    </div>
+                    <!-- </div> -->
 
                 </div>
                 <div id="soal_pg" class="tab-pane fade in">
-                    <div class="box box-info">
-                        <div class="box-header with-border" style="text-align:center">
-                            <!-- <h3 class="box-title">Soal Pilihan Ganda</h3> -->
+                    <!-- <div class="box box-info"> -->
+                        <!-- <div class="box-header with-border" style="text-align:center">
+                            <h3 class="box-title">Soal Pilihan Ganda</h3>
 
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
@@ -165,7 +166,7 @@
                                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i
                                         class="fa fa-times"></i></button>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div class="table-responsive">
@@ -199,15 +200,15 @@
                             <!-- /.table-responsive -->
                         </div>
                         <!-- /.box-body -->
-                    </div>
+                    <!-- </div> -->
                     <!-- Soal Pilihan Ganda -->
                 </div>
 
                 <div id="soal_essay" class="tab-pane fade">
 
-                    <div class="box box-info">
-                        <div class="box-header with-border" style="text-align:center">
-                            <!-- <h3 class="box-title">Soal Essay</h3> -->
+                    <!-- <div class="box box-info"> -->
+                        <!-- <div class="box-header with-border" style="text-align:center">
+                            <h3 class="box-title">Soal Essay</h3>
 
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
@@ -216,7 +217,7 @@
                                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i
                                         class="fa fa-times"></i></button>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div class="table-responsive">
@@ -242,7 +243,7 @@
                             <!-- /.table-responsive -->
                         </div>
                         <!-- /.box-body -->
-                    </div>
+                    <!-- </div> -->
                     <!-- Soal Essay -->
                 </div>
             </div>

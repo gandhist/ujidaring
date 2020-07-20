@@ -3,7 +3,7 @@
 @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1><a href="{{ url('jadwal') }}" class="btn btn-md bg-purple"><i class="fa fa-caret-left"></i> Kembali</a>
+    <h1><a href="{{ url('jadwal') }}" class="btn btn-md bg-purple"><i class="fa fa-arrow-left"></i></a>
         Dashboard
         {{-- <small>it all starts here</small>  --}}
     </h1>
@@ -127,10 +127,10 @@
                     <div class="small-box bg-red">
                         <div class="inner">
                             <h3>{{$jumlahSoalPg+$jumlahSoalEssay}}</h3>
-                            <p>Soal</p>
+                            <p>Ujian Akhir</p>
                         </div>
                         <div class="icon">
-                            <i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
                         </div>
                         <a href="{{ url('jadwal/soal', $data->id) }}" class="small-box-footer">Detail
                             <i class="fa fa-arrow-circle-right"></i></a>
@@ -140,13 +140,13 @@
                 <!-- modul -->
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
-                    <div class="small-box bg-red">
+                    <div class="small-box bg-yellow">
                         <div class="inner">
                             <h3>{{$modul}}</h3>
                             <p>Modul</p>
                         </div>
                         <div class="icon">
-                            <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                            <i class="fa fa-list-alt" aria-hidden="true"></i>
                         </div>
                         <a href="{{ url('instruktur/modul',$data->id) }}"
                             class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
@@ -155,7 +155,7 @@
                 <!-- end of modul -->
                 <!-- atur jadwal -->
                 <div class="col-lg-3 col-xs-6">
-                    <div class="small-box bg-blue">
+                    <div class="small-box bg-yellow">
                         <div class="inner">
                             <h3>{{$jumlahJadwal}}</h3>
                             <p>Atur Jadwal</p>
@@ -163,7 +163,7 @@
                         <div class="icon">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/aturjadwal', $data->id) }}"
+                        <a href="{{ url('jadwal/aturjadwal', $data->id) }}"
                             class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -171,13 +171,13 @@
                 <!-- absen -->
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
-                    <div class="small-box bg-yellow">
+                    <div class="small-box bg-red">
                         <div class="inner">
                             <h3>{{$jumlahabsen}}</h3>
                             <p>Absen</p>
                         </div>
                         <div class="icon">
-                            <i class="fa fa-users" aria-hidden="true"></i>
+                            <i class="fa fa-address-card" aria-hidden="true"></i>
                         </div>
                         <a href="{{ url('jadwal/absen', $data->id) }}" class="small-box-footer">Detail
                             <i class="fa fa-arrow-circle-right"></i></a>
@@ -208,7 +208,7 @@
                 {{-- tugas --}}
                 <div class="col-lg-3 col-xs-6">
                     <!-- small box -->
-                    <div class="small-box bg-yellow">
+                    <div class="small-box bg-blue">
                         <div class="inner">
                             <h3>
                                 @if($data->pdf_tugas == "" )
@@ -220,7 +220,7 @@
                             <p>Tugas</p>
                         </div>
                         <div class="icon">
-                            <i class="fa fa-book" aria-hidden="true"></i>
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                         </div>
                         <a target="_blank" href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">Detail
                             <i class="fa fa-arrow-circle-right"></i></a>
@@ -236,7 +236,7 @@
                             <p>Evaluasi</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-person"></i>
+                            <i class="fa fa-star"></i>
                         </div>
                         <a href="{{ url('jadwal/evaluasi', $data->id) }}"
                             class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
@@ -246,7 +246,7 @@
 
                 <div class="col-lg-12 col-xs-12" style="text-align:center">
                     <button onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")' type="button"
-                        class="btn btn-block btn-info btn-flat">Jadwal</button>
+                        class="btn btn-block btn-primary btn-flat">Jadwal</button>
                 </div>
                 <!-- ./col -->
             </div>

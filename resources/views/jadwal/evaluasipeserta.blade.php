@@ -6,16 +6,17 @@
     .checked {
         color: orange;
     }
+
 </style>
 
 <section class="content-header">
     <h1><a href="{{ url('jadwal/evaluasi/'.$id_jadwal.'/'.$id_instruktur.'/show') }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a> Evaluasi Peserta
+                class="fa fa-arrow-left"></i></a> Detail Peserta
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active"><a href="#">Evaluasi Peserta</a></li>
+        <li class="active"><a href="#">Detail Peserta</a></li>
     </ol>
 
 
@@ -35,7 +36,7 @@
             <div class="row">
 
                 <div class="col-md-12">
-                    <h3>Daftar Peserta</h3>
+                    <!-- <h3>Daftar Peserta</h3> -->
                     <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                         <thead>
                             <tr>
@@ -58,7 +59,7 @@
                                     {{ \Carbon\Carbon::parse($key->tgl_lahir)->isoFormat("DD MMMM YYYY") }}</td>
                                 <td style="text-align:center;width:8%"><button value="{{$id_jaw_evaluasi}}"
                                         idpeserta="{{$key->id}}" type="button"
-                                        class="btn btn-sm btn-warning btnLihat">Lihat</button></td>
+                                        class="btn btn-sm btn-success btnLihat">Lihat</button></td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -76,19 +77,25 @@
                     <div class="modal-content">
                         <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 id="title-modal" class="modal-title" style="text-align:center"></h4>
+                            <h4 class="modal-title" style="text-align:left"><b id="title-modal"></b></h4>
                         </div>
                         <div class="modal-body">
-                            <div class="box">
-                                <div class="box-body no-padding">
-                                    <br>
-                                    <table class="table table-condensed" id="tableModalEvaluasi">
-                                        <thead>
+                            <!-- <div class="box">
+                                <div class="box-body no-padding"> -->
+                            <table class="table table-condensed tableModalDetail" id="tableModalEvaluasi">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Soal</th>
+                                        <th>Nilai</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
-                                        </thead>
-                                    </table>
-                                </div>
-                            </div>
+                                </tbody>
+                            </table>
+                            <!-- </div>
+                            </div> -->
                             <!-- End -->
                         </div>
                         <div class="modal-footer">
@@ -173,9 +180,9 @@
                 success: function (data) {
                     console.log(data)
                     console.log(data.length)
-                    $('#tableModalEvaluasi > thead').html('');
+                    $('#tableModalEvaluasi > tbody').html('');
                     if (data.length > 0) {
-                        $("#title-modal").text("Penilaian " + data[0]['peserta_r']['nama']);
+                        $("#title-modal").text("Penilaian");
                         for (index = 0; index < data.length; index++) {
                             jumlahbintang = data[index]['nilai'];
                             bintang = "";
@@ -186,26 +193,28 @@
                                     bintang += "<span class='fa fa-star'></span>";
                                 }
                             }
-                            $('#tableModalEvaluasi > thead:last').append(`
+                            $('#tableModalEvaluasi > tbody:last').append(`
                             <tr>
-                                <th style='width:1%;text-align:center'>
-                                    ` + (index+1) + `
-                                </th>
-                                <th style='width:40%;text-align:left'>
+                                <td style='width:1%;text-align:center'>
+                                    ` + (index + 1) + `
+                                </td>
+                                <td style='width:40%;text-align:left'>
                                     ` + data[index]['soal_r']['materi'] + `
-                                </th>
-                                <th style='text-align:center;width:3%'>
-                                    ` + data[index]['nilai'] + `
-                                   
-                                </th>
-                                <th style='text-align:center;width:3%'>
-                                 `+bintang + `
-                                </th>
+                                </td>
+                                <td style='text-align:center;width:3%'>
+                                 ` + bintang + `
+                                </td>
                             </tr>`);
                         }
                         $('#modalLihatEval').modal('show');
                     } else {
-                        alert('Peserta Belum Memberikan Penilaian');
+                        Swal.fire({
+                            title: "Peserta Belum Memberikan Penilaian",
+                            type: 'error',
+                            confirmButtonText: 'Close',
+                            confirmButtonColor: '#AAA'
+                        });
+                        // alert('Peserta Belum Memberikan Penilaian');
                     }
                 },
                 error: function (xhr, status) {
