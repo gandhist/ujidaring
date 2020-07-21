@@ -16,7 +16,9 @@
 <section class="content">
     <div class="box box-content">
         <div class="box-body">
-            <form name="formAdd" id="formAdd" enctype="multipart/form-data">
+            <form action="{{ url('modul/save') }}" class="form-horizontal"
+                id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
+                @csrf
                 <div class="row">
                     <div class="col-md-4">
                         <br>
@@ -25,36 +27,39 @@
                                 <tr>
                                     <td style="padding-bottom: 2px">
                                         <div class="input-group">
-                                            <label for="" style="">Bidang</label>
+                                            <label for="" style="">*Bidang</label>
                                             <select class="form-control select2" name="id_bidang" id="id_bidang"
-                                                required>
+                                                >
                                                 <option selected value="">Bidang</option>
                                                 @foreach($bidang as $key)
                                                 <option value="{{ $key->id }}">{{ $key->nama_bidang }}
                                                 </option>
                                                 @endforeach
-                                            </select>
+                                            </select>                                           
                                         </div>
+                                        <span id="" class="help-block customspan">{{ $errors->first('id_bidang') }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <div class="input-group">
-                                            <label for="" style="">Sertifikat Alat</label>
+                                            <label for="" style="">*Sertifikat Alat</label>
                                             <select class="form-control select2" name="id_sert_alat" id="id_sert_alat"
-                                                required>
+                                                >
                                                 <option selected value="">Sertifikat Alat</option>
                                             </select>
                                         </div>
+                                        <span id="" class="help-block customspan">{{ $errors->first('id_sert_alat') }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <!-- <div class="input-group"> -->
-                                        <label for="" style="">Jumlah Hari</label><br>
+                                        <label for="" style="">*Jumlah Hari</label><br>
                                         <input name="id_jumlah_hari" id="id_jumlah_hari" class="form-control input-md"
                                             type="text" placeholder="Jumlah Hari" maxlength="3">
                                         <!-- </div> -->
+                                        <span id="" class="help-block customspan">{{ $errors->first('id_jumlah_hari') }}
                                     </td>
                                 </tr>
                                 </thead>
@@ -68,9 +73,11 @@
                                 <tr>
                                     <td>
                                         <!-- <div class="input-group"> -->
-                                        <label for="" style="">Syarat</label><br>
-                                        <textarea style="width: 100%" name="id_syarat" id="id_syarat" rows="8"></textarea>
+                                        <label for="" style="">*Syarat</label><br>
+                                        <textarea style="width: 100%" name="id_syarat" id="id_syarat"
+                                            rows="8"></textarea>
                                         <!-- </div> -->
+                                        <span id="" class="help-block customspan">{{ $errors->first('id_syarat') }}
                                     </td>
                                 </tr>
                                 </thead>
@@ -114,7 +121,7 @@
                     <!-- /.col -->
 
                     <div class="col-lg-12">
-                        <button type="button"
+                        <button type="submit"
                             data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Sedang Proses..."
                             class="btn btn-info" name="btnSave" id="btnSave">Simpan</button>
                     </div>
@@ -129,10 +136,10 @@
 @push('script')
 <script>
     $(document).ready(function () {
-        $('#btnSave').on('click', function (e) {
-            e.preventDefault();
-            store();
-        })
+        // $('#btnSave').on('click', function (e) {
+        //     e.preventDefault();
+        //     store();
+        // })
 
         $('#id_bidang').on('select2:select', function () {
             var url = `{{ url('bidang/chain') }}`;
@@ -178,11 +185,11 @@
                                                 type="text" placeholder="Jam Pertemuan" maxlength="2"></td>
                                         <td style="text-align:center">
                                             <input name="file_modul_` + no + `" id="file_modul_` + no + `" type="file" class="form-control">
-                                            <span class="help-block"></span>
+                                            <span id="file_modul_` + no + `" class="help-block"></span>
                                         </td>
                                         <td style="text-align:center">
                                             <input name="link_modul_` + no + `" id="link_modul_` + no + `" type="text" class="form-control">
-                                            <span class="help-block"></span>
+                                            <span id="link_modul_` + no + `" class="help-block"></span>
                                         </td>
                                         <td style="padding-top:7px;width:3%">
                         <button type="button" class="btn btn-block btn-danger btn-sm btn-detail-hapus" nomor=" ` + no + `" >

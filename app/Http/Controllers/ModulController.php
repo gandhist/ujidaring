@@ -40,17 +40,19 @@ class ModulController extends Controller
      */
     public function store(Request $request)
     {
-
-        // $request->validate([
-        //     'id_bidang'=>'required',
-        //     'id_sert_alat' => 'required',
-        //     'jumlah_hari'=>'required'
-        // ],
-        // ['id_bidang.required'=>'Kolom bidang harus diisi',
-        // 'id_sert_alat.required'=>'Kolom sertifikat alat harus diisi',
-        // 'jumlah_hari.required' => 'Kolom jumlah hari harus diisi'
-        // ]
-        // );
+        
+        $request->validate([
+            'id_bidang'=>'required',
+            'id_sert_alat' => 'required',
+            'id_jumlah_hari'=>'required',
+            'id_syarat'=>'required',
+        ],
+        ['id_bidang.required'=>'Kolom bidang harus diisi',
+        'id_sert_alat.required'=>'Kolom sertifikat alat harus diisi',
+        'id_jumlah_hari.required' => 'Kolom jumlah hari harus diisi',
+        'id_syarat.required' => 'Kolom syarat harus diisi'
+        ]
+        );
 
         $id_bidang = $request->id_bidang; 
         $id_sert_alat = $request->id_sert_alat;
@@ -85,10 +87,7 @@ class ModulController extends Controller
 
             }
         }
-        return response()->json([
-            'status' => true,
-            'message' => 'Materi berhasil di upload',
-        ],200);
+        return redirect('mastermodul')->with('message', 'Data berhasil ditambahkan');
     }
 
     /**

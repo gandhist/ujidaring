@@ -413,13 +413,13 @@ class JadwalController extends Controller
             $x = "pre_quiz_".$i;
             if ($files = $request->file($x)) {
                 // Update waktu awal dan akhir quiz
-                if($tanggal_awal_jadwal['tgl_awal']==$tanggal_jadwal_rundown->jadwal_rundown_r->tanggal){
-                    $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 08:00:00');
-                    $dataDetail['akhir_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 22:00:00');
-                }else{
-                    $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->addDay(-1)->format('Y-m-d 13:00:00');
-                    $dataDetail['akhir_pre_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->addDay(-1)->format('Y-m-d 22:00:00');
-                }
+                // if($tanggal_awal_jadwal['tgl_awal']==$tanggal_jadwal_rundown->jadwal_rundown_r->tanggal){
+                //     $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 08:00:00');
+                //     $dataDetail['akhir_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 22:00:00');
+                // }else{
+                //     $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->addDay(-1)->format('Y-m-d 13:00:00');
+                //     $dataDetail['akhir_pre_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->addDay(-1)->format('Y-m-d 22:00:00');
+                // }
 
                 // Delete Jika ada file soal sebelumnya
                 $user_data = [
@@ -432,6 +432,14 @@ class JadwalController extends Controller
                 $file = "Soal_Prequiz_Jadwal_Modul_".$id_jadwal_modul."_".Carbon::now()->timestamp.".".$files->getClientOriginalExtension();
                 $files->move($destinationPath, $file);
                 $dataDetail['f_pre_quiz'] = $destinationPath."/".$file;
+
+                $x = "awal_pre_".$i;
+                $dataDetail['awal_pre_quiz'] = $request->$x;
+                $x = "durasi_pre_".$i;
+                $dataDetail['durasi_pre'] = $request->$x;
+                $akhir_pre = Carbon::parse($dataDetail['awal_pre_quiz'])->addMinutes($dataDetail['durasi_pre']);
+                $dataDetail['akhir_pre_quiz'] = $akhir_pre;
+
                 $f_pre_quiz = JadwalModul::find($id_jadwal_modul)->update($dataDetail);
                 // import data excel ke database
                 Excel::import(new SoalPgPreImport($id_jadwal_modul), public_path('/uploads/soal_prequiz/'.$file));
@@ -441,8 +449,8 @@ class JadwalController extends Controller
              if ($files = $request->file($x)) {
                 // Update waktu awal dan akhir quiz
          
-                $dataDetail['awal_post_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->format('Y-m-d 13:00:00');
-                $dataDetail['akhir_post_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->format('Y-m-d 22:00:00');                
+                // $dataDetail['awal_post_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->format('Y-m-d 13:00:00');
+                // $dataDetail['akhir_post_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->format('Y-m-d 22:00:00');                
                 
                  // Delete Jika ada file soal sebelumnya
                  $user_data = [
@@ -455,12 +463,22 @@ class JadwalController extends Controller
                  $file = "Soal_Postquiz_Jadwal_Modul_".$id_jadwal_modul."_".Carbon::now()->timestamp.".".$files->getClientOriginalExtension();
                  $files->move($destinationPath, $file);
                  $dataDetail['f_post_quiz'] = $destinationPath."/".$file;
+
+                 $x = "awal_post_".$i;
+                 $dataDetail['awal_post_quiz'] = $request->$x;
+                 $x = "durasi_post_".$i;
+                 $dataDetail['durasi_post'] = $request->$x;
+                 $akhir_post = Carbon::parse($dataDetail['awal_post_quiz'])->addMinutes($dataDetail['durasi_post']);
+                 $dataDetail['akhir_post_quiz'] = $akhir_post;
+
                  $f_pre_quiz = JadwalModul::find($id_jadwal_modul)->update($dataDetail);
                  // import data excel ke database
                  Excel::import(new SoalPgPostImport($id_jadwal_modul), public_path('/uploads/soal_postquiz/'.$file));
+
               } 
               $x = "tm_".$i;
               $dataDetail2['jumlah_tm'] = $request->$x;
+
               JadwalModul::find($id_jadwal_modul)->update($dataDetail2);
         }
         return redirect()->back()->with('message', 'Soal Quiz Berhasil di Upload');
