@@ -123,8 +123,8 @@
 
                     <div class="col-sm-2" style='text-align:right'>
                         <div class="btn-group">
-                            <!-- <button class="btn btn-success" id="btnTampil" name="btnTampil"> <i class="fa fa-eye"></i>
-                                Detail</button> -->
+                            <button class="btn btn-success" id="btnEdit" name="btnEdit"> <i class="fa fa-pencil-square-o"></i>
+                                Edit</button>
                             <a href="{{ route('mastermodul.create') }}" class="btn btn-info"> <i class="fa fa-plus"></i>
                                 Tambah</a>
 
@@ -243,34 +243,6 @@
     var save_method = "add";
     $(function () {
 
-        // Rubah Warna Filter
-        selectFilter("f_pjk3");
-        selectFilter("f_naker_prov");
-        selectFilter("f_provinsi");
-        selectFilter("f_kota");
-        selectFilter("f_instansi");
-        selectFilter("f_jenis_usaha");
-
-        // Cache Warna Filter
-        if ("{{request()->get('f_pjk3')}}" != "") {
-            selectFilterCache("f_pjk3");
-        }
-        if ("{{request()->get('f_naker_prov')}}" != "") {
-            selectFilterCache("f_naker_prov");
-        }
-        if ("{{request()->get('f_provinsi')}}" != "") {
-            selectFilterCache("f_provinsi");
-        }
-        if ("{{request()->get('f_kota')}}" != "") {
-            selectFilterCache("f_kota");
-        }
-        if ("{{request()->get('f_instansi')}}" != "") {
-            selectFilterCache("f_instansi");
-        }
-        if ("{{request()->get('f_jenis_usaha')}}" != "") {
-            selectFilterCache("f_jenis_usaha");
-        }
-
         // Filter kota berdasarkan provinsi
         $('#f_provinsi').on('select2:select', function () {
             var url = `{{ url('register_perusahaan/chain') }}`;
@@ -281,7 +253,7 @@
         $('[data-mask]').inputmask();
 
         // Button edit click
-        $('#btnTampil').on('click', function (e) {
+        $('#btnEdit').on('click', function (e) {
             e.preventDefault();
             var id = [];
             $('.selection:checked').each(function () {
@@ -297,7 +269,7 @@
                 // alert('Tidak ada data yang terpilih');
             } else if (id.length > 1) {
                 Swal.fire({
-                    title: "Harap pilih satu data untuk ditampilkan",
+                    title: "Harap pilih satu data untuk diedit",
                     type: 'warning',
                     confirmButtonText: 'Close',
                     confirmButtonColor: '#AAA'
@@ -305,7 +277,7 @@
                 // alert('Harap pilih satu data untuk di ubah');
             } else {
                 url = id[0];
-                window.location.href = "{{ url('jadwal') }}/" + url + "/dashboard";
+                window.location.href = "{{ url('mastermodul') }}/" + url + "/edit";
             }
         });
 

@@ -433,12 +433,7 @@ class JadwalController extends Controller
                 $files->move($destinationPath, $file);
                 $dataDetail['f_pre_quiz'] = $destinationPath."/".$file;
 
-                $x = "awal_pre_".$i;
-                $dataDetail['awal_pre_quiz'] = $request->$x;
-                $x = "durasi_pre_".$i;
-                $dataDetail['durasi_pre'] = $request->$x;
-                $akhir_pre = Carbon::parse($dataDetail['awal_pre_quiz'])->addMinutes($dataDetail['durasi_pre']);
-                $dataDetail['akhir_pre_quiz'] = $akhir_pre;
+      
 
                 $f_pre_quiz = JadwalModul::find($id_jadwal_modul)->update($dataDetail);
                 // import data excel ke database
@@ -464,18 +459,26 @@ class JadwalController extends Controller
                  $files->move($destinationPath, $file);
                  $dataDetail['f_post_quiz'] = $destinationPath."/".$file;
 
-                 $x = "awal_post_".$i;
-                 $dataDetail['awal_post_quiz'] = $request->$x;
-                 $x = "durasi_post_".$i;
-                 $dataDetail['durasi_post'] = $request->$x;
-                 $akhir_post = Carbon::parse($dataDetail['awal_post_quiz'])->addMinutes($dataDetail['durasi_post']);
-                 $dataDetail['akhir_post_quiz'] = $akhir_post;
-
-                 $f_pre_quiz = JadwalModul::find($id_jadwal_modul)->update($dataDetail);
+                  $f_pre_quiz = JadwalModul::find($id_jadwal_modul)->update($dataDetail);
                  // import data excel ke database
                  Excel::import(new SoalPgPostImport($id_jadwal_modul), public_path('/uploads/soal_postquiz/'.$file));
 
-              } 
+              }
+              
+              $x = "awal_pre_".$i;
+              $dataDetail2['awal_pre_quiz'] = $request->$x;
+              $x = "durasi_pre_".$i;
+              $dataDetail2['durasi_pre'] = $request->$x;
+              $akhir_pre = Carbon::parse($dataDetail2['awal_pre_quiz'])->addMinutes($dataDetail2['durasi_pre']);
+              $dataDetail2['akhir_pre_quiz'] = $akhir_pre;
+
+              $x = "awal_post_".$i;
+              $dataDetail2['awal_post_quiz'] = $request->$x;
+              $x = "durasi_post_".$i;
+              $dataDetail2['durasi_post'] = $request->$x;
+              $akhir_post = Carbon::parse($dataDetail2['awal_post_quiz'])->addMinutes($dataDetail2['durasi_post']);
+              $dataDetail2['akhir_post_quiz'] = $akhir_post;
+
               $x = "tm_".$i;
               $dataDetail2['jumlah_tm'] = $request->$x;
 

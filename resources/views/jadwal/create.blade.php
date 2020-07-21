@@ -218,8 +218,8 @@
         });
 
         $('#gambarJadwal').change(function () {
-            var ext = this.value.match(/\.(.+)$/)[1];
-            ext = ext.toLowerCase();
+            var id = $(this).val();
+            var ext = id.substr(id.lastIndexOf('.')+1);
             switch (ext) {
                 case 'jpg':
                 case 'jpeg':
@@ -232,7 +232,8 @@
         });
 
         $('#excel_peserta').change(function () {
-            var ext = this.value.match(/\.(.+)$/)[1];
+            var id = $(this).val();
+            var ext = id.substr(id.lastIndexOf('.')+1);
             ext = ext.toLowerCase();
             switch (ext) {
                 case 'xls':
@@ -245,8 +246,8 @@
         });
 
         $(document).on('change', '.foto_instruktur', function (e) {
-            var id = $(this).attr("id");
-            var ext = $("#" + id).val().match(/\.(.+)$/)[1];
+            var id = $(this).val();
+            var ext = id.substr(id.lastIndexOf('.')+1);
             ext = ext.toLowerCase();
             switch (ext) {
                 case 'jpg':
@@ -260,8 +261,8 @@
         });
 
         $(document).on('change', '.pdf_instruktur', function (e) {
-            var id = $(this).attr("id");
-            var ext = $("#" + id).val().match(/\.(.+)$/)[1];
+            var id = $(this).val();
+            var ext = id.substr(id.lastIndexOf('.')+1);
             ext = ext.toLowerCase();
             switch (ext) {
                 case 'jpg':

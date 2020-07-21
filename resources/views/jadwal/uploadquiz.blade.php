@@ -23,7 +23,7 @@
         border-top: 1px solid rgb(117, 117, 117) !important;
         border-left: 1px solid rgb(117, 117, 117) !important;
         border-right: 1px solid rgb(117, 117, 117) !important;
-        border-bottom: 1px solid rgb(117, 117, 117) !important;
+        border-bottom: 0px solid rgb(117, 117, 117) !important;
         text-align:center;
     }
 
@@ -35,7 +35,7 @@
     }
 
     .tableModalDetail > thead > tr > th {
-        border-bottom: 2px solid rgb(117, 117, 117) !important;
+        border-bottom: 1px solid rgb(117, 117, 117) !important;
     }
 
 </style>
@@ -97,7 +97,7 @@
                                     <td>{{$key->jadwal_modul_r->modul_r->modul}}</td>
                                     <td style="width:10%">
                                         <div class="input-group input-group-sm">
-                                            <input id="pre_quiz_{{ $loop->iteration }}" name="pre_quiz_{{ $loop->iteration }}" type="file">
+                                            <input id="pre_quiz_{{ $loop->iteration }}" name="pre_quiz_{{ $loop->iteration }}" class="file_soal" type="file">
                                             @if(isset($key->jadwal_modul_r->f_pre_quiz))
                                             <span class="input-group-btn">
                                                 <button type="button" value="{{$key->jadwal_modul_r->id}}"
@@ -108,7 +108,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <input id="awal_pre_{{ $loop->iteration }}"
+                                        <input style="width: 165px" id="awal_pre_{{ $loop->iteration }}"
                                             name="awal_pre_{{ $loop->iteration }}" type="text"
                                             class="form-control waktu" placeholder="Mulai Pre"
                                             value="{{$key->jadwal_modul_r->awal_pre_quiz}}">
@@ -117,7 +117,7 @@
                                             placeholder="Durasi Pre" value="{{$key->jadwal_modul_r->durasi_pre}}"></td>
                                     <td style="width:10%">
                                         <div class="input-group input-group-sm">
-                                            <input name="post_quiz_{{ $loop->iteration }}" id="post_quiz_{{ $loop->iteration }}" type="file">
+                                            <input name="post_quiz_{{ $loop->iteration }}" id="post_quiz_{{ $loop->iteration }}" class="file_soal" type="file">
                                             @if(isset($key->jadwal_modul_r->f_post_quiz))
                                             <span class="input-group-btn">
                                                 <button type="button" value="{{$key->jadwal_modul_r->id}}"
@@ -285,6 +285,20 @@
 <script src="{{ asset('AdminLTE-2.3.11/plugins/input-mask/jquery.inputmask.extensions.js')}}"></script>
 <script type="text/javascript">
     $(function () {
+
+        $(document).on('change', '.file_soal', function (e) {
+            var id = $(this).val();
+            var ext = id.substr(id.lastIndexOf('.')+1);
+            ext = ext.toLowerCase();
+            switch (ext) {
+                case 'xls':
+                case 'xlsx':
+                    break;
+                default:
+                    this.value = '';
+                    alert('Extension file tidak sesuai!');
+            }
+        });
 
         $("#simpan").on('click', function () {
             z = "berhasil";
