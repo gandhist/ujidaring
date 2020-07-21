@@ -45,6 +45,7 @@
                                             <th>No</th>
                                             <th>Modul</th>
                                             <th>Jam Pertemuan</th>
+                                            <th>Ebook</th>
 											<th>Materi</th>
 											<th>Upload Materi(pdf,word,excel)</th>
 											<th>Input Link</th>
@@ -59,8 +60,16 @@
                                                     <td >{{ $key->modul_r->modul }}</td>
                                                     <td style="text-align:center;width:10%" >{{ $key->modul_r->jp }}</td>
                                                     <td style="text-align:center" > 
+                                                        @if($key->modul_r->materi)
+                                                        <a target="_blank" href="{{ url('/'.$key->modul_r->materi) }}" class="btn btn-success"><i class="fa fa-download" aria-hidden="true"></i></a>
+                                                        @endif
+                                                        @if($key->modul_r->link)
+                                                        <a target="_blank" href="{{ url('/'.$key->modul_r->link) }}" class="btn btn-primary"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+                                                        @endif
+                                                    </td>
+                                                    <td style="text-align:center" > 
                                                         @if($key->materi)
-                                                        <a href="{{ url('uploads/materi/'.$key->materi) }}" class="btn btn-success">Materi</a>
+                                                        <a target="_blank" href="{{ url('uploads/materi/'.$key->materi) }}" class="btn btn-success"><i class="fa fa-download" aria-hidden="true"></i></a>
                                                         @endif
                                                     </td>
                                                     <td style="text-align:center">

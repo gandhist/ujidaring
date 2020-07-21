@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\MasterModul;
 use App\MasterBidang;
 use App\MasterJenisUsaha;
+use App\MasterSertifikatAlat;
+use Carbon\Carbon;
 
 class ModulController extends Controller
 {
@@ -76,18 +78,21 @@ class ModulController extends Controller
                 $id = $create_data->id;
 
                 $x = "file_modul_".$jumlah_detail;
-                // handle upload foto instruktur 
+                // handle upload master modul file 
                 if ($files = $request->file($x)) {
                     $destinationPath = 'uploads/modul'; // upload path
-                    $file = "Modul_".$id."_".$id_sert_alat. "." .$files->getClientOriginalExtension();
+                    $file = "Modul_".$id."_".Carbon::now()->timestamp. "." .$files->getClientOriginalExtension();
                     $files->move($destinationPath, $file);
                     $dataDetail2['materi'] = $destinationPath."/".$file;
                     MasterModul::find($id)->update($dataDetail2);
                  }
 
             }
+            $message = "Data berhasil ditambahkan";
+        }else{
+            $message = "Tidak ada data yang ditambahkan";
         }
-        return redirect('mastermodul')->with('message', 'Data berhasil ditambahkan');
+        return redirect('mastermodul')->with('message', $message);
     }
 
     /**
@@ -109,7 +114,13 @@ class ModulController extends Controller
      */
     public function edit($id)
     {
-        dd($id);
+        $ms_modul = MasterModul::find($id);
+        $bid = $ms_modul->bidang_srtf_alat_r->bidang_r->id;
+        $srtf_bid_alat = MasterSertifikatAlat::where('id_bid','=',$bid)->get();
+        $bidang = MasterBidang::where('id_jns_usaha','=','1')->get();
+        $jenisusaha = MasterJenisUsaha::all();
+        $detailModul = MasterModul::where('id_bid_srtf_alat','=',$ms_modul->id_bid_srtf_alat)->get();
+        return view('modul.edit')->with(compact('jenisusaha','bidang','ms_modul','srtf_bid_alat','detailModul'));
     }
 
     /**
@@ -121,7 +132,51 @@ class ModulController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'id_jumlah_hari'=>'required',
+            'id_syarat'=>'required',
+        ],
+        [
+        'id_jumlah_hari.required' => 'Kolom jumlah hari harus diisi',
+        'id_syarat.required' => 'Kolom syarat harus diisi'
+        ]
+        );
+
+        $id_bidang = $request->id_bidang; 
+        $id_sert_alat = $request->id_sert_alat;
+        $jumlah_hari = $request->id_jumlah_hari;
+        $syarat = $request->id_syarat;
+        if ($request->jumlah_detail!='' )
+        {
+            $jumlah_detail = explode(',', $request->jumlah_detail);
+            foreach($jumlah_detail as $jumlah_detail) {
+                $dataDetail=[];
+                $x = "id_ms_modul_".$jumlah_detail;
+                $id_ms_modul = $request->$x;
+                $x = "modul_".$jumlah_detail;
+                $dataDetail['modul'] = $request->$x;
+                $x = "jp_".$jumlah_detail;
+                $dataDetail['jp'] = $request->$x;
+                $x = "link_modul_".$jumlah_detail;
+                $dataDetail['link'] = $request->$x;
+                $dataDetail['persyaratan'] = $syarat;
+                $dataDetail['hari'] = $jumlah_hari;
+                $dataDetail['id_bid_srtf_alat'] = $id_sert_alat;
+                // handle upload master modul file 
+                $x = "file_modul_".$jumlah_detail;
+                    if ($files = $request->file($x)) {
+                        $destinationPath = 'uploads/modul'; // upload path
+                        $file = "Modul_".$id_ms_modul."_".Carbon::now()->timestamp."." .$files->getClientOriginalExtension();
+                        $files->move($destinationPath, $file);
+                        $dataDetail['materi'] = $destinationPath."/".$file;
+                    }
+                $update_data = MasterModul::find($id_ms_modul)->update($dataDetail);
+            }
+            $message = "Data berhasil diedit";
+        }else{
+            $message = "Tidak ada data yang ditambahkan";
+        }
+        return redirect('mastermodul')->with('message',  $message);
     }
 
     /**
