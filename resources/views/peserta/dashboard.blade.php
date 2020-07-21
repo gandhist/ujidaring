@@ -52,6 +52,16 @@
                 <li class="list-group list-group-flush">
                   <a href="{{ url('peserta/makalah') }}" class="btn btn-outline-info">Upload Makalah</a>
                 </li>
+                @if ($is_pre_today)
+                  <li class="list-group list-group-flush">
+                    <a href="{{ url('peserta/quis/pre') }}" class="btn btn-outline-info">Kerjakan Pre Quis</a>
+                  </li>
+                @endif
+                @if ($is_pre_today)
+                  <li class="list-group list-group-flush">
+                    <a href="{{ url('peserta/quis/post') }}" class="btn btn-outline-info">Kerjakan Post Quis</a>
+                  </li>
+                @endif
                 @if ($is_allow_uji)
                   <li class="list-group list-group-flush">
                     <a href="{{ url('peserta/ujian/pg') }}" class="btn btn-outline-info">Mulai Ujian</a>
@@ -86,15 +96,21 @@
           </thead>
           <tbody>
              @foreach($rd as $key)
+             @if($key->tanggal <= \Carbon\Carbon::now()->isoFormat('YYYY-MM-DD'))
              <tr>
                  <td>{{ $loop->iteration }}</td>
-                 <td>{{ $key->tanggal }}</td>
+                 <td>{{ \Carbon\Carbon::parse($key->tanggal)->isoFormat('DD MMMM YYYY') }}</td>
                  <td>
                   @foreach($key->modul_rundown_r as $md)
                   @if(substr($md->jadwal_modul_r->materi,0,4) == "http")
                     {{ $loop->iteration }}. <a target="_blank" href="{{ $md->jadwal_modul_r->materi }}"> {{ $md->jadwal_modul_r->modul_r->modul }} </a> 
                   @else 
-                    {{ $loop->iteration }}. <a target="_blank" href="{{ url('uploads/materi/'.$md->jadwal_modul_r->materi) }}"> {{ $md->jadwal_modul_r->modul_r->modul }} </a> 
+                    {{-- {{ $loop->iteration }}. <a target="_blank" href="{{ url('uploads/materi/'.$md->jadwal_modul_r->materi) }}"> {{ $md->jadwal_modul_r->modul_r->modul }} </a>  --}}
+                    @if($md->jadwal_modul_r->materi)
+                      {{ $loop->iteration }}. <a target="_blank" href="{{ url('peserta/buka/materi/'.$md->id) }}"> {{ $md->jadwal_modul_r->modul_r->modul }} </a> 
+                    @else
+                      {{ $loop->iteration }}. {{ $md->jadwal_modul_r->modul_r->modul }}
+                    @endif
                   @endif
                   @if($md->jadwal_modul_r->link) 
                     | <a target="_blank" href="{{ $md->jadwal_modul_r->link}}" class="btn btn-info btn-sm"><i class="fa fa-link"></i></a>
@@ -108,6 +124,7 @@
                   @endforeach
                  </td>
              </tr>
+             @endif
              @endforeach
             
            

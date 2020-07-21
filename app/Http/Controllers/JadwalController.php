@@ -32,6 +32,7 @@ use App\InsRundown;
 use App\ModulRundown;
 use App\JawabanEvaluasi;
 use App\JawabanTMPeserta;
+use App\LogActivity;
 
 
 class JadwalController extends Controller
@@ -279,6 +280,8 @@ class JadwalController extends Controller
     {
         $data = JadwalModel::find($id);
         $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->orderBy('nama','asc')->get();
+        // dd($Peserta->);
+
         $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
@@ -295,7 +298,8 @@ class JadwalController extends Controller
         $modul_rundown = ModulRundown::whereHas('jadwal_rundown_r', function ($query) use($id_jadwal){
             return $query->where('id_jadwal', '=', $id_jadwal);
         })->get();
-        return view('jadwal.pesertadetail')->with(compact('data','Peserta','modul_rundown','jumlahSoalPg','jumlahSoalEssay','jawaban_evaluasi'));
+        $logs = LogActivity::where('user_id', $Peserta->user_id)->orderBy('id','desc')->get();
+        return view('jadwal.pesertadetail')->with(compact('data','Peserta','modul_rundown','jumlahSoalPg','jumlahSoalEssay','jawaban_evaluasi','logs'));
     }
 
     public function pesertatm(Request $request){
@@ -415,8 +419,8 @@ class JadwalController extends Controller
                     $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 08:00:00');
                     $dataDetail['akhir_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 22:00:00');
                 }else{
-                    $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 13:00:00');
-                    $dataDetail['akhir_pre_quiz']=Carbon::parse($tanggal_awal_jadwal['tgl_awal'])->addDay(-1)->format('Y-m-d 22:00:00');
+                    $dataDetail['awal_pre_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->addDay(-1)->format('Y-m-d 13:00:00');
+                    $dataDetail['akhir_pre_quiz']=Carbon::parse($tanggal_jadwal_rundown->jadwal_rundown_r->tanggal)->addDay(-1)->format('Y-m-d 22:00:00');
                 }
 
                 // Delete Jika ada file soal sebelumnya

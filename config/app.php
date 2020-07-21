@@ -231,7 +231,8 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
-        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+        'LogActivity' => App\Helpers\LogActivity::class
     ],
 
 ];

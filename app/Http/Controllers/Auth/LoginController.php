@@ -98,6 +98,9 @@ class LoginController extends Controller
                 return redirect('peserta/dashboard');
             }
         }
+        if (Auth::user()->role_id == 3 || Auth::user()->role_id == 3){
+                return redirect('peserta/dashboard');
+        }
         $user = Auth::user();
         $user->last_login = date("Y-m-d H:i:s");
         $user->save();

@@ -54,7 +54,18 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::group(['prefix' => 'pre'], function () {
 				Route::get('/','PrequisController@index');
 				Route::get('kerjakan/{id_p}/{id_jdwl_mod}','PrequisController@show');
-				Route::post('pulang','PesertaController@pulang');
+				Route::post('tm/save_parsial','PrequisController@tm_save_parsial');
+				Route::post('save_parsial','PrequisController@pg_save_parsial');
+				Route::post('save','PrequisController@pg_save');
+			});
+
+			// pre
+			Route::group(['prefix' => 'post'], function () {
+				Route::get('/','PostQuisController@index');
+				Route::get('kerjakan/{id_p}/{id_jdwl_mod}','PostQuisController@show');
+				Route::post('tm/save_parsial','PostQuisController@tm_save_parsial');
+				Route::post('save_parsial','PostQuisController@pg_save_parsial');
+				Route::post('save','PostQuisController@pg_save');
 			});
 
 		});
@@ -66,6 +77,10 @@ Route::group(['middleware' => 'auth'], function () {
 			Route::post('essay/save','PesertaController@es_save');
 			Route::post('essay/save_parsial','PesertaController@es_save_parsial');
 			Route::get('essay','PesertaController@ujian_essay');
+		});
+
+		Route::group(['prefix' => 'buka'], function(){
+			Route::get('materi/{id}','PesertaController@bukaMateri');
 		});
 	});
 

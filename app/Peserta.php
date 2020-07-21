@@ -72,5 +72,10 @@ class Peserta extends Model
         return $this->belongsTo('App\JawabanPpt','id','id_peserta');
     }
 
+    // relasi ke peserta quis
+    public function peserta_quis_r(){
+        return $this->hasMany('App\PesertaQuis','id_peserta');
+    }
+
 
 }

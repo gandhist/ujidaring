@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\SoalPgModel;
 use App\Peserta;
 use App\JadwalModel;
+use App\JadwalModul;
 use App\JawabanEvaluasi;
 use App\EvaluasiSoal;
 use App\JawabanPeserta;
@@ -15,6 +16,7 @@ use App\AbsenModel;
 use App\JawabanPkl;
 use App\JawabanPpt;
 use App\JadwalRundown;
+use App\KirimWa;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
@@ -30,7 +32,9 @@ class PesertaController extends Controller
      */
     public function index()
     {
-        //
+        // generate soal pre quis
+        $is_pre_quis = $this->_is_pre_quis(); // buat soal pre jika ada
+        $is_post_quis = $this->_is_post_quis();
         $peserta = Peserta::where('user_id',Auth::id())->first();
         $cek = JawabanEvaluasi::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->count();
         if($cek == 0){
@@ -52,11 +56,15 @@ class PesertaController extends Controller
         $is_allow_tugas = $this->_check_allow_tugas();
         $is_absen = $this->is_allow_masuk();
         $rd = JadwalRundown::where('id_jadwal',$peserta->jadwal_r->id)->get();
+        $is_pre_today = $this->is_pre_today();
+        $is_post_today = $this->is_post_today();
         if($is_absen){
+            \LogActivity::addToLog('peserta ditolak kedashboard karena belum login');
             return redirect('peserta/presensi')->with('status', 'Anda harus absen, untuk bisa mengakses halaman dashboard');
         }
         else {
-            return view('peserta.dashboard')->with(compact('peserta','is_allow_uji','is_allow_tugas','rd'));
+            // \LogActivity::addToLog('peserta ke menu dashboard');
+            return view('peserta.dashboard')->with(compact('peserta','is_allow_uji','is_allow_tugas','rd','is_pre_quis','is_pre_today'));
         }
     }
 
@@ -106,6 +114,7 @@ class PesertaController extends Controller
         if($cek == 0){
            $this->_generate_soal_eva($peserta->id);
         }
+
         $rd = JadwalRundown::where('id_jadwal',$peserta->jadwal_r->id)->where('tanggal',Carbon::now()->isoFormat('YYYY-MM-DD'))->first();
         return view('peserta.kuisioner')->with(compact('peserta','rd'));
     }
@@ -123,7 +132,8 @@ class PesertaController extends Controller
                      'id_jadwal' => $request->id_jadwal,
                      'tanggal' => Carbon::now()->isoFormat('YYYY-MM-DD'),
                      'id_peserta' => $peserta->id,
-                     'id' => $val_exp[0]
+                     'id' => $val_exp[0],
+                     'id_instruktur' => $request->id_instruktur
                  ],[
                      'nilai' => $val_exp[1],
                      'id_instruktur' => $request->id_instruktur,
@@ -143,6 +153,7 @@ class PesertaController extends Controller
         $allow_cekin = $this->is_allow_masuk();
         $allow_cekout = $this->is_allow_pulang();
         $data = AbsenModel::where('id_peserta',$peserta->id)->get();
+        \LogActivity::addToLog("peserta membuka halaman absensi ");
         return view('peserta.absen')->with(compact('data','allow_cekout','allow_cekin','allow_tugas'));
     }
 
@@ -164,6 +175,7 @@ class PesertaController extends Controller
         $masuk->foto_cek_in = $fileName;
         $masuk->save();
         file_put_contents($file, $image_base64);
+        \LogActivity::addToLog("peserta melakukan absen masuk pada ". Carbon::now()->toDateTimeString());
     
         return response()->json([
             'status' => true,
@@ -189,7 +201,7 @@ class PesertaController extends Controller
         $masuk->foto_cekout = $fileName;
         $masuk->save();
         file_put_contents($file, $image_base64);
-    
+        \LogActivity::addToLog("peserta melakukan absen pulang pada ". Carbon::now()->toDateTimeString());
         return response()->json([
             'status' => true,
             'message' => 'Berhasil Absen',
@@ -214,6 +226,7 @@ class PesertaController extends Controller
         }
         $soal = JawabanPeserta::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->paginate(10);
         $soal_essay = JawabanEssayPeserta::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->get();
+        \LogActivity::addToLog("peserta membuka halaman ujian pilihan ganda pada jadwal ");
         return view('ujian.pg')->with(compact('peserta','soal','soal_essay'));
     }
 
@@ -462,6 +475,15 @@ class PesertaController extends Controller
         //
     }
 
+    public function bukaMateri($id){
+        $file_materi = JadwalModul::find($id);
+        $url = url('uploads/materi/'.$file_materi->materi);
+        $nm_materi = $file_materi->modul_r->modul;
+        \LogActivity::addToLog("peserta membuka materi # $nm_materi ");
+        return redirect($url);
+
+    }
+
     public function kirimSMS(){
         $telepon = '081240353913';
         // Gunakan NIK Anda dan kode: 9777 untuk login ke env('APP_URL')
@@ -470,9 +492,34 @@ class PesertaController extends Controller
     }
 
     public function kirimWA(){
-        $telepon = '081240353913';
-        $message = 'Hi Jon F Snow, you really know nothing. this message sent automatically from your F-word code';
-        return $this->kirimPesanWA($telepon, $message);
+        // $telepon = '081240353913';
+        $data = KirimWa::where('is_sent',0)->get();
+        // return $data;
+
+        $message = '
+        Salam Hormat,
+
+Bapak/ Ibu/ Sdr/ Sdri bersama ini kami sampaikan dari *Perkumpulan Pemangku Kepentingan Keselamatan dan Kesehatan Kerja (PPK-K3)* bahwa tidak ada waktu yang lebih tepat dibanding saat ini dimana kondisi sektor konstruksi sedang mendapat ujian terberat melalui adanya Pandemi COVID-19 dimana harus kita secara bersama menyikapi dengan salah satunya melalui *"Peningkatan Kompetensi Tenaga Kerja Konstruksi seiring dengan Pelaksanaan Kebiasaan Baru di Indonesia"*.
+
+Untuk itu, kami kembali mengingatkan bahwa webinar terkait pembahasan tema di atas akan diselenggarakan pada Sabtu, 25 Juli 2020 (09:00 - 12:30 WIB).
+
+Link Pendaftaran dapat melalui:
+
+bit.ly/webinarkebiasaanbaru
+
+Terima Kasih
+        ';
+        // $message = "test test test";
+        // informasi lebih lanjut dapat menghubungi 0812-9448-1238
+        //081294481238
+        foreach($data as $key){
+            $this->kirimPesanWA($key->no, $message);
+            KirimWa::find($key->id)->update([
+                'is_sent' => 1
+            ]);
+        }
+
+        return 'pesan terkirim semua';
 
     }
 
@@ -507,17 +554,34 @@ class PesertaController extends Controller
         $peserta = Peserta::find($id);
         $period = CarbonPeriod::create( Carbon::parse($peserta->jadwal_r->tgl_awal), Carbon::parse($peserta->jadwal_r->tgl_akhir));
         $data = EvaluasiSoal::all();
-
-        foreach ($period as $key => $date) {
-            foreach($data as $key){
-                $jwb = new JawabanEvaluasi;
-                $jwb->id_evaluasi = $key->id;
-                $jwb->id_jadwal = $peserta->jadwal_r->id;
-                $jwb->id_peserta = $peserta->id;
-                $jwb->tanggal = $date->format('Y-m-d');
-                $jwb->save();
+        $jml_ins = JadwalRundown::where('id_jadwal',$peserta->jadwal_r->id)->get();
+        // looping tanggal jadawl
+        foreach($jml_ins as $key){
+            foreach($key->ins_rundown_r as $ins){
+                foreach($data as $eva){
+                    $jwb = new JawabanEvaluasi;
+                    $jwb->id_evaluasi = $eva->id;
+                    $jwb->id_jadwal = $peserta->jadwal_r->id;
+                    $jwb->id_peserta = $peserta->id;
+                    $jwb->id_instruktur = $ins->jadwal_instruktur_r->instruktur_r->id;
+                    $jwb->tanggal = $key->tanggal;
+                    $jwb->save();
+                }
+                // echo $ins->jadwal_instruktur_r->instruktur_r->id."<br>"; // id instruktur
+                // echo $key->tanggal."<br>";
             }
         }
+
+        // foreach ($period as $key => $date) {
+        //     foreach($data as $key){
+        //         $jwb = new JawabanEvaluasi;
+        //         $jwb->id_evaluasi = $key->id;
+        //         $jwb->id_jadwal = $peserta->jadwal_r->id;
+        //         $jwb->id_peserta = $peserta->id;
+        //         $jwb->tanggal = $date->format('Y-m-d');
+        //         $jwb->save();
+        //     }
+        // }
         
     }
 
