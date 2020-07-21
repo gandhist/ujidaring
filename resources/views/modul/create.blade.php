@@ -14,7 +14,7 @@
         Tambah Modul Pelatihan
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Modul</a></li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> Master Modul</a></li>
     </ol>
 </section>
 <section class="content">
@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <br>
-                        <table class=" table-striped" >
+                        <table class=" table-striped">
                             <tbody>
                                 <tr>
                                     <td style="padding-bottom: 2px">
@@ -77,8 +77,8 @@
                                     <td style="width:100%">
                                         <!-- <div class="input-group"> -->
                                         <label for="" style="">*Syarat</label><br>
-                                        <textarea style="width: 100%;border-radius: 5px;height:158px" name="id_syarat" id="id_syarat"
-                                             cols="175"></textarea>
+                                        <textarea style="width: 100%;border-radius: 5px;height:158px" name="id_syarat"
+                                            id="id_syarat" cols="175"></textarea>
                                         <!-- </div> -->
                                         <span id="" class="help-block customspan">{{ $errors->first('id_syarat') }}
                                     </td>
@@ -105,7 +105,7 @@
                                             <th style="width:1%">No</th>
                                             <th style="width:50%">Modul</th>
                                             <th>Jam Pertemuan</th>
-                                            <th>Upload Materi(pdf,word,excel)</th>
+                                            <th>Upload Materi (pdf,word,excel,ppt,mp4)</th>
                                             <th>Input Link</th>
                                             <th style="width:3%">Hapus</th>
                                         </tr>
@@ -153,6 +153,9 @@
                 case 'pdf':
                 case 'xls':
                 case 'xlsx':
+                case 'ppt':
+                case 'pptx':
+                case 'mp4':
                     break;
                 default:
                     this.value = '';
@@ -212,9 +215,9 @@
                                             <span id="link_modul_` + no + `" class="help-block"></span>
                                         </td>
                                         <td style="padding-top:7px;width:3%">
-                        <button type="button" class="btn btn-block btn-danger btn-sm btn-detail-hapus" nomor=" ` + no + `" >
+                        <button type="button" class="btn btn-block btn-danger btn-sm btn-detail-hapus" nomor="` + no + `" >
                         <span class="fa fa-trash"></span></button>
-                    </td
+                    </td>
                                     </tr>
             `);
 

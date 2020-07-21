@@ -11,22 +11,24 @@
 </style>
 <section class="content-header">
     <h1><a href="{{ url('mastermodul') }}" class="btn btn-md bg-purple"><i class="fa fa-arrow-left"></i></a>
-        Tambah Modul Pelatihan
+        Edit Modul Pelatihan
     </h1>
     <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Modul</a></li>
+        <li><a href="#"><i class="fa fa-dashboard"></i> Master Modul</a></li>
     </ol>
 </section>
+
 <section class="content">
     <div class="box box-content">
         <div class="box-body">
-            <form action="{{ url('modul/save') }}" class="form-horizontal" id="formAdd" name="formAdd" method="post"
+            <form action="{{ route('mastermodul.update',$ms_modul->id_bid_srtf_alat) }}" class="form-horizontal" id="formAdd" name="formAdd" method="post"
                 enctype="multipart/form-data">
+                @method("PATCH")
                 @csrf
                 <div class="row">
                     <div class="col-md-4">
                         <br>
-                        <table class=" table-striped" >
+                        <table class=" table-striped">
                             <tbody>
                                 <tr>
                                     <td style="padding-bottom: 2px">
@@ -35,7 +37,9 @@
                                             <select class="form-control select2" name="id_bidang" id="id_bidang">
                                                 <option selected value="">Bidang</option>
                                                 @foreach($bidang as $key)
-                                                <option value="{{ $key->id }}">{{ $key->nama_bidang }}
+                                                <option value="{{ $key->id }}"
+                                                    {{ $key->id == $ms_modul->bidang_srtf_alat_r->bidang_r->id ? 'selected' : '' }}>
+                                                    {{ $key->nama_bidang }}
                                                 </option>
                                                 @endforeach
                                             </select>
@@ -49,6 +53,12 @@
                                             <label for="" style="">*Sertifikat Alat</label>
                                             <select class="form-control select2" name="id_sert_alat" id="id_sert_alat">
                                                 <option selected value="">Sertifikat Alat</option>
+                                                @foreach($srtf_bid_alat as $key)
+                                                <option value="{{ $key->id }}"
+                                                    {{ $key->id == $ms_modul->id_bid_srtf_alat ? 'selected' : '' }}>
+                                                    {{ $key->nama_srtf_alat }}
+                                                </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                         <span id="" class="help-block customspan">{{ $errors->first('id_sert_alat') }}
@@ -60,7 +70,7 @@
                                         <label for="" style="">*Jumlah Hari</label><br>
                                         <input name="id_jumlah_hari" id="id_jumlah_hari"
                                             class="form-control input-md custominp" type="text"
-                                            placeholder="Jumlah Hari" maxlength="3">
+                                            placeholder="Jumlah Hari" maxlength="3" value="{{$ms_modul->hari}}">
                                         <!-- </div> -->
                                         <span id="" class="help-block customspan">{{ $errors->first('id_jumlah_hari') }}
                                     </td>
@@ -77,8 +87,8 @@
                                     <td style="width:100%">
                                         <!-- <div class="input-group"> -->
                                         <label for="" style="">*Syarat</label><br>
-                                        <textarea style="width: 100%;border-radius: 5px;height:158px" name="id_syarat" id="id_syarat"
-                                             cols="175"></textarea>
+                                        <textarea style="width: 100%;border-radius: 5px;height:158px" name="id_syarat"
+                                            id="id_syarat" cols="175">{{$ms_modul->persyaratan}}</textarea>
                                         <!-- </div> -->
                                         <span id="" class="help-block customspan">{{ $errors->first('id_syarat') }}
                                     </td>
@@ -87,13 +97,13 @@
                         </table>
                     </div>
 
-                    <div class="col-sm-12">
+                    <!-- <div class="col-sm-12">
                         <div class="btn-group btn-lg">
                             <button id="addrow" type="button" class="btn btn-success"><span class="fa fa-plus"></span>
                                 Tambah
                                 Modul</button>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- <div class="col-lg-12"><h1>MODUL PELATIHAN</h1></div> -->
                     <!-- Left col -->
                     <div class="col-md-12">
@@ -105,17 +115,54 @@
                                             <th style="width:1%">No</th>
                                             <th style="width:50%">Modul</th>
                                             <th>Jam Pertemuan</th>
-                                            <th>Upload Materi(pdf,word,excel)</th>
+                                            <th>Materi</th>
+                                            <th>Upload Materi (pdf,word,excel,ppt,mp4)</th>
                                             <th>Input Link</th>
-                                            <th style="width:3%">Hapus</th>
+                                            <!-- <th style="width:3%">Hapus</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        @foreach($detailModul as $key)
+                                        <tr>
+                                            <input type="hidden" value="{{ $loop->iteration }}" id="id_ms_modul_{{ $loop->iteration }}" name="id_ms_modul_{{ $loop->iteration }}">
+                                            <td style="width:1%">{{ $loop->iteration }}</td>
+                                            <td><input required value="{{$key->modul}}" class="form-control input-md"
+                                                    type="text" placeholder="Modul" name="modul_{{ $loop->iteration }}"
+                                                    id="modul_{{ $loop->iteration }}">
+                                            </td>
+                                            <td style="text-align:center;width:10%"><input value="{{$key->jp}}" required
+                                                    name="jp_{{ $loop->iteration }}" id="jp_{{ $loop->iteration }}"
+                                                    class="form-control input-md" type="text"
+                                                    placeholder="Jam Pertemuan" maxlength="2"></td>
+                                            <td style="text-align:center">
+                                                @if($key->materi)
+                                                <a target="_blank" href="{{ url('/'.$key->materi) }}"
+                                                    class="btn btn-success"><i class="fa fa-download" aria-hidden="true"></i></a>
+                                                @endif
+                                            </td>
+                                            <td style="text-align:center">
+                                                <input name="file_modul_{{ $loop->iteration }}"
+                                                    id="file_modul_{{ $loop->iteration }}" type="file"
+                                                    class="form-control file_modul">
+                                                <span id="file_modul_{{ $loop->iteration }}" class="help-block"></span>
+                                            </td>
+                                            <td style="text-align:center">
+                                                <input value="{{$key->link}}" name="link_modul_{{ $loop->iteration }}"
+                                                    id="link_modul_{{ $loop->iteration }}" type="text"
+                                                    class="form-control">
+                                                <span id="link_modul_{{ $loop->iteration }}" class="help-block"></span>
+                                            </td>
+                                            <!-- <td style="padding-top:7px;width:3%">
+                                                <button type="button"
+                                                    class="btn btn-block btn-danger btn-sm btn-detail-hapus"
+                                                    nomor="{{ $loop->iteration }}">
+                                                    <span class="fa fa-trash"></span></button>
+                                            </td> -->
+                                        </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
-                            </div>
-                            <!-- /.table-responsive -->
+                            </div> <!-- /.table-responsive -->
                         </div>
 
                         <!-- </div> -->
@@ -143,6 +190,13 @@
         //     e.preventDefault();
         //     store();
         // })
+        jumlahdetail = "{{count($detailModul)}}";
+        arrayDetail = [];
+        for (let index = 1; index <= jumlahdetail; index++) {
+            arrayDetail.push(index);
+        }
+        $("#jumlah_detail").val(arrayDetail);
+        
         $(document).on('change', '.file_modul', function (e) {
             var id = $(this).val();
             var ext = id.substr(id.lastIndexOf('.') + 1);
@@ -153,6 +207,9 @@
                 case 'pdf':
                 case 'xls':
                 case 'xlsx':
+                case 'ppt':
+                case 'pptx':
+                case 'mp4':
                     break;
                 default:
                     this.value = '';
@@ -189,6 +246,10 @@
         });
 
         $('.select2').select2();
+        $("#id_bidang").parent().find('.select2-container--default').css('pointer-events', 'none');
+        $("#id_bidang").parent().find('.select2-selection--single').css('background', 'silver');
+        $("#id_sert_alat").parent().find('.select2-container--default').css('pointer-events', 'none');
+        $("#id_sert_alat").parent().find('.select2-selection--single').css('background', 'silver');
 
         // Fungsi Tambah Baris Instruktur
         function add_row_modul(no) {
@@ -212,9 +273,9 @@
                                             <span id="link_modul_` + no + `" class="help-block"></span>
                                         </td>
                                         <td style="padding-top:7px;width:3%">
-                        <button type="button" class="btn btn-block btn-danger btn-sm btn-detail-hapus" nomor=" ` + no + `" >
+                        <button type="button" class="btn btn-block btn-danger btn-sm btn-detail-hapus" nomor="` + no + `" >
                         <span class="fa fa-trash"></span></button>
-                    </td
+                    </td>
                                     </tr>
             `);
 

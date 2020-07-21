@@ -146,6 +146,7 @@
                         <th><i class="fa fa-check-square-o"></i></th>
                         <th>No</th>
                         <th>Bidang</th>
+                        <th>Bidang Srtf Alat</th>
                         <th>User Tambah</th>
                     </tr>
                 </thead>
@@ -155,6 +156,7 @@
                         <td style='width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
                                 id="selection[]" name="selection[]"></td>
                         <td style='width:1%'>{{ $loop->iteration }}</td>
+                        <td>{{$key->bidang_srtf_alat_r->bidang_r->nama_bidang}}</td>
                         <td>{{$key->bidang_srtf_alat_r->nama_srtf_alat}}</td>
                         <td style='width:8%;text-align:right'>{{ \Carbon\Carbon::parse($key->reated_at)->isoFormat("DD MMMM YYYY") }}</td>
                     </tr>
