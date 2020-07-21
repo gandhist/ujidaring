@@ -13,7 +13,7 @@
 
 
 Route::auth();
-Route::get('test','JadwalController@gen');
+Route::get('test/{id}','JadwalController@gen');
 Route::group(['middleware' => 'auth'], function () {
 
 	Route::group(['prefix' => 'instruktur'], function () {

@@ -9,8 +9,7 @@
 
 </style>
 <section class="content-header">
-    <h1><a href="{{ url('jadwal/peserta/'.$data->id) }}" class="btn btn-md bg-purple"><i class="fa fa-caret-left"></i>
-            Kembali</a> Detail Peserta
+    <h1><a href="{{ url('jadwal/peserta/'.$data->id) }}" class="btn btn-md bg-purple"><i class="fa fa-arrow-left"></i></a> Detail Peserta
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -118,9 +117,9 @@
                     </ul>
                     <div class="tab-content">
                         <div id="hasilujian" class="tab-pane fade in active">
-                            <div class="box box-info">
-                                <div class="box-header with-border" style="text-align:center">
-                                    <!-- <h3 class="box-title">Upload Soal</h3> -->
+                            <!-- <div class="box box-info"> -->
+                                <!-- <div class="box-header with-border" style="text-align:center">
+                                    <h3 class="box-title">Upload Soal</h3>
                                     <div class="box-tools pull-right">
                                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                                 class="fa fa-minus"></i>
@@ -128,7 +127,7 @@
                                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i
                                                 class="fa fa-times"></i></button>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="box-body">
                                     <table id="custom-table"
                                         class="table table-striped table-bordered dataTable customTable">
@@ -181,18 +180,16 @@
                                                             data-target="#modal_jawab_{{$Peserta->id}}">Sudah
                                                             dinilai</button></td>
                                                     @endif
-
                                             </tr>
-
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            <!-- </div> -->
                         </div>
-                        <div id="nilaiharian" class="tab-pane fade in active">
-                            <div class="box box-info">
-                                <div class="box-header with-border" style="text-align:center">
-                                    <!-- <h3 class="box-title">Upload Soal</h3> -->
+                        <div id="nilaiharian" class="tab-pane fade in">
+                            <!-- <div class="box box-info"> -->
+                                <!-- <div class="box-header with-border" style="text-align:center">
+                                    <h3 class="box-title">Upload Soal</h3>
                                     <div class="box-tools pull-right">
                                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                                 class="fa fa-minus"></i>
@@ -200,7 +197,7 @@
                                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i
                                                 class="fa fa-times"></i></button>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="box-body">
                                     <table id="custom-table"
                                         class="table table-striped table-bordered dataTable customTable">
@@ -282,12 +279,12 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            <!-- </div> -->
                         </div>
-                        <div id="quisioner" class="tab-pane fade in active">
-                            <div class="box box-info">
-                                <div class="box-header with-border" style="text-align:center">
-                                    <!-- <h3 class="box-title">Upload Soal</h3> -->
+                        <div id="quisioner" class="tab-pane fade in">
+                            <!-- <div class="box box-info"> -->
+                                <!-- <div class="box-header with-border" style="text-align:center">
+                                    <h3 class="box-title">Upload Soal</h3>
                                     <div class="box-tools pull-right">
                                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                                 class="fa fa-minus"></i>
@@ -295,7 +292,7 @@
                                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i
                                                 class="fa fa-times"></i></button>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="box-body">
                                     <table id="custom-table"
                                         class="table table-striped table-bordered dataTable customTable">
@@ -304,7 +301,7 @@
                                                 <th>Tanggal</th>
                                                 <th>NIK</th>
                                                 <th>Nama</th>
-                                                <th>Hasil</th>
+                                                <th>Quisioner</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -313,19 +310,31 @@
                                             @endphp
                                             @foreach($jawaban_evaluasi as $key)
                                             <tr>
-                                                <td style="width:5%;text-align:center">
+                                                @if($a==$key->tanggal)
+
+                                                @else
+                                                @php
+                                                $rowspanqs =
+                                                DB::table('jawaban_evaluasi')->groupBy('id_instruktur')->select('id_instruktur')->where('id_jadwal','=',$key->id_jadwal)->where('id_peserta','=',$key->id_peserta)->where('tanggal','=',$key->tanggal)->where('deleted_by','=',null)->get();
+                                                @endphp
+                                                <td style="width:5%;text-align:center" rowspan="{{count($rowspanqs)}}">
                                                     {{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}
                                                 </td>
+                                                @endif
                                                 <td style="width:40%">{{$key->instruktur_r->nik}}</td>
                                                 <td>{{$key->instruktur_r->nama}}</td>
-                                                <td style="width:1%"><button type="button" id_jawaban="{{$key->id}}"
+                                                <td style="width:1%;text-align:center"><button type="button"
+                                                        id_jawaban="{{$key->id}}"
                                                         class="btn btn-sm btn-success btnLihatQ">Lihat</button></td>
                                             </tr>
+                                            @php
+                                            $a = $key->tanggal;
+                                            @endphp
                                             @endforeach
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            <!-- </div> -->
                         </div>
                         <div id="logs" class="tab-pane fade in active">
                             <div class="box box-info">
@@ -532,9 +541,8 @@
                             <h4 class="modal-title"><b id="title-modal"></b></h4>
                         </div>
                         <div class="modal-body">
-                            <div class="box">
-                                <div class="box-body no-padding">
-                                    <br>
+                            <!-- <div class="box">
+                                <div class="box-body no-padding"> -->
                                     <table class="table table-condensed tableModalDetail" id="tableModalTm">
                                         <thead>
                                             <tr>
@@ -547,8 +555,8 @@
 
                                         </tbody>
                                     </table>
-                                </div>
-                            </div>
+                                <!-- </div>
+                            </div> -->
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -569,15 +577,13 @@
                             <h4 class="modal-title"><b id="title-modal-qs"></b></h4>
                         </div>
                         <div class="modal-body">
-                            <div class="box">
-                                <div class="box-body no-padding">
-                                    <br>
-                                    <table class="table table-condensed" id="tableModalQs">
+                            <!-- <div class="box">
+                                <div class="box-body no-padding"> -->
+                                    <table class="table table-condensed tableModalDetail" id="tableModalQs">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
                                                 <th>Soal</th>
-                                                <th></th>
                                                 <th>Nilai</th>
                                             </tr>
                                         </thead>
@@ -585,8 +591,8 @@
 
                                         </tbody>
                                     </table>
-                                </div>
-                            </div>
+                                <!-- </div>
+                            </div> -->
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -773,10 +779,7 @@
                                 <td style='text-align:left'>
                                     ` + data[index]['soal_r']['materi'] + `
                                 </td>
-                                <td style='text-align:right;width:5%'>
-                                    ` + data[index]['nilai'] + `
-                                </td>
-                                <td style='text-align:left;width:5%'>
+                                <td style='text-align:center;width:8%'>
                                     ` + bintang + `
                                 </td>
                             </tr>`);

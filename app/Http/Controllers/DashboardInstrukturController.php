@@ -74,7 +74,7 @@ class DashboardInstrukturController extends Controller
                 $data = JadwalModul::find($key->id);
                 if ($files = $request->file($px_materi.$key->id)) {
                     $destinationPath = 'uploads/materi/'.$jadwal->id; // upload path
-                    $file = "materi_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
+                    $file = "materi_".$key->id."_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
                     $files->move($destinationPath, $file);
                     $data->materi= $jadwal->id."/".$file;
                 }

@@ -45,6 +45,13 @@ class JadwalController extends Controller
      */
     public function index()
     {
+        // $data = DB::table("peserta")
+        // ->select("id" ,"created_at",DB::raw("CONCAT(YEAR(created_at),'-',MONTH(created_at)) as tahun"))
+        //     ->orderBy('created_at')
+        //     ->groupBy(DB::raw("MONTH(created_at)"))
+        //     ->groupBy(DB::raw("YEAR(created_at)"))
+        //     ->get();
+        // dd($data);
         $id_user = Auth::id();
         $user_role = User::select('role_id')->where('id','=',$id_user)->first();
         $role =  $user_role['role_id'];
@@ -78,7 +85,6 @@ class JadwalController extends Controller
      */
     public function store(Request $request)
     {
-
         $data['tgl_awal'] = Carbon::createFromFormat('d/m/Y',$request->tgl_awal);
         $data['tgl_akhir'] = Carbon::createFromFormat('d/m/Y',$request->tgl_akhir);
         $data['tuk'] = $request->tuk;

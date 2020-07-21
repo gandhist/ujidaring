@@ -1,9 +1,14 @@
 @extends('templates/header')
 
 @section('content')
+<style>
+.customTable{
+    
+}
+</style>
 <section class="content-header">
     <h1><a href="{{ url('jadwal/'.$id_jadwal.'/dashboard') }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a>
+                class="fa fa-arrow-left"></i></a>
         Modul Pelatihan
     </h1>
     <ol class="breadcrumb">
@@ -15,12 +20,12 @@
         <div class="box-body">
 
             <div class="row">
-                <div class="col-lg-12"><h1>MODUL PELATIHAN</h1></div>
+                <!-- <div class="col-lg-12"><h1>MODUL PELATIHAN</h1></div> -->
                 <!-- Left col -->
                 <div class="col-md-12">
                     <!-- TABLE: LATEST ORDERS -->
-                    <div class="box box-info collapsed-box">
-                        <div class="box-header with-border">
+                    <!-- <div class="box box-info collapsed-box"> -->
+                        <!-- <div class="box-header with-border">
                             <h3 class="box-title">Detail Modul</h3>
 
                             <div class="box-tools pull-right">
@@ -30,11 +35,11 @@
                                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i
                                         class="fa fa-times"></i></button>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- /.box-header -->
                         <div class="box-body" style="display: block;">
                             <div class="table-responsive">
-                                <table class="table">
+                                <table class="table table table-striped table-bordered dataTable customTable">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -50,9 +55,9 @@
                                             @foreach($data as $key)
                                             <input type="hidden" name="id_jadwal" id="id_jadwal" value="{{ $key->id_jadwal }}">
                                                 <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $key->modul_r->modul }}</td>
-                                                    <td style="text-align:center" >{{ $key->modul_r->jp }}</td>
+                                                    <td style="width:1%">{{ $loop->iteration }}</td>
+                                                    <td >{{ $key->modul_r->modul }}</td>
+                                                    <td style="text-align:center;width:10%" >{{ $key->modul_r->jp }}</td>
                                                     <td style="text-align:center" > 
                                                         @if($key->materi)
                                                         <a href="{{ url('uploads/materi/'.$key->materi) }}" class="btn btn-success">Materi</a>
@@ -75,7 +80,7 @@
                             <!-- /.table-responsive -->
                         </div>
                    
-                    </div>
+                    <!-- </div> -->
                     <!-- /.box -->
                 </div>
                 <!-- /.col -->

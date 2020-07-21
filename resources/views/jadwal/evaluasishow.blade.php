@@ -4,7 +4,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1><a href="{{ url('jadwal/evaluasi/'.$id_jadwal) }}" class="btn btn-md bg-purple"><i
-                class="fa fa-caret-left"></i> Kembali</a> Detail Evaluasi
+                class="fa fa-arrow-left"></i></a> {{$instruktur->nama}}
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -71,7 +71,7 @@
             </form>
             <div class="row">
                 <div class="col-md-12">
-                    <h3 style="text-align:left">{{$instruktur->nama}}</h3>
+                    <!-- <h3 style="text-align:left">{{$instruktur->nama}}</h3> -->
                     <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
                         <thead>
                             <tr>
@@ -85,7 +85,7 @@
                             <tr>
                                 <td style="width:1%"></td>
                                 <td>{{ \Carbon\Carbon::parse( $key->tanggal )->isoFormat("DD MMMM YYYY") }}</td>
-                                <td style="text-align:center;width:10%"><a href="{{ url('jadwal/evaluasi/'.$id_jadwal.'/'.$key->id.'/peserta') }}" style="width:100%" type="button" class="btn btn-sm bg-olive btn-flat">Lihat</a></td>
+                                <td style="text-align:center;width:10%"><a href="{{ url('jadwal/evaluasi/'.$id_jadwal.'/'.$key->id.'/peserta') }}" type="button" class="btn btn-sm bg-olive btn-flat">Lihat</a></td>
                             </tr>
                             @endforeach
                         </tbody>
