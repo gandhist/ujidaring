@@ -32,7 +32,7 @@ use App\InsRundown;
 use App\ModulRundown;
 use App\JawabanEvaluasi;
 use App\JawabanTMPeserta;
-// use Illuminate\Support\Facades\DB;
+use App\LogActivity;
 
 
 class JadwalController extends Controller
@@ -281,6 +281,8 @@ class JadwalController extends Controller
     {
         $data = JadwalModel::find($id);
         $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->orderBy('nama','asc')->get();
+        // dd($Peserta->);
+
         $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
@@ -297,7 +299,8 @@ class JadwalController extends Controller
         $modul_rundown = ModulRundown::whereHas('jadwal_rundown_r', function ($query) use($id_jadwal){
             return $query->where('id_jadwal', '=', $id_jadwal);
         })->get();
-        return view('jadwal.pesertadetail')->with(compact('data','Peserta','modul_rundown','jumlahSoalPg','jumlahSoalEssay','jawaban_evaluasi'));
+        $logs = LogActivity::where('user_id', $Peserta->user_id)->orderBy('id','desc')->get();
+        return view('jadwal.pesertadetail')->with(compact('data','Peserta','modul_rundown','jumlahSoalPg','jumlahSoalEssay','jawaban_evaluasi','logs'));
     }
 
     public function pesertatm(Request $request){
@@ -668,12 +671,12 @@ class JadwalController extends Controller
         // handle upload Premi bpjs kesehatan
         $request->validate(
             [
-                'materiPkl' => 'mimes:flv,mp4,avi|max:20480',
+                'materiPkl' => 'mimes:flv,mp4,avi,pdf|max:20480',
                 'batas_up_makalah' => 'required'
             ],[
                 'materiPkl.required' => "Materi PKL Harus di isi",
                 'batas_up_makalah.required' => "Batas Waktu Makalah Harus di isi",
-                'materiPkl.mimes' => "Materi PKL hanya format FLV, MP4, AVI",
+                'materiPkl.mimes' => "Materi PKL hanya format FLV, MP4, AVI, PDF",
                 'materiPkl.max' => "Maksimal ukuran file 20MB"
             ]);
         $data = JadwalModel::find($request->id_jadwal);

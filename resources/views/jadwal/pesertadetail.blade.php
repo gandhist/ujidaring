@@ -114,6 +114,7 @@
                         <li class="active"><a data-toggle="tab" href="#hasilujian">Hasil Ujian</a></li>
                         <li><a data-toggle="tab" href="#nilaiharian">Nilai Harian</a></li>
                         <li><a data-toggle="tab" href="#quisioner">Quisioner</a></li>
+                        <li><a data-toggle="tab" href="#logs">Logs</a></li>
                     </ul>
                     <div class="tab-content">
                         <div id="hasilujian" class="tab-pane fade in active">
@@ -335,6 +336,43 @@
                                 </table>
                             </div>
                             <!-- </div> -->
+                        </div>
+                        <div id="logs" class="tab-pane fade in active">
+                            <div class="box box-info">
+                                <div class="box-header with-border" style="text-align:center">
+                                    <!-- <h3 class="box-title">Upload Soal</h3> -->
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                                class="fa fa-minus"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                                class="fa fa-times"></i></button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <table id="custom-table"
+                                        class="table table-striped table-bordered dataTable customTable">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>IP Address</th>
+                                                <th>Subject</th>
+                                                <th>Url</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($logs as $key)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $key->ip }}</td>
+                                                <td>{{ $key->subject }}</td>
+                                                <td>{{ $key->url }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

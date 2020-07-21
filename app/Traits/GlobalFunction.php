@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Peserta;
 use App\AbsenModel;
+use App\JadwalModul;
+use App\JawabanPesertaPgPre;
+use App\JawabanPesertaPgPost;
+use App\JawabanTMPeserta;
 
 trait GlobalFunction {
     // fungsi kirim sms
@@ -186,5 +190,167 @@ trait GlobalFunction {
         return $allow;
     }
 
+    // allow and generate soal pre quis
+    public function _is_pre_quis(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        $curdate = Carbon::now()->isoFormat('YYYY-MM-DD');
+        $is_quiz = [];
+        foreach ($peserta->jadwal_r->jadwal_rundown_r as $key) {
+            if ($key->tanggal == $curdate) {
+                // echo $key->modul_rundown_r;
+                foreach ($key->modul_rundown_r as $mr) {
+                    if($mr->jadwal_modul_r->f_pre_quiz){
+                        $is_quiz[] = true;
+                        // $mr->jadwal_modul_r->f_pre_quiz.'<br>';
+                        // cek datanya udah ada apa belum
+                        $cek = JawabanPesertaPgPre::where('id_peserta',$peserta->id)->where('id_jadwal_modul',$mr->id_jadwal_modul)->first();
+                        // jika datanya tidak ada
+                        if (!$cek) {
+                            // looping soal agar menjadi soal utk peserta
+                            foreach ($mr->jadwal_modul_r->soal_pre as $soal) {
+                                $soalpst = new JawabanPesertaPgPre;
+                                $soalpst->id_jadwal_modul = $mr->id_jadwal_modul;
+                                $soalpst->id_soal_pg_pre = $soal->id;
+                                // $soalpst->jawaban = $soal->jawaban;
+                                $soalpst->id_peserta = $peserta->id;
+                                $soalpst->save();
+                            }
+                        }
+
+                        $cektm = JawabanTMPeserta::where('id_peserta',$peserta->id)->where('id_jadwal_modul',$mr->id_jadwal_modul)->where('tipe','pre')->first();
+                        if (!$cektm) {
+                            // looping soal agar menjadi soal utk peserta
+                            for ($i=1; $i <= $mr->jadwal_modul_r->jumlah_tm ; $i++) { 
+                                $soalpst = new JawabanTMPeserta;
+                                $soalpst->id_jadwal_modul = $mr->id_jadwal_modul;
+                                $soalpst->id_peserta = $peserta->id;
+                                $soalpst->tipe = 'pre';
+                                $soalpst->save();
+                            }
+                        }
+                    }
+                    else {
+                        $is_quiz[] = false;
+                    }
+                }
+            }
+        }
+        // jika di array tersebut ada true maka ada ujian
+        if (in_array(true,$is_quiz)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    // allow and generate soal pre quis
+    public function _is_post_quis(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        $curdate = Carbon::now()->isoFormat('YYYY-MM-DD');
+        $is_quiz = [];
+        foreach ($peserta->jadwal_r->jadwal_rundown_r as $key) {
+            if ($key->tanggal == $curdate) {
+                // echo $key->modul_rundown_r;
+                foreach ($key->modul_rundown_r as $mr) {
+                    if($mr->jadwal_modul_r->f_pre_quiz){
+                        $is_quiz[] = true;
+                        // $mr->jadwal_modul_r->f_pre_quiz.'<br>';
+                        // cek datanya udah ada apa belum
+                        $cek = JawabanPesertaPgPost::where('id_peserta',$peserta->id)->where('id_jadwal_modul',$mr->id_jadwal_modul)->first();
+                        // jika datanya tidak ada
+                        if (!$cek) {
+                            // looping soal agar menjadi soal utk peserta
+                            foreach ($mr->jadwal_modul_r->soal_pre as $soal) {
+                                $soalpst = new JawabanPesertaPgPost;
+                                $soalpst->id_jadwal_modul = $mr->id_jadwal_modul;
+                                $soalpst->id_soal_pg_post = $soal->id;
+                                // $soalpst->jawaban = $soal->jawaban;
+                                $soalpst->id_peserta = $peserta->id;
+                                $soalpst->save();
+                            }
+                        }
+
+                        $cektm = JawabanTMPeserta::where('id_peserta',$peserta->id)->where('id_jadwal_modul',$mr->id_jadwal_modul)->where('tipe','post')->first();
+                        if (!$cektm) {
+                            // looping soal agar menjadi soal utk peserta
+                            for ($i=1; $i <= $mr->jadwal_modul_r->jumlah_tm ; $i++) { 
+                                $soalpst = new JawabanTMPeserta;
+                                $soalpst->id_jadwal_modul = $mr->id_jadwal_modul;
+                                $soalpst->id_peserta = $peserta->id;
+                                $soalpst->tipe = 'post';
+                                $soalpst->save();
+                            }
+                        }
+                    }
+                    else {
+                        $is_quiz[] = false;
+                    }
+                }
+            }
+        }
+        // jika di array tersebut ada true maka ada ujian
+        if (in_array(true,$is_quiz)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    // pre_quis today
+    // cek apakah hari ini ada pre quis
+    public function pre_quis_today(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        $curdate = Carbon::now()->isoFormat('YYYY-MM-DD');
+        $cek = false;
+        foreach ($peserta->jadwal_r->jadwal_rundown_r as $key) {
+            if ($key->tanggal == $curdate) {
+                // echo $key->modul_rundown_r;
+                foreach ($key->modul_rundown_r as $mr) {
+                    if($mr->jadwal_modul_r->f_pre_quiz){
+                        // $cek = JawabanPesertaPgPre::where('id_peserta',$peserta->id)->where('id_modul_rundown',$mr->id)->get();
+                        $cek = $mr->jadwal_modul_r;
+                    }
+                }
+            }
+            else {
+
+            }
+        }
+        return $cek;
+    }
+
+    // cek pre quis today
+    public function is_pre_today(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        $curdate = Carbon::now()->isoFormat('YYYY-MM-DD');
+        $cek = false;
+        $data = JadwalModul::whereDate('awal_pre_quiz', $curdate)->get();
+        if($data){
+            $cek = $data;
+        }
+        else {
+            $cek = false;
+        }
+        return $data;
+    }
+
+    // cek pre quis today
+    public function is_post_today(){
+        $peserta = Peserta::where('user_id',Auth::id())->first();
+        $curdate = Carbon::now()->isoFormat('YYYY-MM-DD');
+        $cek = false;
+        $data = JadwalModul::whereDate('awal_post_quiz', $curdate)->get();
+        if($data){
+            $cek = $data;
+        }
+        else {
+            $cek = false;
+        }
+        return $data;
+    }
 
 }

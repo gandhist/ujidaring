@@ -96,47 +96,76 @@
     </div>
     <hr>
     <h3 align="center">Beri Tanggapan</h3>
-    <form name="formAdd" id="formAdd">
-    <div class="row">
-      <div class="col-lg-4">
-        {{-- <input type="text" class="form-control" name="id_instruktur" id="id_instruktur"> --}}
-        <select name="id_instruktur" class="form-control" id="id_instruktur">
-          @foreach($rd->ins_rundown_r as $key)
-          <option value="{{ $key->jadwal_instruktur_r->instruktur_r->id}}">{{ $key->jadwal_instruktur_r->instruktur_r->nama}}</option>
-          @endforeach
-        </select>
-        <input type="hidden" value="{{ $peserta->jadwal_r->id }}" class="form-control" name="id_jadwal" id="id_jadwal">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+      {{-- <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+      </li> --}}
+      @foreach($rd->ins_rundown_r as $key)
+      <li class="nav-item">
+        <a class="nav-link {{ $loop->first ? 'active' : '' }}" id="tab-{{ $key->jadwal_instruktur_r->instruktur_r->id }}" data-toggle="tab" href="#tablink_{{ $key->jadwal_instruktur_r->instruktur_r->id }}" role="tab" aria-controls="contact" aria-selected="false">{{ $key->jadwal_instruktur_r->instruktur_r->nama}}</a>
+      </li>
+      @endforeach
+
+    </ul>
+    <div class="tab-content" id="myTabContent">
+    @foreach($rd->ins_rundown_r as $key)
+      <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="tablink_{{ $key->jadwal_instruktur_r->instruktur_r->id }}" role="tabpanel" aria-labelledby="tab-{{ $key->jadwal_instruktur_r->instruktur_r->id }}">
+        <h6>Beri Penilaian untuk instrtuktur {{ $key->jadwal_instruktur_r->instruktur_r->nama}}</h6> 
+            <form name="formAdd" id="formAdd">
+              <div class="row">
+                <div class="col-lg-4">
+                  <input type="hidden" value="{{ $key->jadwal_instruktur_r->instruktur_r->id }}" class="form-control" name="id_instruktur" id="id_instruktur">
+                  <input type="hidden" value="{{ $peserta->jadwal_r->id }}" class="form-control" name="id_jadwal" id="id_jadwal">
+                </div>
+                  <div class="col-lg-12">
+                      <table class="table table-hover table-sm">
+                          <thead>
+                            <tr>
+                              <th scope="col">No</th>
+                              <th scope="col">Materi Pelatihan</th>
+                              <th scope="col">Nilai</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                              @foreach($peserta->jawaban_eva_r as $eva)
+
+                                @if($eva->id_instruktur == $key->jadwal_instruktur_r->instruktur_r->id)
+                                  <tr>
+                                      <th scope="row">{{ $loop->iteration }}</th>
+                                      <td>{{ $eva->soal_r->materi }}</td>
+                                      <td>
+                                          <select name="nilai_{{ $eva->id }}" id="nilai_{{ $eva->id }}">
+                                              @for($i=1; $i<=5; $i++)
+                                              <option value="{{ $eva->id }}#{{ $i }}">{{ $i }}</option>
+                                              @endfor
+                                          </select>
+                                      </td>
+                                  </tr>
+                                @endif
+                              
+                              @endforeach
+                          
+                          </tbody>
+                        </table>
+                        <button class="btn btn-primary" id="btnSave">Beri Tanggapan</button>
+                  </div>
+              </div>
+            </form>
+
       </div>
-        <div class="col-lg-12">
-            <table class="table table-hover table-sm">
-                <thead>
-                  <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">Materi Pelatihan</th>
-                    <th scope="col">Nilai</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    @foreach($peserta->jawaban_eva_r as $key)
-                    <tr>
-                        <th scope="row">{{ $loop->iteration }}</th>
-                        <td>{{ $key->soal_r->materi }}</td>
-                        <td>
-                            <select name="nilai_{{ $key->id }}" id="nilai_{{ $key->id }}">
-                                @for($i=1; $i<=5; $i++)
-                                <option value="{{ $key->id }}#{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
-                        </td>
-                    </tr>
-                    @endforeach
-                    </form>
-                 
-                </tbody>
-              </table>
-              <button class="btn btn-primary" id="btnSave">Beri Tanggapan</button>
-        </div>
+    @endforeach
+      {{-- <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
+      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+      <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div> --}}
     </div>
+
 
 </div>
 
@@ -180,7 +209,7 @@ function store(){
             confirmButtonText: 'Close',
             confirmButtonColor: '#AAA',
             onClose: function() {
-                window.location.replace(home);
+                window.location.reload();
             }
         })
 
