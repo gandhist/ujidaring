@@ -17,6 +17,7 @@ use App\JawabanPkl;
 use App\JawabanPpt;
 use App\JadwalRundown;
 use App\KirimWa;
+use App\ModulRundown;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
@@ -476,9 +477,12 @@ class PesertaController extends Controller
     }
 
     public function bukaMateri($id){
-        $file_materi = JadwalModul::find($id);
-        $url = url('uploads/materi/'.$file_materi->materi);
-        $nm_materi = $file_materi->modul_r->modul;
+        
+        $file_materi = ModulRundown::find($id);
+        // $file_materi = JadwalModul::find($id);
+        // return $file_materi->jadwal_modul_r;
+        $url = url('uploads/materi/'.$file_materi->jadwal_modul_r->materi);
+        $nm_materi = $file_materi->jadwal_modul_r->modul_r->modul;
         \LogActivity::addToLog("peserta membuka materi # $nm_materi ");
         return redirect($url);
 
@@ -491,35 +495,91 @@ class PesertaController extends Controller
         return $this->kirimPesanSMS($telepon, $message);
     }
 
+    public function tombolWa(){
+        $url = url('wa');
+        $pesan = "";
+        // $pesan = session()->all();
+        $data = '    
+        <a href="'.$url.'" >hajar</a>
+        ';
+        print_r(session()->all());
+        return $data;
+    }
+
     public function kirimWA(){
-        // $telepon = '081240353913';
-        $data = KirimWa::where('is_sent',0)->get();
+        // $now = Carbon::parse("2020-07-21 22:00:00");
+        // $now = Carbon::now();
+        
+        // echo Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:s');
+        // echo "<br>";
+        // $data = KirimWa::where('is_sent',0)->get();
+        // $data = KirimWa::all();
+        // foreach($data as $key){
+            
+        //     $now->addSeconds(5)->isoFormat('YYYY-MM-DD HH:mm:s');
+        //     KirimWa::find($key->id)->update([
+        //         'waktu_kirim' => $now,
+        //     ]);
+             
+        // }
+        // return "buat waktu";
+        $telepon = '081240353913';
         // return $data;
 
         $message = '
         Salam Hormat,
 
-Bapak/ Ibu/ Sdr/ Sdri bersama ini kami sampaikan dari *Perkumpulan Pemangku Kepentingan Keselamatan dan Kesehatan Kerja (PPK-K3)* bahwa tidak ada waktu yang lebih tepat dibanding saat ini dimana kondisi sektor konstruksi sedang mendapat ujian terberat melalui adanya Pandemi COVID-19 dimana harus kita secara bersama menyikapi dengan salah satunya melalui *"Peningkatan Kompetensi Tenaga Kerja Konstruksi seiring dengan Pelaksanaan Kebiasaan Baru di Indonesia"*.
+Bapak/ Ibu/ Sdr/ Sdri bersama ini kami  sampaikan dari *Perkumpulan Pemangku Kepentingan Keselamatan dan Kesehatan Kerja (PPK-K3)* bahwa tidak ada waktu yang lebih tepat dibanding saat ini dimana kondisi sektor konstruksi sedang mendapat ujian terberat melalui adanya Pandemi COVID-19 dimana harus kita secara bersama menyikapi dengan salah satunya melalui *"Peningkatan Kompetensi Tenaga Kerja Konstruksi seiring dengan Pelaksanaan Kebiasaan Baru di Indonesia"*.
 
-Untuk itu, kami kembali mengingatkan bahwa webinar terkait pembahasan tema di atas akan diselenggarakan pada Sabtu, 25 Juli 2020 (09:00 - 12:30 WIB).
+Untuk itu, kami kembali mengingatkan bahwa webinar terkait pembahasan tema di atas akan diselenggarakan pada *Sabtu, 25 Juli 2020 (09:00 - 12:30 WIB)*.
 
 Link Pendaftaran dapat melalui:
 
 bit.ly/webinarkebiasaanbaru
+
+
+informasi lebih lanjut dapat menghubungi 0812-9448-1238
 
 Terima Kasih
         ';
         // $message = "test test test";
         // informasi lebih lanjut dapat menghubungi 0812-9448-1238
         //081294481238
-        foreach($data as $key){
-            $this->kirimPesanWA($key->no, $message);
-            KirimWa::find($key->id)->update([
-                'is_sent' => 1
-            ]);
-        }
+        // $wa =  $this->kirimPesanWA($telepon, $message);
+        // return $wa;
 
-        return 'pesan terkirim semua';
+        $data = KirimWa::where('is_sent',0)->first();
+        $wa =  $this->kirimPesanWA($data->no, $message);
+        // print_r($wa);
+        KirimWa::find($data->id)->update([
+            'is_sent' => $wa['status'],
+            'messageId' => $wa['messageId'],
+            'text' => $wa['text'],
+        ]);
+        return redirect('tombolWa')->with('message',$wa['text']);
+
+        foreach($data as $key){
+            if( strtotime(Carbon::parse($key->waktu_kirim)->isoFormat('YYYY-MM-DD HH:mm:s')) <= strtotime(Carbon::now()->isoFormat('YYYY-MM-DD HH:mm:s')) ){
+                echo 'here'. $key->no."<br>";
+                $wa =  $this->kirimPesanWA($key->no, $message);
+                print_r($wa);
+                KirimWa::find($key->id)->update([
+                    'is_sent' => $wa['status'],
+                    'messageId' => $wa['messageId'],
+                    'text' => $wa['text'],
+                ]);
+            }
+            
+        }
+        return 'ok';
+$a = false;
+        do {
+            $data = KirimWa::where('is_sent',0)->get();
+            
+        } while ($a);
+        
+        return $wa;
+        // return 'pesan terkirim semua';
 
     }
 

@@ -38,7 +38,8 @@ trait GlobalFunction {
         ));
         $results = json_decode(curl_exec($curlHandle), true);
         curl_close($curlHandle);
-        return 'sms berhasil dikirim';
+        return $results;
+
     }
     // fungsi kirim wa
     public function kirimPesanWA($no_hp, $pesan){
@@ -63,7 +64,7 @@ trait GlobalFunction {
         ));
         $results = json_decode(curl_exec($curlHandle), true);
         curl_close($curlHandle);
-        return 'WA berhasil dikirim';
+        return $results;
 
     }
 

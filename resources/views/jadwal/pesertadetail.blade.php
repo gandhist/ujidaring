@@ -355,6 +355,7 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>Waktu Akses</th>
                                                 <th>IP Address</th>
                                                 <th>Subject</th>
                                                 <th>Url</th>
@@ -364,6 +365,7 @@
                                             @foreach($logs as $key)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $key->created_at }}</td>
                                                 <td>{{ $key->ip }}</td>
                                                 <td>{{ $key->subject }}</td>
                                                 <td>{{ $key->url }}</td>

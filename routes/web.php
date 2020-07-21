@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('sms','PesertaController@kirimSMS');
 	Route::get('wa','PesertaController@kirimWA');
+	Route::get('tombolWa','PesertaController@tombolWa');
 
 	Route::group(['prefix' => 'peserta'], function () {
 		Route::get('dashboard','PesertaController@index');

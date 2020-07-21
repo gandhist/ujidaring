@@ -26,6 +26,7 @@ class PostQuisController extends Controller
         // return $modul_today;
         // $pg = JawabanPesertaPgPre::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->paginate(10);
         // $tm = JawabanEssayPeserta::where('id_peserta',$peserta->id)->where('id_modul_rundown',$peserta->jadwal_r->id)->get();
+        \LogActivity::addToLog('Membuka halaman post quis harian');
         return view('quis.pasca.index')->with(compact('peserta','modul_today'));
     }
 
@@ -34,6 +35,7 @@ class PostQuisController extends Controller
         $pg = JawabanPesertaPgPost::where('id_peserta',$peserta->id)->where('id_jadwal_modul',$id_jdw_mod)->paginate(10);
         $tm = JawabanTMPeserta::where('id_peserta',$peserta->id)->where('id_jadwal_modul',$id_jdw_mod)->where('tipe','post')->get();
         $modul_today = JadwalModul::find($id_jdw_mod);
+        \LogActivity::addToLog("Membuka halaman Post quis ". $modul_today->modul_r->modul);
         return view('quis.pasca.uji')->with(compact('peserta','pg','tm','modul_today'));
     }
 

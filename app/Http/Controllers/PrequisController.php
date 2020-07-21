@@ -35,7 +35,9 @@ class PrequisController extends Controller
 
     public function show($id_p, $id_jdw_mod){
         $peserta = Peserta::where('user_id',Auth::id())->first();
-        $pg = JawabanPesertaPgPre::where('id_peserta',$peserta->id)->where('id_jadwal_modul',$id_jdw_mod)->paginate(10);
+        // $pg = JawabanPesertaPgPre::where('id_peserta',$peserta->id)->where('id_jadwal_modul',$id_jdw_mod)->paginate(10);
+        $pg = JawabanPesertaPgPre::where('id_peserta',$peserta->id)->where('id_jadwal_modul',$id_jdw_mod)->get();
+        
         $tm = JawabanTMPeserta::where('id_peserta',$peserta->id)->where('id_jadwal_modul',$id_jdw_mod)->where('tipe','pre')->get();
         $modul_today = JadwalModul::find($id_jdw_mod);
         \LogActivity::addToLog("Membuka halaman pre quis ". $modul_today->modul_r->modul);
