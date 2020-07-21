@@ -103,7 +103,7 @@
                                     @endif
                                 </td>
                                 <td style="text-align:center;width:8%">
-                                    @if (isset($key->foto_cek_in))
+                                    @if (isset($key->jam_cek_in))
                                     <button class="btn btn-success btn-xs"
                                         onclick='tampilFoto("{{ asset("uploads/peserta/$key->foto_cek_in") }}","Jam Masuk {{ \Carbon\Carbon::parse($key->jam_cek_in)->toTimeString() }}")'><i
                                             class="fa fa-picture-o"></i> Lihat </button>
@@ -112,14 +112,14 @@
                                     @endif
                                 </td>
                                 <td style="text-align:center;width:8%">
-                                    @if (isset($key->jam_cek_in))
+                                    @if (isset($key->jam_cekout))
                                     {{ \Carbon\Carbon::parse($key->jam_cekout)->toTimeString() }}
                                     @else
 
                                     @endif
                                 </td>
                                 <td style="text-align:center;width:8%">
-                                    @if (isset($key->foto_cekout))
+                                    @if (isset($key->jam_cekout))
                                     <button class="btn btn-success btn-xs"
                                         onclick='tampilFoto("{{ asset("uploads/peserta/$key->foto_cekout") }}","Jam Keluar {{ \Carbon\Carbon::parse($key->jam_cekout)->toTimeString() }}")'><i
                                             class="fa fa-picture-o"></i> Lihat </button>

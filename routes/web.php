@@ -137,6 +137,11 @@ Route::group(['middleware' => 'auth'], function () {
 	// Daftar Kantor
 	Route::resource('penilaian', 'PenilaianController');
 
+	// Master Modul 
+	Route::resource('mastermodul', 'ModulController');
+	Route::get('mastermodul/{id}/edit','ModulController@edit');
+	Route::post('modul/save','ModulController@store');
+
 	// Fungsi Chain Bidang
 	Route::post('bidang/chain','ChainController@bidang');
 	Route::post('getDataModul/chain','ChainController@getDataModul');
