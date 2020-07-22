@@ -124,7 +124,7 @@
                                     <tbody>
                                         @foreach($detailModul as $key)
                                         <tr>
-                                            <input type="hidden" value="{{ $loop->iteration }}" id="id_ms_modul_{{ $loop->iteration }}" name="id_ms_modul_{{ $loop->iteration }}">
+                                            <input type="hidden" value="{{ $key->id }}" id="id_ms_modul_{{ $loop->iteration }}" name="id_ms_modul_{{ $loop->iteration }}">
                                             <td style="width:1%">{{ $loop->iteration }}</td>
                                             <td><input required value="{{$key->modul}}" class="form-control input-md"
                                                     type="text" placeholder="Modul" name="modul_{{ $loop->iteration }}"

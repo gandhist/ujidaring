@@ -337,7 +337,7 @@
                             </div>
                             <!-- </div> -->
                         </div>
-                        <div id="logs" class="tab-pane fade in active">
+                        <div id="logs" class="tab-pane fade in">
                             <div class="box box-info">
                                 <div class="box-header with-border" style="text-align:center">
                                     <!-- <h3 class="box-title">Upload Soal</h3> -->

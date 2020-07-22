@@ -54,10 +54,19 @@ class LoginController extends Controller
         // This section is the only change
         if ($this->guard()->validate($this->credentials($request))) {
             $user = $this->guard()->getLastAttempted();
+
+            if ($user->is_login == 1) {
+                return redirect()
+                ->back()
+                ->withInput($request->only($this->username(), 'remember'))
+                ->withErrors(['active' => 'anda sudah login.']);
+            }
     
             // Make sure the user is active
             if ($user->is_active == 1 && $this->attemptLogin($request)) {
                 // Send the normal successful login response
+
+                // save device id here
                 return $this->sendLoginResponse($request);
             } else {
                 // Increment the failed login attempts and redirect back to the
@@ -66,7 +75,7 @@ class LoginController extends Controller
                 return redirect()
                     ->back()
                     ->withInput($request->only($this->username(), 'remember'))
-                    ->withErrors(['active' => 'You must be active to login.']);
+                    ->withErrors(['active' => 'Userlogin tidak aktif.']);
             }
         }
     
@@ -88,6 +97,16 @@ class LoginController extends Controller
 
     protected function authenticated()
     {
+        $user = Auth::user();
+        $user->last_login = date("Y-m-d H:i:s");
+        $user->is_login = 1;
+        $user->save();
+        \LogActivity::addToLog("Login ke halaman ujian");
+        
+
+        // singel user login only
+        \Auth::logoutOtherDevices(request('password'));
+
         if (Auth::user()->role_id == 2){
             $allow_absen_masuk = $this->_is_allow_masuk();
             $allow_absen_pulang = $this->_is_allow_pulang();
@@ -101,8 +120,21 @@ class LoginController extends Controller
         if (Auth::user()->role_id == 3 || Auth::user()->role_id == 3){
                 return redirect('peserta/dashboard');
         }
+        
+    }
+
+    public function logout(\Illuminate\Http\Request $request){
+        \LogActivity::addToLog("Logout dari halaman ujian");
         $user = Auth::user();
-        $user->last_login = date("Y-m-d H:i:s");
+        $user->is_login = 0;
         $user->save();
+        $this->guard()->logout();
+
+        $request->session()->flush();
+
+        $request->session()->regenerate();
+
+        return redirect('/');
+
     }
 }

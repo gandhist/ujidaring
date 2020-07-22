@@ -35,17 +35,19 @@
                 Anda belum upload tugas.
             </div>
             @endif
+            @if($peserta->jadwal_r->f_pkl)
             <div id="upload">
                 <h3>Upload Makalah dari tugas PKL yang diberikan</h3>
                 <form id="formAdd" name="formAdd">
                     <input type="file" class="form-control" name="pdf_makalah" id="pdf_makalah">
                     <span id="pdf_makalah" class="invalid-feedback" > {{ $errors->first('pdf_makalah') }}</span>
-
+                        <br>
                     <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" id="btnSave" name="btnSave">Kirim Tugas</button>
                     </div>
                 </form>
             </div>
+            @endif
         </div>
     </div>
 </div>
@@ -66,14 +68,16 @@ $(document).ready(function () {
     var diffTime = eventTime - currentTime;
     var duration = moment.duration(diffTime*1000, 'milliseconds');
     var interval = 1000;
-
+if (eventTime > 0) {
     timer = setInterval(function(){
         
-    duration = moment.duration(duration - interval, 'milliseconds');
-    stopTimer(duration);
-        $('#timer').text(duration.hours() + ":" + duration.minutes() + ":" + duration.seconds())
-        }, interval
-    );
+        duration = moment.duration(duration - interval, 'milliseconds');
+        stopTimer(duration);
+            $('#timer').text(duration.hours() + ":" + duration.minutes() + ":" + duration.seconds())
+            }, interval
+        );
+}
+    
 })
 
 // timer

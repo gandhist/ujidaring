@@ -72,6 +72,7 @@ class PesertaController extends Controller
     // view tugas
     public function tugas(){
         $peserta = Peserta::where('user_id',Auth::id())->first();
+        \LogActivity::addToLog("peserta membuka halaman tugas");
         return view('peserta.tugas')->with(compact('peserta'));
     }
 
@@ -102,6 +103,7 @@ class PesertaController extends Controller
             'created_by' => Auth::id(),
             'pdf_tugas' => $pdf_tugas
         ]);
+        \LogActivity::addToLog("peserta mengirim/upload tugas");
         return response()->json([
             'status' => true,
             'message' => 'Berhasil Mengirim Tugas'
@@ -117,6 +119,7 @@ class PesertaController extends Controller
         }
 
         $rd = JadwalRundown::where('id_jadwal',$peserta->jadwal_r->id)->where('tanggal',Carbon::now()->isoFormat('YYYY-MM-DD'))->first();
+        \LogActivity::addToLog("peserta membuka halaman pengisian kuisioner/evaluasi pada ". Carbon::now()->toDateTimeString());
         return view('peserta.kuisioner')->with(compact('peserta','rd'));
     }
 
@@ -141,6 +144,7 @@ class PesertaController extends Controller
                  ]);
             }
         }
+        \LogActivity::addToLog("peserta mengisi kuisioner/evaluasi pada ". Carbon::now()->toDateTimeString());
         return response()->json([
             'status' => true,
             'message' => 'Berhasil memberikan evaluasi, Penilaian anda di jamin kerahasiaannya',
@@ -227,7 +231,7 @@ class PesertaController extends Controller
         }
         $soal = JawabanPeserta::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->paginate(10);
         $soal_essay = JawabanEssayPeserta::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->get();
-        \LogActivity::addToLog("peserta membuka halaman ujian pilihan ganda pada jadwal ");
+        \LogActivity::addToLog("peserta membuka halaman ujian pilihan ganda");
         return view('ujian.pg')->with(compact('peserta','soal','soal_essay'));
     }
 
@@ -261,6 +265,7 @@ class PesertaController extends Controller
         // ->where('id_soal',$val_exp[0])
         ->where('is_true',1)->count();
         // return $benar;
+        \LogActivity::addToLog("peserta menyimpan semua jawaban pilihan ganda");
         return response()->json([
             'status' => true,
             'message' => 'Jawaban Anda Berhasil Disimpan'
@@ -335,6 +340,7 @@ class PesertaController extends Controller
     // function menampilkan form upload makalah
     public function makalah(){
         $peserta = Peserta::where('user_id',Auth::id())->first();
+        \LogActivity::addToLog("peserta membuka halaman makalah PKL");
         return view('peserta.makalah')->with(compact('peserta'));
     }
 
@@ -365,6 +371,7 @@ class PesertaController extends Controller
             'created_by' => Auth::id(),
             'pdf_makalah' => $pdf_tugas
         ]);
+        \LogActivity::addToLog("peserta menyimpan/upload makalah PKL");
         return response()->json([
             'status' => true,
             'message' => 'Berhasil Mengirim Makalah'
@@ -374,6 +381,7 @@ class PesertaController extends Controller
     // function menampilkan form upload presentasi
     public function presentasi(){
         $peserta = Peserta::where('user_id',Auth::id())->first();
+        \LogActivity::addToLog("peserta membuka halaman upload Presentasi");
         return view('peserta.presentasi')->with(compact('peserta'));
     }
 
@@ -404,6 +412,8 @@ class PesertaController extends Controller
             'created_by' => Auth::id(),
             'f_ppt' => $pdf_tugas
         ]);
+        \LogActivity::addToLog("peserta menyimpan/upload Presentasi");
+
         return response()->json([
             'status' => true,
             'message' => 'Berhasil Mengirim Presentasi'

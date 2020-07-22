@@ -61,10 +61,11 @@
                 </div>
                 <div class="col-lg-10">
                     <!-- 21:9 aspect ratio -->
-                    <div >
-                        {{-- https://www.youtube.com/embed/LI-_0_q1rDI --}}
-                        <iframe class="embed-responsive-item" src="{{ url("uploads/pkl/$jadwal->f_pkl") }}" allowfullscreen></iframe>
-                      </div>
+                    @if($jadwal->f_pkl)
+                        <div >
+                            <iframe class="embed-responsive-item" src="{{ url("uploads/pkl/$jadwal->f_pkl") }}" allowfullscreen></iframe>
+                        </div>
+                    @endif
                 </div>
             </div>
             <hr>

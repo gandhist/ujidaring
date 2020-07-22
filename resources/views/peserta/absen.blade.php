@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h3 id="demo">Halaman Absensi</h3>
+<h3 id="demo">Halaman Presensi</h3>
 <div class="containel-fluid">
 
 
@@ -21,7 +21,7 @@
                     <div id="my_camera"></div>
                     <br/>
                     @if($allow_cekin)
-                    <input type=button class="btn btn-outline-success" value="Absen Masuk" onClick="take_snapshot()">
+                    <input type=button class="btn btn-outline-success" value="Presensi Masuk" onClick="take_snapshot()">
                     @else
                       @if($allow_cekout)
                         {{-- <a href="{{ url('peserta/kuisioner') }}" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Isi evaluasi agar bisa absen pulang">Absen Keluar</a> --}}
@@ -29,11 +29,11 @@
                         @if($allow_tugas)
                           <a href="{{ url('peserta/kuisioner') }}" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Isi evaluasi agar bisa absen pulang">Absen Keluar</a>
                         @else
-                          <input type=button class="btn btn-outline-success" value="Absen Keluar" onClick="take_snapshot_out()">
+                          <input type=button class="btn btn-outline-success" value="Presensi Keluar" onClick="take_snapshot_out()">
                         @endif
                       @else
                       <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        Terimakasih, Anda Sudah Melakukan Absensi Masuk dan Pulang.
+                        Terimakasih, Anda Sudah Melakukan Presensi Masuk dan Pulang.
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
@@ -44,14 +44,14 @@
                     <input type="hidden" name="image" class="image-tag">
                 </div>
                 <div class="col-md-6">
-                    <div id="results" style="padding:20px; border:1px solid; background:#ccc;">Gambar saat absen akan tampil disini</div>
+                    <div id="results" style="padding:20px; border:1px solid; background:#ccc;">Gambar saat Presensi akan tampil disini</div>
                 </div>
             </div>
         </form>
 <hr>
 
     <div class="row">
-        <h3>Daftar Absensi Anda</h3>
+        <h3>Daftar Presensi Anda</h3>
         <div class="col-lg-12">
             <table class="table">
                 <thead>
@@ -161,7 +161,7 @@
         }
       },
       error: function(xhr, status) {
-        alert('error saat absensi');
+        alert('error saat Presensi');
       }
     });
   }
@@ -214,7 +214,7 @@
         }
       },
       error: function(xhr, status) {
-          alert('error saat absensi');
+          alert('error saat Presensi');
       }
     });
 
