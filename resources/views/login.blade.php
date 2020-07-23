@@ -32,6 +32,7 @@
 <div class="login-box">
   <div class="login-logo">
     <a href="../../index2.html"><b>Ujian Online</b>- Login</a>
+
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
@@ -43,12 +44,23 @@
         <input type="hidden" id="is_active" name="is_active" value="1">
         <input type="text" class="form-control" placeholder="Username" name="username">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        @if ($error = $errors->first('username'))
+          <div class="alert alert-danger">
+            {{ $error }}
+          </div>
+        @endif
       </div>
       <div class="form-group has-feedback">
         <input type="password" class="form-control" placeholder="Password" name="password">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        @if ($error = $errors->first('password'))
+          <div class="alert alert-danger">
+            {{ $error }}
+          </div>
+        @endif
       </div>
       <div class="row">
+
        <!--  <div class="col-xs-8">
           <div class="checkbox icheck">
             <label>
@@ -61,8 +73,18 @@
           <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
         </div>
         <!-- /.col -->
+        
+      </div>
+      <div class="row">
+        @if ($error = $errors->first('active'))
+          <div class="alert alert-danger">
+            {{ $error }}
+          </div>
+        @endif
       </div>
     </form>
+    {{-- {{ dd(session()->all() ) }} --}}
+
   </div>
   <!-- /.login-box-body -->
 </div>

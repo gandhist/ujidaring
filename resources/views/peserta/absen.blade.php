@@ -21,7 +21,7 @@
                     <div id="my_camera"></div>
                     <br/>
                     @if($allow_cekin)
-                    <input type=button class="btn btn-outline-success" value="Absen Masuk" onClick="take_snapshot()">
+                    <input type=button class="btn btn-outline-success" value="Presensi Masuk" onClick="take_snapshot()">
                     @else
                       @if($allow_cekout)
                         {{-- <a href="{{ url('peserta/kuisioner') }}" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Isi evaluasi agar bisa absen pulang">Absen Keluar</a> --}}
@@ -44,7 +44,7 @@
                     <input type="hidden" name="image" class="image-tag">
                 </div>
                 <div class="col-md-6">
-                    <div id="results" style="padding:20px; border:1px solid; background:#ccc;">Gambar saat absen akan tampil disini</div>
+                    <div id="results" style="padding:20px; border:1px solid; background:#ccc;">Gambar saat Presensi akan tampil disini</div>
                 </div>
             </div>
         </form>
@@ -161,7 +161,7 @@
         }
       },
       error: function(xhr, status) {
-        alert('error saat absensi');
+        alert('error saat Presensi');
       }
     });
   }
@@ -214,7 +214,7 @@
         }
       },
       error: function(xhr, status) {
-          alert('error saat absensi');
+          alert('error saat Presensi');
       }
     });
 

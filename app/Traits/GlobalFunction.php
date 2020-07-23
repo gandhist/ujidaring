@@ -38,7 +38,8 @@ trait GlobalFunction {
         ));
         $results = json_decode(curl_exec($curlHandle), true);
         curl_close($curlHandle);
-        return 'sms berhasil dikirim';
+        return $results;
+
     }
     // fungsi kirim wa
     public function kirimPesanWA($no_hp, $pesan){
@@ -63,7 +64,7 @@ trait GlobalFunction {
         ));
         $results = json_decode(curl_exec($curlHandle), true);
         curl_close($curlHandle);
-        return 'WA berhasil dikirim';
+        return $results;
 
     }
 
@@ -262,7 +263,7 @@ trait GlobalFunction {
                         // jika datanya tidak ada
                         if (!$cek) {
                             // looping soal agar menjadi soal utk peserta
-                            foreach ($mr->jadwal_modul_r->soal_pre as $soal) {
+                            foreach ($mr->jadwal_modul_r->soal_post as $soal) {
                                 $soalpst = new JawabanPesertaPgPost;
                                 $soalpst->id_jadwal_modul = $mr->id_jadwal_modul;
                                 $soalpst->id_soal_pg_post = $soal->id;

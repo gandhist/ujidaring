@@ -38,7 +38,7 @@
                 <form id="formAdd" name="formAdd">
                     <input type="file" class="form-control" name="f_ppt" id="f_ppt">
                     <span id="f_ppt" class="invalid-feedback" > {{ $errors->first('f_ppt') }}</span>
-
+                    <br>
                     <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="button" id="btnSave" name="btnSave">Kirim</button>
                     </div>

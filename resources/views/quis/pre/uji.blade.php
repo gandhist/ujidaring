@@ -5,6 +5,9 @@ html {
   scroll-behavior: smooth;
 }
 </style>
+<style type="text/css" media="print">
+  body {visibility: hidden; display: none;}
+</style>
 @endpush
 @section('content')
 <div class="container-fluid">
@@ -159,7 +162,7 @@ html {
     var jml_soal = "{{ $soall }}";
     var home = "{{ url('peserta/dashboard') }}";
     var timer;
-
+document.addEventListener('contextmenu', event => event.preventDefault());
 $(document).ready(function () {
       // OPSIONAL: Buat event listener untuk pindah
     // ke soal selanjutnya ketika input radio dipilih

@@ -22,6 +22,11 @@ class JadwalModul extends Model
         return $this->hasMany('App\SoalPgPreModel','id_jadwal_modul');
     }
 
+    // relasi has many soal pre
+    public function soal_post(){
+        return $this->hasMany('App\SoalPgPostModel','id_jadwal_modul');
+    }
+
      // relasi has many soal pre
      public function soal_pre_today(){
         return $this->hasMany('App\SoalPgPreModel','id_jadwal_modul');

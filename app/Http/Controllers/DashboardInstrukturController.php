@@ -55,12 +55,12 @@ class DashboardInstrukturController extends Controller
         foreach ($jadwal->jadwal_modul_r as $key) {
             if ($request->has($px_materi.$key->id)) {
                 $anggota += [
-                    $px_materi.$key->id => 'mimes:pdf,docx,xls,xlsx,mp4,ppt|max:10240',
+                    $px_materi.$key->id => 'mimes:pdf,docx,xls,xlsx,mp4,ppt,pptx|max:20480',
                     // $px_link.$i => 'required',
                 ];
                 $anggota_msg += [
                     $px_materi.$key->id.".mimes" => 'Upload Hanya format PDF,XLS,DOCX, MP4!',
-                    $px_materi.$key->id.".max" => 'Maksimal File harus 5MB',
+                    $px_materi.$key->id.".max" => 'Maksimal File harus 20MB',
                 ];
             }
         }
