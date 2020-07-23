@@ -13,7 +13,8 @@
 
 
 Route::auth();
-Route::get('test/{id}','JadwalController@gen');
+Route::post('bentukkelompok','JadwalController@gen');
+Route::get('jadwal/lihatkelompok/{id}','JadwalController@lihatkelompok');
 Route::group(['middleware' => 'auth'], function () {
 
 	Route::group(['prefix' => 'instruktur'], function () {

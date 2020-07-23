@@ -131,16 +131,7 @@ function store(){
     success: function(response) {
         console.log(response['id_jadwal']);
         if (response.status) {
-        Swal.fire({
-            title: response.message,
-            // text: response.success,
-            type: 'success',
-            confirmButtonText: 'Close',
-            confirmButtonColor: '#AAA',
-            onClose: function() {
-                window.location = document.referrer;
-            }
-        })
+
         
         }
     },

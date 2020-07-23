@@ -69,7 +69,7 @@ trait GlobalFunction {
 
     // fungsi generate kelompok by jadwal
     public function generate_kelompok($id_jadwal){
-        $dt_peserta = Peserta::where('id_kelompok',$id_jadwal);
+        $dt_peserta = Peserta::where('id_kelompok',$id_jadwal)->get();
         $dt_p =[];
         // menyimpan id peserta ke dalam array
         foreach($dt_peserta as $key){

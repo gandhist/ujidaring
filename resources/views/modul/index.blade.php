@@ -145,6 +145,7 @@
                     <tr>
                         <th><i class="fa fa-check-square-o"></i></th>
                         <th>No</th>
+                        <th>Jenis Usaha</th>
                         <th>Bidang</th>
                         <th>Bidang Srtf Alat</th>
                         <th>User Tambah</th>
@@ -156,8 +157,19 @@
                         <td style='width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
                                 id="selection[]" name="selection[]"></td>
                         <td style='width:1%'>{{ $loop->iteration }}</td>
-                        <td>{{$key->bidang_srtf_alat_r->bidang_r->nama_bidang}}</td>
-                        <td>{{$key->bidang_srtf_alat_r->nama_srtf_alat}}</td>
+
+                        <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$key->bidang_srtf_alat_r->bidang_r->jenis_usaha_r->nama_jns_usaha}}">
+                                {{$key->bidang_srtf_alat_r->bidang_r->jenis_usaha_r->kode_jns_usaha}}</td>
+                        <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$key->bidang_srtf_alat_r->bidang_r->nama_bidang}}">
+                                {{$key->bidang_srtf_alat_r->bidang_r->kode_bidang}}</td>
+                        <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$key->bidang_srtf_alat_r->nama_srtf_alat}}">
+                                {{$key->bidang_srtf_alat_r->kode_srtf_alat}}</td>
+
+                        <!-- <td>{{$key->bidang_srtf_alat_r->bidang_r->nama_bidang}}</td>
+                        <td>{{$key->bidang_srtf_alat_r->nama_srtf_alat}}</td> -->
                         <td style='width:8%;text-align:right'>{{ \Carbon\Carbon::parse($key->reated_at)->isoFormat("DD MMMM YYYY") }}</td>
                     </tr>
                     @endforeach

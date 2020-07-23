@@ -33,7 +33,7 @@ use App\ModulRundown;
 use App\JawabanEvaluasi;
 use App\JawabanTMPeserta;
 use App\LogActivity;
-
+use App\KelompokPeserta;
 
 class JadwalController extends Controller
 {
@@ -45,8 +45,6 @@ class JadwalController extends Controller
      */
     public function index()
     {
-        // generate_kelompok(1);
-        // dd('x');
         $id_user = Auth::id();
         $user_role = User::select('role_id')->where('id','=',$id_user)->first();
         $role =  $user_role['role_id'];
@@ -703,9 +701,57 @@ class JadwalController extends Controller
     }
 
     // function generate kelompok peserta 
-    public function gen($id_jadwal){
-        return $this->generate_kelompok($id_jadwal);
+    public function gen(request $request){
+
+        $jumlahPeserta = Peserta::where('id_kelompok','=',$request->idjadwal)->count();
+        if($jumlahPeserta<7){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Minimal Peserta 7 Orang !'
+            ]);
+        }
+
+        $is_kelompok = JadwalModel::select('is_kelompok')->where('id','=',$request->idjadwal)->first();
+        if($is_kelompok['is_kelompok']==1){
+            return response()->json([
+                'status' => 'warning',
+                'message' => 'Kelompok sudah ada !'
+            ]);
+        }
+
+        $dataupdate['is_kelompok'] = 1;
+        JadwalModel::find($request->idjadwal)->update($dataupdate);
+        $data = $this->generate_kelompok($request->idjadwal);
+        $no_kelompok = 1;
+        foreach ($data as $row) {
+            foreach ($row as $idpeserta) {
+                $datakelompok['id_jadwal'] = $request->idjadwal;
+                $datakelompok['id_peserta'] = $idpeserta;
+                $datakelompok['id_ketua'] = $row[0];
+                $datakelompok['no_kelompok'] = $no_kelompok; 
+                $datakelompok['created_by'] = Auth::id();
+                $datakelompok['created_at'] = Carbon::now()->toDateTimeString();
+                KelompokPeserta::create($datakelompok);
+            }
+            $no_kelompok++;
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Berhasil buat kelompok !'
+        ]);
     }
+
+    public function lihatkelompok($id){
+        $datakelompok = KelompokPeserta::where('id_jadwal',$id)->groupBy('no_kelompok')->get();
+        $datapeserta = KelompokPeserta::where('id_jadwal',$id)->get();
+        $data = JadwalModel::find($id);
+        $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->orderBy('nama','asc')->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.kelompok')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay','datakelompok','datapeserta'));
+    } 
 
     public function lihatsoalpre (Request $request){
         $datasoal = SoalPgPreModel::where('id_jadwal_modul','=',$request->value_id)->with('jadwal_modul_r.modul_r')->get();

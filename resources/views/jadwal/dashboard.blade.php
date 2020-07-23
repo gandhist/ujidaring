@@ -35,21 +35,30 @@
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td>
                                         <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->jenis_usaha_r->nama_jns_usaha}}</td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->tuk}}
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$data->jenis_usaha_r->nama_jns_usaha}}">:
+                                            {{$data->jenis_usaha_r->kode_jns_usaha}}</td>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$data->bidang_r->nama_bidang}}">:
+                                            {{$data->bidang_r->kode_bidang}}
                                         </td>
+
                                     </tr>
                                     <tr>
                                         <th style="text-align:left;padding: 6px;">Tanggal Selesai</th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{ \Carbon\Carbon::parse($data->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
                                         </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang Srtf
+                                            Alat</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$data->sertifikat_alat_r->nama_srtf_alat}}">:
+                                            {{$data->sertifikat_alat_r->kode_srtf_alat}}
+                                        </td>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->bidang_r->nama_bidang}}
+                                            {{$data->tuk}}
                                         </td>
                                     </tr>
                                 </thead>
@@ -101,8 +110,8 @@
                         <div class="icon">
                             <i class="ion ion-person"></i>
                         </div>
-                        <a href="{{ url('jadwal/instruktur', $data->id) }}"
-                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('jadwal/instruktur', $data->id) }}" class="small-box-footer">Detail <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 {{-- end of instruktur --}}
@@ -148,8 +157,8 @@
                         <div class="icon">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('instruktur/modul',$data->id) }}"
-                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('instruktur/modul',$data->id) }}" class="small-box-footer">Detail <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- end of modul -->
@@ -163,8 +172,8 @@
                         <div class="icon">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('jadwal/aturjadwal', $data->id) }}"
-                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('jadwal/aturjadwal', $data->id) }}" class="small-box-footer">Detail <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- end of atur jadwal -->
@@ -238,8 +247,8 @@
                         <div class="icon">
                             <i class="fa fa-star"></i>
                         </div>
-                        <a href="{{ url('jadwal/evaluasi', $data->id) }}"
-                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('jadwal/evaluasi', $data->id) }}" class="small-box-footer">Detail <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- end of evaluasi -->
@@ -393,7 +402,7 @@
                             'Waktu dihitung mundur dari sekarang.',
                             'success'
                         )
-                    updateDurasi(durasi, idJadwal);
+                        updateDurasi(durasi, idJadwal);
                     }
 
                 });

@@ -150,6 +150,7 @@
                         <th>Tanggal Akhir</th>
                         <th>Jenis Usaha</th>
                         <th>Bidang</th>
+                        <th>Bidang Srtf Alat</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -163,8 +164,15 @@
                         </td>
                         <td style='width:10%'>{{ \Carbon\Carbon::parse($key->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
                         </td>
-                        <td>{{$key->jenis_usaha_r->nama_jns_usaha}}</td>
-                        <td>{{$key->bidang_r->nama_bidang}}</td>
+                        <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$key->jenis_usaha_r->nama_jns_usaha}}">
+                                {{$key->jenis_usaha_r->kode_jns_usaha}}</td>
+                        <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$key->bidang_r->nama_bidang}}">
+                                {{$key->bidang_r->kode_bidang}}</td>
+                        <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$key->sertifikat_alat_r->nama_srtf_alat}}">
+                                {{$key->sertifikat_alat_r->kode_srtf_alat}}</td>
                     </tr>
                     @endforeach
                 </tbody>

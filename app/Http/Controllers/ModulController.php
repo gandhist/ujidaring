@@ -142,8 +142,8 @@ class ModulController extends Controller
         ]
         );
 
-        $id_bidang = $request->id_bidang; 
-        $id_sert_alat = $request->id_sert_alat;
+        // $id_bidang = $request->id_bidang; 
+        // $id_sert_alat = $request->id_sert_alat;
         $jumlah_hari = $request->id_jumlah_hari;
         $syarat = $request->id_syarat;
         if ($request->jumlah_detail!='' )
@@ -161,7 +161,7 @@ class ModulController extends Controller
                 $dataDetail['link'] = $request->$x;
                 $dataDetail['persyaratan'] = $syarat;
                 $dataDetail['hari'] = $jumlah_hari;
-                $dataDetail['id_bid_srtf_alat'] = $id_sert_alat;
+                // $dataDetail['id_bid_srtf_alat'] = $id_sert_alat;
                 // handle upload master modul file 
                 $x = "file_modul_".$jumlah_detail;
                     if ($files = $request->file($x)) {

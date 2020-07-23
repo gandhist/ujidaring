@@ -37,15 +37,15 @@
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td>
                                         <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->jenis_usaha_r->nama_jns_usaha}}</td>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;"
+                                            data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                            title="{{$data->jenis_usaha_r->nama_jns_usaha}}">:
+                                            {{$data->jenis_usaha_r->kode_jns_usaha}}</td>
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->bidang_r->nama_bidang}}
-                                        </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->tuk}}
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;"
+                                            data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                            title="{{$data->bidang_r->nama_bidang}}">:
+                                            {{$data->bidang_r->kode_bidang}}
                                         </td>
 
                                     </tr>
@@ -54,12 +54,19 @@
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{ \Carbon\Carbon::parse($data->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
                                         </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Peserta
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang Srtf
+                                            Alat
                                         </th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;"
+                                            data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                            title="{{$data->sertifikat_alat_r->nama_srtf_alat}}">:
+                                            {{$data->sertifikat_alat_r->kode_srtf_alat}}</td>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahPeserta}} Orang</td>
+                                            {{$data->tuk}}
+                                        </td>
 
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Pg
+                                        <!-- <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Pg
                                         </th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{$jumlahSoalPg}} Soal</td>
@@ -67,7 +74,7 @@
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">Jml Soal Essay
                                         </th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$jumlahSoalEssay}} Soal</td>
+                                            {{$jumlahSoalEssay}} Soal</td> -->
                                     </tr>
 
                                 </thead>
@@ -75,23 +82,34 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                </div>
                 <div class="col-md-2">
+                </div>
+                <div class="col-md-3">
 
                     <div class="box-body">
                         <div class="table-responsive">
                             <table class="table no-margin">
                                 <thead>
                                     <tr>
-                                        <th style="text-align:left;padding-bottom:0px;padding-top:0px"><button id="btnkirim" type="button"
+                                        <td style="text-align:left;padding-bottom:0px;padding-top:0px">
+                                            @if($data->is_kelompok == "1" )
+                                            <a href="{{url('jadwal/lihatkelompok/'.$data->id)}}" id="btnlihatklp"
+                                                type="button" class="btn btn-block btn-danger btn-flat">Lihat Kelompok</a>
+                                            @else
+                                            <button id="btnbuatklp" type="button"
+                                                class="btn btn-block btn-info btn-flat">Buat Kelompok</button>
+                                            @endif
+                                        </td>
+                                        <td style="text-align:left;padding-bottom:0px;padding-top:0px"><button
+                                                id="btnkirim" type="button"
                                                 class="btn btn-block btn-info btn-flat">Kirim User Account</button>
-                                        </th>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <th style="text-align:left;padding-bottom:0px;padding-top:2px"><button id="btndetail" type="button"
+                                        <td colspan="2" style="text-align:left;padding-bottom:0px;padding-top:2px">
+                                            <button id="btndetail" type="button"
                                                 class="btn btn-block btn-warning btn-flat">Detail</button>
-                                        </th>
+                                        </td>
                                     </tr>
                                 </thead>
                             </table>
@@ -157,7 +175,7 @@
                                             data-target="#modal_jawab_{{$key->id}}">Sudah
                                             dinilai</button></td>
                                     @endif -->
-                                    <!-- <td style="width:7%">{{count($key->pg_benar_r)}}</td>
+                                <!-- <td style="width:7%">{{count($key->pg_benar_r)}}</td>
                                 <td style="width:7%">{{count($key->pg_salah_r)}}</td>
                                 <td style="width:8%">{{count($key->essay_benar_r)}}</td>
                                 <td style="width:8%">{{count($key->essay_salah_r)}}</td> -->
@@ -375,13 +393,14 @@
 
         var dt = $('#custom-table').DataTable({
             "lengthMenu": [
-                [10, 20, 50],
-                [10, 20, 50]
+                [20, 20, 50],
+                [20, 20, 50]
             ],
+            'responsive': true,
             "scrollX": true,
             "scrollY": $(window).height() - 255,
             "scrollCollapse": true,
-        
+
             "searching": false,
             "autoWidth": false,
             "columnDefs": [{
@@ -431,6 +450,26 @@
             }
         });
 
+        $('#btnbuatklp').on('click', function (e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Generate Kelompok',
+                text: "Sistem akan generate kelompok secara random?",
+                icon: 'warning',
+                buttons: true,
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: "Batal",
+                confirmButtonText: 'Ya'
+            }).then((result) => {
+                if (result.value) {
+                    idjadwal = "{{$data->id}}";
+                    buatkelompok(idjadwal);
+                }
+            });
+        });
+
         $('#btndetail').on('click', function (e) {
             e.preventDefault();
             var id = [];
@@ -446,7 +485,7 @@
                     confirmButtonColor: '#AAA'
                 });
                 // alert('Tidak ada data yang terpilih');
-            }else if (id.length > 1) {
+            } else if (id.length > 1) {
                 Swal.fire({
                     title: "Harap pilih satu data untuk detail",
                     type: 'warning',
@@ -460,6 +499,47 @@
             }
         });
 
+        // Fungsi membuat kelompok
+        function buatkelompok(idjadwal) {
+            // alert(idjadwal);
+            var url = "{{ url('bentukkelompok') }}";
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    idjadwal: idjadwal
+                },
+                success: function (data) {
+                    if (data['status'] == "success") {
+                        Swal.fire({
+                            title: data['message'],
+                            // text: response.success,
+                            type: data['status'],
+                            confirmButtonText: 'Ok',
+                            confirmButtonColor: '#AAA',
+                            onClose: function () {
+                                window.location.href = "{{ url('jadwal/lihatkelompok/'.$data->id) }}";
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: data['message'],
+                            type: data['status'],
+                            confirmButtonText: 'Ok',
+                            confirmButtonColor: '#AAA'
+                        });
+                    }
+                },
+                error: function (xhr, status) {
+                    alert('Error');
+                }
+            });
+        }
         // Fungsi Update durasi ujian
         function updateDurasi(durasi, idJadwal) {
             var url = "{{ url('updateDurasiUjian') }}";
