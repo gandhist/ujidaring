@@ -39,43 +39,47 @@
                             <table class="table no-margin">
                                 <thead>
                                     <tr>
-                                        <th style="text-align:left;padding: 6px;">Tanggal Mulai</th>
+                                        <!-- <th style="text-align:left;padding: 6px;">Tanggal Mulai</th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td>
-                                        <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->jenis_usaha_r->nama_jns_usaha}}</td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->bidang_r->nama_bidang}}
-                                        </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->tuk}}
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <th style="text-align:left;padding: 6px;">Tanggal Selesai</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{ \Carbon\Carbon::parse($data->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
-                                        </td>
+                                            {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td> -->
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">NIK
                                         </th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{$Peserta->nik}}</td>
-
+                                        <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                            title="{{$data->jenis_usaha_r->nama_jns_usaha}}">:
+                                            {{$data->jenis_usaha_r->kode_jns_usaha}}</td>
+                                        </td>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang Srtf
+                                            Alat</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                            title="{{$data->sertifikat_alat_r->nama_srtf_alat}}">:
+                                            {{$data->sertifikat_alat_r->kode_srtf_alat}}
+                                    </tr>
+                                    <tr>
+                                        <!-- <th style="text-align:left;padding: 6px;">Tanggal Selesai</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{ \Carbon\Carbon::parse($data->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
+                                        </td> -->
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">Nama
                                         </th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{$Peserta->nama}}</td>
-
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Tmp, Tgl_Lahir
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                            title="{{$data->bidang_r->nama_bidang}}">:
+                                            {{$data->bidang_r->kode_bidang}}
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{$data->tuk}}
+                                        </td>
+                                        <!-- <th style="text-align:left;padding: 6px;vertical-align: middle;">Tmp, Tgl_Lahir
                                         </th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{$Peserta->tmp_lahir}},
                                             {{ \Carbon\Carbon::parse($Peserta->tgl_lahir)->isoFormat("DD MMMM YYYY") }}
-                                        </td>
+                                        </td> -->
                                     </tr>
 
                                 </thead>

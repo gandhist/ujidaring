@@ -220,6 +220,7 @@
         $('#gambarJadwal').change(function () {
             var id = $(this).val();
             var ext = id.substr(id.lastIndexOf('.')+1);
+            ext = ext.toLowerCase();
             switch (ext) {
                 case 'jpg':
                 case 'jpeg':

@@ -4,7 +4,7 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1><a href="{{ url('jadwal') }}" class="btn btn-md bg-purple"><i class="fa fa-arrow-left"></i></a>
-        Dashboard
+        Dashboard Jadwal
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
@@ -25,7 +25,7 @@
             @endif
             <!-- MultiStep Form -->
             <div class="row">
-                <div class="col-md-7">
+                <!-- <div class="col-md-7">
                     <div class="box-body">
                         <div class="table-responsive">
                             <table class="table no-margin">
@@ -35,32 +35,41 @@
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td>
                                         <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->jenis_usaha_r->nama_jns_usaha}}</td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->tuk}}
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$data->jenis_usaha_r->nama_jns_usaha}}">:
+                                            {{$data->jenis_usaha_r->kode_jns_usaha}}</td>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$data->bidang_r->nama_bidang}}">:
+                                            {{$data->bidang_r->kode_bidang}}
                                         </td>
+
                                     </tr>
                                     <tr>
                                         <th style="text-align:left;padding: 6px;">Tanggal Selesai</th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{ \Carbon\Carbon::parse($data->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
                                         </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang Srtf
+                                            Alat</th>
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$data->sertifikat_alat_r->nama_srtf_alat}}">:
+                                            {{$data->sertifikat_alat_r->kode_srtf_alat}}
+                                        </td>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->bidang_r->nama_bidang}}
+                                            {{$data->tuk}}
                                         </td>
                                     </tr>
                                 </thead>
                             </table>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-md-1">
                 </div>
                 <div class="col-md-4">
-                    <form action="{{ route('jadwal.store') }}" id="" name="" method="post"
+                    <!-- <form action="{{ route('jadwal.store') }}" id="" name="" method="post"
                         enctype="multipart/form-data">
                         @csrf
                         <div class="box-body">
@@ -82,13 +91,12 @@
                                     </thead>
                                 </table>
                             </div>
-                            <!-- /.table-responsive -->
                         </div>
-                    </form>
+                    </form> -->
                 </div>
             </div>
             <!-- /.MultiStep Form -->
-
+            <br>
             <div class="row">
                 {{-- instruktur --}}
                 <div class="col-lg-3 col-xs-6">
@@ -101,8 +109,8 @@
                         <div class="icon">
                             <i class="ion ion-person"></i>
                         </div>
-                        <a href="{{ url('jadwal/instruktur', $data->id) }}"
-                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('jadwal/instruktur', $data->id) }}" class="small-box-footer">Detail <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 {{-- end of instruktur --}}
@@ -127,7 +135,7 @@
                     <div class="small-box bg-red">
                         <div class="inner">
                             <h3>{{$jumlahSoalPg+$jumlahSoalEssay}}</h3>
-                            <p>Ujian Akhir</p>
+                            <p>Ujian</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-file-text-o" aria-hidden="true"></i>
@@ -148,8 +156,8 @@
                         <div class="icon">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('instruktur/modul',$data->id) }}"
-                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('instruktur/modul',$data->id) }}" class="small-box-footer">Detail <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- end of modul -->
@@ -163,8 +171,8 @@
                         <div class="icon">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('jadwal/aturjadwal', $data->id) }}"
-                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('jadwal/aturjadwal', $data->id) }}" class="small-box-footer">Detail <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- end of atur jadwal -->
@@ -238,19 +246,90 @@
                         <div class="icon">
                             <i class="fa fa-star"></i>
                         </div>
-                        <a href="{{ url('jadwal/evaluasi', $data->id) }}"
-                            class="small-box-footer">Detail <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="{{ url('jadwal/evaluasi', $data->id) }}" class="small-box-footer">Detail <i
+                                class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- end of evaluasi -->
 
                 <div class="col-lg-12 col-xs-12" style="text-align:center">
                     <button onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")' type="button"
-                        class="btn btn-block btn-primary btn-flat">Jadwal</button>
+                        class="btn btn-block btn-danger btn-flat" style="font-size:16px">Klik Untuk Melihat Jadwal</button>
                 </div>
                 <!-- ./col -->
             </div>
 
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="box-body" style="background:#f7dddd">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left;padding: 6px;">Tanggal Mulai</th>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</th>
+                                        <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$data->jenis_usaha_r->nama_jns_usaha}}">:
+                                            {{$data->jenis_usaha_r->kode_jns_usaha}}</th>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$data->bidang_r->nama_bidang}}">:
+                                            {{$data->bidang_r->kode_bidang}}
+                                        </th>
+
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:left;padding: 6px;">Tanggal Selesai</th>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{ \Carbon\Carbon::parse($data->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
+                                        </th>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang Srtf
+                                            Alat</th>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$data->sertifikat_alat_r->nama_srtf_alat}}">:
+                                            {{$data->sertifikat_alat_r->kode_srtf_alat}}
+                                        </th>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">:
+                                            {{$data->tuk}}
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-md-1">
+                </div>
+                <div class="col-md-4"> -->
+                    <!-- <form action="{{ route('jadwal.store') }}" id="" name="" method="post"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table class="table no-margin">
+                                    <thead>
+                                        <tr>
+                                            <input type="hidden" id="idJadwal" name="idJadwal" value="{{$data->id}}">
+                                            <th style="width:5%"><span style="text-align:right;font-size: 22px;"
+                                                    id="clock">00:00:00</span></th>
+                                            <th style="text-align:right;padding: 6px;width:32%"><input maxlength="4"
+                                                    id="durasi" name="durasi" type="text" class="form-control"
+                                                    placeholder="Durasi Ujian(Menit)"></th>
+                                            <th style="text-align:left;padding: 6px;"><button id="btnmulai"
+                                                    type="button" class="btn btn-block btn-info btn-flat">Mulai
+                                                    Ujian</button>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </form> -->
+                <!-- </div> -->
+            </div>
 
         </div>
         <!-- /.box-body -->
@@ -393,7 +472,7 @@
                             'Waktu dihitung mundur dari sekarang.',
                             'success'
                         )
-                    updateDurasi(durasi, idJadwal);
+                        updateDurasi(durasi, idJadwal);
                     }
 
                 });

@@ -60,7 +60,7 @@ class DashboardInstrukturController extends Controller
                 ];
                 $anggota_msg += [
                     $px_materi.$key->id.".mimes" => 'Upload Hanya format PDF,XLS,DOCX, MP4!',
-                    $px_materi.$key->id.".max" => 'Maksimal File harus 20MB',
+                    $px_materi.$key->id.".max" => 'Maksimal File 20MB',
                 ];
             }
         }
@@ -122,20 +122,20 @@ class DashboardInstrukturController extends Controller
 
     public function uploadsoal(Request $request, $id)
     {
-
         $request->validate([
-            // 'soalPg' => 'required',
-            'soalPg'=>'mimes:xls,xlsx',
+            'soalPg' => 'mimes:xls,xlsx',
             // 'soalEssay' => 'required',
             'soalEssay'=>'mimes:xls,xlsx'
         ],
-        ['soalPg.required'=>'Kolom upload soal PG harus diisi',
+        [
+        // 'soalPg.required'=>'Kolom upload soal PG harus diisi',
         'soalPg.mimes'=>'File harus berupa excel',
-        'soalEssay.required'=>'Kolom upload soal essay harus diisi',
+        // 'soalEssay.required'=>'Kolom upload soal essay harus diisi',
         'soalEssay.mimes'=>'File harus berupa excel'
         ]
         );
 
+        $status = false;
         if($request->hasFile('soalPg')){
             $user_data = [
                 'deleted_by' => Auth::id(),
@@ -152,6 +152,7 @@ class DashboardInstrukturController extends Controller
             Excel::import(new SoalPgImport($id), public_path('uploads/Soal/'.$nama_file2));   
             $data['f_soal_pg'] = "/uploads/Soal/".$nama_file2 ;
             JadwalModel::find($id)->update($data); 
+            $status = true;
         }
 
         if($request->hasFile('soalEssay')){
@@ -170,9 +171,25 @@ class DashboardInstrukturController extends Controller
             Excel::import(new SoalEssayImport($id), public_path('uploads/Soal/'.$nama_file2)); 
             $data['f_soal_essay'] = "/uploads/Soal/".$nama_file2 ;
             JadwalModel::find($id)->update($data);   
+            $status = true;
+        }
+
+        if($status){
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil Upload Soal!',
+                'icon' => 'success'
+            ],200);
+        }else{
+            return response()->json([
+                'status' => true,
+                'message' => 'Tidak Ada File yang dipilih',
+                'icon'=>'error'
+            ],200);
         }
         // $simpan = JadwalModel::find($id)->update($data);
-        return redirect()->back()->with('message', 'Berhasil Upload Soal!'); 
+
+        // return redirect()->back()->with('message', 'Berhasil Upload Soal!'); 
     }
      /**
      * Show the form for creating a new resource.
@@ -247,17 +264,25 @@ class DashboardInstrukturController extends Controller
     }
 
     public function updateDurasiUjian (Request $request){
+        $akhirujian = "";
+        $jumlahsoal = SoalPgModel::where('kelompok_soal','=',$request->idJadwal)->count();
+        if($jumlahsoal>0){
+            $jadwalUpdate['mulai_ujian'] = Carbon::now()->toDateTimeString();
+            $jadwalUpdate['akhir_ujian'] = Carbon::now()->addMinutes($request->durasi)->toDateTimeString();
+            $akhirujian = $jadwalUpdate['akhir_ujian'];
+            $jadwalUpdate['durasi_ujian'] = $request->durasi; 
+            $pesertaUpdate['durasi'] = $request->durasi; 
+            JadwalModel::find($request->idJadwal)->update($jadwalUpdate);
+    
+            $getIdKelompok = JadwalModel::find($request->idJadwal)->first();
+            Peserta::where("id_kelompok","=",$getIdKelompok->id_klp_peserta)->update($pesertaUpdate);
+        }
+        return response()->json([
+            'akhirujian' => $akhirujian,
+            'jumlahsoal' => $jumlahsoal
+        ],200);
 
-        $jadwalUpdate['mulai_ujian'] = Carbon::now()->toDateTimeString();
-        $jadwalUpdate['akhir_ujian'] = Carbon::now()->addMinutes($request->durasi)->toDateTimeString();
-        $jadwalUpdate['durasi_ujian'] = $request->durasi; 
-        $pesertaUpdate['durasi'] = $request->durasi; 
-        JadwalModel::find($request->idJadwal)->update($jadwalUpdate);
-
-        $getIdKelompok = JadwalModel::find($request->idJadwal)->first();
-        Peserta::where("id_kelompok","=",$getIdKelompok->id_klp_peserta)->update($pesertaUpdate);
-        
-        return $jadwalUpdate['akhir_ujian'];
+        // return $jadwalUpdate['akhir_ujian'];
     }
 
     public function cekDurasiUjian (Request $request){
@@ -267,6 +292,11 @@ class DashboardInstrukturController extends Controller
         $data['akhir_ujian'] = $x['akhir_ujian'];
         $data['mulai_ujian'] = $x['mulai_ujian'];
         return $data;
+    }
+
+    public function ceksoalujian (Request $request){
+        $x = SoalPgModel::where('kelompok_soal','=',$request->idJadwal)->count();
+        return $x;
     }
 
     public function lihatevaluasi (Request $request){

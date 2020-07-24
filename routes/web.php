@@ -13,7 +13,8 @@
 
 
 Route::auth();
-Route::get('test/{id}','JadwalController@gen');
+Route::post('bentukkelompok','JadwalController@gen');
+Route::get('jadwal/lihatkelompok/{id}','JadwalController@lihatkelompok');
 Route::group(['middleware' => 'auth'], function () {
 
 	Route::group(['prefix' => 'instruktur'], function () {
@@ -22,6 +23,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::resource('dashboardinstruktur','DashboardInstrukturController');
 	});
 
+	Route::post('ceksoalujian','DashboardInstrukturController@ceksoalujian');
 	Route::post('cekDurasiUjian','DashboardInstrukturController@cekDurasiUjian');
 	Route::post('updateDurasiUjian','DashboardInstrukturController@updateDurasiUjian');
 	Route::post('instruktur/lihatevaluasi','DashboardInstrukturController@lihatevaluasi');
