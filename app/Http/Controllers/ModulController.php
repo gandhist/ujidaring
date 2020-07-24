@@ -43,18 +43,51 @@ class ModulController extends Controller
     public function store(Request $request)
     {
         
-        $request->validate([
+        $px_materi = "file_modul_";
+        $px_modul = "modul_";
+        $anggota = [];
+        $anggota_msg = [];
+        // $jumlahdetail = $request->jumlah_detail;
+        $idData = explode(',', $request->jumlah_detail);
+        foreach ($idData as $idData) {
+            if ($request->has($px_materi.$idData)) {
+                $anggota += [
+                    $px_materi.$idData => 'mimes:pdf,docx,xls,xlsx,mp4,ppt,pptx|max:20480',
+                    $px_modul.$idData => 'required',
+                ];
+                $anggota_msg += [
+                    $px_materi.$idData.".mimes" => 'Upload Hanya format PDF,XLS,DOCX, MP4!',
+                    $px_materi.$idData.".max" => 'Maksimal File 20MB',
+                    $px_modul.$idData.".required" => 'Modul harus diisi',
+                ];
+            } 
+        }
+        $anggota += [
             'id_bidang'=>'required',
             'id_sert_alat' => 'required',
             'id_jumlah_hari'=>'required',
             'id_syarat'=>'required',
-        ],
-        ['id_bidang.required'=>'Kolom bidang harus diisi',
+        ];
+
+        $anggota_msg += ['id_bidang.required'=>'Kolom bidang harus diisi',
         'id_sert_alat.required'=>'Kolom sertifikat alat harus diisi',
         'id_jumlah_hari.required' => 'Kolom jumlah hari harus diisi',
         'id_syarat.required' => 'Kolom syarat harus diisi'
-        ]
-        );
+    ];
+       $request->validate($anggota, $anggota_msg); 
+       
+        // $request->validate([
+        //     'id_bidang'=>'required',
+        //     'id_sert_alat' => 'required',
+        //     'id_jumlah_hari'=>'required',
+        //     'id_syarat'=>'required',
+        // ],
+        // ['id_bidang.required'=>'Kolom bidang harus diisi',
+        // 'id_sert_alat.required'=>'Kolom sertifikat alat harus diisi',
+        // 'id_jumlah_hari.required' => 'Kolom jumlah hari harus diisi',
+        // 'id_syarat.required' => 'Kolom syarat harus diisi'
+        // ]
+        // );
 
         $id_bidang = $request->id_bidang; 
         $id_sert_alat = $request->id_sert_alat;
@@ -89,10 +122,17 @@ class ModulController extends Controller
 
             }
             $message = "Data berhasil ditambahkan";
+            $icon = "success";
         }else{
             $message = "Tidak ada data yang ditambahkan";
+            $icon = "error";
         }
-        return redirect('mastermodul')->with('message', $message);
+        return response()->json([
+            'status' => true,
+            'message' => $message,
+            'icon' => $icon
+        ],200);
+        // return redirect('mastermodul')->with('message', $message);
     }
 
     /**

@@ -20,8 +20,7 @@
 <section class="content">
     <div class="box box-content">
         <div class="box-body">
-            <form action="{{ url('modul/save') }}" class="form-horizontal" id="formAdd" name="formAdd" method="post"
-                enctype="multipart/form-data">
+            <form class="form-horizontal" id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-4">
@@ -40,7 +39,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <span id="" class="help-block customspan">{{ $errors->first('id_bidang') }}
+                                        <span id="id_bidang" class="help-block customspan"></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -51,18 +50,19 @@
                                                 <option selected value="">Sertifikat Alat</option>
                                             </select>
                                         </div>
-                                        <span id="" class="help-block customspan">{{ $errors->first('id_sert_alat') }}
+                                        <span id="id_sert_alat" class="help-block customspan"></span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td class="x">
                                         <!-- <div class="input-group"> -->
                                         <label for="" style="">*Jumlah Hari</label><br>
                                         <input name="id_jumlah_hari" id="id_jumlah_hari"
                                             class="form-control input-md custominp" type="text"
                                             placeholder="Jumlah Hari" maxlength="3">
                                         <!-- </div> -->
-                                        <span id="" class="help-block customspan">{{ $errors->first('id_jumlah_hari') }}
+                                        <span id="id_jumlah_hari"
+                                            class="help-block customspan">{{ $errors->first('id_jumlah_hari') }}</span>
                                     </td>
                                 </tr>
                                 </thead>
@@ -77,10 +77,11 @@
                                     <td style="width:100%">
                                         <!-- <div class="input-group"> -->
                                         <label for="" style="">*Syarat</label><br>
-                                        <textarea style="width: 100%;border-radius: 5px;height:158px" name="id_syarat"
-                                            id="id_syarat" cols="175"></textarea>
+                                        <textarea class="textarea" style="width: 100%;border-radius: 5px;height:158px"
+                                            name="id_syarat" id="id_syarat" cols="175"></textarea>
                                         <!-- </div> -->
-                                        <span id="" class="help-block customspan">{{ $errors->first('id_syarat') }}
+                                        <span id="id_syarat"
+                                            class="help-block customspan">{{ $errors->first('id_syarat') }}</span>
                                     </td>
                                 </tr>
                                 </thead>
@@ -122,13 +123,12 @@
                         <!-- /.box -->
                     </div>
                     <!-- /.col -->
-
+                    <input id="jumlah_detail" name="jumlah_detail" type="hidden">
                     <div class="col-lg-12">
-                        <button type="submit"
+                        <button type="button"
                             data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Sedang Proses..."
                             class="btn btn-info" name="btnSave" id="btnSave">Simpan</button>
                     </div>
-                    <input id="jumlah_detail" name="jumlah_detail" type="hidden">
                 </div>
             </form>
             <br>
@@ -137,30 +137,32 @@
 </section>
 @endsection
 @push('script')
+<script src='https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js'>
+</script>
 <script>
     $(document).ready(function () {
-        // $('#btnSave').on('click', function (e) {
-        //     e.preventDefault();
-        //     store();
-        // })
+        $('#btnSave').on('click', function (e) {
+            e.preventDefault();
+            store();
+        })
         $(document).on('change', '.file_modul', function (e) {
             var id = $(this).val();
             var ext = id.substr(id.lastIndexOf('.') + 1);
             ext = ext.toLowerCase();
-            switch (ext) {
-                case 'doc':
-                case 'docx':
-                case 'pdf':
-                case 'xls':
-                case 'xlsx':
-                case 'ppt':
-                case 'pptx':
-                case 'mp4':
-                    break;
-                default:
-                    this.value = '';
-                    alert('Extension file tidak sesuai!');
-            }
+            // switch (ext) {
+            //     case 'doc':
+            //     case 'docx':
+            //     case 'pdf':
+            //     case 'xls':
+            //     case 'xlsx':
+            //     case 'ppt':
+            //     case 'pptx':
+            //     case 'mp4':
+            //         break;
+            //     default:
+            //         this.value = '';
+            //         alert('Extension file tidak sesuai!');
+            // }
         });
 
         $('#id_bidang').on('select2:select', function () {
@@ -199,14 +201,16 @@
             <tr>
                                         <td style="width:1%">` + no +
                 `</td>
-                                        <td><input required class="form-control input-md" type="text" placeholder="Modul" name="modul_` +
+                                        <td class="x">
+                                        <input required class="form-control input-md" type="text" placeholder="Modul" name="modul_` +
                 no + `" id="modul_` + no + `">
+                <span id="modul_` + no + `" class="help-block"></span>
                                         </td>
                                         <td style="text-align:center;width:10%"><input required name="jp_` + no +
                 `" id="jp_` +
                 no + `" class="form-control input-md"
                                                 type="text" placeholder="Jam Pertemuan" maxlength="2"></td>
-                                        <td style="text-align:center">
+                                        <td class="x" style="text-align:center">
                                             <input name="file_modul_` + no + `" id="file_modul_` + no + `" type="file" class="form-control file_modul">
                                             <span id="file_modul_` + no + `" class="help-block"></span>
                                         </td>
@@ -232,6 +236,7 @@
 
     function store() {
         var formData = new FormData($('#formAdd')[0]);
+
         var url = "{{ url('modul/save') }}";
         $.ajaxSetup({
             headers: {
@@ -245,39 +250,62 @@
             data: formData,
             contentType: false,
             processData: false,
+            beforeSend: function () {
+                $.LoadingOverlay("show", {
+                    image: "",
+                    fontawesome: "fa fa-cog fa-spin",
+                    fade : [5, 5],
+                    background : "rgba(60, 60, 60, 0.4)"
+                });
+                // $("#btnSave").button('loading');
+            },
             success: function (response) {
-                // console.log(response['id_jadwal']);
+                console.log(response);
                 if (response.status) {
-                    Swal.fire({
-                        title: response.message,
-                        type: 'success',
-                        confirmButtonText: 'Close',
-                        confirmButtonColor: '#AAA',
-                        onClose: function () {
-                            window.location = document.referrer;
-                        }
-                    })
-
-                }
+                        Swal.fire({
+                            title: response.message,
+                            type: response.icon,
+                            confirmButtonText: 'Ok',
+                            confirmButtonColor: '#AAA'
+                        }).then(function () {
+                            location.reload();
+                        });
+                    }
             },
             error: function (xhr, status) {
-                // reset to remove error
                 var a = JSON.parse(xhr.responseText);
-                // reset to remove error
-                $('.form-group').removeClass('has-error');
-                $('.help-block').hide(); // hide error span message
+                // console.log(a);
+                $(".textarea").css('border-color', 'rgb(118, 118, 118)');
+                $(".select2-selection").css('border-color', '#aaa');
+                $('.x').removeClass('has-error');
+                $('.help-block').text("");
                 $.each(a.errors, function (key, value) {
-                    $('[name="' + key + '"]').parent().addClass(
-                        'has-error'
-                    ); //select parent twice to select div form-group class and add has-error class
-                    $('span[id^="' + key + '"]').show(); // show error message span
-                    // for select2
-                    if (!$('[name="' + key + '"]').is("select")) {
-                        $('[name="' + key + '"]').next().text(
-                            value); //select span help-block class set text error string
+                    tipeinput = $('#' + key).attr("class");
+                    tipeselect = "select2";
+                    tipetextarea = "textarea";
+                    if (tipeinput.indexOf(tipeselect) > -1) {
+                        console.log("select2");
+                        $("#" + key).parent().find(".select2-container").children().children().css(
+                            'border-color', '#a94442');
+                        $('span[id^="' + key + '"]').text(value);
+                    } else if (tipeinput.indexOf(tipetextarea) > -1) {
+                        $("#" + key).css('border-color', '#a94442');
+                        $('span[id^="' + key + '"]').text(value);
+                    } else {
+                        $('[name="' + key + '"]').parent().addClass(
+                            'has-error'
+                        );
+                        if (!$('[name="' + key + '"]').is("select")) {
+                            $('[name="' + key + '"]').next().text(
+                                value);
+                        }
                     }
+                    $('span[id^="' + key + '"]').show();
                 });
-
+            },
+            complete: function () {
+                $.LoadingOverlay("hide");
+                // $("#btnSave").button('reset');
             }
         });
     }

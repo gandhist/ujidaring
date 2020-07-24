@@ -167,7 +167,6 @@
                         <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
                             title="{{$key->bidang_srtf_alat_r->nama_srtf_alat}}">
                                 {{$key->bidang_srtf_alat_r->kode_srtf_alat}}</td>
-
                         <!-- <td>{{$key->bidang_srtf_alat_r->bidang_r->nama_bidang}}</td>
                         <td>{{$key->bidang_srtf_alat_r->nama_srtf_alat}}</td> -->
                         <td style='width:8%;text-align:right'>{{ \Carbon\Carbon::parse($key->reated_at)->isoFormat("DD MMMM YYYY") }}</td>
