@@ -23,79 +23,6 @@
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             </div>
             @endif
-            <!-- MultiStep Form -->
-            <div class="row">
-                <!-- <div class="col-md-7">
-                    <div class="box-body">
-                        <div class="table-responsive">
-                            <table class="table no-margin">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align:left;padding: 6px;">Tanggal Mulai</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</td>
-                                        <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                            title="{{$data->jenis_usaha_r->nama_jns_usaha}}">:
-                                            {{$data->jenis_usaha_r->kode_jns_usaha}}</td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                            title="{{$data->bidang_r->nama_bidang}}">:
-                                            {{$data->bidang_r->kode_bidang}}
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <th style="text-align:left;padding: 6px;">Tanggal Selesai</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{ \Carbon\Carbon::parse($data->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
-                                        </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang Srtf
-                                            Alat</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                            title="{{$data->sertifikat_alat_r->nama_srtf_alat}}">:
-                                            {{$data->sertifikat_alat_r->kode_srtf_alat}}
-                                        </td>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;">:
-                                            {{$data->tuk}}
-                                        </td>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div> -->
-                <div class="col-md-1">
-                </div>
-                <div class="col-md-4">
-                    <!-- <form action="{{ route('jadwal.store') }}" id="" name="" method="post"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <div class="box-body">
-                            <div class="table-responsive">
-                                <table class="table no-margin">
-                                    <thead>
-                                        <tr>
-                                            <input type="hidden" id="idJadwal" name="idJadwal" value="{{$data->id}}">
-                                            <th style="width:5%"><span style="text-align:right;font-size: 22px;"
-                                                    id="clock">00:00:00</span></th>
-                                            <th style="text-align:right;padding: 6px;width:32%"><input maxlength="4"
-                                                    id="durasi" name="durasi" type="text" class="form-control"
-                                                    placeholder="Durasi Ujian(Menit)"></th>
-                                            <th style="text-align:left;padding: 6px;"><button id="btnmulai"
-                                                    type="button" class="btn btn-block btn-info btn-flat">Mulai
-                                                    Ujian</button>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                    </form> -->
-                </div>
-            </div>
-            <!-- /.MultiStep Form -->
             <br>
             <div class="row">
                 {{-- instruktur --}}
@@ -109,7 +36,7 @@
                         <div class="icon">
                             <i class="ion ion-person"></i>
                         </div>
-                        <a href="{{ url('jadwal/instruktur', $data->id) }}" class="small-box-footer">Detail <i
+                        <a href="{{ url('jadwal/instruktur', $data->id) }}" class="small-box-footer">Lihat <i
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -125,7 +52,7 @@
                         <div class="icon">
                             <i class="fa fa-users" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">Detail
+                        <a href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">Lihat
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -140,7 +67,7 @@
                         <div class="icon">
                             <i class="fa fa-file-text-o" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('jadwal/soal', $data->id) }}" class="small-box-footer">Detail
+                        <a href="{{ url('jadwal/soal', $data->id) }}" class="small-box-footer">Lihat
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -156,7 +83,7 @@
                         <div class="icon">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('instruktur/modul',$data->id) }}" class="small-box-footer">Detail <i
+                        <a href="{{ url('instruktur/modul',$data->id) }}" class="small-box-footer">Lihat <i
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -166,12 +93,12 @@
                     <div class="small-box bg-yellow">
                         <div class="inner">
                             <h3>{{$jumlahJadwal}}</h3>
-                            <p>Atur Jadwal</p>
+                            <p>Jadwal & Quiz</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('jadwal/aturjadwal', $data->id) }}" class="small-box-footer">Detail <i
+                        <a href="{{ url('jadwal/aturjadwal', $data->id) }}" class="small-box-footer">Lihat <i
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -182,12 +109,12 @@
                     <div class="small-box bg-red">
                         <div class="inner">
                             <h3>{{$jumlahabsen}}</h3>
-                            <p>Absen</p>
+                            <p>Presensi</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-address-card" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('jadwal/absen', $data->id) }}" class="small-box-footer">Detail
+                        <a href="{{ url('jadwal/absen', $data->id) }}" class="small-box-footer">Lihat
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -208,7 +135,7 @@
                         <div class="icon">
                             <i class="fa fa-film" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ route('pkl', $data->id) }}" class="small-box-footer">Detail <i
+                        <a href="{{ route('pkl', $data->id) }}" class="small-box-footer">Lihat <i
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -230,7 +157,7 @@
                         <div class="icon">
                             <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">Detail
+                        <a target="_blank" href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">Lihat
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -246,15 +173,47 @@
                         <div class="icon">
                             <i class="fa fa-star"></i>
                         </div>
-                        <a href="{{ url('jadwal/evaluasi', $data->id) }}" class="small-box-footer">Detail <i
+                        <a href="{{ url('jadwal/evaluasi', $data->id) }}" class="small-box-footer">Lihat <i
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- end of evaluasi -->
+                @if($data->is_kelompok == "1" )
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3>{{$jumlahkelompok}}</h3>
+                            <p>Kelompok</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                        </div>
+                        <a href="{{url('jadwal/lihatkelompok/'.$data->id)}}" class="small-box-footer">Lihat
+                            <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                @else
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3>-</h3>
+                            <p>Buat Kelompok</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                        </div>
+                        <a id="btnbuatklp" href="#" class="small-box-footer">Buat Kelompok
+                            <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                @endif
 
                 <div class="col-lg-12 col-xs-12" style="text-align:center">
                     <button onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")' type="button"
-                        class="btn btn-block btn-danger btn-flat" style="font-size:16px">Klik Untuk Melihat Jadwal</button>
+                        class="btn btn-block btn-danger btn-flat" style="font-size:16px">Klik Untuk Melihat
+                        Jadwal</button>
                 </div>
                 <!-- ./col -->
             </div>
@@ -270,12 +229,14 @@
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</th>
                                         <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                            title="{{$data->jenis_usaha_r->nama_jns_usaha}}">:
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;"
+                                            data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                            title="{{$data->jenis_usaha_r->nama_jns_usaha}}">:
                                             {{$data->jenis_usaha_r->kode_jns_usaha}}</th>
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                            title="{{$data->bidang_r->nama_bidang}}">:
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;"
+                                            data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                            title="{{$data->bidang_r->nama_bidang}}">:
                                             {{$data->bidang_r->kode_bidang}}
                                         </th>
 
@@ -287,8 +248,9 @@
                                         </th>
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang Srtf
                                             Alat</th>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                            title="{{$data->sertifikat_alat_r->nama_srtf_alat}}">:
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;"
+                                            data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                            title="{{$data->sertifikat_alat_r->nama_srtf_alat}}">:
                                             {{$data->sertifikat_alat_r->kode_srtf_alat}}
                                         </th>
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
@@ -304,7 +266,7 @@
                 <!-- <div class="col-md-1">
                 </div>
                 <div class="col-md-4"> -->
-                    <!-- <form action="{{ route('jadwal.store') }}" id="" name="" method="post"
+                <!-- <form action="{{ route('jadwal.store') }}" id="" name="" method="post"
                         enctype="multipart/form-data">
                         @csrf
                         <div class="box-body">
@@ -337,7 +299,7 @@
     <!-- /.box -->
 
     <!-- modal konfirmasi -->
-    <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    <!-- <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <form action="{{ url('jadwal/kirimaccount') }}" class="form-horizontal" id="formDelete" name="formDelete"
             method="post" enctype="multipart/form-data">
@@ -363,10 +325,10 @@
                 </div>
             </div>
         </form>
-    </div>
+    </div> -->
     <!-- end of modal konfirmais -->
 
-    <!-- modal lampiran -->
+    <!-- Modal Foto -->
     <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" style="width: 95%;" role="document">
@@ -392,6 +354,43 @@
     </div>
     <!-- end of modal lampiran -->
 
+    <!-- Modal Buat Kelompok -->
+    <div class="modal fade" id="modal_buat_kelompok" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <form class="form-horizontal" id="formkelompok" name="formkelompok" method="post" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" value="" name="idHapusData" id="idHapusData">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span
+                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Buat Kelompok Otomatis</h4>
+                        <b>Kelompok akan digenerate oleh sistem secara otomatis</b>
+                    </div>
+                    <div class="modal-body" id="konfirmasi-body">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <!-- <label for="exampleInputEmail1">*Masukkan Jumlah Kelompok</label> -->
+                                <input type="hidden" name="idjadwal" id="idjadwal" value="{{$data->id}}">
+                                <input maxlength="1" type="text" class="form-control" id="jumlahkelompok"
+                                    name="jumlahkelompok" placeholder="Masukkan Jumlah Kelompok">
+                                <span id="jumlahkelompok" class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-danger" data-id=""
+                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Kirim..."
+                            id="btn-generate">Generate</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- end of modal kirim account peserta -->
+
 </section>
 <!-- /.content -->
 
@@ -409,80 +408,19 @@
 <script type="text/javascript">
     $(function () {
 
-        var dt = $('#custom-table').DataTable({
-            "lengthMenu": [
-                [10, 20, 50],
-                [10, 20, 50]
-            ],
-            "scrollX": true,
-            "scrollY": $(window).height() - 255,
-            "scrollCollapse": true,
-            "bPaginate": false,
-            "searching": false,
-            "autoWidth": false,
-            "columnDefs": [{
-                "searchable": false,
-                "orderable": false,
-                "targets": [0, 1]
-            }],
-            "aaSorting": []
+        $('#btnbuatklp').on('click', function (e) {
+            e.preventDefault();
+            $('#modal_buat_kelompok').modal('show');
         });
 
-        dt.on('order.dt search.dt', function () {
-            dt.column(1, {
-                search: 'applied',
-                order: 'applied'
-            }).nodes().each(function (cell, i) {
-                cell.innerHTML = i + 1;
-            });
-        }).draw();
-
-        // Kunci Input durasi Hanya Angka
-        $('#durasi').on('input blur paste', function () {
-            $(this).val($(this).val().replace(/\D/g, ''))
+        $('#btn-generate').on('click', function (e) {
+            store();
         });
 
-        $("#btnmulai").on('click', function () {
-            $("#durasi").css("border-color", "#ccc");
-            var durasi = $("#durasi").val();
-            var idJadwal = $("#idJadwal").val();
-            if (durasi == "") {
-                Swal.fire({
-                    title: "Durasi ujian belum diisi",
-                    type: 'warning',
-                    confirmButtonText: 'Close',
-                    confirmButtonColor: '#AAA'
-                });
-                $("#durasi").focus();
-                $("#durasi").css("border-color", "red");
-            } else {
-                Swal.fire({
-                    title: 'Mulai Ujian?',
-                    text: "Apakah anda yakin untuk memulai ujian?",
-                    icon: 'warning',
-                    buttons: true,
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Mulai'
-                }).then((result) => {
-                    if (result.value) {
-                        Swal.fire(
-                            'Ujian dimulai!',
-                            'Waktu dihitung mundur dari sekarang.',
-                            'success'
-                        )
-                        updateDurasi(durasi, idJadwal);
-                    }
+        function store() {
+            var formData = new FormData($('#formkelompok')[0]);
 
-                });
-
-            }
-        });
-
-        // Fungsi Update durasi ujian
-        function updateDurasi(durasi, idJadwal) {
-            var url = "{{ url('updateDurasiUjian') }}";
+            var url = "{{ url('bentukkelompok') }}";
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -490,183 +428,71 @@
             });
             $.ajax({
                 url: url,
-                method: 'POST',
-                data: {
-                    durasi: durasi,
-                    idJadwal: idJadwal
+                type: 'POST',
+                dataType: "JSON",
+                data: formData,
+                contentType: false,
+                processData: false,
+                beforeSend: function () {
+                    $.LoadingOverlay("show", {
+                        image: "",
+                        fontawesome: "fa fa-refresh fa-spin",
+                        fontawesomeColor: "black",
+                        fade: [5, 5],
+                        background: "rgba(60, 60, 60, 0.4)"
+                    });
+                    // $("#btnSave").button('loading');
                 },
-                success: function (data) {
-
-                    // countdown
-                    var $clock = $('#clock'),
-                        eventTime = moment(data, 'YYYY-MM-DD HH:mm:ss').unix(),
-                        currentTime = moment().unix(),
-                        diffTime = eventTime - currentTime,
-                        duration = moment.duration(diffTime * 1000, 'milliseconds'),
-                        interval = 1000;
-
-                    if (diffTime > 0) {
-                        $("#durasi").attr('readonly', 'readonly');
-                        $("#durasi").css('background-color', '#ccc');
-                        $("#durasi").val($("#durasi").val() + " Menit");
-                        $("#btnmulai").text("Ujian Sedang Berlangsung");
-                        $("#btnmulai").attr("class", "btn btn-block btn-warning btn-flat disabled");
-                        $("#durasi").unbind();
-                        $("#btnmulai").unbind();
-
-                        // Show clock
-                        // $clock.show();
-                        $('#clock').text("");
-                        var $d = $('<span class="days" ></span>').appendTo($clock),
-                            $h = $('<span class="hours" ></span>').appendTo($clock),
-                            $m = $('<span class="minutes" ></span>').appendTo($clock),
-                            $s = $('<span class="seconds" ></span>').appendTo($clock);
-
-                        timer = setInterval(function () {
-
-                            duration = moment.duration(duration.asMilliseconds() -
-                                interval, 'milliseconds');
-                            var d = moment.duration(duration).days(),
-                                h = moment.duration(duration).hours(),
-                                m = moment.duration(duration).minutes(),
-                                s = moment.duration(duration).seconds();
-
-                            d = $.trim(d).length === 1 ? '0' + d : d;
-                            h = $.trim(h).length === 1 ? '0' + h : h;
-                            m = $.trim(m).length === 1 ? '0' + m : m;
-                            s = $.trim(s).length === 1 ? '0' + s : s;
-
-                            // show how many hours, minutes and seconds are left
-                            // $d.text(d + ":");
-                            $h.text(h + ":");
-                            $m.text(m + ":");
-                            $s.text(s);
-
-                            if (h == '00' && m == '00' && s == '00') {
-                                $("#btnmulai").text('Ujian Telah Selesai');
-                                $("#btnmulai").attr("class",
-                                    "btn btn-block btn-danger btn-flat disabled");
-                                Swal.fire({
-                                    title: "Ujian telah selesai",
-                                    type: 'success',
-                                    confirmButtonText: 'Ok',
-                                    confirmButtonColor: '#AAA'
-                                });
-                                clearInterval(timer);
+                success: function (response) {
+                    console.log(response);
+                    if (response.status) {
+                        Swal.fire({
+                            title: response.message,
+                            type: response.icon,
+                            confirmButtonText: 'Ok',
+                            confirmButtonColor: '#AAA'
+                        }).then(function () {
+                            if (response.icon == "success") {
+                                window.location.href ="{{ url('jadwal/lihatkelompok/'.$data->id) }}";
                             }
-                        }, interval);
-
+                        });
                     }
-                    // Countdown
                 },
                 error: function (xhr, status) {
-                    alert('Error');
-                }
-            });
-        }
-
-        cekDurasi();
-
-        // Fungsi Update durasi ujian
-        function cekDurasi() {
-            var idJadwal = $("#idJadwal").val();
-            var url = "{{ url('cekDurasiUjian') }}";
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: url,
-                method: 'POST',
-                data: {
-                    idJadwal: idJadwal
-                },
-                success: function (data) {
-
-                    if (data['akhir_ujian'] == null) {
-
-                    } else if (data['waktusekarang'] > data['mulai_ujian'] && data[
-                            'waktusekarang'] < data[
-                            'akhir_ujian']) {
-                        // countdown
-                        var $clock = $('#clock'),
-                            eventTime = moment(data['akhir_ujian'], 'YYYY-MM-DD HH:mm:ss').unix(),
-                            currentTime = moment().unix(),
-                            diffTime = eventTime - currentTime,
-                            duration = moment.duration(diffTime * 1000, 'milliseconds'),
-                            interval = 1000;
-
-                        if (diffTime > 0) {
-
-                            $("#durasi").attr('readonly', 'readonly');
-                            $("#durasi").css('background-color', '#ccc');
-                            $("#durasi").val($("#durasi").val() + " Menit");
-                            $("#btnmulai").text('Ujian Sedang Berlangsung');
-                            $("#btnmulai").attr("class",
-                                "btn btn-block btn-warning btn-flat disabled");
-                            $("#durasi").unbind();
-                            $("#btnmulai").unbind();
-
-                            // Show clock
-                            // $clock.show();
-                            $('#clock').text("");
-                            var $d = $('<span class="days" ></span>').appendTo($clock),
-                                $h = $('<span class="hours" ></span>').appendTo($clock),
-                                $m = $('<span class="minutes" ></span>').appendTo($clock),
-                                $s = $('<span class="seconds" ></span>').appendTo($clock);
-
-                            timer = setInterval(function () {
-
-                                duration = moment.duration(duration.asMilliseconds() -
-                                    interval, 'milliseconds');
-                                var d = moment.duration(duration).days(),
-                                    h = moment.duration(duration).hours(),
-                                    m = moment.duration(duration).minutes(),
-                                    s = moment.duration(duration).seconds();
-
-                                d = $.trim(d).length === 1 ? '0' + d : d;
-                                h = $.trim(h).length === 1 ? '0' + h : h;
-                                m = $.trim(m).length === 1 ? '0' + m : m;
-                                s = $.trim(s).length === 1 ? '0' + s : s;
-
-                                // show how many hours, minutes and seconds are left
-                                // $d.text(d + ":");
-                                $h.text(h + ":");
-                                $m.text(m + ":");
-                                $s.text(s);
-
-
-                                if (h == '00' && m == '00' && s == '00') {
-                                    clearInterval(timer);
-                                    Swal.fire({
-                                        title: "Ujian telah selesai",
-                                        type: 'success',
-                                        confirmButtonText: 'Ok',
-                                        confirmButtonColor: '#AAA'
-                                    });
-                                    $("#btnmulai").text('Ujian Telah Selesai');
-                                    $("#btnmulai").attr("class",
-                                        "btn btn-block btn-danger btn-flat disabled");
-
-                                }
-                            }, interval);
-
+                    var a = JSON.parse(xhr.responseText);
+                    // console.log(a);
+                    $(".textarea").css('border-color', 'rgb(118, 118, 118)');
+                    $(".select2-selection").css('border-color', '#aaa');
+                    $('.form-group').removeClass('has-error');
+                    $('.help-block').text("");
+                    $.each(a.errors, function (key, value) {
+                        tipeinput = $('#' + key).attr("class");
+                        tipeselect = "select2";
+                        tipetextarea = "textarea";
+                        if (tipeinput.indexOf(tipeselect) > -1) {
+                            console.log("select2");
+                            $("#" + key).parent().find(".select2-container").children()
+                                .children().css(
+                                    'border-color', '#a94442');
+                            $('span[id^="' + key + '"]').text(value);
+                        } else if (tipeinput.indexOf(tipetextarea) > -1) {
+                            $("#" + key).css('border-color', '#a94442');
+                            $('span[id^="' + key + '"]').text(value);
+                        } else {
+                            $('[name="' + key + '"]').parent().addClass(
+                                'has-error'
+                            );
+                            if (!$('[name="' + key + '"]').is("select")) {
+                                $('[name="' + key + '"]').next().text(
+                                    value);
+                            }
                         }
-                        // Countdown
-                    } else if (data['waktusekarang'] > data['akhir_ujian']) {
-                        $("#durasi").attr('readonly', 'readonly');
-                        $("#durasi").css('background-color', '#ccc');
-                        $("#btnmulai").text('Ujian Telah Selesai');
-                        $("#btnmulai").attr("class", "btn btn-block btn-danger btn-flat disabled");
-                        $("#durasi").unbind();
-                        $("#btnmulai").unbind();
-                    } else {
-                        console.log('Ujian Belum Selesai');
-                    }
+                        $('span[id^="' + key + '"]').show();
+                    });
                 },
-                error: function (xhr, status) {
-                    alert('Error');
+                complete: function () {
+                    $.LoadingOverlay("hide");
+                    // $("#btnSave").button('reset');
                 }
             });
         }

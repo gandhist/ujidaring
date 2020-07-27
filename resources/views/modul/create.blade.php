@@ -7,7 +7,6 @@
         border-color: darkgrey;
         height: 30px;
     }
-
 </style>
 <section class="content-header">
     <h1><a href="{{ url('mastermodul') }}" class="btn btn-md bg-purple"><i class="fa fa-arrow-left"></i></a>
@@ -137,14 +136,15 @@
 </section>
 @endsection
 @push('script')
-<script src='https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js'>
-</script>
+
 <script>
     $(document).ready(function () {
+        
         $('#btnSave').on('click', function (e) {
             e.preventDefault();
             store();
-        })
+        });
+
         $(document).on('change', '.file_modul', function (e) {
             var id = $(this).val();
             var ext = id.substr(id.lastIndexOf('.') + 1);
@@ -206,10 +206,12 @@
                 no + `" id="modul_` + no + `">
                 <span id="modul_` + no + `" class="help-block"></span>
                                         </td>
-                                        <td style="text-align:center;width:10%"><input required name="jp_` + no +
+                                        <td class="x" style="text-align:center;width:10%"><input required name="jp_` + no +
                 `" id="jp_` +
                 no + `" class="form-control input-md"
-                                                type="text" placeholder="Jam Pertemuan" maxlength="2"></td>
+                                                type="text" placeholder="Jam Pertemuan" maxlength="2">
+                                                <span id="jp_` + no + `" class="help-block"></span>
+                                                </td>
                                         <td class="x" style="text-align:center">
                                             <input name="file_modul_` + no + `" id="file_modul_` + no + `" type="file" class="form-control file_modul">
                                             <span id="file_modul_` + no + `" class="help-block"></span>
@@ -253,14 +255,15 @@
             beforeSend: function () {
                 $.LoadingOverlay("show", {
                     image: "",
-                    fontawesome: "fa fa-cog fa-spin",
+                    fontawesome: "fa fa-refresh fa-spin",
+                    fontawesomeColor:"black",
                     fade : [5, 5],
                     background : "rgba(60, 60, 60, 0.4)"
                 });
                 // $("#btnSave").button('loading');
             },
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if (response.status) {
                         Swal.fire({
                             title: response.message,
@@ -268,7 +271,11 @@
                             confirmButtonText: 'Ok',
                             confirmButtonColor: '#AAA'
                         }).then(function () {
-                            location.reload();
+                            if(response.icon=="warning"){
+
+                            }else{
+                                window.history.back();
+                            }
                         });
                     }
             },

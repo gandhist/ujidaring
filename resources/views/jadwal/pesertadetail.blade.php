@@ -47,13 +47,15 @@
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{$Peserta->nik}}</td>
                                         <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;"
+                                            data-toggle="tooltip" data-placement="bottom" data-html="true"
                                             title="{{$data->jenis_usaha_r->nama_jns_usaha}}">:
                                             {{$data->jenis_usaha_r->kode_jns_usaha}}</td>
                                         </td>
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang Srtf
                                             Alat</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;"
+                                            data-toggle="tooltip" data-placement="bottom" data-html="true"
                                             title="{{$data->sertifikat_alat_r->nama_srtf_alat}}">:
                                             {{$data->sertifikat_alat_r->kode_srtf_alat}}
                                     </tr>
@@ -67,7 +69,8 @@
                                         <td style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{$Peserta->nama}}</td>
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
-                                        <td style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                        <td style="text-align:left;padding: 6px;vertical-align: middle;"
+                                            data-toggle="tooltip" data-placement="bottom" data-html="true"
                                             title="{{$data->bidang_r->nama_bidang}}">:
                                             {{$data->bidang_r->kode_bidang}}
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
@@ -118,7 +121,11 @@
                         <li class="active"><a data-toggle="tab" href="#hasilujian">Hasil Ujian</a></li>
                         <li><a data-toggle="tab" href="#nilaiharian">Nilai Harian</a></li>
                         <li><a data-toggle="tab" href="#quisioner">Quisioner</a></li>
+                        <li><a data-toggle="tab" href="#presensi">Presensi</a></li>
                         <li><a data-toggle="tab" href="#logs">Logs</a></li>
+                        @if($data->is_kelompok==1)
+                        <li><a data-toggle="tab" href="#kelompok">Kelompok</a></li>
+                        @endif
                     </ul>
                     <div class="tab-content">
                         <div id="hasilujian" class="tab-pane fade in active">
@@ -341,10 +348,81 @@
                             </div>
                             <!-- </div> -->
                         </div>
+
+                        <div id="presensi" class="tab-pane fade in">
+                            <div class="box-body">
+                                <table id="custom-table"
+                                    class="table table-striped table-bordered dataTable customTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Tanggal</th>
+                                            <th>Jam Masuk</th>
+                                            <th>Foto Masuk</th>
+                                            <th>Jam Keluar</th>
+                                            <th>Foto Keluar</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($jadwalrundown as $key)
+                                        <tr>
+                                            <td style="text-align:center;width:8%">
+                                                {{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}
+                                            </td>
+                                            @php
+                                            $dataabsen =
+                                            DB::table('absen')->where('tanggal','=',$key->tanggal)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->first();
+                                            @endphp
+
+                                            @if($dataabsen==null)
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            @else
+                                            <td style="text-align:center;width:8%">
+                                                @if (isset($dataabsen->jam_cek_in))
+                                                {{ \Carbon\Carbon::parse($dataabsen->jam_cek_in)->toTimeString() }}
+                                                @else
+
+                                                @endif
+                                            </td>
+                                            <td style="text-align:center;width:8%">
+                                                @if (isset($dataabsen->jam_cek_in))
+                                                <button class="btn btn-success btn-xs"
+                                                    onclick='tampilFoto("{{ asset("uploads/peserta/$dataabsen->foto_cek_in") }}","Jam Masuk {{ \Carbon\Carbon::parse($dataabsen->jam_cek_in)->toTimeString() }}")'><i
+                                                        class="fa fa-picture-o"></i> Lihat </button>
+                                                @else
+                                                <button class="btn btn-danger btn-xs"> Belum Absen </button>
+                                                @endif
+                                            </td>
+                                            <td style="text-align:center;width:8%">
+                                                @if (isset($dataabsen->jam_cekout))
+                                                {{ \Carbon\Carbon::parse($dataabsen->jam_cekout)->toTimeString() }}
+                                                @else
+
+                                                @endif
+                                            </td>
+                                            <td style="text-align:center;width:8%">
+                                                @if (isset($dataabsen->jam_cekout))
+                                                <button class="btn btn-success btn-xs"
+                                                    onclick='tampilFoto("{{ asset("uploads/peserta/$dataabsen->foto_cekout") }}","Jam Keluar {{ \Carbon\Carbon::parse($dataabsen->jam_cekout)->toTimeString() }}")'><i
+                                                        class="fa fa-picture-o"></i> Lihat </button>
+                                                @else
+                                                <button class="btn btn-danger btn-xs"> Belum Absen </button>
+                                                @endif
+                                            </td>
+                                            @endif
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                         <div id="logs" class="tab-pane fade in">
-                            <div class="box box-info">
-                                <div class="box-header with-border" style="text-align:center">
-                                    <!-- <h3 class="box-title">Upload Soal</h3> -->
+                            <!-- <div class="box box-info"> -->
+                            <!-- <div class="box-header with-border" style="text-align:center">
+                                    <h3 class="box-title">Upload Soal</h3>
                                     <div class="box-tools pull-right">
                                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                                 class="fa fa-minus"></i>
@@ -352,34 +430,86 @@
                                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i
                                                 class="fa fa-times"></i></button>
                                     </div>
-                                </div>
-                                <div class="box-body">
-                                    <table id="custom-table"
-                                        class="table table-striped table-bordered dataTable customTable">
-                                        <thead>
-                                            <tr>
-                                                <th>No</th>
-                                                <th>Waktu Akses</th>
-                                                <th>IP Address</th>
-                                                <th>Subject</th>
-                                                <th>Url</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($logs as $key)
-                                            <tr>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $key->created_at }}</td>
-                                                <td>{{ $key->ip }}</td>
-                                                <td>{{ $key->subject }}</td>
-                                                <td>{{ $key->url }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                </div> -->
+                            <div class="box-body">
+                                <table id="custom-table"
+                                    class="table table-striped table-bordered dataTable customTable">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Waktu Akses</th>
+                                            <th>IP Address</th>
+                                            <th>Subject</th>
+                                            <th>Url</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($logs as $key)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $key->created_at }}</td>
+                                            <td>{{ $key->ip }}</td>
+                                            <td>{{ $key->subject }}</td>
+                                            <td>{{ $key->url }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- </div> -->
+                        </div>
+                        @if($data->is_kelompok==1)
+                        <div id="kelompok" class="tab-pane fade in">
+                            <div class="box-body">
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        <div class="box box-primary box-solid">
+                                            <div class="box-header with-border" style="text-align:center">
+                                                <h3 class="box-title">Kelompok {{$no_kelompok->no_kelompok}}</h3>
+
+                                                <div class="box-tools pull-right">
+                                                    <button type="button" class="btn btn-box-tool"
+                                                        data-widget="collapse"><i class="fa fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                                <!-- /.box-tools -->
+                                            </div>
+                                            <!-- /.box-header -->
+                                            <div class="box-body" style="">
+                                                @foreach ($kelompok as $key)
+                                                @if($Peserta->id==$key->id_peserta)
+                                                <b>{{$loop->iteration}}. {{$key->peserta_r->nama}}</b>
+                                                @else
+                                                {{$loop->iteration}}. {{$key->peserta_r->nama}}
+                                                @endif
+
+                                                @if($key->id_peserta==$key->id_ketua)
+                                                <b>(Ketua)</b>
+                                                @endif
+                                                <br>
+                                                @endforeach
+                                            </div>
+                                            <!-- /.box-body -->
+                                            <div style="text-align:center">
+                                            <h4 class="box-title">Tugas</h4>
+                                            Belum Ada Tugas
+                                            </div>
+                                        </div>
+                                        <!-- /.box -->
+                                    </div>
+
+                                    <!-- <div class="col-md-12" style="text-align:center">
+                                        <h3 class="box-title">Tugas</h3>
+                                        Belum Ada Tugas
+                                    </div> -->
                                 </div>
                             </div>
+                            <!-- </div> -->
                         </div>
+                        @endif
+
+
                     </div>
 
                 </div>
@@ -391,7 +521,7 @@
             <div class="modal fade" id="modal_{{$Peserta->id}}" role="dialog">
                 <div class="modal-dialog modal-lg" style="width:1500px">
 
-                    <!-- Modal content-->
+                    <!-- Modal Essay-->
                     <div class="modal-content">
                         <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -469,7 +599,7 @@
             <div class="modal fade" id="modal_jawab_{{$Peserta->id}}" role="dialog">
                 <div class="modal-dialog modal-lg" style="width:1500px">
 
-                    <!-- Modal content-->
+                    <!-- Modal Essay Jawab-->
                     <div class="modal-content">
                         <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -651,39 +781,36 @@
             </div>
             <!-- End -->
 
+            <!-- modal foto -->
+            <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h3 class="modal-title" id="lampiranTitle"></h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12" style="text-align:center">
+                                    <img id="imgFoto" src="" alt="" width="100%">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- end of modal foto -->
+
         </div>
         <!-- /.box-body -->
     </div>
     <!-- /.box -->
-    <!-- modal konfirmasi -->
-    <!-- <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
-        <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formDelete"
-            name="formDelete" method="post" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" value="" name="idHapusData" id="idHapusData">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span
-                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Konfirmasi</h4>
-                    </div>
-                    <div class="modal-body" id="konfirmasi-body">
-                        Apakah anda ingin mengirim account peserta?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
-                        <button type="submit" class="btn btn-danger" data-id=""
-                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Kirim..."
-                            id="confirm-delete">Ya</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div> -->
-    <!-- end of modal konfirmais -->
-
 </section>
 <!-- /.content -->
 
@@ -843,7 +970,6 @@
                 }
             });
         }
-
 
     });
 

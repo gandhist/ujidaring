@@ -263,6 +263,7 @@ class JadwalController extends Controller
     public function dashboard($id)
     {
         $data = JadwalModel::find($id);
+        $jumlahkelompok = KelompokPeserta::where('id_jadwal',$id)->groupBy('no_kelompok')->count();
         $jumlahJadwal = JadwalRundown::where('id_jadwal','=',$id)->count();
         $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
         $jumlahabsen = AbsenModel::whereIn("id_peserta",$id_klp_peserta)->count();
@@ -272,7 +273,7 @@ class JadwalController extends Controller
         $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
-        return view('jadwal.dashboard')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay','instruktur','modul','jumlahabsen','jumlahJadwal'));
+        return view('jadwal.dashboard')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay','instruktur','modul','jumlahabsen','jumlahJadwal','jumlahkelompok'));
     }
 
     public function peserta($id)
@@ -290,6 +291,8 @@ class JadwalController extends Controller
     public function pesertadetail($id_jadwal,$id_peserta)
     {
         $data = JadwalModel::find($id_jadwal);
+        $no_kelompok = KelompokPeserta::select('no_kelompok')->where('id_peserta',$id_peserta)->first();
+        $kelompok = KelompokPeserta::where('no_kelompok',$no_kelompok['no_kelompok'])->where('id_jadwal',$id_jadwal)->get();
         $Peserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->where('id','=',$id_peserta)->first();
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
@@ -297,8 +300,9 @@ class JadwalController extends Controller
         $modul_rundown = ModulRundown::whereHas('jadwal_rundown_r', function ($query) use($id_jadwal){
             return $query->where('id_jadwal', '=', $id_jadwal);
         })->get();
+        $jadwalrundown = JadwalRundown::where('id_jadwal',$id_jadwal)->orderBy('tanggal','asc')->get();
         $logs = LogActivity::where('user_id', $Peserta->user_id)->orderBy('id','desc')->get();
-        return view('jadwal.pesertadetail')->with(compact('data','Peserta','modul_rundown','jumlahSoalPg','jumlahSoalEssay','jawaban_evaluasi','logs'));
+        return view('jadwal.pesertadetail')->with(compact('data','Peserta','modul_rundown','jumlahSoalPg','jumlahSoalEssay','jawaban_evaluasi','logs','kelompok','no_kelompok','jadwalrundown'));
     }
 
     public function pesertatm(Request $request){
@@ -620,8 +624,18 @@ class JadwalController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
-    {
+    {   
+        $user_data = [
+            'deleted_by' => Auth::id(),
+            'deleted_at' => Carbon::now()->toDateTimeString()
+        ];
+        $idData = explode(',', $request->idHapusData);
+        $user_id = Peserta::select('user_id')->whereIn('id_kelompok', $idData)->get()->toArray();
+        JadwalModel::whereIn('id', $idData)->update($user_data);
+        User::whereIn('id', $user_id)->update($user_data);
+        // Peserta::whereIn('id_kelompok', $idData)->update($user_data);
 
+        return redirect()->back()->with('message', 'Data Telah dihapus!'); 
     }
 
     public function AccountPeserta(Request $request)
@@ -711,42 +725,70 @@ class JadwalController extends Controller
     // function generate kelompok peserta 
     public function gen(request $request){
 
-        $jumlahPeserta = Peserta::where('id_kelompok','=',$request->idjadwal)->count();
-        if($jumlahPeserta<7){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Minimal Peserta 7 Orang !'
+        $request->validate(
+            [
+                'jumlahkelompok' => 'required'
+            ],[
+                'jumlahkelompok.required' => "Jumlah Kelompok Harus di isi"
             ]);
-        }
+
+        // $jumlahPeserta = Peserta::where('id_kelompok','=',$request->idjadwal)->count();
+        // if($jumlahPeserta<7){
+        //     return response()->json([
+        //         'icon' => 'error',
+        //         'status' => true,
+        //         'message' => 'Minimal Peserta 7 Orang !'
+        //     ]);
+        // }
 
         $is_kelompok = JadwalModel::select('is_kelompok')->where('id','=',$request->idjadwal)->first();
         if($is_kelompok['is_kelompok']==1){
             return response()->json([
-                'status' => 'warning',
-                'message' => 'Kelompok sudah ada !'
+                'icon' => 'warning',
+                'status' => true,
+                'message' => "Kelompok sudah ada !"
             ]);
         }
 
         $dataupdate['is_kelompok'] = 1;
         JadwalModel::find($request->idjadwal)->update($dataupdate);
-        $data = $this->generate_kelompok($request->idjadwal);
-        $no_kelompok = 1;
-        foreach ($data as $row) {
-            foreach ($row as $idpeserta) {
-                $datakelompok['id_jadwal'] = $request->idjadwal;
-                $datakelompok['id_peserta'] = $idpeserta;
-                $datakelompok['id_ketua'] = $row[0];
-                $datakelompok['no_kelompok'] = $no_kelompok; 
-                $datakelompok['created_by'] = Auth::id();
-                $datakelompok['created_at'] = Carbon::now()->toDateTimeString();
-                KelompokPeserta::create($datakelompok);
-            }
-            $no_kelompok++;
+        $data = $this->buat_kelompok($request->idjadwal,$request->jumlahkelompok);
+        $no_kelompok=1;
+  
+        for ($i=1; $i <= count($data) ; $i++) { 
+                foreach($data[$i] as $id_peserta){
+                    $datakelompok['id_jadwal'] = $request->idjadwal;
+                    $datakelompok['id_peserta'] = $id_peserta;
+                    $datakelompok['id_ketua'] = $data[$i][0];
+                    $datakelompok['no_kelompok'] = $no_kelompok; 
+                    $datakelompok['created_by'] = Auth::id();
+                    $datakelompok['created_at'] = Carbon::now()->toDateTimeString();
+                    KelompokPeserta::create($datakelompok);
+                }
+        $no_kelompok++;
         }
 
+        // $dataupdate['is_kelompok'] = 1;
+        // JadwalModel::find($request->idjadwal)->update($dataupdate);
+        // $data = $this->generate_kelompok($request->idjadwal);
+        // $no_kelompok = 1;
+        // foreach ($data as $row) {
+        //     foreach ($row as $idpeserta) {
+        //         $datakelompok['id_jadwal'] = $request->idjadwal;
+        //         $datakelompok['id_peserta'] = $idpeserta;
+        //         $datakelompok['id_ketua'] = $row[0];
+        //         $datakelompok['no_kelompok'] = $no_kelompok; 
+        //         $datakelompok['created_by'] = Auth::id();
+        //         $datakelompok['created_at'] = Carbon::now()->toDateTimeString();
+        //         KelompokPeserta::create($datakelompok);
+        //     }
+        //     $no_kelompok++;
+        // }
+
         return response()->json([
-            'status' => 'success',
-            'message' => 'Berhasil buat kelompok !'
+            'icon' => 'success',
+            'status' => true,
+            'message' => 'Kelompok berhasil dibuat!'
         ]);
     }
 

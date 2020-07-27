@@ -143,6 +143,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// Master Modul 
 	Route::resource('mastermodul', 'ModulController');
 	Route::get('mastermodul/{id}/edit','ModulController@edit');
+	Route::get('mastermodul/update','ModulController@update');
 	Route::post('modul/save','ModulController@store');
 
 	// Fungsi Chain Bidang

@@ -9,10 +9,8 @@
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active"><a href="#">Tampil</a></li>
+        <li class="active"><a href="#">Peserta</a></li>
     </ol>
-
-
 </section>
 
 <!-- Main content -->
@@ -82,9 +80,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                </div>
                 <div class="col-md-3">
+                </div>
+                <div class="col-md-2">
 
                     <div class="box-body">
                         <div class="table-responsive">
@@ -92,24 +90,25 @@
                                 <thead>
                                     <tr>
                                         <td style="text-align:left;padding-bottom:0px;padding-top:0px">
-                                            @if($data->is_kelompok == "1" )
-                                            <a href="{{url('jadwal/lihatkelompok/'.$data->id)}}" id="btnlihatklp"
-                                                type="button" class="btn btn-block btn-danger btn-flat">Lihat Kelompok</a>
-                                            @else
-                                            <button id="btnbuatklp" type="button"
-                                                class="btn btn-block btn-info btn-flat">Buat Kelompok</button>
-                                            @endif
-                                        </td>
-                                        <td style="text-align:left;padding-bottom:0px;padding-top:0px"><button
-                                                id="btnkirim" type="button"
-                                                class="btn btn-block btn-info btn-flat">Kirim User Account</button>
+                                            <button id="btnkirim" type="button"
+                                                class="btn btn-block btn-primary btn-flat">Kirim User Account</button>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" style="text-align:left;padding-bottom:0px;padding-top:2px">
+                                        <td style="text-align:left;padding-bottom:0px;padding-top:2px">
                                             <button id="btndetail" type="button"
-                                                class="btn btn-block btn-warning btn-flat">Detail</button>
+                                                class="btn btn-block btn-warning btn-flat">Lihat Detail</button>
                                         </td>
+                                        <!-- <td style="text-align:left;padding-bottom:0px;padding-top:2px">
+                                            @if($data->is_kelompok == "1" )
+                                            <a href="{{url('jadwal/lihatkelompok/'.$data->id)}}" id="btnlihatklp"
+                                                type="button" class="btn btn-block btn-warning btn-flat">Lihat
+                                                Kelompok</a>
+                                            @else
+                                            <button id="btnbuatklp" type="button"
+                                                class="btn btn-block btn-primary btn-flat">Buat Kelompok</button>
+                                            @endif
+                                        </td> -->
                                     </tr>
                                 </thead>
                             </table>
@@ -186,173 +185,19 @@
                 </div>
             </div>
             <!-- /.MultiStep Form -->
-
-            <!-- Modal Penilaian -->
-            @foreach($Peserta as $key)
-            <div class="modal fade" id="modal_{{$key->id}}" role="dialog">
-                <div class="modal-dialog modal-lg" style="width:1500px">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"><b>{{$key->nama}}</b></h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="box">
-                                <form action="{{ route('penilaian.update', $key->id ) }}" class="form-horizontal"
-                                    id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
-                                    @method("PATCH")
-                                    @csrf
-                                    <div class="box-body no-padding">
-                                        <br>
-                                        <table class="table table-condensed" id="tableModalDetailAhli">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Soal</th>
-                                                    <th>Jawaban Peserta</th>
-                                                    <th>Jawaban Sebenarnya</th>
-                                                    <th>Bobot</th>
-                                                    <th>Ceklis jika sesuai</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <input type="hidden" name="jumlah_jawaban_{{$key->id}}"
-                                                    value="{{count($key->jawaban_essay_r)}}">
-                                                @foreach($key->jawaban_essay_r as $jawaban)
-                                                <tr>
-                                                    <input type="hidden"
-                                                        name="{{$key->id}}_id_jawaban_{{ $loop->iteration }}"
-                                                        value="{{ $jawaban->id }}">
-                                                    <td style="width:1%">{{ $loop->iteration }}</td>
-                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
-                                                            id="" rows="5">{{ $jawaban->soal_r->soal }}</textarea></td>
-                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
-                                                            id="" rows="5">{{ $jawaban->jawaban }}</textarea></td>
-                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
-                                                            id="" rows="5">{{ $jawaban->soal_r->jawaban }}</textarea>
-                                                    </td>
-                                                    <td style="width:2%"><input
-                                                            name="{{$key->id}}_bobot_{{ $loop->iteration }}" type="text"
-                                                            maxlength="2" class="Inputbobot" required></td>
-                                                    <td style="width:10%;text-align:center"><input
-                                                            name="{{$key->id}}_istrue_{{ $loop->iteration }}"
-                                                            type="checkbox"></td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-                                    <div class="box-footer">
-                                        <div class="row">
-                                            <div class="col-sm-6" style="text-align:right">
-                                                <button type="button" class="btn btn-default"
-                                                    data-dismiss="modal">Batal</button>
-                                            </div>
-                                            <div class="col-sm-6" style="text-align:left">
-                                                <button id="btnUpdateNilai" type="submit" class="btn btn-md btn-danger">
-                                                    <i class="fa fa-save"></i>
-                                                    Simpan Nilai</button>
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                </form>
-                            </div>
-                            <!-- End -->
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="modal fade" id="modal_jawab_{{$key->id}}" role="dialog">
-                <div class="modal-dialog modal-lg" style="width:1500px">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title"><b>{{$key->nama}}</b></h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="box">
-                                <form action="{{ route('penilaian.update', $key->id ) }}" class="form-horizontal"
-                                    id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
-                                    @method("PATCH")
-                                    @csrf
-                                    <div class="box-body no-padding">
-                                        <br>
-                                        <table class="table table-condensed" id="tableModalDetailAhli">
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Soal</th>
-                                                    <th>Jawaban Peserta</th>
-                                                    <th>Jawaban Sebenarnya</th>
-                                                    <th>Bobot</th>
-                                                    <th>Sesuai/Tidak Sesuai</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <input type="hidden" name="jumlah_jawaban_{{$key->id}}"
-                                                    value="{{count($key->jawaban_essay_r)}}">
-                                                @foreach($key->jawaban_essay_r as $jawaban)
-                                                <tr>
-                                                    <input type="hidden"
-                                                        name="{{$key->id}}_id_jawaban_{{ $loop->iteration }}"
-                                                        value="{{ $jawaban->id }}">
-                                                    <td style="width:1%">{{ $loop->iteration }}</td>
-                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
-                                                            id="" rows="5">{{ $jawaban->soal_r->soal }}</textarea></td>
-                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
-                                                            id="" rows="5">{{ $jawaban->jawaban }}</textarea></td>
-                                                    <td><textarea style="width: 100%;resize: none;" readonly name=""
-                                                            id="" rows="5">{{ $jawaban->soal_r->jawaban }}</textarea>
-                                                    </td>
-                                                    <td style="width:2%"><input
-                                                            name="{{$key->id}}_bobot_{{ $loop->iteration }}" type="text"
-                                                            maxlength="2" class="Inputbobot"
-                                                            value="{{ $jawaban->nilai }}" readonly></td>
-                                                    <td style="width:10%;text-align:center"><span><i
-                                                                class="fa {{ $jawaban->is_true==1 ? 'fa-check' : 'fa-times' }} "
-                                                                aria-hidden="true"></i></span></td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
-                                </form>
-                            </div>
-                            <!-- End -->
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            @endforeach
-            <!-- End -->
-
         </div>
         <!-- /.box-body -->
     </div>
     <!-- /.box -->
-    <!-- modal konfirmasi -->
+
+    <!-- Modal Kirim Account Peserta -->
     <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formDelete"
             name="formDelete" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" value="" name="idHapusData" id="idHapusData">
-            <div class="modal-dialog modal-sm">
+            <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span
@@ -372,7 +217,44 @@
             </div>
         </form>
     </div>
-    <!-- end of modal konfirmais -->
+    <!-- end of modal kirim account peserta -->
+
+    <!-- Modal Buat Kelompok -->
+    <div class="modal fade" id="modal_buat_kelompok" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <form class="form-horizontal" id="formkelompok" name="formkelompok" method="post" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" value="" name="idHapusData" id="idHapusData">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span
+                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Buat Kelompok Otomatis</h4>
+                        <b>Kelompok akan digenerate oleh sistem secara otomatis</b>
+                    </div>
+                    <div class="modal-body" id="konfirmasi-body">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <!-- <label for="exampleInputEmail1">*Masukkan Jumlah Kelompok</label> -->
+                                <input type="hidden" name="idjadwal" id="idjadwal" value="{{$data->id}}">
+                                <input maxlength="1" type="text" class="form-control" id="jumlahkelompok"
+                                    name="jumlahkelompok" placeholder="Masukkan Jumlah Kelompok">
+                                <span id="jumlahkelompok" class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-danger" data-id=""
+                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Kirim..."
+                            id="btn-generate">Generate</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- end of modal kirim account peserta -->
 
 </section>
 <!-- /.content -->
@@ -421,14 +303,14 @@
         }).draw();
 
         // Kunci Input NIK Hanya Angka
-        $('.Inputbobot').on('input blur paste', function () {
+        $('#jumlahkelompok').on('input blur paste', function () {
             $(this).val($(this).val().replace(/\D/g, ''))
         });
 
         // Show Modal Penilaian
-        $('.btnnilai').on('click', function () {
-            $('#modaldetailAhli').modal('show');
-        });
+        // $('.btnnilai').on('click', function () {
+        //     $('#modaldetailAhli').modal('show');
+        // });
 
         $('#btnkirim').on('click', function (e) {
             e.preventDefault();
@@ -452,22 +334,7 @@
 
         $('#btnbuatklp').on('click', function (e) {
             e.preventDefault();
-            Swal.fire({
-                title: 'Generate Kelompok',
-                text: "Sistem akan generate kelompok secara random?",
-                icon: 'warning',
-                buttons: true,
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: "Batal",
-                confirmButtonText: 'Ya'
-            }).then((result) => {
-                if (result.value) {
-                    idjadwal = "{{$data->id}}";
-                    buatkelompok(idjadwal);
-                }
-            });
+            $('#modal_buat_kelompok').modal('show');
         });
 
         $('#btndetail').on('click', function (e) {
@@ -499,9 +366,13 @@
             }
         });
 
-        // Fungsi membuat kelompok
-        function buatkelompok(idjadwal) {
-            // alert(idjadwal);
+        $('#btn-generate').on('click', function (e) {
+            store();
+        });
+
+        function store() {
+            var formData = new FormData($('#formkelompok')[0]);
+
             var url = "{{ url('bentukkelompok') }}";
             $.ajaxSetup({
                 headers: {
@@ -510,104 +381,136 @@
             });
             $.ajax({
                 url: url,
-                method: 'POST',
-                data: {
-                    idjadwal: idjadwal
+                type: 'POST',
+                dataType: "JSON",
+                data: formData,
+                contentType: false,
+                processData: false,
+                beforeSend: function () {
+                    $.LoadingOverlay("show", {
+                        image: "",
+                        fontawesome: "fa fa-refresh fa-spin",
+                        fontawesomeColor: "black",
+                        fade: [5, 5],
+                        background: "rgba(60, 60, 60, 0.4)"
+                    });
+                    // $("#btnSave").button('loading');
                 },
-                success: function (data) {
-                    if (data['status'] == "success") {
+                success: function (response) {
+                    console.log(response);
+                    if (response.status) {
                         Swal.fire({
-                            title: data['message'],
-                            // text: response.success,
-                            type: data['status'],
-                            confirmButtonText: 'Ok',
-                            confirmButtonColor: '#AAA',
-                            onClose: function () {
-                                window.location.href = "{{ url('jadwal/lihatkelompok/'.$data->id) }}";
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            title: data['message'],
-                            type: data['status'],
+                            title: response.message,
+                            type: response.icon,
                             confirmButtonText: 'Ok',
                             confirmButtonColor: '#AAA'
+                        }).then(function () {
+                            if (response.icon == "success") {
+                                window.location.href ="{{ url('jadwal/lihatkelompok/'.$data->id) }}";
+                            }
                         });
                     }
                 },
                 error: function (xhr, status) {
-                    alert('Error');
-                }
-            });
-        }
-        // Fungsi Update durasi ujian
-        function updateDurasi(durasi, idJadwal) {
-            var url = "{{ url('updateDurasiUjian') }}";
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: url,
-                method: 'POST',
-                data: {
-                    durasi: durasi,
-                    idJadwal: idJadwal
+                    var a = JSON.parse(xhr.responseText);
+                    // console.log(a);
+                    $(".textarea").css('border-color', 'rgb(118, 118, 118)');
+                    $(".select2-selection").css('border-color', '#aaa');
+                    $('.form-group').removeClass('has-error');
+                    $('.help-block').text("");
+                    $.each(a.errors, function (key, value) {
+                        tipeinput = $('#' + key).attr("class");
+                        tipeselect = "select2";
+                        tipetextarea = "textarea";
+                        if (tipeinput.indexOf(tipeselect) > -1) {
+                            console.log("select2");
+                            $("#" + key).parent().find(".select2-container").children()
+                                .children().css(
+                                    'border-color', '#a94442');
+                            $('span[id^="' + key + '"]').text(value);
+                        } else if (tipeinput.indexOf(tipetextarea) > -1) {
+                            $("#" + key).css('border-color', '#a94442');
+                            $('span[id^="' + key + '"]').text(value);
+                        } else {
+                            $('[name="' + key + '"]').parent().addClass(
+                                'has-error'
+                            );
+                            if (!$('[name="' + key + '"]').is("select")) {
+                                $('[name="' + key + '"]').next().text(
+                                    value);
+                            }
+                        }
+                        $('span[id^="' + key + '"]').show();
+                    });
                 },
-                success: function (data) {
-
-
-                    // countdown
-                    var $clock = $('#clock'),
-                        eventTime = moment(data, 'YYYY-MM-DD HH:mm:ss').unix(),
-                        currentTime = moment().unix(),
-                        diffTime = eventTime - currentTime,
-                        duration = moment.duration(diffTime * 1000, 'milliseconds'),
-                        interval = 1000;
-
-                    if (diffTime > 0) {
-
-                        // Show clock
-                        // $clock.show();
-                        $('#clock').text("");
-                        var $d = $('<span class="days" ></span>').appendTo($clock),
-                            $h = $('<span class="hours" ></span>').appendTo($clock),
-                            $m = $('<span class="minutes" ></span>').appendTo($clock),
-                            $s = $('<span class="seconds" ></span>').appendTo($clock);
-
-                        setInterval(function () {
-
-                            duration = moment.duration(duration.asMilliseconds() -
-                                interval, 'milliseconds');
-                            var d = moment.duration(duration).days(),
-                                h = moment.duration(duration).hours(),
-                                m = moment.duration(duration).minutes(),
-                                s = moment.duration(duration).seconds();
-
-                            d = $.trim(d).length === 1 ? '0' + d : d;
-                            h = $.trim(h).length === 1 ? '0' + h : h;
-                            m = $.trim(m).length === 1 ? '0' + m : m;
-                            s = $.trim(s).length === 1 ? '0' + s : s;
-
-                            // show how many hours, minutes and seconds are left
-                            // $d.text(d + ":");
-                            $h.text(h + ":");
-                            $m.text(m + ":");
-                            $s.text(s);
-
-                        }, interval);
-
-                    }
-                    // Countdown
-                },
-                error: function (xhr, status) {
-                    alert('Error');
+                complete: function () {
+                    $.LoadingOverlay("hide");
+                    // $("#btnSave").button('reset');
                 }
             });
         }
 
+        // $('#btnbuatklp').on('click', function (e) {
+        //     e.preventDefault();
+        //     Swal.fire({
+        //         title: 'Generate Kelompok',
+        //         text: "Sistem akan generate kelompok secara random?",
+        //         icon: 'warning',
+        //         buttons: true,
+        //         showCancelButton: true,
+        //         confirmButtonColor: '#3085d6',
+        //         cancelButtonColor: '#d33',
+        //         cancelButtonText: "Batal",
+        //         confirmButtonText: 'Ya'
+        //     }).then((result) => {
+        //         if (result.value) {
+        //             idjadwal = "{{$data->id}}";
+        //             buatkelompok(idjadwal);
+        //         }
+        //     });
+        // });
 
+        // Fungsi membuat kelompok
+        // function buatkelompok(idjadwal) {
+        //     var url = "{{ url('bentukkelompok') }}";
+        //     $.ajaxSetup({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         }
+        //     });
+        //     $.ajax({
+        //         url: url,
+        //         method: 'POST',
+        //         data: {
+        //             idjadwal: idjadwal
+        //         },
+        //         success: function (data) {
+        //             if (data['status'] == "success") {
+        //                 Swal.fire({
+        //                     title: data['message'],
+        //                     // text: response.success,
+        //                     type: data['status'],
+        //                     confirmButtonText: 'Ok',
+        //                     confirmButtonColor: '#AAA',
+        //                     onClose: function () {
+        //                         window.location.href =
+        //                             "{{ url('jadwal/lihatkelompok/'.$data->id) }}";
+        //                     }
+        //                 });
+        //             } else {
+        //                 Swal.fire({
+        //                     title: data['message'],
+        //                     type: data['status'],
+        //                     confirmButtonText: 'Ok',
+        //                     confirmButtonColor: '#AAA'
+        //                 });
+        //             }
+        //         },
+        //         error: function (xhr, status) {
+        //             alert('Error');
+        //         }
+        //     });
+        // }
 
     });
 
