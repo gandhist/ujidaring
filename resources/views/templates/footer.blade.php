@@ -17,6 +17,9 @@
 <!-- global custom js -->
 <script type="text/javascript" src="{{ asset('global.js') }}"></script>
 
+<script src='https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js'>
+</script>
+
 <!-- Data Table -->
 <script src="{{ asset('AdminLTE-2.3.11/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('AdminLTE-2.3.11/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>

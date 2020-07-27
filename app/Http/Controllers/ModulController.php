@@ -45,20 +45,23 @@ class ModulController extends Controller
         
         $px_materi = "file_modul_";
         $px_modul = "modul_";
+        $px_jp = "jp_";
         $anggota = [];
         $anggota_msg = [];
         // $jumlahdetail = $request->jumlah_detail;
         $idData = explode(',', $request->jumlah_detail);
         foreach ($idData as $idData) {
-            if ($request->has($px_materi.$idData)) {
+            if ($request->has($px_modul.$idData)) {
                 $anggota += [
-                    $px_materi.$idData => 'mimes:pdf,docx,xls,xlsx,mp4,ppt,pptx|max:20480',
                     $px_modul.$idData => 'required',
+                    $px_jp.$idData => 'required',
+                    $px_materi.$idData => 'mimes:pdf,docx,xls,xlsx,mp4,ppt,pptx|max:20480'
                 ];
                 $anggota_msg += [
                     $px_materi.$idData.".mimes" => 'Upload Hanya format PDF,XLS,DOCX, MP4!',
-                    $px_materi.$idData.".max" => 'Maksimal File 20MB',
-                    $px_modul.$idData.".required" => 'Modul harus diisi',
+                    $px_materi.$idData.".max" => 'Maksimal File 20MB!',
+                    $px_modul.$idData.".required" => 'Modul harus diisi!',
+                    $px_jp.$idData.".required" => 'Jam Pertemuan harus diisi!'
                 ];
             } 
         }
@@ -69,10 +72,10 @@ class ModulController extends Controller
             'id_syarat'=>'required',
         ];
 
-        $anggota_msg += ['id_bidang.required'=>'Kolom bidang harus diisi',
-        'id_sert_alat.required'=>'Kolom sertifikat alat harus diisi',
-        'id_jumlah_hari.required' => 'Kolom jumlah hari harus diisi',
-        'id_syarat.required' => 'Kolom syarat harus diisi'
+        $anggota_msg += ['id_bidang.required'=>'Kolom bidang harus diisi!',
+        'id_sert_alat.required'=>'Kolom sertifikat alat harus diisi!',
+        'id_jumlah_hari.required' => 'Kolom jumlah hari harus diisi!',
+        'id_syarat.required' => 'Kolom syarat harus diisi!'
     ];
        $request->validate($anggota, $anggota_msg); 
        
@@ -124,8 +127,8 @@ class ModulController extends Controller
             $message = "Data berhasil ditambahkan";
             $icon = "success";
         }else{
-            $message = "Tidak ada data yang ditambahkan";
-            $icon = "error";
+            $message = "Harap Tambahkan Modul Terlebih Dahulu";
+            $icon = "warning";
         }
         return response()->json([
             'status' => true,
@@ -170,17 +173,43 @@ class ModulController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $request->validate([
+        $px_materi = "file_modul_";
+        $px_modul = "modul_";
+        $px_jp = "jp_";
+        $anggota = [];
+        $anggota_msg = [];
+        // $jumlahdetail = $request->jumlah_detail;
+        $idData = explode(',', $request->jumlah_detail);
+        foreach ($idData as $idData) {
+            if ($request->has($px_modul.$idData)) {
+                $anggota += [
+                    $px_modul.$idData => 'required',
+                    $px_jp.$idData => 'required',
+                    $px_materi.$idData => 'mimes:pdf,docx,xls,xlsx,mp4,ppt,pptx|max:20480'
+                ];
+                $anggota_msg += [
+                    $px_materi.$idData.".mimes" => 'Upload Hanya format PDF,XLS,DOCX, MP4!',
+                    $px_materi.$idData.".max" => 'Maksimal File 20MB!',
+                    $px_modul.$idData.".required" => 'Modul harus diisi!',
+                    $px_jp.$idData.".required" => 'Jam Pertemuan harus diisi!'
+                ];
+            } 
+        }
+        $anggota += [
+            'id_bidang'=>'required',
+            'id_sert_alat' => 'required',
             'id_jumlah_hari'=>'required',
             'id_syarat'=>'required',
-        ],
-        [
-        'id_jumlah_hari.required' => 'Kolom jumlah hari harus diisi',
-        'id_syarat.required' => 'Kolom syarat harus diisi'
-        ]
-        );
+        ];
+
+        $anggota_msg += ['id_bidang.required'=>'Kolom bidang harus diisi!',
+        'id_sert_alat.required'=>'Kolom sertifikat alat harus diisi!',
+        'id_jumlah_hari.required' => 'Kolom jumlah hari harus diisi!',
+        'id_syarat.required' => 'Kolom syarat harus diisi!'
+    ];
+       $request->validate($anggota, $anggota_msg); 
 
         // $id_bidang = $request->id_bidang; 
         // $id_sert_alat = $request->id_sert_alat;
@@ -213,10 +242,17 @@ class ModulController extends Controller
                 $update_data = MasterModul::find($id_ms_modul)->update($dataDetail);
             }
             $message = "Data berhasil diedit";
+            $icon = "success";
         }else{
-            $message = "Tidak ada data yang ditambahkan";
+            $message = "Tidak ada data modul";
+            $icon = "warning";
         }
-        return redirect('mastermodul')->with('message',  $message);
+        return response()->json([
+            'status' => true,
+            'message' => $message,
+            'icon' => $icon
+        ],200);
+        // return redirect('mastermodul')->with('message',  $message);
     }
 
     /**

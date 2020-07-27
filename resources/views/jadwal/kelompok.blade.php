@@ -47,40 +47,43 @@
                 <div class="row">
                     @foreach ($datakelompok as $key)
 
-                    <div class="card col-lg-4">
-                        <a style="color:#333" class="card-link" data-toggle="collapse"
-                            href="#collapse_{{$loop->iteration}}" aria-expanded="true">
-                            <div class="card-header">
-                                <h4>
-                                    Kelompok {{$key->no_kelompok}} 
-                                    <!-- <span style="float:right"><i class="fa fa-plus"
-                                            aria-hidden="true"></i></span> -->
-                                </h4>
-                            </div>
-                        </a>
-                        <div id="collapse_{{$loop->iteration}}" class="collapse in" data-parent="#accordion">
-                            <div class="card-body" style="font-size:16px">
-                                    @php
-                                    $no = 1;
-                                    @endphp
+                    <div class="col-md-4">
+                        <div class="box box-primary box-solid">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Kelompok {{$key->no_kelompok}}</h3>
 
-                                    @foreach ($datapeserta as $data)
-                                    @if ($data->no_kelompok==$key->no_kelompok)
-                                    @if ($data->id_peserta==$key->id_ketua)
-                                    {{$no}}. {{$data->peserta_r->nama}} <b>(Ketua)</b><br>
-                                    @php
-                                    $no++;
-                                    @endphp
-                                    @else
-                                    {{$no}}. {{$data->peserta_r->nama}}<br>
-                                    @php
-                                    $no++;
-                                    @endphp
-                                    @endif
-                                    @endif
-                                    @endforeach
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                            class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <!-- /.box-tools -->
                             </div>
+                            <!-- /.box-header -->
+                            <div class="box-body" style="">
+                                @php
+                                $no = 1;
+                                @endphp
+
+                                @foreach ($datapeserta as $data)
+                                @if ($data->no_kelompok==$key->no_kelompok)
+                                @if ($data->id_peserta==$key->id_ketua)
+                                {{$no}}. {{$data->peserta_r->nama}} <b>(Ketua)</b><br>
+                                @php
+                                $no++;
+                                @endphp
+                                @else
+                                {{$no}}. {{$data->peserta_r->nama}}<br>
+                                @php
+                                $no++;
+                                @endphp
+                                @endif
+                                @endif
+                                @endforeach
+                            </div>
+                            <!-- /.box-body -->
                         </div>
+                        <!-- /.box -->
                     </div>
                     @endforeach
                 </div>

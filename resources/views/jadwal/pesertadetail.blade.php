@@ -342,9 +342,9 @@
                             <!-- </div> -->
                         </div>
                         <div id="logs" class="tab-pane fade in">
-                            <div class="box box-info">
-                                <div class="box-header with-border" style="text-align:center">
-                                    <!-- <h3 class="box-title">Upload Soal</h3> -->
+                            <!-- <div class="box box-info"> -->
+                                <!-- <div class="box-header with-border" style="text-align:center">
+                                    <h3 class="box-title">Upload Soal</h3>
                                     <div class="box-tools pull-right">
                                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                                 class="fa fa-minus"></i>
@@ -352,7 +352,7 @@
                                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i
                                                 class="fa fa-times"></i></button>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="box-body">
                                     <table id="custom-table"
                                         class="table table-striped table-bordered dataTable customTable">
@@ -378,7 +378,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            <!-- </div> -->
                         </div>
                     </div>
 
@@ -391,7 +391,7 @@
             <div class="modal fade" id="modal_{{$Peserta->id}}" role="dialog">
                 <div class="modal-dialog modal-lg" style="width:1500px">
 
-                    <!-- Modal content-->
+                    <!-- Modal Essay-->
                     <div class="modal-content">
                         <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -469,7 +469,7 @@
             <div class="modal fade" id="modal_jawab_{{$Peserta->id}}" role="dialog">
                 <div class="modal-dialog modal-lg" style="width:1500px">
 
-                    <!-- Modal content-->
+                    <!-- Modal Essay Jawab-->
                     <div class="modal-content">
                         <div class="modal-header" style="text-align:left;background:#3c8dbc;color:white">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -655,35 +655,6 @@
         <!-- /.box-body -->
     </div>
     <!-- /.box -->
-    <!-- modal konfirmasi -->
-    <!-- <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
-        <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formDelete"
-            name="formDelete" method="post" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" value="" name="idHapusData" id="idHapusData">
-            <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span
-                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Konfirmasi</h4>
-                    </div>
-                    <div class="modal-body" id="konfirmasi-body">
-                        Apakah anda ingin mengirim account peserta?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
-                        <button type="submit" class="btn btn-danger" data-id=""
-                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Kirim..."
-                            id="confirm-delete">Ya</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div> -->
-    <!-- end of modal konfirmais -->
-
 </section>
 <!-- /.content -->
 
@@ -843,7 +814,6 @@
                 }
             });
         }
-
 
     });
 
