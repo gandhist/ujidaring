@@ -61,12 +61,12 @@
                                     <tr>
                                         <th style="text-align:center"><a class="btn btn-success btn-xs"
                                                 href="{{ url('template_upload/pilihan_ganda.xlsx') }}"> <i
-                                                    class="fa fa-file-excel-o"></i>Template Soal PG</a> Upload Soal
+                                                    class="fa fa-file-excel-o"></i> Template Soal PG</a> Upload Soal
                                             Pilihan Ganda (.xls/.xlsx)</th>
                                         <th></th>
                                         <th style="text-align:center"><a class="btn btn-success btn-xs"
                                                 href="{{ url('template_upload/essay.xlsx') }}"> <i
-                                                    class="fa fa-file-excel-o"></i>Template Soal Essay</a> Upload Soal
+                                                    class="fa fa-file-excel-o"></i> Template Soal Essay</a> Upload Soal
                                             Essay (.xls/.xlsx)</th>
                                     </tr>
                                 </thead>
@@ -93,10 +93,18 @@
                                 </tbody>
                             </table>
                             <div class="row">
-                                <div class="col-sm-12" style="text-align:left">
+                                <div class="col-sm-12" style="text-align:left" id="btnuploadsoal">
+
+                                    @if( \Carbon\Carbon::now()->toDateTimeString() > $data->akhir_ujian &&
+                                    $data->akhir_ujian != null)
+                                    <button type="button" class="btn btn-block btn-md btn-danger disabled">
+                                        Ujian Telah Selesai</button>
+                                    @else
                                     <button id="btnSave" type="button" class="btn btn-block btn-md btn-info">
                                         <i class="fa fa-save"></i>
                                         Upload</button>
+                                    @endif
+
                                 </div>
                             </div>
                         </form>
@@ -289,6 +297,8 @@
                                 $s.text(s);
 
                                 if (h == '00' && m == '00' && s == '00') {
+                                    $('#btnuploadsoal').html(`<button type="button" class="btn btn-block btn-md btn-danger disabled">
+                                        Ujian Telah Selesai</button>`);
                                     $("#durasi").val($("#durasi").val() + " Menit");
                                     $("#btnmulai").text('Ujian Telah Selesai');
                                     $("#btnmulai").attr("class",

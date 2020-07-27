@@ -36,7 +36,7 @@
                         <div class="icon">
                             <i class="ion ion-person"></i>
                         </div>
-                        <a href="{{ url('jadwal/instruktur', $data->id) }}" class="small-box-footer">Detail <i
+                        <a href="{{ url('jadwal/instruktur', $data->id) }}" class="small-box-footer">Lihat <i
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                         <div class="icon">
                             <i class="fa fa-users" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">Detail
+                        <a href="{{ url('jadwal/peserta', $data->id) }}" class="small-box-footer">Lihat
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                         <div class="icon">
                             <i class="fa fa-file-text-o" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('jadwal/soal', $data->id) }}" class="small-box-footer">Detail
+                        <a href="{{ url('jadwal/soal', $data->id) }}" class="small-box-footer">Lihat
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                         <div class="icon">
                             <i class="fa fa-list-alt" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('instruktur/modul',$data->id) }}" class="small-box-footer">Detail <i
+                        <a href="{{ url('instruktur/modul',$data->id) }}" class="small-box-footer">Lihat <i
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
                         <div class="icon">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('jadwal/aturjadwal', $data->id) }}" class="small-box-footer">Detail <i
+                        <a href="{{ url('jadwal/aturjadwal', $data->id) }}" class="small-box-footer">Lihat <i
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -114,7 +114,7 @@
                         <div class="icon">
                             <i class="fa fa-address-card" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ url('jadwal/absen', $data->id) }}" class="small-box-footer">Detail
+                        <a href="{{ url('jadwal/absen', $data->id) }}" class="small-box-footer">Lihat
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -135,7 +135,7 @@
                         <div class="icon">
                             <i class="fa fa-film" aria-hidden="true"></i>
                         </div>
-                        <a href="{{ route('pkl', $data->id) }}" class="small-box-footer">Detail <i
+                        <a href="{{ route('pkl', $data->id) }}" class="small-box-footer">Lihat <i
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -157,7 +157,7 @@
                         <div class="icon">
                             <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                         </div>
-                        <a target="_blank" href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">Detail
+                        <a target="_blank" href="{{ url('jadwal/tugas',$data->id) }}" class="small-box-footer">Lihat
                             <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
@@ -173,15 +173,47 @@
                         <div class="icon">
                             <i class="fa fa-star"></i>
                         </div>
-                        <a href="{{ url('jadwal/evaluasi', $data->id) }}" class="small-box-footer">Detail <i
+                        <a href="{{ url('jadwal/evaluasi', $data->id) }}" class="small-box-footer">Lihat <i
                                 class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- end of evaluasi -->
+                @if($data->is_kelompok == "1" )
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3>{{$jumlahkelompok}}</h3>
+                            <p>Kelompok</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                        </div>
+                        <a href="{{url('jadwal/lihatkelompok/'.$data->id)}}" class="small-box-footer">Lihat
+                            <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                @else
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3>-</h3>
+                            <p>Buat Kelompok</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-users" aria-hidden="true"></i>
+                        </div>
+                        <a id="btnbuatklp" href="#" class="small-box-footer">Buat Kelompok
+                            <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                @endif
 
                 <div class="col-lg-12 col-xs-12" style="text-align:center">
                     <button onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")' type="button"
-                        class="btn btn-block btn-danger btn-flat" style="font-size:16px">Klik Untuk Melihat Jadwal</button>
+                        class="btn btn-block btn-danger btn-flat" style="font-size:16px">Klik Untuk Melihat
+                        Jadwal</button>
                 </div>
                 <!-- ./col -->
             </div>
@@ -197,12 +229,14 @@
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">:
                                             {{ \Carbon\Carbon::parse($data->tgl_awal)->isoFormat("DD MMMM YYYY") }}</th>
                                         <th style="text-align:left;padding: 6px;">Jenis Usaha</th>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                            title="{{$data->jenis_usaha_r->nama_jns_usaha}}">:
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;"
+                                            data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                            title="{{$data->jenis_usaha_r->nama_jns_usaha}}">:
                                             {{$data->jenis_usaha_r->kode_jns_usaha}}</th>
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang</th>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                            title="{{$data->bidang_r->nama_bidang}}">:
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;"
+                                            data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                            title="{{$data->bidang_r->nama_bidang}}">:
                                             {{$data->bidang_r->kode_bidang}}
                                         </th>
 
@@ -214,8 +248,9 @@
                                         </th>
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">Bidang Srtf
                                             Alat</th>
-                                        <th style="text-align:left;padding: 6px;vertical-align: middle;" data-toggle="tooltip" data-placement="bottom" data-html="true"
-                            title="{{$data->sertifikat_alat_r->nama_srtf_alat}}">:
+                                        <th style="text-align:left;padding: 6px;vertical-align: middle;"
+                                            data-toggle="tooltip" data-placement="bottom" data-html="true"
+                                            title="{{$data->sertifikat_alat_r->nama_srtf_alat}}">:
                                             {{$data->sertifikat_alat_r->kode_srtf_alat}}
                                         </th>
                                         <th style="text-align:left;padding: 6px;vertical-align: middle;">TUK</th>
@@ -231,7 +266,7 @@
                 <!-- <div class="col-md-1">
                 </div>
                 <div class="col-md-4"> -->
-                    <!-- <form action="{{ route('jadwal.store') }}" id="" name="" method="post"
+                <!-- <form action="{{ route('jadwal.store') }}" id="" name="" method="post"
                         enctype="multipart/form-data">
                         @csrf
                         <div class="box-body">
@@ -319,6 +354,43 @@
     </div>
     <!-- end of modal lampiran -->
 
+    <!-- Modal Buat Kelompok -->
+    <div class="modal fade" id="modal_buat_kelompok" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <form class="form-horizontal" id="formkelompok" name="formkelompok" method="post" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" value="" name="idHapusData" id="idHapusData">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span
+                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Buat Kelompok Otomatis</h4>
+                        <b>Kelompok akan digenerate oleh sistem secara otomatis</b>
+                    </div>
+                    <div class="modal-body" id="konfirmasi-body">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <!-- <label for="exampleInputEmail1">*Masukkan Jumlah Kelompok</label> -->
+                                <input type="hidden" name="idjadwal" id="idjadwal" value="{{$data->id}}">
+                                <input maxlength="1" type="text" class="form-control" id="jumlahkelompok"
+                                    name="jumlahkelompok" placeholder="Masukkan Jumlah Kelompok">
+                                <span id="jumlahkelompok" class="help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-danger" data-id=""
+                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Kirim..."
+                            id="btn-generate">Generate</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- end of modal kirim account peserta -->
+
 </section>
 <!-- /.content -->
 
@@ -336,7 +408,96 @@
 <script type="text/javascript">
     $(function () {
 
-     });
+        $('#btnbuatklp').on('click', function (e) {
+            e.preventDefault();
+            $('#modal_buat_kelompok').modal('show');
+        });
+
+        $('#btn-generate').on('click', function (e) {
+            store();
+        });
+
+        function store() {
+            var formData = new FormData($('#formkelompok')[0]);
+
+            var url = "{{ url('bentukkelompok') }}";
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                type: 'POST',
+                dataType: "JSON",
+                data: formData,
+                contentType: false,
+                processData: false,
+                beforeSend: function () {
+                    $.LoadingOverlay("show", {
+                        image: "",
+                        fontawesome: "fa fa-refresh fa-spin",
+                        fontawesomeColor: "black",
+                        fade: [5, 5],
+                        background: "rgba(60, 60, 60, 0.4)"
+                    });
+                    // $("#btnSave").button('loading');
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (response.status) {
+                        Swal.fire({
+                            title: response.message,
+                            type: response.icon,
+                            confirmButtonText: 'Ok',
+                            confirmButtonColor: '#AAA'
+                        }).then(function () {
+                            if (response.icon == "success") {
+                                window.location.href ="{{ url('jadwal/lihatkelompok/'.$data->id) }}";
+                            }
+                        });
+                    }
+                },
+                error: function (xhr, status) {
+                    var a = JSON.parse(xhr.responseText);
+                    // console.log(a);
+                    $(".textarea").css('border-color', 'rgb(118, 118, 118)');
+                    $(".select2-selection").css('border-color', '#aaa');
+                    $('.form-group').removeClass('has-error');
+                    $('.help-block').text("");
+                    $.each(a.errors, function (key, value) {
+                        tipeinput = $('#' + key).attr("class");
+                        tipeselect = "select2";
+                        tipetextarea = "textarea";
+                        if (tipeinput.indexOf(tipeselect) > -1) {
+                            console.log("select2");
+                            $("#" + key).parent().find(".select2-container").children()
+                                .children().css(
+                                    'border-color', '#a94442');
+                            $('span[id^="' + key + '"]').text(value);
+                        } else if (tipeinput.indexOf(tipetextarea) > -1) {
+                            $("#" + key).css('border-color', '#a94442');
+                            $('span[id^="' + key + '"]').text(value);
+                        } else {
+                            $('[name="' + key + '"]').parent().addClass(
+                                'has-error'
+                            );
+                            if (!$('[name="' + key + '"]').is("select")) {
+                                $('[name="' + key + '"]').next().text(
+                                    value);
+                            }
+                        }
+                        $('span[id^="' + key + '"]').show();
+                    });
+                },
+                complete: function () {
+                    $.LoadingOverlay("hide");
+                    // $("#btnSave").button('reset');
+                }
+            });
+        }
+
+    });
 
     $('.datepicker').datepicker({
         format: 'yyyy/mm/dd',

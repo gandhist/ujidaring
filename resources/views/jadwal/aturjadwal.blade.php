@@ -25,8 +25,6 @@
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li class="active"><a href="#">Atur Jadwal</a></li>
     </ol>
-
-
 </section>
 
 <!-- Main content -->

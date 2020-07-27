@@ -68,7 +68,34 @@ trait GlobalFunction {
 
     }
 
-    // fungsi generate kelompok by jadwal
+    // Fungsi Generate Kelompok Berdasarkan Input Jumlah Kelompok
+    public function buat_kelompok($id_jadwal,$jumlah_kelompok){
+        $jumlahPeserta = Peserta::where('id_kelompok','=',$id_jadwal)->count();
+        $Peserta = Peserta::select('id')->where('id_kelompok','=',$id_jadwal)->get()->toArray();
+        $idpeserta = 0;
+        $jumlahkelompok = floor($jumlahPeserta/$jumlah_kelompok);
+        $kelompok=[];
+        $sisa=($jumlahPeserta%$jumlah_kelompok);
+  
+        // Pembagian Kelompok
+        for ($i=1; $i <= $jumlah_kelompok; $i++) { 
+            for ($j=1; $j <=$jumlahkelompok ; $j++) { 
+                $kelompok[$i][] = $Peserta[$idpeserta]['id'];
+                $idpeserta++;
+            }
+        }
+
+        // Masukkan Sisa Ke kelompok yang sudah ada
+        if($sisa>0){
+        for ($i=1; $i <= $sisa; $i++) { 
+                $kelompok[$i][] = $Peserta[$idpeserta]['id'];
+                $idpeserta++;
+            }
+        }
+        return $kelompok;
+    }
+
+    // fungsi generate kelompok otomatis by jadwal max 4 orang perkelompok
     public function generate_kelompok($id_jadwal){
         $dt_peserta = Peserta::where('id_kelompok',$id_jadwal)->get();
         $dt_p =[];

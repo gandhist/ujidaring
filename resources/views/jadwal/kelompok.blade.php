@@ -17,7 +17,7 @@
 
 </style>
 <section class="content-header">
-    <h1><a href="{{ url('jadwal/peserta/'.$data->id) }}" class="btn btn-md bg-purple"><i
+    <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
                 class="fa fa-arrow-left"></i></a> Kelompok
         {{-- <small>it all starts here</small>  --}}
     </h1>

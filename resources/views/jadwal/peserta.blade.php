@@ -80,16 +80,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                </div>
                 <div class="col-md-3">
+                </div>
+                <div class="col-md-2">
 
                     <div class="box-body">
                         <div class="table-responsive">
                             <table class="table no-margin">
                                 <thead>
                                     <tr>
-                                        <td colspan="2" style="text-align:left;padding-bottom:0px;padding-top:0px">
+                                        <td style="text-align:left;padding-bottom:0px;padding-top:0px">
                                             <button id="btnkirim" type="button"
                                                 class="btn btn-block btn-primary btn-flat">Kirim User Account</button>
                                         </td>
@@ -99,7 +99,7 @@
                                             <button id="btndetail" type="button"
                                                 class="btn btn-block btn-warning btn-flat">Lihat Detail</button>
                                         </td>
-                                        <td style="text-align:left;padding-bottom:0px;padding-top:2px">
+                                        <!-- <td style="text-align:left;padding-bottom:0px;padding-top:2px">
                                             @if($data->is_kelompok == "1" )
                                             <a href="{{url('jadwal/lihatkelompok/'.$data->id)}}" id="btnlihatklp"
                                                 type="button" class="btn btn-block btn-warning btn-flat">Lihat
@@ -108,7 +108,7 @@
                                             <button id="btnbuatklp" type="button"
                                                 class="btn btn-block btn-primary btn-flat">Buat Kelompok</button>
                                             @endif
-                                        </td>
+                                        </td> -->
                                     </tr>
                                 </thead>
                             </table>
@@ -222,31 +222,33 @@
     <!-- Modal Buat Kelompok -->
     <div class="modal fade" id="modal_buat_kelompok" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
-        <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formDelete"
-            name="formDelete" method="post" enctype="multipart/form-data">
+        <form class="form-horizontal" id="formkelompok" name="formkelompok" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" value="" name="idHapusData" id="idHapusData">
-            <div class="modal-dialog modal-sm">
+            <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"><span
                                 aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Generate Kelompok</h4>
+                        <h4 class="modal-title" id="myModalLabel">Buat Kelompok Otomatis</h4>
+                        <b>Kelompok akan digenerate oleh sistem secara otomatis</b>
                     </div>
                     <div class="modal-body" id="konfirmasi-body">
                         <div class="box-body">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Masukkan Jumlah</label>
-                                <input type="text" class="form-control" id="jumlahkelompok" name="jumlahkelompok"
-                                    placeholder="Jumlah Kelompok">
+                                <!-- <label for="exampleInputEmail1">*Masukkan Jumlah Kelompok</label> -->
+                                <input type="hidden" name="idjadwal" id="idjadwal" value="{{$data->id}}">
+                                <input maxlength="1" type="text" class="form-control" id="jumlahkelompok"
+                                    name="jumlahkelompok" placeholder="Masukkan Jumlah Kelompok">
+                                <span id="jumlahkelompok" class="help-block"></span>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-danger" data-id=""
+                        <button type="button" class="btn btn-danger" data-id=""
                             data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Kirim..."
-                            id="confirm-delete">Generate</button>
+                            id="btn-generate">Generate</button>
                     </div>
                 </div>
             </div>
@@ -301,7 +303,7 @@
         }).draw();
 
         // Kunci Input NIK Hanya Angka
-        $('.Inputbobot').on('input blur paste', function () {
+        $('#jumlahkelompok').on('input blur paste', function () {
             $(this).val($(this).val().replace(/\D/g, ''))
         });
 
@@ -334,25 +336,6 @@
             e.preventDefault();
             $('#modal_buat_kelompok').modal('show');
         });
-        // $('#btnbuatklp').on('click', function (e) {
-        //     e.preventDefault();
-        //     Swal.fire({
-        //         title: 'Generate Kelompok',
-        //         text: "Sistem akan generate kelompok secara random?",
-        //         icon: 'warning',
-        //         buttons: true,
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#d33',
-        //         cancelButtonText: "Batal",
-        //         confirmButtonText: 'Ya'
-        //     }).then((result) => {
-        //         if (result.value) {
-        //             idjadwal = "{{$data->id}}";
-        //             buatkelompok(idjadwal);
-        //         }
-        //     });
-        // });
 
         $('#btndetail').on('click', function (e) {
             e.preventDefault();
@@ -383,9 +366,13 @@
             }
         });
 
-        // Fungsi membuat kelompok
-        function buatkelompok(idjadwal) {
-            // alert(idjadwal);
+        $('#btn-generate').on('click', function (e) {
+            store();
+        });
+
+        function store() {
+            var formData = new FormData($('#formkelompok')[0]);
+
             var url = "{{ url('bentukkelompok') }}";
             $.ajaxSetup({
                 headers: {
@@ -394,37 +381,136 @@
             });
             $.ajax({
                 url: url,
-                method: 'POST',
-                data: {
-                    idjadwal: idjadwal
+                type: 'POST',
+                dataType: "JSON",
+                data: formData,
+                contentType: false,
+                processData: false,
+                beforeSend: function () {
+                    $.LoadingOverlay("show", {
+                        image: "",
+                        fontawesome: "fa fa-refresh fa-spin",
+                        fontawesomeColor: "black",
+                        fade: [5, 5],
+                        background: "rgba(60, 60, 60, 0.4)"
+                    });
+                    // $("#btnSave").button('loading');
                 },
-                success: function (data) {
-                    if (data['status'] == "success") {
+                success: function (response) {
+                    console.log(response);
+                    if (response.status) {
                         Swal.fire({
-                            title: data['message'],
-                            // text: response.success,
-                            type: data['status'],
-                            confirmButtonText: 'Ok',
-                            confirmButtonColor: '#AAA',
-                            onClose: function () {
-                                window.location.href =
-                                    "{{ url('jadwal/lihatkelompok/'.$data->id) }}";
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            title: data['message'],
-                            type: data['status'],
+                            title: response.message,
+                            type: response.icon,
                             confirmButtonText: 'Ok',
                             confirmButtonColor: '#AAA'
+                        }).then(function () {
+                            if (response.icon == "success") {
+                                window.location.href ="{{ url('jadwal/lihatkelompok/'.$data->id) }}";
+                            }
                         });
                     }
                 },
                 error: function (xhr, status) {
-                    alert('Error');
+                    var a = JSON.parse(xhr.responseText);
+                    // console.log(a);
+                    $(".textarea").css('border-color', 'rgb(118, 118, 118)');
+                    $(".select2-selection").css('border-color', '#aaa');
+                    $('.form-group').removeClass('has-error');
+                    $('.help-block').text("");
+                    $.each(a.errors, function (key, value) {
+                        tipeinput = $('#' + key).attr("class");
+                        tipeselect = "select2";
+                        tipetextarea = "textarea";
+                        if (tipeinput.indexOf(tipeselect) > -1) {
+                            console.log("select2");
+                            $("#" + key).parent().find(".select2-container").children()
+                                .children().css(
+                                    'border-color', '#a94442');
+                            $('span[id^="' + key + '"]').text(value);
+                        } else if (tipeinput.indexOf(tipetextarea) > -1) {
+                            $("#" + key).css('border-color', '#a94442');
+                            $('span[id^="' + key + '"]').text(value);
+                        } else {
+                            $('[name="' + key + '"]').parent().addClass(
+                                'has-error'
+                            );
+                            if (!$('[name="' + key + '"]').is("select")) {
+                                $('[name="' + key + '"]').next().text(
+                                    value);
+                            }
+                        }
+                        $('span[id^="' + key + '"]').show();
+                    });
+                },
+                complete: function () {
+                    $.LoadingOverlay("hide");
+                    // $("#btnSave").button('reset');
                 }
             });
         }
+
+        // $('#btnbuatklp').on('click', function (e) {
+        //     e.preventDefault();
+        //     Swal.fire({
+        //         title: 'Generate Kelompok',
+        //         text: "Sistem akan generate kelompok secara random?",
+        //         icon: 'warning',
+        //         buttons: true,
+        //         showCancelButton: true,
+        //         confirmButtonColor: '#3085d6',
+        //         cancelButtonColor: '#d33',
+        //         cancelButtonText: "Batal",
+        //         confirmButtonText: 'Ya'
+        //     }).then((result) => {
+        //         if (result.value) {
+        //             idjadwal = "{{$data->id}}";
+        //             buatkelompok(idjadwal);
+        //         }
+        //     });
+        // });
+
+        // Fungsi membuat kelompok
+        // function buatkelompok(idjadwal) {
+        //     var url = "{{ url('bentukkelompok') }}";
+        //     $.ajaxSetup({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         }
+        //     });
+        //     $.ajax({
+        //         url: url,
+        //         method: 'POST',
+        //         data: {
+        //             idjadwal: idjadwal
+        //         },
+        //         success: function (data) {
+        //             if (data['status'] == "success") {
+        //                 Swal.fire({
+        //                     title: data['message'],
+        //                     // text: response.success,
+        //                     type: data['status'],
+        //                     confirmButtonText: 'Ok',
+        //                     confirmButtonColor: '#AAA',
+        //                     onClose: function () {
+        //                         window.location.href =
+        //                             "{{ url('jadwal/lihatkelompok/'.$data->id) }}";
+        //                     }
+        //                 });
+        //             } else {
+        //                 Swal.fire({
+        //                     title: data['message'],
+        //                     type: data['status'],
+        //                     confirmButtonText: 'Ok',
+        //                     confirmButtonColor: '#AAA'
+        //                 });
+        //             }
+        //         },
+        //         error: function (xhr, status) {
+        //             alert('Error');
+        //         }
+        //     });
+        // }
 
     });
 
