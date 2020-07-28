@@ -215,7 +215,7 @@ class PesertaController extends Controller
 
 
     // function menampilkan form ujian online
-    public function ujian_pg(){
+    public function ujian_pg(Request $request){
         if($this->_check_allow_ujian() == false){
             return redirect('peserta/dashboard')->with('status', 'Waktu ujian telah habis');
         }
@@ -229,10 +229,17 @@ class PesertaController extends Controller
         if(!$cek){
             $this->_generate_soal($peserta->id);
         }
-        $soal = JawabanPeserta::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->paginate(10);
-        $soal_essay = JawabanEssayPeserta::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->get();
+        $pg = JawabanPeserta::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->paginate(10);
+        $soal_essay = JawabanEssayPeserta::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->orderBy('id_soal','asc')->get();
+        if($request->ajax()){
+            return view('quis.pre.soal',[
+                'pg' => $pg,
+                'modul_today' => $peserta->jadwal_r,
+            ])->render();
+        }
+        $modul_today = $peserta->jadwal_r;
         \LogActivity::addToLog("peserta membuka halaman ujian pilihan ganda");
-        return view('ujian.pg')->with(compact('peserta','soal','soal_essay'));
+        return view('ujian.pg')->with(compact('peserta','pg','soal_essay','modul_today'));
     }
 
     // function save pilihan ke table temp
@@ -598,17 +605,20 @@ $a = false;
         $peserta = Peserta::find($id);
         // return $peserta->jadwal_r->soalpg_r;
         // loop to save table jawaban peserta
-        foreach ($peserta->jadwal_r->soalpg_r as $key) {
+        $no = 1;
+        foreach ($peserta->jadwal_r->soalpg_r->shuffle() as $key) {
             $jwb_soal = new JawabanPeserta;
             $jwb_soal->id_jadwal = $peserta->jadwal_r->id;
             $jwb_soal->id_soal = $key->id;
             $jwb_soal->id_peserta = $id;
+            $jwb_soal->no_soal = $no;
             $jwb_soal->created_by = Auth::id();
             $jwb_soal->created_at = Carbon::now()->toDateTimeString();
             $jwb_soal->save();
+            $no++;
         }
         // loop to save table jawaban essay peserta
-        foreach ($peserta->jadwal_r->soales_r as $key) {
+        foreach ($peserta->jadwal_r->soales_r->shuffle() as $key) {
             $jwb_soal = new JawabanEssayPeserta;
             $jwb_soal->id_jadwal = $peserta->jadwal_r->id;
             $jwb_soal->id_soal = $key->id;

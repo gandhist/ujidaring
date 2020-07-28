@@ -33,6 +33,8 @@ use App\ModulRundown;
 use App\JawabanEvaluasi;
 use App\JawabanTMPeserta;
 use App\LogActivity;
+use App\JawabanPesertaPgPost;
+use App\JawabanPesertaPgPre;
 
 
 class JadwalController extends Controller
@@ -430,6 +432,7 @@ class JadwalController extends Controller
                     'deleted_at' => Carbon::now()->toDateTimeString()
                 ];
                 SoalPgPreModel::where('id_jadwal_modul','=', $id_jadwal_modul)->update($user_data);
+                JawabanPesertaPgPre::where('id_jadwal_modul','=', $id_jadwal_modul)->update($user_data);
 
                 $destinationPath = 'uploads/soal_prequiz'; // upload path
                 $file = "Soal_Prequiz_Jadwal_Modul_".$id_jadwal_modul."_".Carbon::now()->timestamp.".".$files->getClientOriginalExtension();
@@ -456,6 +459,7 @@ class JadwalController extends Controller
                      'deleted_at' => Carbon::now()->toDateTimeString()
                  ];
                  SoalPgPostModel::where('id_jadwal_modul','=', $id_jadwal_modul)->update($user_data);
+                JawabanPesertaPgPost::where('id_jadwal_modul','=', $id_jadwal_modul)->update($user_data);
  
                  $destinationPath = 'uploads/soal_postquiz'; // upload path
                  $file = "Soal_Postquiz_Jadwal_Modul_".$id_jadwal_modul."_".Carbon::now()->timestamp.".".$files->getClientOriginalExtension();

@@ -30,11 +30,17 @@ class PostQuisController extends Controller
         return view('quis.pasca.index')->with(compact('peserta','modul_today'));
     }
 
-    public function show($id_p, $id_jdw_mod){
+    public function show(Request $request, $id_p, $id_jdw_mod){
         $peserta = Peserta::where('user_id',Auth::id())->first();
         $pg = JawabanPesertaPgPost::where('id_peserta',$peserta->id)->where('id_jadwal_modul',$id_jdw_mod)->paginate(10);
         $tm = JawabanTMPeserta::where('id_peserta',$peserta->id)->where('id_jadwal_modul',$id_jdw_mod)->where('tipe','post')->get();
         $modul_today = JadwalModul::find($id_jdw_mod);
+        if($request->ajax()){
+            return view('quis.pre.soal',[
+                'pg' => $pg,
+                'modul_today' => $modul_today,
+            ])->render();
+        }
         \LogActivity::addToLog("Membuka halaman Post quis ". $modul_today->modul_r->modul);
         return view('quis.pasca.uji')->with(compact('peserta','pg','tm','modul_today'));
     }

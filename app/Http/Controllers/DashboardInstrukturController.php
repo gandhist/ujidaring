@@ -14,6 +14,7 @@ use App\JadwalInstruktur;
 use App\InstrukturModel;
 use App\JadwalModul;
 use App\JawabanEvaluasi;
+use App\JawabanPeserta;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -160,6 +161,7 @@ class DashboardInstrukturController extends Controller
                 'deleted_at' => Carbon::now()->toDateTimeString()
             ];
             SoalEssayModel::where('kelompok_soal', $id)->update($user_data);
+            JawabanPeserta::where('id_jadwal','=', $id)->update($user_data);
             // menangkap file excel
             $file2 = $request->file('soalEssay');
             // membuat nama file unik

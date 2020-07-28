@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class JawabanPesertaPgPre extends Model
 {
     //
+    use SoftDeletes;
     protected $table = "jawaban_peserta_pg_pre";
     protected $guarded = ['id'];
 

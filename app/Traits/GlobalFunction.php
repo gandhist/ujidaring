@@ -70,7 +70,7 @@ trait GlobalFunction {
 
     // fungsi generate kelompok by jadwal
     public function generate_kelompok($id_jadwal){
-        $dt_peserta = Peserta::where('id_kelompok',$id_jadwal);
+        $dt_peserta = Peserta::where('id_kelompok',$id_jadwal)->get();
         $dt_p =[];
         // menyimpan id peserta ke dalam array
         foreach($dt_peserta as $key){
@@ -208,13 +208,15 @@ trait GlobalFunction {
                         // jika datanya tidak ada
                         if (!$cek) {
                             // looping soal agar menjadi soal utk peserta
-                            foreach ($mr->jadwal_modul_r->soal_pre as $soal) {
+                            $no = 1;
+                            foreach ($mr->jadwal_modul_r->soal_pre->shuffle() as $soal) {
                                 $soalpst = new JawabanPesertaPgPre;
                                 $soalpst->id_jadwal_modul = $mr->id_jadwal_modul;
                                 $soalpst->id_soal_pg_pre = $soal->id;
-                                // $soalpst->jawaban = $soal->jawaban;
+                                $soalpst->no_soal = $no;
                                 $soalpst->id_peserta = $peserta->id;
                                 $soalpst->save();
+                                $no++;
                             }
                         }
 
@@ -263,13 +265,15 @@ trait GlobalFunction {
                         // jika datanya tidak ada
                         if (!$cek) {
                             // looping soal agar menjadi soal utk peserta
-                            foreach ($mr->jadwal_modul_r->soal_post as $soal) {
+                            $no = 1;
+                            foreach ($mr->jadwal_modul_r->soal_post->shuffle() as $soal) {
                                 $soalpst = new JawabanPesertaPgPost;
                                 $soalpst->id_jadwal_modul = $mr->id_jadwal_modul;
                                 $soalpst->id_soal_pg_post = $soal->id;
-                                // $soalpst->jawaban = $soal->jawaban;
+                                $soalpst->no_soal = $no;
                                 $soalpst->id_peserta = $peserta->id;
                                 $soalpst->save();
+                                $no++;
                             }
                         }
 
