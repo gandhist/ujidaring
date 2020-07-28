@@ -692,7 +692,7 @@ class JadwalController extends Controller
         $request->validate(
             [
                 'materiPkl' => 'mimes:flv,mp4,avi,pdf|max:20480',
-                'batas_up_makalah' => 'required'
+                'batas_up_makalah' => 'required',
             ],[
                 'materiPkl.required' => "Materi PKL Harus di isi",
                 'batas_up_makalah.required' => "Batas Waktu Makalah Harus di isi",
@@ -701,6 +701,7 @@ class JadwalController extends Controller
             ]);
         $data = JadwalModel::find($request->id_jadwal);
         $data->batas_up_makalah = $request->batas_up_makalah;
+        $data->l_pkl = $request->l_pkl;
         if ($files = $request->file('materiPkl')) {
             // return "test";
             $destinationPath = 'uploads/pkl/'.$request->id_jadwal; // upload path
@@ -712,7 +713,7 @@ class JadwalController extends Controller
         $data->save();
         return response()->json([
             'status' => true,
-            'message' => 'materi PKL berhasil di upload'
+            'message' => 'Materi PKL berhasil diupload'
         ]);
     }
 
@@ -740,6 +741,14 @@ class JadwalController extends Controller
         //         'message' => 'Minimal Peserta 7 Orang !'
         //     ]);
         // }
+        if($request->jumlahkelompok<=0){
+            return response()->json([
+                'icon' => 'warning',
+                'status' => true,
+                'message' => "Minimal Kelompok 1!"
+            ]);
+        }
+
 
         $is_kelompok = JadwalModel::select('is_kelompok')->where('id','=',$request->idjadwal)->first();
         if($is_kelompok['is_kelompok']==1){

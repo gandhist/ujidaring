@@ -302,10 +302,6 @@
             });
         }).draw();
 
-        // Kunci Input NIK Hanya Angka
-        $('#jumlahkelompok').on('input blur paste', function () {
-            $(this).val($(this).val().replace(/\D/g, ''))
-        });
 
         // Show Modal Penilaian
         // $('.btnnilai').on('click', function () {

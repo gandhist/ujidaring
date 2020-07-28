@@ -291,7 +291,6 @@
                     tipeselect = "select2";
                     tipetextarea = "textarea";
                     if (tipeinput.indexOf(tipeselect) > -1) {
-                        console.log("select2");
                         $("#" + key).parent().find(".select2-container").children().children().css(
                             'border-color', '#a94442');
                         $('span[id^="' + key + '"]').text(value);

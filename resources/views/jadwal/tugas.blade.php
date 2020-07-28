@@ -1,7 +1,8 @@
 @extends('templates.header')
 @push('style')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
 @endpush
 @section('content')
 <style>
@@ -40,19 +41,23 @@
                     <form action="{{ url('instruktur/dashboardinstruktur/'.$data->id.'/uploadtugas') }}"
                         class="form-horizontal" id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
                         @csrf
-                        <label for="" style="">Batas Upload</label>
-                        <input id="BatasUpload" name="BatasUpload" type="text" class="form-control" placeholder="Batas Upload" value="{{old('BatasUpload') ? old('BatasUpload') : $data->batas_up_tugas}} {{$data->batas_up_tugas}}">
-                        <span id="BatasUploadSpan" class="help-block" style="color:red">{{ $errors->first('BatasUpload') }}</span>
+                        <label for="" style="">*Batas Pengumpulan</label>
+                        <input id="BatasUpload" name="BatasUpload" type="text" class="form-control"
+                            placeholder="Batas Upload"
+                            value="{{old('BatasUpload') ? old('BatasUpload') : $data->batas_up_tugas}} {{$data->batas_up_tugas}}">
+                        <span id="BatasUploadSpan" class="help-block"
+                            style="color:red">{{ $errors->first('BatasUpload') }}</span>
+                        <label for="" style="">*File Tugas (.pdf)</label>
                         <br>
-                        <label for="" style="">File (extension .pdf)</label>
                         <div class="input-group input-group-md">
                             <input type="file" class="form-control" id="uploadTugas" name="uploadTugas" required>
                             <span class="input-group-btn">
                                 <button id="btnUpdateNilai" type="submit" type="button"
-                                    class="btn btn-danger btn-flat"><i class="fa fa-save"></i> Upload</button>
+                                    class="btn btn-primary"><i class="fa fa-upload"></i> Upload</button>
                             </span>
                         </div>
-                        <span id="uploadTugasSpan" class="help-block" style="color:red">{{ $errors->first('uploadTugas') }}</span>
+                        <span id="uploadTugasSpan" class="help-block"
+                            style="color:red">{{ $errors->first('uploadTugas') }}</span>                   
                     </form>
                 </div>
                 <div class="col-md-9">
@@ -76,13 +81,14 @@
                             @foreach($data->peserta_r as $key)
                             <tr>
                                 <td style='width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
-                                    id="selection[]" name="selection[]"></td>
+                                        id="selection[]" name="selection[]"></td>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $key->nama }}</td>
                                 <td>{{ $key->jawaban_tugas ? $key->jawaban_tugas->created_at : '' }}</td>
                                 <td>
                                     @if($key->jawaban_tugas)
-                                        <a href="{{ url('uploads/tugas/peserta/'.$key->jawaban_tugas->pdf_tugas) }}" class="btn btn-success">Tugas</a>
+                                    <a href="{{ url('uploads/tugas/peserta/'.$key->jawaban_tugas->pdf_tugas) }}"
+                                        class="btn btn-success">Tugas</a>
                                     @endif
                                 </td>
                             </tr>
@@ -115,8 +121,8 @@
     $(function () {
 
         $('#BatasUpload').datetimepicker({
-            locale : 'id',
-            format : 'YYYY-MM-DD HH:mm:ss'
+            locale: 'id',
+            format: 'YYYY-MM-DD HH:mm:ss'
         });
 
         var dt = $('#custom-table,#custom-table2').DataTable({
