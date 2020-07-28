@@ -174,11 +174,15 @@
                         </fieldset>
                         <fieldset>
                             <h2 class="fs-title">Peserta</h2>
-                            <span class="pull-left"><b>Import Excel Data Peserta (.xls/.xlsx) </b><a target="_blank" style="border-radius: 12px" class="btn btn-success btn-xs" href="{{ url('template_upload/peserta.xlsx') }}"> <i class="fa fa-file-excel-o" ></i> Template </a></span>
+                            <span class="pull-left"><b>Import Excel Data Peserta (.xls/.xlsx) </b><a target="_blank"
+                                    style="border-radius: 12px" class="btn btn-success btn-xs"
+                                    href="{{ url('template_upload/peserta.xlsx') }}"> <i class="fa fa-file-excel-o"></i>
+                                    Template </a></span>
                             <input type="file" id="excel_peserta" name="excel_peserta" />
                             <input type="button" name="previous" class="previous action-button-previous"
                                 value="Previous" />
-                            <input id="submit" type="submit" name="submit" class="submit action-button" value="Submit" />
+                            <input id="submit" type="submit" name="submit" class="submit action-button"
+                                value="Submit" />
                         </fieldset>
                     </form>
                 </div>
@@ -211,15 +215,22 @@
 
         $("#submit").click(function () {
             var val_excel = $("#excel_peserta").val();
-            if(val_excel==""){
-                alert("Excel peserta belum diinput");
+            if (val_excel == "") {
+                // alert("Excel peserta belum diinput");
+                Swal.fire({
+                    title: "Excel peserta belum diinput!",
+                    type: 'warning',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: '#AAA'
+                });
                 return false;
             }
         });
 
         $('#gambarJadwal').change(function () {
             var id = $(this).val();
-            var ext = id.substr(id.lastIndexOf('.')+1);
+            var ext = id.substr(id.lastIndexOf('.') + 1);
+            ext = ext.toLowerCase();
             switch (ext) {
                 case 'jpg':
                 case 'jpeg':
@@ -227,13 +238,19 @@
                     break;
                 default:
                     this.value = '';
-                    alert('Extension file tidak sesuai!');
+                    Swal.fire({
+                        title: "Extension file tidak sesuai!",
+                        type: 'warning',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: '#AAA'
+                    });
+                    // alert('Extension file tidak sesuai!');
             }
         });
 
         $('#excel_peserta').change(function () {
             var id = $(this).val();
-            var ext = id.substr(id.lastIndexOf('.')+1);
+            var ext = id.substr(id.lastIndexOf('.') + 1);
             ext = ext.toLowerCase();
             switch (ext) {
                 case 'xls':
@@ -241,13 +258,19 @@
                     break;
                 default:
                     this.value = '';
-                    alert('Extension file tidak sesuai!');
+                    Swal.fire({
+                        title: "Extension file tidak sesuai!",
+                        type: 'warning',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: '#AAA'
+                    });
+                    // alert('Extension file tidak sesuai!');
             }
         });
 
         $(document).on('change', '.foto_instruktur', function (e) {
             var id = $(this).val();
-            var ext = id.substr(id.lastIndexOf('.')+1);
+            var ext = id.substr(id.lastIndexOf('.') + 1);
             ext = ext.toLowerCase();
             switch (ext) {
                 case 'jpg':
@@ -256,13 +279,19 @@
                     break;
                 default:
                     this.value = '';
-                    alert('Extension file tidak sesuai!');
+                    Swal.fire({
+                        title: "Extension file tidak sesuai!",
+                        type: 'warning',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: '#AAA'
+                    });
+                    // alert('Extension file tidak sesuai!');
             }
         });
 
         $(document).on('change', '.pdf_instruktur', function (e) {
             var id = $(this).val();
-            var ext = id.substr(id.lastIndexOf('.')+1);
+            var ext = id.substr(id.lastIndexOf('.') + 1);
             ext = ext.toLowerCase();
             switch (ext) {
                 case 'jpg':
@@ -271,7 +300,13 @@
                     break;
                 default:
                     this.value = '';
-                    alert('Extension file tidak sesuai!');
+                    Swal.fire({
+                        title: "Extension file tidak sesuai!",
+                        type: 'warning',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: '#AAA'
+                    });
+                    // alert('Extension file tidak sesuai!');
             }
         });
 
@@ -288,62 +323,141 @@
                 $("#tgl_akhir").css("border-color", "#ccc");
                 $("#tgl_awal").css("border-color", "#ccc");
                 $("#gambarJadwal").css("border-color", "#ccc");
+                $("#id_bidang").parent().find(".select2-container").children().children().css(
+                    'border-color', '#ccc');
+                $("#id_sert_alat").parent().find(".select2-container").children().children().css(
+                    'border-color', '#ccc');
                 $("#tuk").css("border-color", "#ccc");
                 if ($("#tgl_awal").val() == '') {
-                    alert("Tanggal Mulai belum di input");
+                    Swal.fire({
+                        title: "Tanggal Mulai belum di input!",
+                        type: 'warning',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: '#AAA'
+                    });
+                    // alert("Tanggal Mulai belum di input");
                     $("#tgl_awal").css("border-color", "red");
                     return false;
                 }
                 if ($("#tgl_akhir").val() == '') {
-                    alert("Tanggal Selesai belum di input");
+                    Swal.fire({
+                        title: "Tanggal Selesai belum di input!",
+                        type: 'warning',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: '#AAA'
+                    });
+                    // alert("Tanggal Selesai belum di input");
                     $("#tgl_akhir").css("border-color", "red");
                     return false;
                 }
                 if ($("#tuk").val() == '') {
-                    alert("Tempat Uji Kompetensi belum di input");
+                    Swal.fire({
+                        title: "Tempat Uji Kompetensi belum di input!",
+                        type: 'warning',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: '#AAA'
+                    });
+                    // alert("Tempat Uji Kompetensi belum di input");
                     $("#tuk").css("border-color", "red");
                     return false;
                 }
                 if ($("#id_bidang").val() == '') {
-                    alert("Bidang belum di input");
+                    Swal.fire({
+                        title: "Bidang belum di input!",
+                        type: 'warning',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: '#AAA'
+                    });
+                    $("#id_bidang").parent().find(".select2-container").children().children().css(
+                        'border-color', 'red');
+                    // alert("Bidang belum di input");
                     return false;
                 }
                 if ($("#id_sert_alat").val() == '') {
-                    alert("Sertifikat Alat belum di input");
+                    Swal.fire({
+                        title: "Sertifikat Alat belum di input!",
+                        type: 'warning',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: '#AAA'
+                    });
+                    $("#id_sert_alat").parent().find(".select2-container").children().children().css(
+                        'border-color', 'red');
+                    // alert("Sertifikat Alat belum di input");
                     return false;
                 }
                 if ($("#gambarJadwal").val() == '') {
-                    alert("Gambar jadwal belum di input");
+                    Swal.fire({
+                        title: "Gambar jadwal belum di input!",
+                        type: 'warning',
+                        confirmButtonText: 'Close',
+                        confirmButtonColor: '#AAA'
+                    });
+                    // alert("Gambar jadwal belum di input");
                     $("#gambarJadwal").css("border-color", "red");
                     return false;
                 }
-                if ($("#gambarJadwal-error").text() == "Please enter a value with a valid extension.") {
-                    alert("Extension Gambar Jadwal Harus Berupa .jpg/.jpeg/.png");
-                    return false;
-                }
+                // if ($("#gambarJadwal-error").text() == "Please enter a value with a valid extension.") {
+                //     Swal.fire({
+                //         title: "Extension Gambar Jadwal Harus Berupa .jpg/.jpeg/.png!",
+                //         type: 'warning',
+                //         confirmButtonText: 'Close',
+                //         confirmButtonColor: '#AAA'
+                //     });
+                //     return false;
+                // }
             }
 
             if (halaman == "next2") {
                 var status;
+                $(".form-control").css('border-color', '#ccc');
                 for (var i = 0; i < id_detail_instruktur.length; i++) {
                     nik = $('#nik_instruktur_' + id_detail_instruktur[i]).val();
-                    if (nik == "") {
-                        alert('NIK Instruktur No ' + id_detail_instruktur[i] + ' belum diisi');
-                        status = false;
-                    }else{
-                        if(nik.length!=16){
-                            alert('Jumlah NIK Instruktur No ' + id_detail_instruktur[i] + ' kurang');
-                            status = false;
-                        }
-                    }
                     nama = $('#nama_instruktur_' + id_detail_instruktur[i]).val();
-                    if (nama == "") {
-                        alert('Nama Instruktur No ' + id_detail_instruktur[i] + ' belum diisi');
-                        status = false;
-                    }
                     no_hp = $('#no_hp_instruktur_' + id_detail_instruktur[i]).val();
-                    if (no_hp == "") {
-                        alert('No HP Instruktur No ' + id_detail_instruktur[i] + ' belum diisi');
+                    if (nik == "") {
+                        Swal.fire({
+                            title: 'NIK Instruktur ' + id_detail_instruktur[i] +
+                                ' belum diisi',
+                            type: 'warning',
+                            confirmButtonText: 'Close',
+                            confirmButtonColor: '#AAA'
+                        });
+                        $('#nik_instruktur_' + id_detail_instruktur[i]).css('border-color', 'red');
+                        // alert('NIK Instruktur No ' + id_detail_instruktur[i] + ' belum diisi');
+
+                        status = false;
+                    } else if (nik.length != 16) {
+                        Swal.fire({
+                            title: 'Jumlah NIK Instruktur Harus 16 Digit',
+                            type: 'warning',
+                            confirmButtonText: 'Close',
+                            confirmButtonColor: '#AAA'
+                        });
+                        $('#nik_instruktur_' + id_detail_instruktur[i]).css('border-color', 'red');
+                        // alert('Jumlah NIK Instruktur No ' + id_detail_instruktur[i] +' Harus 16 Digit');
+                        status = false;
+                    } else if (nama == "") {
+                        Swal.fire({
+                            title: 'Nama Instruktur ' + id_detail_instruktur[i] +
+                                ' belum diisi',
+                            type: 'warning',
+                            confirmButtonText: 'Close',
+                            confirmButtonColor: '#AAA'
+                        });
+                        $('#nama_instruktur_' + id_detail_instruktur[i]).css('border-color', 'red');
+                        // alert('Nama Instruktur No ' + id_detail_instruktur[i] + ' belum diisi');
+
+                        status = false;
+                    } else if (no_hp == "") {
+                        Swal.fire({
+                            title: 'No HP Instruktur ' + id_detail_instruktur[i] + ' belum diisi',
+                            type: 'warning',
+                            confirmButtonText: 'Close',
+                            confirmButtonColor: '#AAA'
+                        });
+                        $('#no_hp_instruktur_' + id_detail_instruktur[i]).css('border-color', 'red');
+                        // alert('No HP Instruktur No ' + id_detail_instruktur[i] + ' belum diisi');
+
                         status = false;
                     }
                 }
@@ -518,7 +632,6 @@
                 id_sert_alat: id_sert_alat
             },
             success: function (data) {
-
                 if (data.length > 0) {
                     $("#persyaratan").html(data[0]["persyaratan"] +
                         "&#13;&#10;&#13;&#10;Jumlah Hari: " + data[0]["hari"] + " hari");

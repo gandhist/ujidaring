@@ -128,8 +128,8 @@
                             <a href="{{ route('jadwal.create') }}" class="btn btn-info"> <i class="fa fa-plus"></i>
                                 Tambah</a>
 
-                            <!--  <button class="btn btn-danger" id="btnHapus" name="btnHapus"> <i class="fa fa-trash"></i>
-                                Hapus</button> -->
+                             <button class="btn btn-danger" id="btnHapus" name="btnHapus"> <i class="fa fa-trash"></i>
+                                Hapus</button>
                         </div>
                     </div>
                 </div>
@@ -150,6 +150,7 @@
                         <th>Tanggal Akhir</th>
                         <th>Jenis Usaha</th>
                         <th>Bidang</th>
+                        <th>Bidang Srtf Alat</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -163,8 +164,15 @@
                         </td>
                         <td style='width:10%'>{{ \Carbon\Carbon::parse($key->tgl_akhir)->isoFormat("DD MMMM YYYY") }}
                         </td>
-                        <td>{{$key->jenis_usaha_r->nama_jns_usaha}}</td>
-                        <td>{{$key->bidang_r->nama_bidang}}</td>
+                        <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$key->jenis_usaha_r->nama_jns_usaha}}">
+                                {{$key->jenis_usaha_r->kode_jns_usaha}}</td>
+                        <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$key->bidang_r->nama_bidang}}">
+                                {{$key->bidang_r->kode_bidang}}</td>
+                        <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="{{$key->sertifikat_alat_r->nama_srtf_alat}}">
+                                {{$key->sertifikat_alat_r->kode_srtf_alat}}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -184,7 +192,7 @@
 <!-- modal konfirmasi -->
 <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
-    <form action="{{ url('badanusaha/destroy') }}" class="form-horizontal" id="formDelete" name="formDelete"
+    <form action="{{ url('jadwal/destroy') }}" class="form-horizontal" id="formDelete" name="formDelete"
         method="post" enctype="multipart/form-data">
         @method("DELETE")
         @csrf
@@ -197,7 +205,7 @@
                     <h4 class="modal-title" id="myModalLabel">Konfirmasi</h4>
                 </div>
                 <div class="modal-body" id="konfirmasi-body">
-                    Yakin ingin menghapus data?
+                    Yakin ingin menghapus jadwal?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
@@ -212,7 +220,7 @@
 <!-- end of modal konfirmais -->
 
 <!-- modal lampiran -->
-<div class="modal fade" id="modalLampiran" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<!-- <div class="modal fade" id="modalLampiran" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -235,7 +243,7 @@
 
         </div>
     </div>
-</div>
+</div> -->
 <!-- end of modal lampiran -->
 @endsection
 
@@ -251,42 +259,38 @@
     var save_method = "add";
     $(function () {
 
-        // Rubah Warna Filter
-        selectFilter("f_pjk3");
-        selectFilter("f_naker_prov");
-        selectFilter("f_provinsi");
-        selectFilter("f_kota");
-        selectFilter("f_instansi");
-        selectFilter("f_jenis_usaha");
+        // selectFilter("f_pjk3");
+        // selectFilter("f_naker_prov");
+        // selectFilter("f_provinsi");
+        // selectFilter("f_kota");
+        // selectFilter("f_instansi");
+        // selectFilter("f_jenis_usaha");
 
-        // Cache Warna Filter
-        if ("{{request()->get('f_pjk3')}}" != "") {
-            selectFilterCache("f_pjk3");
-        }
-        if ("{{request()->get('f_naker_prov')}}" != "") {
-            selectFilterCache("f_naker_prov");
-        }
-        if ("{{request()->get('f_provinsi')}}" != "") {
-            selectFilterCache("f_provinsi");
-        }
-        if ("{{request()->get('f_kota')}}" != "") {
-            selectFilterCache("f_kota");
-        }
-        if ("{{request()->get('f_instansi')}}" != "") {
-            selectFilterCache("f_instansi");
-        }
-        if ("{{request()->get('f_jenis_usaha')}}" != "") {
-            selectFilterCache("f_jenis_usaha");
-        }
+        // if ("{{request()->get('f_pjk3')}}" != "") {
+        //     selectFilterCache("f_pjk3");
+        // }
+        // if ("{{request()->get('f_naker_prov')}}" != "") {
+        //     selectFilterCache("f_naker_prov");
+        // }
+        // if ("{{request()->get('f_provinsi')}}" != "") {
+        //     selectFilterCache("f_provinsi");
+        // }
+        // if ("{{request()->get('f_kota')}}" != "") {
+        //     selectFilterCache("f_kota");
+        // }
+        // if ("{{request()->get('f_instansi')}}" != "") {
+        //     selectFilterCache("f_instansi");
+        // }
+        // if ("{{request()->get('f_jenis_usaha')}}" != "") {
+        //     selectFilterCache("f_jenis_usaha");
+        // }
 
-        // Filter kota berdasarkan provinsi
-        $('#f_provinsi').on('select2:select', function () {
-            var url = `{{ url('register_perusahaan/chain') }}`;
-            chainedProvinsi(url, 'f_provinsi', 'f_kota', "Kota");
-        });
+        // $('#f_provinsi').on('select2:select', function () {
+        //     var url = `{{ url('register_perusahaan/chain') }}`;
+        //     chainedProvinsi(url, 'f_provinsi', 'f_kota', "Kota");
+        // });
 
-        // Input data mask
-        $('[data-mask]').inputmask();
+        // $('[data-mask]').inputmask();
 
         // Button edit click
         $('#btnTampil').on('click', function (e) {
@@ -327,7 +331,7 @@
             $("#idHapusData").val(id);
             if (id.length == 0) {
                 Swal.fire({
-                    title: "Tidak ada data yang terpilih",
+                    title: "Tidak ada data yang dipilih",
                     type: 'warning',
                     confirmButtonText: 'Close',
                     confirmButtonColor: '#AAA'

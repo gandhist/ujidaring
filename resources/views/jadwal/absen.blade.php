@@ -169,7 +169,7 @@
     </div>
     <!-- end of modal konfirmais -->
 
-    <!-- modal lampiran -->
+    <!-- modal foto -->
     <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-md" role="document">
@@ -193,7 +193,7 @@
             </div>
         </div>
     </div>
-    <!-- end of modal lampiran -->
+    <!-- end of modal foto -->
 
 </section>
 <!-- /.content -->
@@ -220,7 +220,6 @@
             "scrollX": true,
             "scrollY": $(window).height() - 255,
             "scrollCollapse": true,
-            "searching": false,
             "autoWidth": false,
             "columnDefs": [{
                 "searchable": false,
