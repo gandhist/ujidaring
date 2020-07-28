@@ -408,6 +408,11 @@
 <script type="text/javascript">
     $(function () {
 
+        // Kunci Jumlah Kelompok Hanya Angka
+        $('#jumlahkelompok').on('input blur paste', function () {
+            $(this).val($(this).val().replace(/\D/g, ''))
+        });
+
         $('#btnbuatklp').on('click', function (e) {
             e.preventDefault();
             $('#modal_buat_kelompok').modal('show');
