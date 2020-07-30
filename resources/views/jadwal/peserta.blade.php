@@ -147,6 +147,7 @@
                                 <th>Tempat Lahir</th>
                                 <th>Tanggal Lahir</th>
                                 <th>No Hp</th>
+                                <th style="white-space: nowrap">Status Login</th>
                                 <!-- <th>Pg Benar</th>
                                 <th>Pg Salah</th>
                                 <th>Essay Benar</th>
@@ -170,6 +171,11 @@
                                 <td style="text-align:right;width:10%">
                                     {{ \Carbon\Carbon::parse($key->tgl_lahir)->isoFormat("DD MMMM YYYY") }}</td>
                                 <td style="text-align:center;width:8%">{{ $key->no_hp }}</td>
+                                <td style="text-align:center;width:1%">
+                                @if($key->user_r->is_login==1)
+                                <button type="button" class="btn btn-sm btn-info">Login</button>
+                                @endif
+                                </td>
                                 <!-- <td style="width:7%">{{count($key->pg_benar_r)}}</td>
                                 <td style="width:7%">{{count($key->pg_salah_r)}}</td>
                                 <td style="width:8%">{{count($key->essay_benar_r)}}</td>

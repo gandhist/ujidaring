@@ -12,6 +12,11 @@ class InstrukturModel extends Model
         protected $table = "instruktur";
         protected $guarded = ["id"];
 
+        // relasi ke table user
+        public function user_r(){
+             return $this->belongsTo('App\User','id_users');
+        }
+
         // relasi ke table jadwal
         public function jadwal_r(){
                 return $this->belongsTo('App\JadwalInstruktur','id','id_instruktur');

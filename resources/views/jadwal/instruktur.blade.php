@@ -118,6 +118,7 @@
                                 <th>NIK</th>
                                 <th>Nama</th>
                                 <th>No Hp</th>
+                                <th style="white-space: nowrap">Status Login</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -129,6 +130,11 @@
                                 <td>{{ $key->instruktur_r->nik }}</td>
                                 <td>{{ $key->instruktur_r->nama }}</td>
                                 <td style="width:5%">{{ $key->instruktur_r->no_hp }}</td>
+                                <td style="text-align:center;width:1%">
+                                @if($key->instruktur_r->user_r->is_login==1)
+                                <button type="button" class="btn btn-sm btn-info">Login</button>
+                                @endif
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
