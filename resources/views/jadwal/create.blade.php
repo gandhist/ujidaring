@@ -581,6 +581,8 @@
     $('#id_sert_alat').on('select2:select', function () {
         id_sert_alat = $(this).val();
         getDataModul(id_sert_alat);
+        id_detail = [];
+        $('#id_jumlah_detail').val(id_detail);
     });
 
     // Add baris instruktur

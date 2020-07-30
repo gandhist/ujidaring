@@ -25,7 +25,7 @@
             @endif
             <!-- MultiStep Form -->
             <div class="row">
-                <div class="col-md-7">
+                <div class="col-md-9">
                     <div class="box-body">
                         <div class="table-responsive">
                             <table class="table no-margin">

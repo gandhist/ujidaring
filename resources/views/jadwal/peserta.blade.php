@@ -80,26 +80,46 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-1">
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4">
 
-                    <div class="box-body">
-                        <div class="table-responsive">
-                            <table class="table no-margin">
-                                <thead>
-                                    <tr>
-                                        <td style="text-align:left;padding-bottom:0px;padding-top:0px">
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                                <tr>
+                                    <td style="text-align:right;padding:8px 0px 2px 0px;">
+                                        <!-- <div class="row">
+                                            <div class="col-xs-12"> -->
+                                                <div class="btn-group">
+                                                    <button class="btn btn-success btn-flat" id="btnEdit"
+                                                        name="btnEdit"> <i class="fa fa-edit"></i>Ubah
+                                                    </button>
+                                                    <button class="btn btn-danger btn-flat" id="btnReset"
+                                                        name="btnReset">
+                                                        <i class="fa fa-refresh"></i>
+                                                        Reset Login</button>
+                                                </div>
+                                            <!-- </div>
+                                        </div> -->
+                                    </td>
+                                    <!-- <td style="text-align:left;padding-bottom:0px;padding-top:0px">
                                             <button id="btnkirim" type="button"
                                                 class="btn btn-block btn-primary btn-flat">Kirim User Account</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align:left;padding-bottom:0px;padding-top:2px">
-                                            <button id="btndetail" type="button"
-                                                class="btn btn-block btn-warning btn-flat">Lihat Detail</button>
-                                        </td>
-                                        <!-- <td style="text-align:left;padding-bottom:0px;padding-top:2px">
+                                        </td> -->
+                                </tr>
+                                <tr>
+                                    <td style="text-align:right;padding:0px 0px 0px 0px;">
+                                        <div class="btn-group">
+                                            <button id="btnkirim" type="button" class="btn btn-primary btn-flat">Kirim
+                                                User
+                                                Account</button>
+                                            <button id="btndetail" type="button" class="btn btn-warning btn-flat">Lihat
+                                                Detail</button>
+                                        </div>
+                                    </td>
+
+                                    <!-- <td style="text-align:left;padding-bottom:0px;padding-top:2px">
                                             @if($data->is_kelompok == "1" )
                                             <a href="{{url('jadwal/lihatkelompok/'.$data->id)}}" id="btnlihatklp"
                                                 type="button" class="btn btn-block btn-warning btn-flat">Lihat
@@ -109,10 +129,9 @@
                                                 class="btn btn-block btn-primary btn-flat">Buat Kelompok</button>
                                             @endif
                                         </td> -->
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
 
                 </div>
@@ -190,11 +209,60 @@
     </div>
     <!-- /.box -->
 
+    <!-- Modal Edit Data Peserta -->
+    <div class="modal fade" id="modal-edit-peserta" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <form action="{{ url('update/peserta') }}" class="form-horizontal" id="formeditpeserta" name="formeditpeserta"
+            method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span
+                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Edit Data Peserta</h4>
+                    </div>
+                    <div class="modal-body" id="konfirmasi-body">
+                        <form class="form-horizontal">
+                            <div class="box-body">
+                                <input type="hidden" value="" name="iddatapeserta" id="iddatapeserta">
+                                <div class="form-group">
+                                    <label for="nama" class="col-sm-2 control-label">Nama</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="nama" name="nama"
+                                            placeholder="Nama">
+                                        <span id="nama" class="help-block customspan"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="no_hp" class="col-sm-2 control-label">No Hp</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="no_hp" name="no_hp"
+                                            placeholder="No Hp">
+                                        <span id="no_hp" class="help-block customspan"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-primary" id="btnsimpan"
+                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Mengirim..."
+                            id="confirm-delete">Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- end of modal kirim account peserta -->
+
+
     <!-- Modal Kirim Account Peserta -->
     <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
-        <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formDelete"
-            name="formDelete" method="post" enctype="multipart/form-data">
+        <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formkirimaccount"
+            name="formkirimaccount" method="post" enctype="multipart/form-data">
             @csrf
             <input type="hidden" value="" name="idHapusData" id="idHapusData">
             <div class="modal-dialog modal-md">
@@ -208,10 +276,10 @@
                         Apakah anda ingin mengirim account peserta?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
-                        <button type="submit" class="btn btn-danger" data-id=""
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary" data-id=""
                             data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Kirim..."
-                            id="confirm-delete">Ya</button>
+                            id="confirm-delete">Kirim</button>
                     </div>
                 </div>
             </div>
@@ -219,8 +287,37 @@
     </div>
     <!-- end of modal kirim account peserta -->
 
+    <!-- Modal Reset Account Peserta -->
+    <div class="modal fade" id="modal-reset" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <form action="{{ url('jadwal/reset/peserta') }}" class="form-horizontal" id="formresetaccount"
+            name="formresetaccount" method="post" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" value="" name="idResetData" id="idResetData">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span
+                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Konfirmasi</h4>
+                    </div>
+                    <div class="modal-body" id="konfirmasi-body">
+                        Apakah anda ingin reset account login peserta?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
+                        <button type="submit" class="btn btn-primary" data-id=""
+                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Kirim..."
+                            id="confirm-delete">Ya</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- end of modal reset account peserta -->
+
     <!-- Modal Buat Kelompok -->
-    <div class="modal fade" id="modal_buat_kelompok" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    <!-- <div class="modal fade" id="modal_buat_kelompok" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <form class="form-horizontal" id="formkelompok" name="formkelompok" method="post" enctype="multipart/form-data">
             @csrf
@@ -236,7 +333,6 @@
                     <div class="modal-body" id="konfirmasi-body">
                         <div class="box-body">
                             <div class="form-group">
-                                <!-- <label for="exampleInputEmail1">*Masukkan Jumlah Kelompok</label> -->
                                 <input type="hidden" name="idjadwal" id="idjadwal" value="{{$data->id}}">
                                 <input maxlength="1" type="text" class="form-control" id="jumlahkelompok"
                                     name="jumlahkelompok" placeholder="Masukkan Jumlah Kelompok">
@@ -253,7 +349,7 @@
                 </div>
             </div>
         </form>
-    </div>
+    </div> -->
     <!-- end of modal kirim account peserta -->
 
 </section>
@@ -282,8 +378,6 @@
             "scrollX": true,
             "scrollY": $(window).height() - 255,
             "scrollCollapse": true,
-
-            "searching": false,
             "autoWidth": false,
             "columnDefs": [{
                 "searchable": false,
@@ -302,11 +396,15 @@
             });
         }).draw();
 
+        // Kunci Input No Hp Hanya Angka
+        $('#no_hp').on('input blur paste', function () {
+            $(this).val($(this).val().replace(/\D/g, ''))
+        });
 
-        // Show Modal Penilaian
-        // $('.btnnilai').on('click', function () {
-        //     $('#modaldetailAhli').modal('show');
-        // });
+        $('#btnsimpan').on('click', function (e) {
+            e.preventDefault();
+            updatepeserta();
+        });
 
         $('#btnkirim').on('click', function (e) {
             e.preventDefault();
@@ -328,10 +426,30 @@
             }
         });
 
-        $('#btnbuatklp').on('click', function (e) {
+        $('#btnReset').on('click', function (e) {
             e.preventDefault();
-            $('#modal_buat_kelompok').modal('show');
+            var id = [];
+            $('.selection:checked').each(function () {
+                id.push($(this).data('id'));
+            });
+            $("#idResetData").val(id);
+            if (id.length == 0) {
+                Swal.fire({
+                    title: "Tidak ada data yang terpilih",
+                    type: 'warning',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: '#AAA'
+                });
+                // alert('Tidak ada data yang terpilih');
+            } else {
+                $('#modal-reset').modal('show');
+            }
         });
+
+        // $('#btnbuatklp').on('click', function (e) {
+        //     e.preventDefault();
+        //     $('#modal_buat_kelompok').modal('show');
+        // });
 
         $('#btndetail').on('click', function (e) {
             e.preventDefault();
@@ -362,14 +480,45 @@
             }
         });
 
-        $('#btn-generate').on('click', function (e) {
-            store();
+        $('#btnEdit').on('click', function (e) {
+            e.preventDefault();
+            // 
+            $('.form-group').removeClass('has-error');
+            $('.help-block').text("");
+
+            var id = [];
+            $('.selection:checked').each(function () {
+                id.push($(this).data('id'));
+            });
+
+            $("#idHapusData").val(id);
+
+            if (id.length == 0) {
+                Swal.fire({
+                    title: "Tidak ada data yang terpilih",
+                    type: 'warning',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: '#AAA'
+                });
+                // alert('Tidak ada data yang terpilih');
+            } else if (id.length > 1) {
+                Swal.fire({
+                    title: "Harap pilih satu data untuk diubah",
+                    type: 'warning',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: '#AAA'
+                });
+                // alert('Tidak ada data yang terpilih');
+            } else {
+                idpeserta = id[0];
+                getDataPeserta(idpeserta);
+            }
         });
 
-        function store() {
-            var formData = new FormData($('#formkelompok')[0]);
+        function updatepeserta() {
+            var formData = new FormData($('#formeditpeserta')[0]);
 
-            var url = "{{ url('bentukkelompok') }}";
+            var url = "{{ url('jadwal/peserta/update') }}";
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -390,7 +539,6 @@
                         fade: [5, 5],
                         background: "rgba(60, 60, 60, 0.4)"
                     });
-                    // $("#btnSave").button('loading');
                 },
                 success: function (response) {
                     console.log(response);
@@ -402,49 +550,26 @@
                             confirmButtonColor: '#AAA'
                         }).then(function () {
                             if (response.icon == "success") {
-                                window.location.href ="{{ url('jadwal/lihatkelompok/'.$data->id) }}";
+                                location.reload();
                             }
                         });
                     }
                 },
                 error: function (xhr, status) {
                     var a = JSON.parse(xhr.responseText);
-                    // console.log(a);
-                    $(".textarea").css('border-color', 'rgb(118, 118, 118)');
-                    $(".select2-selection").css('border-color', '#aaa');
                     $('.form-group').removeClass('has-error');
                     $('.help-block').text("");
                     $.each(a.errors, function (key, value) {
-                        tipeinput = $('#' + key).attr("class");
-                        tipeselect = "select2";
-                        tipetextarea = "textarea";
-                        if (tipeinput.indexOf(tipeselect) > -1) {
-                            console.log("select2");
-                            $("#" + key).parent().find(".select2-container").children()
-                                .children().css(
-                                    'border-color', '#a94442');
-                            $('span[id^="' + key + '"]').text(value);
-                        } else if (tipeinput.indexOf(tipetextarea) > -1) {
-                            $("#" + key).css('border-color', '#a94442');
-                            $('span[id^="' + key + '"]').text(value);
-                        } else {
-                            $('[name="' + key + '"]').parent().addClass(
-                                'has-error'
-                            );
-                            if (!$('[name="' + key + '"]').is("select")) {
-                                $('[name="' + key + '"]').next().text(
-                                    value);
-                            }
-                        }
-                        $('span[id^="' + key + '"]').show();
+                        $("#" + key).parent().parent().addClass('has-error');
+                        $('span[id^="' + key + '"]').text(value);
                     });
                 },
                 complete: function () {
                     $.LoadingOverlay("hide");
-                    // $("#btnSave").button('reset');
                 }
             });
         }
+
 
         // $('#btnbuatklp').on('click', function (e) {
         //     e.preventDefault();
@@ -466,47 +591,44 @@
         //     });
         // });
 
-        // Fungsi membuat kelompok
-        // function buatkelompok(idjadwal) {
-        //     var url = "{{ url('bentukkelompok') }}";
-        //     $.ajaxSetup({
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         }
-        //     });
-        //     $.ajax({
-        //         url: url,
-        //         method: 'POST',
-        //         data: {
-        //             idjadwal: idjadwal
-        //         },
-        //         success: function (data) {
-        //             if (data['status'] == "success") {
-        //                 Swal.fire({
-        //                     title: data['message'],
-        //                     // text: response.success,
-        //                     type: data['status'],
-        //                     confirmButtonText: 'Ok',
-        //                     confirmButtonColor: '#AAA',
-        //                     onClose: function () {
-        //                         window.location.href =
-        //                             "{{ url('jadwal/lihatkelompok/'.$data->id) }}";
-        //                     }
-        //                 });
-        //             } else {
-        //                 Swal.fire({
-        //                     title: data['message'],
-        //                     type: data['status'],
-        //                     confirmButtonText: 'Ok',
-        //                     confirmButtonColor: '#AAA'
-        //                 });
-        //             }
-        //         },
-        //         error: function (xhr, status) {
-        //             alert('Error');
-        //         }
-        //     });
-        // }
+        // Fungsi get data peserta
+        function getDataPeserta(idpeserta) {
+            var url = "{{ url('getdatapeserta') }}";
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    idpeserta: idpeserta
+                },
+                beforeSend: function () {
+                    $.LoadingOverlay("show", {
+                        image: "",
+                        fontawesome: "fa fa-refresh fa-spin",
+                        fontawesomeColor: "black",
+                        fade: [5, 5],
+                        background: "rgba(60, 60, 60, 0.4)"
+                    });
+                    // $("#btnSave").button('loading');
+                },
+                success: function (data) {
+                    $("#iddatapeserta").val(data['id']);
+                    $("#nama").val(data['nama']);
+                    $("#no_hp").val(data['no_hp']);
+                    $('#modal-edit-peserta').modal('show');
+                },
+                error: function (xhr, status) {
+                    alert('Error');
+                },
+                complete: function () {
+                    $.LoadingOverlay("hide");
+                }
+            });
+        }
 
     });
 

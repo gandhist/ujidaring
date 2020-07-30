@@ -212,7 +212,7 @@
 
                 <div class="col-lg-12 col-xs-12" style="text-align:center">
                     <button onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")' type="button"
-                        class="btn btn-block btn-danger btn-flat" style="font-size:16px">Klik Untuk Melihat
+                        class="btn btn-block btn-primary btn-flat" style="font-size:16px">Klik Untuk Melihat
                         Jadwal</button>
                 </div>
                 <!-- ./col -->
@@ -220,7 +220,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <div class="box-body" style="background:#f7dddd">
+                    <div class="box-body" style="background:lavender">
                         <div class="table-responsive">
                             <table class="table no-margin">
                                 <thead>
@@ -381,7 +381,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                        <button type="button" class="btn btn-danger" data-id=""
+                        <button type="button" class="btn btn-primary" data-id=""
                             data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Kirim..."
                             id="btn-generate">Generate</button>
                     </div>
