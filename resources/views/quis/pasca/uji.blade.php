@@ -30,7 +30,7 @@ html {
           <a class="nav-link" id="essay-tab" data-toggle="pill" href="#essay" role="tab" aria-controls="essay" aria-selected="false">Tugas Mandiri</a>
         </li>
       </ul>
-      {!! $pg->render() !!}
+      {{-- {!! $pg->render() !!} --}}
       
     </div>
 
@@ -43,64 +43,9 @@ html {
     {{-- tab pilihan ganda --}}
     <div class="tab-pane fade show active" id="pg" role="tabpanel" aria-labelledby="pg-tab">
           {{-- pilihan ganda --}}
-          <div class="row">
-              <div class="col-lg-12">
-                  <nav aria-label="Navigasi soal ujian">No Soal : 
-                      <ul class="nav" role="tablist">
-                          @foreach ($pg as $key)
-                              {{-- <li class="page-item {{ $key->jawaban != null ? "active" : "" }}" role="presentation"><a class="page-link" href="#soal-{{ $key->soal_r->no_soal }}" aria-control="soal-{{ $key->soal_r->no_soal }}" role="tab" data-toggle="tab">{{ $key->soal_r->no_soal }}</a></li> --}}
-                              <li class="page-item {{ $key->jawaban != null ? "active" : "" }}" role="presentation"><a class="page-link" href="#soal-{{ $key->soal_r->no_soal }}" aria-control="soal-{{ $key->soal_r->no_soal }}" >{{ $key->soal_r->no_soal }}</a></li>
-                          @endforeach
-                      </ul>
-                    </nav>
-              </div>
+          <div id="tag_container">
+            @include('quis.pre.soal')
           </div>
-          
-          <div class="row" style="margin-top:10px">
-              <div class="col-lg-12">
-                  <div class="tab-content">
-                      @foreach ($pg as $key)
-                      <div role="tabpanel" class="tab-pane active" id="soal-{{ $key->soal_r->no_soal }}">
-                          <div class="panel panel-default">
-                            <div class="panel-heading">
-                              <h4 class="panel-title">{{ $key->soal_r->no_soal }}. {{ $key->soal_r->soal }}</h4></div>
-                            <div class="panel-body">
-                              <div class="radio"> 
-                                  @if($loop->first)
-                                      <form name="formAdd" id="formAdd">
-                                      <input type="hidden" name="id_jadwal" id="id_jadwal" value="{{ $modul_today->id }}">
-                                  @endif
-                                <label>
-                                  <input type="radio" {{ $key->jawaban == "a" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}a" value="{{ $key->soal_r->id }}#a">A. {{ $key->soal_r->pg_a }}</label>
-                              </div>
-                              <div class="radio">
-                                <label>
-                                  <input type="radio" {{ $key->jawaban == "b" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}b" value="{{ $key->soal_r->id }}#b">B. {{ $key->soal_r->pg_b }}</label>
-                              </div>
-                              <div class="radio">
-                                <label>
-                                  <input type="radio" {{ $key->jawaban == "c" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}c" value="{{ $key->soal_r->id }}#c">C. {{ $key->soal_r->pg_c }}</label>
-                              </div>
-                              <div class="radio">
-                                <label>
-                                  <input type="radio" {{ $key->jawaban == "d" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->no_soal }}]" id="jawaban-{{ $key->soal_r->no_soal }}d" value="{{ $key->soal_r->id }}#d">D. {{ $key->soal_r->pg_d }}</label>
-                              </div>
-                              @if($loop->last)
-                                  </form>
-                              @endif
-                            </div>
-                          </div>
-                        </div>
-                        <?php $soall = $loop->iteration; ?>
-                        <hr>
-                      @endforeach
-                      
-                    </div>
-              </div>
-              
-              
-          </div>
-          
           {{-- end of pilihan ganda --}}
     </div>
     {{-- end of tab pilihan ganda --}}
@@ -137,7 +82,7 @@ html {
             </div>
         </div>
         <div class="col-lg-6 offset-lg-3 py-5 d-flex" style="text-align: center!important;justify-content: center!important;">
-          <div >Halaman: {!! $pg->render() !!}</div>
+          {{-- <div >Halaman: {!! $pg->render() !!}</div> --}}
         </div>
         
     </div>
@@ -159,11 +104,34 @@ html {
 @endsection
 @push('script')
 <script>
-    var jml_soal = "{{ $soall }}";
+    $(window).on('hashchange', function() {
+        if (window.location.hash) {
+            var page = window.location.hash.replace('#', '');
+            if (page == Number.NaN || page <= 0) {
+                return false;
+            }else{
+                // getSoal(page);
+            }
+        }
+    });
     var home = "{{ url('peserta/dashboard') }}";
     var timer;
 document.addEventListener('contextmenu', event => event.preventDefault());
 $(document).ready(function () {
+  $('.txtEssay').on('paste', false)
+    // handle link pagination on click
+    $('body').on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        $('#soal a').css('color', '#dfecf6');
+        $('#soal').append('<img  src="{{ asset('loader.gif') }}" />');
+
+        // var url = $(this).attr('href');  
+        $('.page-item').removeClass('active')
+        $(this).parent().addClass('active')
+        var url=$(this).attr('href').split('page=')[1];
+        getSoal(url);
+    });
+
       // OPSIONAL: Buat event listener untuk pindah
     // ke soal selanjutnya ketika input radio dipilih
     $('[id^="soal-"] input:radio').on('change', function() {
@@ -431,7 +399,7 @@ function storeData(){
 }
 
 // fucntion request data pagination
-function getData(page){
+function getSoal(page){
       $.ajax(
       {
           url: '?page=' + page,
