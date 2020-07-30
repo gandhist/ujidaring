@@ -84,6 +84,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 		Route::group(['prefix' => 'buka'], function(){
 			Route::get('materi/{id}','PesertaController@bukaMateri');
+			Route::get('materi/modul/{id}','PesertaController@bukaMateriModul');
 		});
 	});
 

@@ -21,11 +21,16 @@
                 <img class="card-img-top" src="{{ asset("uploads/peserta/",$peserta->foto) }}" alt="Pass Foto {{ $peserta->nama }}">
                 @endif
                 <div class="card-body">
-                  <h5 class="card-title">{{ $peserta->nama }}</h5>
+                  <h5 class="card-title">{{ $peserta->nama }} @if($is_ketua) (Ketua Kelompok {{ $peserta->kelompok->no_kelompok }} ) @endif</h5>
                 </div>
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">NIK : {{ $peserta->nik }}</li>
                 </ul>
+                @if($is_ketua)
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">NIK : {{ $peserta->nik }}</li>
+                </ul>
+                @endif
                 
               </div>
         </div>
@@ -106,15 +111,28 @@
                     {{ $loop->iteration }}. <a target="_blank" href="{{ $md->jadwal_modul_r->materi }}"> {{ $md->jadwal_modul_r->modul_r->modul }} </a> 
                   @else 
                     {{-- {{ $loop->iteration }}. <a target="_blank" href="{{ url('uploads/materi/'.$md->jadwal_modul_r->materi) }}"> {{ $md->jadwal_modul_r->modul_r->modul }} </a>  --}}
-                    @if($md->jadwal_modul_r->materi)
-                      {{ $loop->iteration }}. <a target="_blank" href="{{ url('peserta/buka/materi/'.$md->id) }}"> {{ $md->jadwal_modul_r->modul_r->modul }} </a> 
+                    @if($md->jadwal_modul_r->modul_r->materi)
+                      {{ $loop->iteration }}. <a target="_blank" href="{{ url('peserta/buka/materi/modul/'.$md->jadwal_modul_r->modul_r->id) }}"> {{ $md->jadwal_modul_r->modul_r->modul }} </a> 
                     @else
                       {{ $loop->iteration }}. {{ $md->jadwal_modul_r->modul_r->modul }}
+                      {{-- jika modulnya berupa link --}}
                     @endif
                   @endif
+                  {{-- link dari master modul --}}
+                  @if($md->jadwal_modul_r->materi) 
+                    | <a target="_blank" href="{{ url('peserta/buka/materi/'.$md->id) }}"" class="btn btn-success btn-sm" ><i class="fa fa-link"></i> Materi Inst</a>
+                  @endif
+                  {{-- end of link dari master modul --}}
+                  {{-- link dari master modul --}}
+                  @if($md->jadwal_modul_r->modul_r->link) 
+                    | <a target="_blank" href="{{ $md->jadwal_modul_r->modul_r->link}}" class="btn btn-success btn-sm" ><i class="fa fa-link"></i></a>
+                  @endif
+                  {{-- end of link dari master modul --}}
+                  {{-- zoom --}}
                   @if($md->jadwal_modul_r->link) 
-                    | <a target="_blank" href="{{ $md->jadwal_modul_r->link}}" class="btn btn-info btn-sm"><i class="fa fa-link"></i></a>
-                    @endif
+                    | <a target="_blank" href="{{ $md->jadwal_modul_r->link}}" class="btn btn-info btn-sm"><i class="fa fa-link"></i> Zoom</a>
+                  @endif
+                  {{-- end zoom --}}
                   <br>
                   @endforeach
                  </td>

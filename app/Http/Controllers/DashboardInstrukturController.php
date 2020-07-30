@@ -77,7 +77,7 @@ class DashboardInstrukturController extends Controller
                     $destinationPath = 'uploads/materi/'.$jadwal->id; // upload path
                     $file = "materi_".$key->id."_".Carbon::now()->timestamp. "." . $files->getClientOriginalExtension();
                     $files->move($destinationPath, $file);
-                    $data->materi= $jadwal->id."/".$file;
+                    $data->materi= $destinationPath."/".$file;
                 }
                 $data->link = $request->input($px_link.$key->id);
                 $data->save();

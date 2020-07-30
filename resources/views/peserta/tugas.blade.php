@@ -67,6 +67,7 @@ $(document).ready(function () {
     var diffTime = eventTime - currentTime;
     var duration = moment.duration(diffTime*1000, 'milliseconds');
     var interval = 1000;
+    if (eventTime > 0) {
 
     timer = setInterval(function(){
         
@@ -75,6 +76,7 @@ $(document).ready(function () {
         $('#timer').text(duration.hours() + ":" + duration.minutes() + ":" + duration.seconds())
         }, interval
     );
+    }
 
 })
 
