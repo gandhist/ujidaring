@@ -13,7 +13,10 @@
 
 
 Route::auth();
+
 Route::post('bentukkelompok','JadwalController@gen');
+
+
 Route::get('jadwal/lihatkelompok/{id}','JadwalController@lihatkelompok');
 Route::group(['middleware' => 'auth'], function () {
 
@@ -109,17 +112,30 @@ Route::group(['middleware' => 'auth'], function () {
 	// Daftar Kantor
 	Route::resource('jadwal', 'JadwalController');
 	Route::get('jadwal/{id}/dashboard','JadwalController@dashboard');
-	Route::get('jadwal/peserta/{id}','JadwalController@peserta');
-	Route::get('jadwal/peserta/{id_jadwal}/{id_peserta}','JadwalController@pesertadetail');
+
 	Route::get('jadwal/instruktur/{id}','JadwalController@instruktur');
+	Route::post('getdatainstruktur','JadwalController@getdatainstruktur');
+	Route::post('jadwal/instruktur/update','JadwalController@instrukturupdate');
+	Route::post('jadwal/kirimaccount/instruktur','JadwalController@AccountInstruktur');
+	Route::post('jadwal/reset/instruktur','JadwalController@ResetAccountInstruktur');
+	
 	Route::get('jadwal/soal/{id}','JadwalController@soal');
 	Route::get('jadwal/tugas/{id}','JadwalController@tugas');
 	Route::get('jadwal/absen/{id}','JadwalController@absen');
 	Route::get('jadwal/aturjadwal/{id}','JadwalController@aturjadwal');
 	Route::get('aturjadwal/{id_jadwal}/{id}/uploadquiz','JadwalController@uploadquiz');
 	Route::get('jadwal/presentasi/{id}','JadwalController@presentasi');
-	Route::post('jadwal/kirimaccount/instruktur','JadwalController@AccountInstruktur');
+
+	Route::get('jadwal/peserta/{id}','JadwalController@peserta');
+	Route::get('jadwal/peserta/{id_jadwal}/{id_peserta}','JadwalController@pesertadetail');
 	Route::post('jadwal/kirimaccount/peserta','JadwalController@AccountPeserta');
+	Route::post('jadwal/reset/peserta','JadwalController@ResetAccountPeserta');
+	Route::post('getdatapeserta','JadwalController@getdatapeserta');
+	Route::post('jadwal/peserta/update','JadwalController@pesertaupdate');
+	
+	Route::post('jadwal/peserta/tm','JadwalController@pesertatm');
+	Route::post('jadwal/peserta/quisioner','JadwalController@pesertaquisioner');
+
 	Route::get('jadwal/pkl/{id}','JadwalController@pkl')->name('pkl');
 	Route::post('jadwal/upload/pkl','JadwalController@upload_pkl_store');
 	Route::post('jadwal/absen/filter', 'JadwalController@filter_absen');
@@ -134,8 +150,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('jadwal/lihatsoalpre','JadwalController@lihatsoalpre');
 	Route::post('jadwal/lihatsoalpost','JadwalController@lihatsoalpost');
 
-	Route::post('jadwal/peserta/tm','JadwalController@pesertatm');
-	Route::post('jadwal/peserta/quisioner','JadwalController@pesertaquisioner');
+
 	
 	// Daftar Kantor
 	Route::resource('penilaian', 'PenilaianController');
