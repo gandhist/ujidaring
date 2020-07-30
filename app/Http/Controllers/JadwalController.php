@@ -218,7 +218,7 @@ class JadwalController extends Controller
                  JadwalInstruktur::create($dataJadwalInstruktur);
             } 
         }
-
+       
         if ($request->id_jumlah_detail!='' ){
             $jml_dtl_modul = explode(',', $request->id_jumlah_detail);
             foreach($jml_dtl_modul as $jml_dtl_modul) {
@@ -635,10 +635,14 @@ class JadwalController extends Controller
             'deleted_at' => Carbon::now()->toDateTimeString()
         ];
         $idData = explode(',', $request->idHapusData);
-        $user_id = Peserta::select('user_id')->whereIn('id_kelompok', $idData)->get()->toArray();
+        $user_id_peserta = Peserta::select('user_id')->whereIn('id_kelompok', $idData)->get()->toArray();
+        $id_instruktur = JadwalInstruktur::select('id_instruktur')->whereIn('id_jadwal', $idData)->get()->toArray();
+        $user_id_inst = InstrukturModel::select('id_users')->whereIn('id', $id_instruktur)->get()->toArray();
         JadwalModel::whereIn('id', $idData)->update($user_data);
-        User::whereIn('id', $user_id)->update($user_data);
-        // Peserta::whereIn('id_kelompok', $idData)->update($user_data);
+        User::whereIn('id', $user_id_peserta)->update($user_data);
+        User::whereIn('id', $user_id_inst)->update($user_data);
+        Peserta::whereIn('id_kelompok', $idData)->update($user_data);
+        InstrukturModel::whereIn('id', $id_instruktur)->update($user_data);
 
         return redirect()->back()->with('message', 'Data Telah dihapus!'); 
     }
@@ -663,6 +667,45 @@ class JadwalController extends Controller
         return back()->with('message', 'Account telah dikirim');
     }
 
+    // function update data peserta 
+    public function pesertaupdate(request $request){
+
+        $request->validate(
+            [
+                'nama' => 'required',
+                'no_hp' => 'required',
+            ],[
+                'nama.required' => "Nama tidak boleh kosong",
+                'no_hp.required' => "No Hp tidak boleh kosong"
+            ]);
+            
+        $data['nama'] = $request->nama;
+        $data['no_hp'] = $request->no_hp;
+        Peserta::find($request->iddatapeserta)->update($data);
+        
+        $user['name'] = $request->nama;
+
+        $id_user = Peserta::select('user_id')->find($request->iddatapeserta); 
+        User::find($id_user['user_id'])->update($user);
+
+        return response()->json([
+            'status' => true,
+            'icon' => "success",
+            'message' => 'Data peserta berhasil dirubah!'
+        ]);
+    } 
+
+    public function ResetAccountPeserta(Request $request)
+    {
+        $idData = explode(',', $request->idResetData);
+        foreach ($idData as $idData) {
+            $user_id =  Peserta::select('user_id')->find($idData);
+            $reset_login['is_login'] = 0;
+            $reset_account =  User::where('id',"=",$user_id['user_id'])->update($reset_login);
+        }
+        return back()->with('message', 'Account peserta telah di reset!');
+    }
+
     public function AccountInstruktur(Request $request)
     {
         $idData = explode(',', $request->idHapusData);
@@ -681,6 +724,51 @@ class JadwalController extends Controller
         }   
         return back()->with('message', 'Account telah dikirim');
     }
+
+    public function ResetAccountInstruktur(Request $request)
+    {
+        $idData = explode(',', $request->idResetData);
+        foreach ($idData as $idData) {
+            $user_id =  InstrukturModel::select('id_users')->find($idData);
+            $reset_login['is_login'] = 0;
+            $reset_account =  User::where('id',"=",$user_id['id_users'])->update($reset_login);
+        }
+        return back()->with('message', 'Account Instruktur telah di reset!');
+    }
+
+            // function generate kelompok peserta 
+            public function getdatainstruktur(request $request){
+                $instruktur = InstrukturModel::where('id','=',$request->idinstruktur)->first();
+                return $instruktur;
+            }
+
+        // function update data instruktur 
+        public function instrukturupdate(request $request){
+
+            $request->validate(
+                [
+                    'nama' => 'required',
+                    'no_hp' => 'required',
+                ],[
+                    'nama.required' => "Nama tidak boleh kosong",
+                    'no_hp.required' => "No Hp tidak boleh kosong"
+                ]);
+                
+            $data['nama'] = $request->nama;
+            $data['no_hp'] = $request->no_hp;
+            InstrukturModel::find($request->idins)->update($data);
+            
+            $user['name'] = $request->nama;
+    
+            $id_user = InstrukturModel::select('id_users')->find($request->idins); 
+            User::find($id_user['id_users'])->update($user);
+    
+            return response()->json([
+                'status' => true,
+                'icon' => "success",
+                'message' => 'Data instruktur berhasil dirubah!'
+            ]);
+        }
 
     // fungsi tampil form upload jadwal pkl
     public function pkl($id){
@@ -728,6 +816,12 @@ class JadwalController extends Controller
         return view('jadwal.presentasi')->with(compact('data'));
     }
 
+    // function generate kelompok peserta 
+    public function getdatapeserta(request $request){
+        $peserta = Peserta::where('id','=',$request->idpeserta)->first();
+        return $peserta;
+    }
+    
     // function generate kelompok peserta 
     public function gen(request $request){
 

@@ -26,14 +26,14 @@
             @endif
 
             {{-- sub menu  --}}
-            <form action="{{ url('badanusaha/filter') }}" enctype="multipart/form-data" name="filterData"
-                id="filterData" method="post">
+            <!-- <form action="{{ url('badanusaha/filter') }}" enctype="multipart/form-data" name="filterData"
+                id="filterData" method="post"> -->
                 <!-- @method("PUT") -->
-                @csrf
+                <!-- @csrf -->
                 <!-- <input type="hidden" name="key" id="key">
                 <input type="hidden" name="_method" id="_method"> -->
                 <div class="row">
-                    <div class="col-sm-5">
+                    <div class="col-sm-7">
 
                         <!-- Table Filter -->
                         <!-- <table class="table table-condensed table-filter">
@@ -113,15 +113,15 @@
                         <!-- End -->
                     </div>
 
-                    <div class="col-sm-2">
+                    <!-- <div class="col-sm-2">
 
-                    </div>
+                    </div> -->
 
-                    <div class="col-sm-3">
+                    <!-- <div class="col-sm-5">
 
-                    </div>
+                    </div> -->
 
-                    <div class="col-sm-2" style='text-align:right'>
+                    <div class="col-sm-5" style='text-align:right'>
                         <div class="btn-group">
                             <button class="btn btn-success" id="btnTampil" name="btnTampil"> <i class="fa fa-eye"></i>
                                 Detail</button>
@@ -133,7 +133,7 @@
                         </div>
                     </div>
                 </div>
-            </form>
+            <!-- </form> -->
             <br>
             <!-- /.box-footer -->
             {{-- end of sub menu  --}}
