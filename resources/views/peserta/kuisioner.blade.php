@@ -121,7 +121,8 @@
             <form name="formAdd" id="formAdd">
               <div class="row">
                 <div class="col-lg-4">
-                  <input type="hidden" value="{{ $key->jadwal_instruktur_r->instruktur_r->id }}" class="form-control" name="id_instruktur" id="id_instruktur">
+                  <input type="hidden" id="total" value="{{ $loop->iteration }}" name="total" >
+                  <input type="hidden" value="{{ $key->jadwal_instruktur_r->instruktur_r->id }}" class="form-control" name="id_instruktur_{{ $loop->iteration }}" id="id_instruktur_{{ $loop->iteration }}">
                   <input type="hidden" value="{{ $peserta->jadwal_r->id }}" class="form-control" name="id_jadwal" id="id_jadwal">
                 </div>
                   <div class="col-lg-12">
@@ -143,7 +144,7 @@
                                       <td>
                                           <select name="nilai_{{ $eva->id }}" id="nilai_{{ $eva->id }}">
                                               @for($i=1; $i<=5; $i++)
-                                              <option value="{{ $eva->id }}#{{ $i }}">{{ $i }}</option>
+                                              <option {{ $eva->nilai == $i ? 'selected' : '' }} value="{{ $eva->id }}#{{ $i }}">{{ $i }}</option>
                                               @endfor
                                           </select>
                                       </td>
@@ -154,10 +155,12 @@
                           
                           </tbody>
                         </table>
+                        @if($loop->last)
+                        </form>
                         <button class="btn btn-primary" id="btnSave">Beri Tanggapan</button>
+                        @endif
                   </div>
               </div>
-            </form>
 
       </div>
     @endforeach
@@ -186,6 +189,7 @@ $(document).ready(function () {
 });
 
 function store(){
+  var hal_absen = "{{ url('peserta/presensi') }}";
   var formData = new FormData($('#formAdd')[0]);
   var url = "{{ url('peserta/kuisioner/save') }}";
   $.ajaxSetup({
@@ -209,7 +213,7 @@ function store(){
             confirmButtonText: 'Close',
             confirmButtonColor: '#AAA',
             onClose: function() {
-                window.location.reload();
+                window.location.replace(hal_absen);
             }
         })
 

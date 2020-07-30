@@ -18,6 +18,8 @@ use App\JawabanPpt;
 use App\JadwalRundown;
 use App\KirimWa;
 use App\ModulRundown;
+use App\MasterModul;
+use App\KelompokPeserta;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
@@ -59,13 +61,20 @@ class PesertaController extends Controller
         $rd = JadwalRundown::where('id_jadwal',$peserta->jadwal_r->id)->get();
         $is_pre_today = $this->is_pre_today();
         $is_post_today = $this->is_post_today();
+        $is_ketua = false;
+        $anggota_klp = "";
+        if($peserta->kelompok){
+            if($peserta->kelompok->id_ketua == $peserta->id)
+            $is_ketua = true;
+            $anggota_klp = KelompokPeserta::where('no_kelompok',$peserta->kelompok->no_kelompok)->where('id_jadwal',$peserta->jadwal_r->id)->get();
+        }
         if($is_absen){
             \LogActivity::addToLog('peserta ditolak kedashboard karena belum login');
             return redirect('peserta/presensi')->with('status', 'Anda harus absen, untuk bisa mengakses halaman dashboard');
         }
         else {
             // \LogActivity::addToLog('peserta ke menu dashboard');
-            return view('peserta.dashboard')->with(compact('peserta','is_allow_uji','is_allow_tugas','rd','is_pre_quis','is_pre_today'));
+            return view('peserta.dashboard')->with(compact('peserta','is_allow_uji','is_allow_tugas','rd','is_pre_quis','is_pre_today','is_ketua','anggota_klp'));
         }
     }
 
@@ -129,21 +138,34 @@ class PesertaController extends Controller
         $peserta = Peserta::where('user_id',Auth::id())->first();
         $px = "nilai_";
         $data =[];
-        foreach ($peserta->jawaban_eva_r as $key) {
-            if($request->has($px.$key->id)){
-                $val_exp = explode("#", $request->input($px.$key->id));
-                JawabanEvaluasi::updateOrCreate([
-                     'id_jadwal' => $request->id_jadwal,
-                     'tanggal' => Carbon::now()->isoFormat('YYYY-MM-DD'),
-                     'id_peserta' => $peserta->id,
-                     'id' => $val_exp[0],
-                     'id_instruktur' => $request->id_instruktur
-                 ],[
-                     'nilai' => $val_exp[1],
-                     'id_instruktur' => $request->id_instruktur,
-                 ]);
+        // for ($i=1; $i <= $request->total ; $i++) { 
+            foreach ($peserta->jawaban_eva_r as $key) {
+                if($request->has($px.$key->id)){
+                    $val_exp = explode("#", $request->input($px.$key->id));
+                    JawabanEvaluasi::updateOrCreate([
+                        'id' => $val_exp[0],
+                    ],[
+                        'nilai' => $val_exp[1],
+                    ]);
+                }
             }
-        }
+        // }
+        // foreach ($peserta->jawaban_eva_r as $key) {
+        //     if($request->has($px.$key->id)){
+        //         $val_exp = explode("#", $request->input($px.$key->id));
+        //         JawabanEvaluasi::updateOrCreate([
+        //              'id_jadwal' => $request->id_jadwal,
+        //              'tanggal' => Carbon::now()->isoFormat('YYYY-MM-DD'),
+        //              'id_peserta' => $peserta->id,
+        //              'id' => $val_exp[0],
+        //              'id_instruktur' => $request->id_instruktur
+        //          ],[
+        //              'nilai' => $val_exp[1],
+        //              'id_instruktur' => $request->id_instruktur,
+        //          ]);
+        //     }
+        // }
+
         \LogActivity::addToLog("peserta mengisi kuisioner/evaluasi pada ". Carbon::now()->toDateTimeString());
         return response()->json([
             'status' => true,
@@ -497,10 +519,24 @@ class PesertaController extends Controller
         
         $file_materi = ModulRundown::find($id);
         // $file_materi = JadwalModul::find($id);
-        // return $file_materi->jadwal_modul_r;
-        $url = url('uploads/materi/'.$file_materi->jadwal_modul_r->materi);
+        $url = url($file_materi->jadwal_modul_r->materi);
         $nm_materi = $file_materi->jadwal_modul_r->modul_r->modul;
-        \LogActivity::addToLog("peserta membuka materi # $nm_materi ");
+        \LogActivity::addToLog("peserta membuka materi Instruktur # $nm_materi ");
+        return view('pdfviewer')->with(compact('url')); // pdf cant download
+        return redirect($url);
+
+    }
+
+    public function bukaMateriModul($id){
+        
+        
+
+        $file_materi = MasterModul::find($id);
+        // $file_materi = JadwalModul::find($id);
+        $url = url($file_materi->materi);
+        $nm_materi = $file_materi->modul;
+        \LogActivity::addToLog("peserta membuka materi Modul # $nm_materi ");
+        return view('pdfviewer')->with(compact('url')); // pdf cant download
         return redirect($url);
 
     }

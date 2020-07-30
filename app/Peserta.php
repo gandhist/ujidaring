@@ -77,5 +77,10 @@ class Peserta extends Model
         return $this->hasMany('App\PesertaQuis','id_peserta');
     }
 
+    // relasi ke table peserta kelompok
+    public function kelompok(){
+        return $this->belongsTo('App\KelompokPeserta','id','id_peserta');
+    }
+
 
 }
