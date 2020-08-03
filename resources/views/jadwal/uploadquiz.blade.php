@@ -77,10 +77,10 @@
                                 <tr class="tablecustom">
                                     <th>No</th>
                                     <th>Modul</th>
-                                    <th>Pre Quiz</th>
+                                    <th>Soal Pre Quiz (.xls/.xlsx)</th>
                                     <th>Mulai Pre</th>
                                     <th style="white-space: nowrap;width:5%">Durasi Pre</th>
-                                    <th>Post Quiz</th>
+                                    <th>Soal Post Quiz (.xls/.xlsx)</th>
                                     <th>Mulai Post</th>
                                     <th style="white-space: nowrap;width:5%">Durasi Post</th>
                                     <th style="white-space: nowrap" width="8%">Tugas Mandiri</th>
@@ -335,6 +335,43 @@
                         z = "gagal";
                     }
                 }
+
+                f_durasi_pre = $("#durasi_pre_" + index).val();
+                if (f_durasi_pre != "") {
+                    file_pre = $("#pre_quiz_" + index).val();
+                    if (file_pre == "") {
+                        alert('Soal Pre Quiz ' + index + ' Harus diisi!');
+                        z = "gagal";
+                    }
+                }
+
+                f_durasi_post = $("#durasi_post_" + index).val();
+                if (f_durasi_post != "") {
+                    file_post = $("#post_quiz_" + index).val();
+                    if (file_post == "") {
+                        alert('Soal Post Quiz ' + index + ' Harus diisi!');
+                        z = "gagal";
+                    }
+                }
+
+                f_mulai_pre = $("#awal_pre_" + index).val();
+                if (f_mulai_pre != "") {
+                    file_pre = $("#pre_quiz_" + index).val();
+                    if (file_pre == "") {
+                        alert('Soal Pre Quiz ' + index + ' Harus diisi!');
+                        z = "gagal";
+                    }
+                }
+
+                f_mulai_post = $("#awal_post_" + index).val();
+                if (f_mulai_post != "") {
+                    file_post = $("#post_quiz_" + index).val();
+                    if (file_post == "") {
+                        alert('Soal Post Quiz ' + index + ' Harus diisi!');
+                        z = "gagal";
+                    }
+                }
+
             }
             if (z == "gagal") {
                 return false;
