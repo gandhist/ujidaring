@@ -314,7 +314,7 @@ class JadwalController extends Controller
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
         $jawaban_evaluasi = JawabanEvaluasi::where('id_peserta','=',$id_peserta)->where('id_jadwal','=',$id_jadwal)->groupBy('id_instruktur')->groupBy('tanggal')->orderBy('tanggal','asc')->orderBy('id_instruktur','asc')->get();
-        $modul_rundown = ModulRundown::whereHas('jadwal_rundown_r', function ($query) use($id_jadwal){
+        $modul_rundown = ModulRundown::orderBy('id_rundown','asc')->whereHas('jadwal_rundown_r', function ($query) use($id_jadwal){
             return $query->where('id_jadwal', '=', $id_jadwal);
         })->get();
         $jadwalrundown = JadwalRundown::where('id_jadwal',$id_jadwal)->orderBy('tanggal','asc')->get();
