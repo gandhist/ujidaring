@@ -172,7 +172,7 @@
                                     {{ \Carbon\Carbon::parse($key->tgl_lahir)->isoFormat("DD MMMM YYYY") }}</td>
                                 <td style="text-align:center;width:8%">{{ $key->no_hp }}</td>
                                 <td style="text-align:center;width:1%">
-                                    @if($key->text_sms=="success")
+                                    @if(strtolower($key->text_sms)=="success")
                                     <button type="button" class="btn btn-sm btn-info">{{ucwords($key->text_sms)}}</button>
                                     @elseif($key->text_sms==null)
                                     

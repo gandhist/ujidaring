@@ -132,7 +132,7 @@
                                 <td>{{ $key->instruktur_r->nama }}</td>
                                 <td style="width:5%">{{ $key->instruktur_r->no_hp }}</td>
                                 <td style="text-align:center;width:1%">
-                                    @if($key->instruktur_r->text_sms=="success")
+                                    @if(strtolower($key->instruktur_r->text_sms)=="success")
                                     <button type="button"
                                         class="btn btn-sm btn-info">{{ucwords($key->instruktur_r->text_sms)}}</button>
                                     @elseif($key->instruktur_r->text_sms==null)
