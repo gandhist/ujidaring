@@ -91,16 +91,15 @@
                                     <td style="text-align:right;padding:8px 0px 2px 0px;">
                                         <!-- <div class="row">
                                             <div class="col-xs-12"> -->
-                                                <div class="btn-group">
-                                                    <button class="btn btn-success btn-flat" id="btnEdit"
-                                                        name="btnEdit"> <i class="fa fa-edit"></i>Ubah
-                                                    </button>
-                                                    <button class="btn btn-danger btn-flat" id="btnReset"
-                                                        name="btnReset">
-                                                        <i class="fa fa-refresh"></i>
-                                                        Reset Login</button>
-                                                </div>
-                                            <!-- </div>
+                                        <div class="btn-group">
+                                            <button class="btn btn-success btn-flat" id="btnEdit" name="btnEdit"> <i
+                                                    class="fa fa-edit"></i>Ubah
+                                            </button>
+                                            <button class="btn btn-danger btn-flat" id="btnReset" name="btnReset">
+                                                <i class="fa fa-refresh"></i>
+                                                Reset Login</button>
+                                        </div>
+                                        <!-- </div>
                                         </div> -->
                                     </td>
                                     <!-- <td style="text-align:left;padding-bottom:0px;padding-top:0px">
@@ -144,9 +143,10 @@
                                 <th>No</th>
                                 <th>NIK</th>
                                 <th>Nama</th>
-                                <th>Tempat Lahir</th>
-                                <th>Tanggal Lahir</th>
-                                <th>No Hp</th>
+                                <th style="white-space: nowrap">Tempat Lahir</th>
+                                <th style="white-space: nowrap">Tanggal Lahir</th>
+                                <th style="white-space: nowrap">No Hp</th>
+                                <th style="white-space: nowrap">Status SMS</th>
                                 <th style="white-space: nowrap">Status Login</th>
                                 <!-- <th>Pg Benar</th>
                                 <th>Pg Salah</th>
@@ -172,9 +172,18 @@
                                     {{ \Carbon\Carbon::parse($key->tgl_lahir)->isoFormat("DD MMMM YYYY") }}</td>
                                 <td style="text-align:center;width:8%">{{ $key->no_hp }}</td>
                                 <td style="text-align:center;width:1%">
-                                @if($key->user_r->is_login==1)
-                                <button type="button" class="btn btn-sm btn-info">Login</button>
-                                @endif
+                                    @if($key->text_sms=="success")
+                                    <button type="button" class="btn btn-sm btn-info">{{ucwords($key->text_sms)}}</button>
+                                    @elseif($key->text_sms==null)
+                                    
+                                    @else
+                                    <button type="button" class="btn btn-sm btn-danger">{{ucwords($key->text_sms)}}</button>
+                                    @endif
+                                </td>
+                                <td style="text-align:center;width:1%">
+                                    @if($key->user_r->is_login==1)
+                                    <button type="button" class="btn btn-sm btn-info">Login</button>
+                                    @endif
                                 </td>
                                 <!-- <td style="width:7%">{{count($key->pg_benar_r)}}</td>
                                 <td style="width:7%">{{count($key->pg_salah_r)}}</td>

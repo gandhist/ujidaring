@@ -205,6 +205,12 @@ th {
     background: skyblue;
 }
 
+.withscroll {
+    width: 100%;
+    overflow-x: scroll;
+    white-space: nowrap;
+}
+
 .main-header {
     position: fixed;
     width: 100%;
