@@ -19,22 +19,22 @@
         color: black !important;
     }
 
-    .tablecustom > th{
+    .tablecustom>th {
         border-top: 1px solid rgb(117, 117, 117) !important;
         border-left: 1px solid rgb(117, 117, 117) !important;
         border-right: 1px solid rgb(117, 117, 117) !important;
         border-bottom: 0px solid rgb(117, 117, 117) !important;
-        text-align:center;
+        text-align: center;
     }
 
-    .tablecustom > td{
+    .tablecustom>td {
         border-top: 1px solid rgb(117, 117, 117) !important;
         border-left: 1px solid rgb(117, 117, 117) !important;
         border-right: 1px solid rgb(117, 117, 117) !important;
         border-bottom: 1px solid rgb(117, 117, 117) !important;
     }
 
-    .tableModalDetail > thead > tr > th {
+    .tableModalDetail>thead>tr>th {
         border-bottom: 1px solid rgb(117, 117, 117) !important;
     }
 
@@ -77,10 +77,10 @@
                                 <tr class="tablecustom">
                                     <th>No</th>
                                     <th>Modul</th>
-                                    <th>Pre Quiz</th>
+                                    <th>Soal Pre Quiz (.xls/.xlsx)</th>
                                     <th>Mulai Pre</th>
                                     <th style="white-space: nowrap;width:5%">Durasi Pre</th>
-                                    <th>Post Quiz</th>
+                                    <th>Soal Post Quiz (.xls/.xlsx)</th>
                                     <th>Mulai Post</th>
                                     <th style="white-space: nowrap;width:5%">Durasi Post</th>
                                     <th style="white-space: nowrap" width="8%">Tugas Mandiri</th>
@@ -97,7 +97,8 @@
                                     <td>{{$key->jadwal_modul_r->modul_r->modul}}</td>
                                     <td style="width:10%">
                                         <div class="input-group input-group-sm">
-                                            <input id="pre_quiz_{{ $loop->iteration }}" name="pre_quiz_{{ $loop->iteration }}" class="file_soal" type="file">
+                                            <input id="pre_quiz_{{ $loop->iteration }}"
+                                                name="pre_quiz_{{ $loop->iteration }}" class="file_soal" type="file">
                                             @if(isset($key->jadwal_modul_r->f_pre_quiz))
                                             <span class="input-group-btn">
                                                 <button type="button" value="{{$key->jadwal_modul_r->id}}"
@@ -113,11 +114,14 @@
                                             class="form-control waktu" placeholder="Mulai Pre"
                                             value="{{$key->jadwal_modul_r->awal_pre_quiz}}">
                                     </td>
-                                    <td><input style="width: 100%;" maxlength="3" class="form-control durasi" type="text" id="durasi_pre_{{ $loop->iteration }}" name="durasi_pre_{{ $loop->iteration }}"
-                                            placeholder="Durasi Pre" value="{{$key->jadwal_modul_r->durasi_pre}}"></td>
+                                    <td><input style="width: 100%;" maxlength="3" class="form-control durasi"
+                                            type="text" id="durasi_pre_{{ $loop->iteration }}"
+                                            name="durasi_pre_{{ $loop->iteration }}" placeholder="Durasi Pre"
+                                            value="{{$key->jadwal_modul_r->durasi_pre}}"></td>
                                     <td style="width:10%">
                                         <div class="input-group input-group-sm">
-                                            <input name="post_quiz_{{ $loop->iteration }}" id="post_quiz_{{ $loop->iteration }}" class="file_soal" type="file">
+                                            <input name="post_quiz_{{ $loop->iteration }}"
+                                                id="post_quiz_{{ $loop->iteration }}" class="file_soal" type="file">
                                             @if(isset($key->jadwal_modul_r->f_post_quiz))
                                             <span class="input-group-btn">
                                                 <button type="button" value="{{$key->jadwal_modul_r->id}}"
@@ -133,8 +137,10 @@
                                             class="form-control waktu" placeholder="Mulai Post"
                                             value="{{$key->jadwal_modul_r->awal_post_quiz}}">
                                     </td>
-                                    <td><input style="width: 100%;" maxlength="3" class="form-control durasi" type="text" id="durasi_post_{{ $loop->iteration }}" name="durasi_post_{{ $loop->iteration }}"
-                                            placeholder="Durasi Post" value="{{$key->jadwal_modul_r->durasi_post}}">
+                                    <td><input style="width: 100%;" maxlength="3" class="form-control durasi"
+                                            type="text" id="durasi_post_{{ $loop->iteration }}"
+                                            name="durasi_post_{{ $loop->iteration }}" placeholder="Durasi Post"
+                                            value="{{$key->jadwal_modul_r->durasi_post}}">
                                     </td>
                                     <td><input value="{{$key->jadwal_modul_r->jumlah_tm}}" style="width:100%"
                                             class="form-control InputTugasMandiri" name="tm_{{ $loop->iteration }}"
@@ -169,7 +175,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="box">
-                        <div class="box-body no-padding">
+                        <div class="box-body no-padding withscroll">
                             <br>
                             <table class="table table-condensed tableModalDetail" id="tablemodalSoalPre">
                                 <thead>
@@ -225,7 +231,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="box">
-                        <div class="box-body no-padding">
+                        <div class="box-body no-padding withscroll">
                             <br>
                             <table class="table table-condensed tableModalDetail" id="tablemodalSoalPost">
                                 <thead>
@@ -288,7 +294,7 @@
 
         $(document).on('change', '.file_soal', function (e) {
             var id = $(this).val();
-            var ext = id.substr(id.lastIndexOf('.')+1);
+            var ext = id.substr(id.lastIndexOf('.') + 1);
             ext = ext.toLowerCase();
             switch (ext) {
                 case 'xls':
@@ -304,35 +310,72 @@
             z = "berhasil";
             jumlahData = "{{count($modulrundown)}}";
             for (let index = 1; index <= jumlahData; index++) {
-                f_pre = $("#pre_quiz_"+index).val();
-                if(f_pre!=""){
-                    mulai_pre = $("#awal_pre_"+index).val();
-                    durasi_pre = $("#durasi_pre_"+index).val();
-                    if(mulai_pre==""){
-                        alert('Mulai Pre Quiz '+index+' Harus diisi!');
+                f_pre = $("#pre_quiz_" + index).val();
+                if (f_pre != "") {
+                    mulai_pre = $("#awal_pre_" + index).val();
+                    durasi_pre = $("#durasi_pre_" + index).val();
+                    if (mulai_pre == "") {
+                        alert('Mulai Pre Quiz ' + index + ' Harus diisi!');
                         z = "gagal";
-                    }else if(durasi_pre==""){
-                        alert('Durasi Pre Quiz '+index+' Harus diisi!');
+                    } else if (durasi_pre == "") {
+                        alert('Durasi Pre Quiz ' + index + ' Harus diisi!');
                         z = "gagal";
                     }
                 }
 
-                f_post = $("#post_quiz_"+index).val();
-                if(f_post!=""){
-                    mulai_post = $("#awal_post_"+index).val();
-                    durasi_post = $("#durasi_post_"+index).val();
-                    if(mulai_post==""){
-                        alert('Mulai Post Quiz '+index+' Harus diisi!');
+                f_post = $("#post_quiz_" + index).val();
+                if (f_post != "") {
+                    mulai_post = $("#awal_post_" + index).val();
+                    durasi_post = $("#durasi_post_" + index).val();
+                    if (mulai_post == "") {
+                        alert('Mulai Post Quiz ' + index + ' Harus diisi!');
                         z = "gagal";
-                    }else if(durasi_post==""){
-                        alert('Durasi Post Quiz '+index+' Harus diisi!');
+                    } else if (durasi_post == "") {
+                        alert('Durasi Post Quiz ' + index + ' Harus diisi!');
                         z = "gagal";
                     }
                 }
+
+                f_durasi_pre = $("#durasi_pre_" + index).val();
+                if (f_durasi_pre != "") {
+                    file_pre = $("#pre_quiz_" + index).val();
+                    if (file_pre == "") {
+                        alert('Soal Pre Quiz ' + index + ' Harus diisi!');
+                        z = "gagal";
+                    }
+                }
+
+                f_durasi_post = $("#durasi_post_" + index).val();
+                if (f_durasi_post != "") {
+                    file_post = $("#post_quiz_" + index).val();
+                    if (file_post == "") {
+                        alert('Soal Post Quiz ' + index + ' Harus diisi!');
+                        z = "gagal";
+                    }
+                }
+
+                f_mulai_pre = $("#awal_pre_" + index).val();
+                if (f_mulai_pre != "") {
+                    file_pre = $("#pre_quiz_" + index).val();
+                    if (file_pre == "") {
+                        alert('Soal Pre Quiz ' + index + ' Harus diisi!');
+                        z = "gagal";
+                    }
+                }
+
+                f_mulai_post = $("#awal_post_" + index).val();
+                if (f_mulai_post != "") {
+                    file_post = $("#post_quiz_" + index).val();
+                    if (file_post == "") {
+                        alert('Soal Post Quiz ' + index + ' Harus diisi!');
+                        z = "gagal";
+                    }
+                }
+
             }
-            if(z=="gagal"){
+            if (z == "gagal") {
                 return false;
-            }else{
+            } else {
                 return true;
             }
         });

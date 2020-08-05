@@ -363,14 +363,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($jadwalrundown as $key)
+                                        @foreach($modul_rundown as $key)
                                         <tr>
                                             <td style="text-align:center;width:8%">
-                                                {{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}
+                                                {{ \Carbon\Carbon::parse($key->jadwal_rundown_r->tanggal)->isoFormat("DD MMMM YYYY") }}
                                             </td>
                                             @php
                                             $dataabsen =
-                                            DB::table('absen')->where('tanggal','=',$key->tanggal)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->first();
+                                            DB::table('absen')->where('tanggal','=',$key->jadwal_rundown_r->tanggal)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->first();
                                             @endphp
 
                                             @if($dataabsen==null)

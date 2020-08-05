@@ -31,7 +31,7 @@
                 @csrf
                 <input type="hidden" name="id_jadwal" value="{{$data->id}}">
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-md-8">
                         <div class="box-body">
                             <div class="table-responsive" style="margin-left: -18px;">
                                 <table class="table no-margin">
@@ -53,14 +53,24 @@
                                                         placeholder="Tgl Akhir">
                                                 </div>
                                             </th>
+                                            <th style="width:16%">
+                                                <div class="input-group">
+                                                    <select class="form-control select2" name="jenis_absen"
+                                                        id="jenis_absen" required>
+                                                        <option value="all">All</option>
+                                                        <option value="absen" {{ request()->get("jenis_absen")=="absen" ? "selected" : "" }} >Sudah Absen</option>
+                                                        <option value="belumabsen" {{ request()->get("jenis_absen")=="belumabsen" ? "selected" : "" }} >Belum Absen</option>
+                                                    </select>
+                                                </div>
+                                            </th>
                                             <th style="text-align:left;width:5%">
                                                 <button type="submit" class="btn btn-sm btn-info"> <i
                                                         class="fa fa-filter"></i>
                                                     Filter</button>
                                             </th>
                                             <th style="text-align:left">
-                                                <a href="{{ url('jadwal/absen', $id_jadwal) }}" class="btn btn-sm btn-default"> <i
-                                                        class="fa fa-refresh"></i>
+                                                <a href="{{ url('jadwal/absen', $id_jadwal) }}"
+                                                    class="btn btn-sm btn-default"> <i class="fa fa-refresh"></i>
                                                     Reset</a>
                                             </th>
                                         </tr>
@@ -214,8 +224,8 @@
 
         var dt = $('#custom-table').DataTable({
             "lengthMenu": [
-                [10, 20, 50],
-                [10, 20, 50]
+                [30, 50, 100],
+                [30, 50, 100]
             ],
             "scrollX": true,
             "scrollY": $(window).height() - 255,
@@ -310,6 +320,7 @@
             }
         });
 
+        $('.select2').select2();
 
         // Fungsi Update durasi ujian
         function updateDurasi(durasi, idJadwal) {

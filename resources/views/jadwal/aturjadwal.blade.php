@@ -47,7 +47,7 @@
                         @csrf
                         <input type="hidden" name="jumlah" value="{{count($rundown)}}">
                         <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
-                        
+
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -62,41 +62,75 @@
                                 <tr>
                                     <input type="hidden" name="id_rowdown_{{ $loop->iteration }}" value="{{$key->id}}">
                                     <td style="width:1%">{{ $loop->iteration }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}</td>
+                                    <td>
+                                        @switch(\Carbon\Carbon::parse($key->tanggal)->format('l'))
+                                        @case("Sunday")
+                                        Minggu,
+                                        @break
+
+                                        @case("Monday")
+                                        Senin,
+                                        @break
+
+                                        @case("Tuesday")
+                                        Selasa,
+                                        @break
+
+                                        @case("Wednesday")
+                                        Rabu,
+                                        @break
+
+                                        @case("Thursday")
+                                        Kamis,
+                                        @break
+
+                                        @case("Friday")
+                                        Jumat,
+                                        @break
+
+                                        @case("Saturday")
+                                        Sabtu,
+                                        @break
+
+                                        @default
+                                        
+                                        @endswitch
+                                        {{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}</td>
                                     <td class="customselect2">
                                         <select class="js-example-basic-multiple"
-                                            name="instruktur_{{ $loop->iteration }}[]" multiple="multiple" required>
+                                            name="instruktur_{{ $loop->iteration }}[]" multiple="multiple">
                                             @foreach($instrukturjadwal as $datainstrukturjadwal)
-                                            <option value="{{$datainstrukturjadwal->id}}" 
-                                            @php 
-                                            $selected = DB::table('instruktur_rundown')->select('id')->where('id_jadwal_instruktur','=',$datainstrukturjadwal->id)->where('id_rundown','=',$key->id)->where('deleted_by','=',null)->first();
-                                            if($selected!=null){
+                                            <option value="{{$datainstrukturjadwal->id}}" @php
+                                                $selected=DB::table('instruktur_rundown')->
+                                                select('id')->where('id_jadwal_instruktur','=',$datainstrukturjadwal->id)->where('id_rundown','=',$key->id)->where('deleted_by','=',null)->first();
+                                                if($selected!=null){
                                                 echo "selected";
-                                            }
-                                            @endphp
-                                            >
+                                                }
+                                                @endphp
+                                                >
                                                 {{$datainstrukturjadwal->instruktur_r->nama}}</option>
                                             @endforeach
                                         </select>
                                     </td>
                                     <td class="customselect2">
                                         <select class="js-example-basic-multiple" name="modul_{{ $loop->iteration }}[]"
-                                            multiple="multiple" required>
+                                            multiple="multiple">
                                             @foreach($JadwalModul as $dataJadwalModul)
-                                            <option value="{{$dataJadwalModul->id}}"
-                                            @php 
-                                            $selected = DB::table('modul_rundown')->select('id')->where('id_jadwal_modul','=',$dataJadwalModul->id)->where('id_rundown','=',$key->id)->where('deleted_by','=',null)->first();
-                                            if($selected!=null){
+                                            <option value="{{$dataJadwalModul->id}}" @php
+                                                $selected=DB::table('modul_rundown')->
+                                                select('id')->where('id_jadwal_modul','=',$dataJadwalModul->id)->where('id_rundown','=',$key->id)->where('deleted_by','=',null)->first();
+                                                if($selected!=null){
                                                 echo "selected";
-                                            }
-                                            @endphp
-                                            >
+                                                }
+                                                @endphp
+                                                >
                                                 {{$dataJadwalModul->modul_r->modul}}</option>
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td style="text-align:center;width:5%"><a  class="btn btn-success btn-xs" href="{{ url('aturjadwal/'.$id_jadwal.'/'.$key->id.'/uploadquiz') }}"><i
-                                            class="fa fa-upload"></i> Upload </a></td>
+                                    <td style="text-align:center;width:5%"><a class="btn btn-success btn-xs"
+                                            href="{{ url('aturjadwal/'.$id_jadwal.'/'.$key->id.'/uploadquiz') }}"><i
+                                                class="fa fa-upload"></i> Upload </a></td>
                                 </tr>
                                 @endforeach
                             </tbody>

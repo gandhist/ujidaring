@@ -94,19 +94,6 @@ class JadwalController extends Controller
         $getIdJadwal = JadwalModel::create($data); 
         $idJadwal = $getIdJadwal->id;
 
-        // Insert ke table rowndown
-        $from = Carbon::parse(Carbon::createFromFormat('d/m/Y', $request->tgl_awal)->format('Y-m-d'));
-        $to = Carbon::parse(Carbon::createFromFormat('d/m/Y', $request->tgl_akhir)->format('Y-m-d'));
-        $dates = [];
-        
-        for($d = $from; $d->lte($to); $d->addDay()) {
-            $data_schedule['id_jadwal'] = $idJadwal;
-            $data_schedule['tanggal'] = $d->format('Y-m-d'); 
-            $data_schedule['created_by'] = Auth::id();
-            $data_schedule['created_at'] = Carbon::now()->toDateTimeString();
-            JadwalRundown::create($data_schedule);
-        }
-
         if($request->hasFile('excel_peserta')){
             // menangkap file excel
             $file = $request->file('excel_peserta');
@@ -140,6 +127,33 @@ class JadwalController extends Controller
                     Peserta::find($id_peserta)->update($user_id);
                 }
             }
+
+                // Insert ke table rowndown
+                $from = Carbon::parse(Carbon::createFromFormat('d/m/Y', $request->tgl_awal)->format('Y-m-d'));
+                $to = Carbon::parse(Carbon::createFromFormat('d/m/Y', $request->tgl_akhir)->format('Y-m-d'));
+                $dates = [];
+                
+                for($d = $from; $d->lte($to); $d->addDay()) {
+                    // Cek hari minggu
+                    // $nameofday = strtolower($d->format('l'));
+                    // if($nameofday!="sunday"){
+                        $data_schedule['id_jadwal'] = $idJadwal;
+                        $data_schedule['tanggal'] = $d->format('Y-m-d'); 
+                        $data_schedule['created_by'] = Auth::id();
+                        $data_schedule['created_at'] = Carbon::now()->toDateTimeString();
+                        JadwalRundown::create($data_schedule);
+
+                        $idpesertaall = Peserta::select('id')->where("id_kelompok",$idJadwal)->get()->toArray();
+                        foreach ($idpesertaall as $key) {
+                            $data_absen['id_peserta'] = $key['id']; 
+                            $data_absen['tanggal'] = $d->format('Y-m-d');
+                            $data_absen['created_by'] = Auth::id();
+                            $data_absen['created_at'] = Carbon::now()->toDateTimeString();
+                            AbsenModel::create($data_absen); 
+                        }
+
+                    // }
+                }
 
         if ($files = $request->file('gambarJadwal')) {
             $destinationPath = 'uploads/GambarJadwal'; // upload path
@@ -300,7 +314,7 @@ class JadwalController extends Controller
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
         $jawaban_evaluasi = JawabanEvaluasi::where('id_peserta','=',$id_peserta)->where('id_jadwal','=',$id_jadwal)->groupBy('id_instruktur')->groupBy('tanggal')->orderBy('tanggal','asc')->orderBy('id_instruktur','asc')->get();
-        $modul_rundown = ModulRundown::whereHas('jadwal_rundown_r', function ($query) use($id_jadwal){
+        $modul_rundown = ModulRundown::orderBy('id_rundown','asc')->whereHas('jadwal_rundown_r', function ($query) use($id_jadwal){
             return $query->where('id_jadwal', '=', $id_jadwal);
         })->get();
         $jadwalrundown = JadwalRundown::where('id_jadwal',$id_jadwal)->orderBy('tanggal','asc')->get();
@@ -503,7 +517,7 @@ class JadwalController extends Controller
         $data = JadwalModel::find($id);
         $id_jadwal = $id;
         $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
-        $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta)->get();
+        $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta)->where('tanggal',Carbon::now()->format('Y-m-d'))->get();
         $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
@@ -518,8 +532,17 @@ class JadwalController extends Controller
         $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta);
 
         if($request->f_tgl_awal != null && $request->f_tgl_akhir != null){
-            $absen->whereBetween('tanggal', [Carbon::createFromFormat('d/m/Y',$request->f_tgl_awal), Carbon::createFromFormat('d/m/Y',$request->f_tgl_akhir)]);
+            $absen->whereBetween('tanggal', [Carbon::createFromFormat('d/m/Y',$request->f_tgl_awal)->format('Y-m-d'), Carbon::createFromFormat('d/m/Y',$request->f_tgl_akhir)->format('Y-m-d')]);
         }
+
+        if($request->jenis_absen != null && $request->jenis_absen != null){
+            if($request->jenis_absen=="absen"){
+                $absen->whereNotNull('jam_cek_in');
+            }else if ($request->jenis_absen=="belumabsen"){
+                $absen->whereNull('jam_cek_in');
+            }
+        }
+
         $absen->get();
         $absen = $absen->get();
 
