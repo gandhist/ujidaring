@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\MasterSertifikatAlat;
 use App\MasterModul;
+use DB;
 
 class ChainController extends Controller
 {
@@ -16,6 +17,19 @@ class ChainController extends Controller
 public function getDataModul(Request $request){
     return $data = MasterModul::where('id_bid_srtf_alat', '=', $request->id_sert_alat)
         ->get();
+}
+
+public function chained_prov(Request $req){
+    if ($req->prov) {
+        return $data = DB::table('ms_kota')
+            ->where('provinsi_id', '=', $req->prov)
+            ->get(['id','nama as text']);
+    }
+    else {
+        return $data = DB::table('ms_kota')
+            ->where('id', '=', $req->kota)
+            ->get(['provinsi_id']);
+    }
 }
 
 }

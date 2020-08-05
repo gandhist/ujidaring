@@ -6,7 +6,9 @@
     .checked {
         color: orange;
     }
-
+    th{
+        white-space: nowrap;
+    }
 </style>
 <section class="content-header">
     <h1><a href="{{ url('jadwal/peserta/'.$data->id) }}" class="btn btn-md bg-purple"><i
@@ -140,7 +142,7 @@
                                                 class="fa fa-times"></i></button>
                                     </div>
                                 </div> -->
-                            <div class="box-body">
+                            <div class="box-body withscroll">
                                 <table id="custom-table"
                                     class="table table-striped table-bordered dataTable customTable">
                                     <thead>
@@ -210,19 +212,21 @@
                                                 class="fa fa-times"></i></button>
                                     </div>
                                 </div> -->
-                            <div class="box-body">
+                            <div class="box-body withscroll">
                                 <table id="custom-table"
                                     class="table table-striped table-bordered dataTable customTable">
                                     <thead>
                                         <tr>
                                             <th>Tanggal</th>
                                             <th>Modul</th>
+                                            <th>Jumlah Soal</th>
                                             <th>Pre Quiz Benar</th>
                                             <th>Pre Quiz Salah</th>
+                                            <th>Jumlah Soal</th>
                                             <th>Post Quiz Benar</th>
                                             <th>Post Quiz Salah</th>
                                             <th>Tugas Mandiri</th>
-                                            <th>Total Nilai</th>
+                                            <th>Nilai</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -235,6 +239,8 @@
 
                                             @else
                                             @php
+                                            $jumlahsoalpre = DB::table('soal_pg_pre')->where('id_jadwal_modul','=',$key->id_jadwal_modul)->where('deleted_by','=',null)->count(); 
+                                            $jumlahsoalpost = DB::table('soal_pg_post')->where('id_jadwal_modul','=',$key->id_jadwal_modul)->where('deleted_by','=',null)->count(); 
                                             $rowspan =
                                             DB::table('modul_rundown')->where('id_rundown','=',$key->id_rundown)->where('deleted_by','=',null)->count();
                                             @endphp
@@ -243,6 +249,7 @@
                                             </td>
                                             @endif
                                             <td>{{$key->jadwal_modul_r->modul_r->modul}}</td>
+                                            <td style="width:5%;text-align:right">{{$jumlahsoalpre}}</td>
                                             @php
                                             $prequizbenar =
                                             DB::table('jawaban_peserta_pg_pre')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',1)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
@@ -252,14 +259,35 @@
                                             DB::table('jawaban_peserta_pg_post')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',1)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
                                             $postquizsalah =
                                             DB::table('jawaban_peserta_pg_post')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',0)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                            
+                                            if($jumlahsoalpre>0){
+                                                $jawpre = $prequizbenar/$jumlahsoalpre*100;
+                                            }else{
+                                                $jawpre = 0;
+                                            }
 
-                                            $nilaiakhir = ($prequizbenar+$postquizbenar)*10/2;
+                                            if($jumlahsoalpost>0){
+                                                $jawpost = $postquizbenar/$jumlahsoalpost*100;
+                                            }else{
+                                                $jawpost = 0;
+                                            }
+                                            
+                                            if($jumlahsoalpre==0 && $jumlahsoalpost==0){
+                                                $nilaiakhir = -1;
+                                            }else if ($jumlahsoalpre==0){
+                                                $nilaiakhir = $jawpost;
+                                            }else if ($jumlahsoalpost==0){
+                                                $nilaiakhir = $jawpre;
+                                            }else{
+                                                $nilaiakhir = ($jawpre + $jawpost)/2;
+                                            }
                                             @endphp
-                                            <td style="width:10%;text-align:right">{{$prequizbenar}}</td>
-                                            <td style="width:10%;text-align:right">{{$prequizsalah}}</td>
-                                            <td style="width:10%;text-align:right">{{$postquizbenar}}</td>
-                                            <td style="width:10%;text-align:right">{{$postquizsalah}}</td>
-                                            <td style="width:10%;text-align:center">
+                                            <td style="width:5%;text-align:right">{{$prequizbenar}}</td>
+                                            <td style="width:5%;text-align:right">{{$prequizsalah}}</td>
+                                            <td style="width:5%;text-align:right">{{$jumlahsoalpost}}</td>
+                                            <td style="width:5%;text-align:right">{{$postquizbenar}}</td>
+                                            <td style="width:5%;text-align:right">{{$postquizsalah}}</td>
+                                            <td style="width:5%;text-align:center">
                                                 @php
                                                 $jumlahtm =
                                                 DB::table('jawaban_tm')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
@@ -275,12 +303,14 @@
                                                 @endif
                                             </td>
                                             <td style="width:7%;text-align:right"><b>
-                                                    @if($nilaiakhir < 60 && $jumlahtm>0)
+                                                        @if($nilaiakhir < 60 && $jumlahtm>0)
                                                         60*
                                                         @elseif($nilaiakhir>=60)
-                                                        {{$nilaiakhir}}
+                                                        {{$nilaiakhir}} (Lulus)
+                                                        @elseif($nilaiakhir==-1)
+                                                        Tidak Ada Quiz
                                                         @else
-                                                        Tidak Lulus
+                                                        {{$nilaiakhir}} (Tidak Lulus)
                                                         @endif
                                                 </b></td>
                                             @php
@@ -305,7 +335,7 @@
                                                 class="fa fa-times"></i></button>
                                     </div>
                                 </div> -->
-                            <div class="box-body">
+                            <div class="box-body withscroll">
                                 <table id="custom-table"
                                     class="table table-striped table-bordered dataTable customTable">
                                     <thead>
@@ -350,7 +380,7 @@
                         </div>
 
                         <div id="presensi" class="tab-pane fade in">
-                            <div class="box-body">
+                            <div class="box-body withscroll">
                                 <table id="custom-table"
                                     class="table table-striped table-bordered dataTable customTable">
                                     <thead>
@@ -431,7 +461,7 @@
                                                 class="fa fa-times"></i></button>
                                     </div>
                                 </div> -->
-                            <div class="box-body">
+                            <div class="box-body withscroll">
                                 <table id="custom-table"
                                     class="table table-striped table-bordered dataTable customTable">
                                     <thead>
@@ -519,7 +549,7 @@
             <!-- Modal Penilaian -->
 
             <div class="modal fade" id="modal_{{$Peserta->id}}" role="dialog">
-                <div class="modal-dialog modal-lg" style="width:1500px">
+                <div class="modal-dialog modal-lg">
 
                     <!-- Modal Essay-->
                     <div class="modal-content">
@@ -533,7 +563,7 @@
                                     id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
                                     @method("PATCH")
                                     @csrf
-                                    <div class="box-body no-padding">
+                                    <div class="box-body no-padding withscroll">
                                         <br>
                                         <table class="table table-condensed" id="tableModalDetailAhli">
                                             <thead>
@@ -597,7 +627,7 @@
             </div>
 
             <div class="modal fade" id="modal_jawab_{{$Peserta->id}}" role="dialog">
-                <div class="modal-dialog modal-lg" style="width:1500px">
+                <div class="modal-dialog modal-lg">
 
                     <!-- Modal Essay Jawab-->
                     <div class="modal-content">
@@ -611,7 +641,7 @@
                                     id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
                                     @method("PATCH")
                                     @csrf
-                                    <div class="box-body no-padding">
+                                    <div class="box-body no-padding withscroll">
                                         <br>
                                         <table class="table table-condensed" id="tableModalDetailAhli">
                                             <thead>
@@ -669,7 +699,7 @@
 
             <!-- Modal TM -->
             <div class="modal fade" id="modal_tm" role="dialog">
-                <div class="modal-dialog modal-lg" style="width:1500px">
+                <div class="modal-dialog modal-lg">
 
                     <!-- Modal content-->
                     <div class="modal-content">
@@ -677,7 +707,7 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title"><b id="title-modal"></b></h4>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body withscroll">
                             <!-- <div class="box">
                                 <div class="box-body no-padding"> -->
                             <table class="table table-condensed tableModalDetail" id="tableModalTm">
@@ -705,7 +735,7 @@
 
             <!-- Modal Quisioner -->
             <div class="modal fade" id="modal_qs" role="dialog">
-                <div class="modal-dialog modal-lg" style="width:1500px">
+                <div class="modal-dialog modal-lg" >
 
                     <!-- Modal content-->
                     <div class="modal-content">
@@ -713,7 +743,7 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title"><b id="title-modal-qs"></b></h4>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body withscroll">
                             <!-- <div class="box">
                                 <div class="box-body no-padding"> -->
                             <table class="table table-condensed tableModalDetail" id="tableModalQs">
@@ -830,8 +860,8 @@
 
         var dt = $('#custom-table').DataTable({
             "lengthMenu": [
-                [10, 20, 50],
-                [10, 20, 50]
+                [30, 50, 100],
+                [30, 50, 100]
             ],
             "scrollX": true,
             "scrollY": $(window).height() - 255,

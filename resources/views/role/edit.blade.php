@@ -16,7 +16,7 @@
 
     <!-- Main content -->
     <section class="content">
-    	<div class="row">
+    	<div class="row box-custom">
 
 	      <div class="col-md-6  col-md-offset-3">
 

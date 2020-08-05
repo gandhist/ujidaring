@@ -99,8 +99,8 @@
 
         var dt = $('#custom-table,#custom-table2').DataTable({
             "lengthMenu": [
-                [5, 10, 50],
-                [5, 10, 50]
+                [30, 50, 100],
+                [30, 50, 100]
             ],
             "scrollX": true,
             "scrollY": $(window).height() - 255,

@@ -100,7 +100,13 @@
 
       <li class="treeview">
         <a href="{{ url('mastermodul') }}">
-          <i class="fa fa-dashboard"></i> <span>Mater Modul</span>
+          <i class="fa fa-dashboard"></i> <span>Master Modul</span>
+        </a>
+      </li>
+
+      <li class="treeview">
+        <a href="{{ url('mastertuk') }}">
+          <i class="fa fa-dashboard"></i> <span>Master TUK</span>
         </a>
       </li>
 
