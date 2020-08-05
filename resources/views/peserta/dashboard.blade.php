@@ -54,15 +54,17 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group list-group-flush"><a target="_blank" href="{{ url($peserta->jadwal_r->pdf_jadwal) }}" class="btn btn-outline-info">Lihat Jadwal</a></li>
                 <li class="list-group list-group-flush"><a target="_blank" href="{{ url('peserta/presensi') }}" class="btn btn-outline-info">Absen</a></li>
+                @if ($is_pkl)
                 <li class="list-group list-group-flush">
                   <a href="{{ url('peserta/makalah') }}" class="btn btn-outline-info">Upload Makalah</a>
                 </li>
-                @if ($is_pre_today)
+                @endif
+                @if ($is_pre_quis)
                   <li class="list-group list-group-flush">
                     <a href="{{ url('peserta/quis/pre') }}" class="btn btn-outline-info">Kerjakan Pre Quis</a>
                   </li>
                 @endif
-                @if ($is_pre_today)
+                @if ($is_post_quis)
                   <li class="list-group list-group-flush">
                     <a href="{{ url('peserta/quis/post') }}" class="btn btn-outline-info">Kerjakan Post Quis</a>
                   </li>
@@ -72,7 +74,7 @@
                     <a href="{{ url('peserta/ujian/pg') }}" class="btn btn-outline-info">Mulai Ujian</a>
                   </li>
                 @else
-                  @if($is_allow_tugas)
+                  @if($is_tugas)
                   <li class="list-group list-group-flush">
                     <a href="{{ url('peserta/tugas') }}" class="btn btn-outline-info">Kerjakan Tugas</a>
                   </li>
