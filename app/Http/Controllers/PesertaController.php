@@ -20,6 +20,7 @@ use App\KirimWa;
 use App\ModulRundown;
 use App\MasterModul;
 use App\KelompokPeserta;
+use App\PesertaQuis;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
@@ -63,6 +64,10 @@ class PesertaController extends Controller
         $is_post_today = $this->is_post_today();
         $is_ketua = false;
         $anggota_klp = "";
+        $cek_pkl = $peserta->jadwal_r->f_pkl;
+        $cek_pkl != null ? $is_pkl = true : $is_pkl = false; // makalah
+        $cek_tgs = $peserta->jadwal_r->pdf_tugas;
+        $cek_tgs != null ? $is_tugas = true : $is_tugas = false; // tugas
         if($peserta->kelompok){
             if($peserta->kelompok->id_ketua == $peserta->id)
             $is_ketua = true;
@@ -74,7 +79,7 @@ class PesertaController extends Controller
         }
         else {
             // \LogActivity::addToLog('peserta ke menu dashboard');
-            return view('peserta.dashboard')->with(compact('peserta','is_allow_uji','is_allow_tugas','rd','is_pre_quis','is_pre_today','is_ketua','anggota_klp'));
+            return view('peserta.dashboard')->with(compact('peserta','is_allow_uji','is_allow_tugas','rd','is_pre_quis','is_post_quis','is_ketua','anggota_klp','is_pkl','is_tugas'));
         }
     }
 
@@ -291,10 +296,24 @@ class PesertaController extends Controller
         }
         $benar = JawabanPeserta::where('id_jadwal',$request->id_jadwal)
         ->where('id_peserta',$peserta->id)
-        // ->where('id_soal',$val_exp[0])
         ->where('is_true',1)->count();
-        // return $benar;
+        $salah = JawabanPeserta::where('id_jadwal',$request->id_jadwal)
+        ->where('id_peserta',$peserta->id)
+        ->where('is_true',0)->count();
         \LogActivity::addToLog("peserta menyimpan semua jawaban pilihan ganda");
+        // update status pra quis peserta
+        PesertaQuis::updateOrCreate([
+            'id_jadwal_modul' => $request->id_jadwal,
+            'id_peserta' => $peserta->id,
+            'tipe_quis' => 'akhir',
+            'created_by' => Auth::id(),
+
+        ],[
+            'benar' => $benar,
+            'salah' => $salah,
+            'status' => '1',
+            'updated_by' => Auth::id(),
+        ]);
         return response()->json([
             'status' => true,
             'message' => 'Jawaban Anda Berhasil Disimpan'

@@ -165,6 +165,7 @@ $(document).ready(function () {
     // onclick btn save
     $('#btnSelesai').on('click', function(){
         var s = $('[name^="jawaban"]').val()
+        console.log(s);
         storeData();
         // storeDataEssay();
     }) 

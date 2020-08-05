@@ -99,7 +99,7 @@ class LoginController extends Controller
     {
         $user = Auth::user();
         $user->last_login = date("Y-m-d H:i:s");
-        $user->is_login = 1;
+        $user->is_login = Auth::user()->role_id == 2 ? '1' : '0';
         $user->save();
         \LogActivity::addToLog("Login ke halaman ujian");
         

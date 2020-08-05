@@ -33,15 +33,14 @@
     <div class="row" style="margin-top:10px">
         <div class="col-lg-12">
             <div class="tab-content">
+              <form name="formAdd" id="formAdd">
+                <input type="hidden" name="id_jadwal" id="id_jadwal" value="{{ $modul_today->id }}">
                 @foreach ($pg as $key)
                 <div role="tabpanel" class="tab-pane active" id="soal-{{ $key->no_soal }}">
                     <div class="panel panel-default">
                       <div class="panel-heading">
                         <h4 class="panel-title">{{ $key->no_soal }}.  {{ $key->soal_r->soal }}</h4></div>
-                        @if($loop->first)
-                                <form name="formAdd" id="formAdd">
-                                <input type="hidden" name="id_jadwal" id="id_jadwal" value="{{ $modul_today->id }}">
-                        @endif
+                        
                       <div class="panel-body">
                         <div class="radio"> 
                           <label>
@@ -59,15 +58,15 @@
                           <label>
                             <input type="radio" onclick="is_filled($(this).attr('id'),$(this).closest('.tab-pane').attr('id'))" {{ $key->jawaban == "d" ? "checked" : "" }} name="jawaban[{{ $key->soal_r->id }}]" id="jawaban-{{ $key->soal_r->id }}d" value="{{ $key->soal_r->id }}#d">D. {{ $key->soal_r->pg_d }}</label>
                         </div>
-                        @if($loop->last)
-                            </form>
-                        @endif
+                        
                       </div>
                     </div>
                   </div>
                   <?php $soall = $loop->iteration; ?>
                   <hr>
                 @endforeach
+              </form>
+
                 
               </div>
         </div>

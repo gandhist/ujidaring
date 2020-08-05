@@ -284,7 +284,7 @@ trait GlobalFunction {
             if ($key->tanggal == $curdate) {
                 // echo $key->modul_rundown_r;
                 foreach ($key->modul_rundown_r as $mr) {
-                    if($mr->jadwal_modul_r->f_pre_quiz){
+                    if($mr->jadwal_modul_r->f_post_quiz){
                         $is_quiz[] = true;
                         // $mr->jadwal_modul_r->f_pre_quiz.'<br>';
                         // cek datanya udah ada apa belum
