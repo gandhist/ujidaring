@@ -162,9 +162,16 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('mastermodul/update','ModulController@update');
 	Route::post('modul/save','ModulController@store');
 
-	// Fungsi Chain Bidang
+	// Master Modul 
+	Route::resource('mastertuk', 'TukController');
+	// Route::get('mastermodul/{id}/edit','ModulController@edit');
+	// Route::get('mastermodul/update','ModulController@update');
+	// Route::post('modul/save','ModulController@store');
+
+	// Fungsi Chain
 	Route::post('bidang/chain','ChainController@bidang');
 	Route::post('getDataModul/chain','ChainController@getDataModul');
+	Route::post('provinsi/chain','ChainController@chained_prov');
 	
 	// Route::post('daftarkantor/filter', 'SuketControllers\DaftarKantorController@filter');
 	// end

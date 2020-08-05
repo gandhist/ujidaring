@@ -165,7 +165,7 @@
 
     <!-- Modal Soal Pre -->
     <div class="modal fade" id="modalSoalPre" role="dialog">
-        <div class="modal-dialog modal-lg" style="width:1500px">
+        <div class="modal-dialog modal-lg">
 
             <!-- Modal content-->
             <div class="modal-content">
@@ -221,7 +221,7 @@
 
     <!-- Modal Soal Post -->
     <div class="modal fade" id="modalSoalPost" role="dialog">
-        <div class="modal-dialog modal-lg" style="width:1500px">
+        <div class="modal-dialog modal-lg">
 
             <!-- Modal content-->
             <div class="modal-content">
@@ -336,41 +336,41 @@
                     }
                 }
 
-                f_durasi_pre = $("#durasi_pre_" + index).val();
-                if (f_durasi_pre != "") {
-                    file_pre = $("#pre_quiz_" + index).val();
-                    if (file_pre == "") {
-                        alert('Soal Pre Quiz ' + index + ' Harus diisi!');
-                        z = "gagal";
-                    }
-                }
+                // f_durasi_pre = $("#durasi_pre_" + index).val();
+                // if (f_durasi_pre != "") {
+                //     file_pre = $("#pre_quiz_" + index).val();
+                //     if (file_pre == "") {
+                //         alert('Soal Pre Quiz ' + index + ' Harus diisi!');
+                //         z = "gagal";
+                //     }
+                // }
 
-                f_durasi_post = $("#durasi_post_" + index).val();
-                if (f_durasi_post != "") {
-                    file_post = $("#post_quiz_" + index).val();
-                    if (file_post == "") {
-                        alert('Soal Post Quiz ' + index + ' Harus diisi!');
-                        z = "gagal";
-                    }
-                }
+                // f_durasi_post = $("#durasi_post_" + index).val();
+                // if (f_durasi_post != "") {
+                //     file_post = $("#post_quiz_" + index).val();
+                //     if (file_post == "") {
+                //         alert('Soal Post Quiz ' + index + ' Harus diisi!');
+                //         z = "gagal";
+                //     }
+                // }
 
-                f_mulai_pre = $("#awal_pre_" + index).val();
-                if (f_mulai_pre != "") {
-                    file_pre = $("#pre_quiz_" + index).val();
-                    if (file_pre == "") {
-                        alert('Soal Pre Quiz ' + index + ' Harus diisi!');
-                        z = "gagal";
-                    }
-                }
+                // f_mulai_pre = $("#awal_pre_" + index).val();
+                // if (f_mulai_pre != "") {
+                //     file_pre = $("#pre_quiz_" + index).val();
+                //     if (file_pre == "") {
+                //         alert('Soal Pre Quiz ' + index + ' Harus diisi!');
+                //         z = "gagal";
+                //     }
+                // }
 
-                f_mulai_post = $("#awal_post_" + index).val();
-                if (f_mulai_post != "") {
-                    file_post = $("#post_quiz_" + index).val();
-                    if (file_post == "") {
-                        alert('Soal Post Quiz ' + index + ' Harus diisi!');
-                        z = "gagal";
-                    }
-                }
+                // f_mulai_post = $("#awal_post_" + index).val();
+                // if (f_mulai_post != "") {
+                //     file_post = $("#post_quiz_" + index).val();
+                //     if (file_post == "") {
+                //         alert('Soal Post Quiz ' + index + ' Harus diisi!');
+                //         z = "gagal";
+                //     }
+                // }
 
             }
             if (z == "gagal") {
@@ -384,8 +384,8 @@
 
         var dt = $('#custom-table').DataTable({
             "lengthMenu": [
-                [10, 20, 50],
-                [10, 20, 50]
+                [30, 50, 100],
+                [30, 50, 100]
             ],
             "scrollX": true,
             "scrollY": $(window).height() - 255,

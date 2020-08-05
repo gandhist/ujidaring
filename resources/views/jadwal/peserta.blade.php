@@ -2,6 +2,11 @@
 
 @section('content')
 <!-- Content Header (Page header) -->
+<style>
+    th{
+        white-space: nowrap;
+    }
+</style>
 <section class="content-header">
     <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
                 class="fa fa-arrow-left"></i></a> Peserta
@@ -143,11 +148,11 @@
                                 <th>No</th>
                                 <th>NIK</th>
                                 <th>Nama</th>
-                                <th style="white-space: nowrap">Tempat Lahir</th>
-                                <th style="white-space: nowrap">Tanggal Lahir</th>
-                                <th style="white-space: nowrap">No Hp</th>
-                                <th style="white-space: nowrap">Status SMS</th>
-                                <th style="white-space: nowrap">Status Login</th>
+                                <th>Tempat Lahir</th>
+                                <th>Tanggal Lahir</th>
+                                <th>No Hp</th>
+                                <th>Status SMS</th>
+                                <th>Status Login</th>
                                 <!-- <th>Pg Benar</th>
                                 <th>Pg Salah</th>
                                 <th>Essay Benar</th>
@@ -386,8 +391,8 @@
 
         var dt = $('#custom-table').DataTable({
             "lengthMenu": [
-                [20, 20, 50],
-                [20, 20, 50]
+                [30, 50, 100],
+                [30, 50, 100]
             ],
             'responsive': true,
             "scrollX": true,

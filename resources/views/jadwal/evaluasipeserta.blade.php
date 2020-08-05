@@ -71,7 +71,7 @@
             <!-- Modal Penilaian -->
 
             <div class="modal fade" id="modalLihatEval" role="dialog">
-                <div class="modal-dialog modal-lg" style="width:1500px">
+                <div class="modal-dialog modal-lg">
 
                     <!-- Modal content-->
                     <div class="modal-content">
@@ -79,7 +79,7 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title" style="text-align:left"><b id="title-modal"></b></h4>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body withscroll">
                             <!-- <div class="box">
                                 <div class="box-body no-padding"> -->
                             <table class="table table-condensed tableModalDetail" id="tableModalEvaluasi">
@@ -169,8 +169,8 @@
 
         var dt = $('#custom-table').DataTable({
             "lengthMenu": [
-                [10, 20, 50],
-                [10, 20, 50]
+                [30, 50, 100],
+                [30, 50, 100]
             ],
             "scrollX": true,
             "scrollY": $(window).height() - 255,
