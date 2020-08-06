@@ -93,10 +93,11 @@
                                         @break
 
                                         @default
-                                        
+
                                         @endswitch
                                         {{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}</td>
-                                    <td class="customselect2">
+                                    <td
+                                        class="customselect2 {{( \Carbon\Carbon::now()->toDateTimeString() > $key->tanggal) ? 'select2-disabled' : '' }}">
                                         <select class="js-example-basic-multiple"
                                             name="instruktur_{{ $loop->iteration }}[]" multiple="multiple" required>
                                             @foreach($instrukturjadwal as $datainstrukturjadwal)
@@ -112,7 +113,8 @@
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td class="customselect2">
+                                    <td
+                                        class="customselect2 {{ ( \Carbon\Carbon::now()->toDateTimeString() > $key->tanggal ) ? 'select2-disabled' : '' }}">
                                         <select class="js-example-basic-multiple" name="modul_{{ $loop->iteration }}[]"
                                             multiple="multiple" required>
                                             @foreach($JadwalModul as $dataJadwalModul)
@@ -128,9 +130,13 @@
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td style="text-align:center;width:5%"><a class="btn btn-success btn-xs"
+
+                                    <td style="text-align:center;width:5%">
+                                        <a class="btn btn-success btn-xs"
                                             href="{{ url('aturjadwal/'.$id_jadwal.'/'.$key->id.'/uploadquiz') }}"><i
-                                                class="fa fa-upload"></i> Upload </a></td>
+                                                class="fa fa-upload"></i> Upload </a>                                   
+                                    </td>
+
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -192,6 +198,10 @@
 <script type="text/javascript">
     $(function () {
         $('.js-example-basic-multiple').select2();
+
+        $(".select2-disabled").find('.select2-container--default').css('pointer-events', 'none');
+        $(".select2-disabled > .select2-container--default > .selection > .select2-selection").css(
+            'background-color', 'silver');
 
         var dt = $('#custom-table').DataTable({
             "lengthMenu": [
