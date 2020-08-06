@@ -35,7 +35,7 @@ use App\JawabanTMPeserta;
 use App\LogActivity;
 use App\JawabanPesertaPgPost;
 use App\JawabanPesertaPgPre;
-
+use App\PesertaQuis;
 use App\KelompokPeserta;
 
 class JadwalController extends Controller
@@ -476,7 +476,7 @@ class JadwalController extends Controller
                      'deleted_at' => Carbon::now()->toDateTimeString()
                  ];
                  SoalPgPostModel::where('id_jadwal_modul','=', $id_jadwal_modul)->update($user_data);
-                JawabanPesertaPgPost::where('id_jadwal_modul','=', $id_jadwal_modul)->update($user_data);
+                 JawabanPesertaPgPost::where('id_jadwal_modul','=', $id_jadwal_modul)->update($user_data);
  
                  $destinationPath = 'uploads/soal_postquiz'; // upload path
                  $file = "Soal_Postquiz_Jadwal_Modul_".$id_jadwal_modul."_".Carbon::now()->timestamp.".".$files->getClientOriginalExtension();
@@ -524,12 +524,55 @@ class JadwalController extends Controller
         return view('jadwal.absen')->with(compact('data','jumlahPeserta','absen','jumlahSoalPg','jumlahSoalEssay','id_jadwal'));
     }
 
+    public function lihatnilai($id)
+    {
+        
+        $data = JadwalModel::find($id);
+        $idjadwalmodul = JadwalModul::select('id')->where('id_jadwal',$id)->get()->toArray();
+        $datanilai = PesertaQuis::whereIn('id_jadwal_modul',$idjadwalmodul)->get();
+        
+        $id_jadwal = $id;
+        $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
+        $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta)->where('tanggal',Carbon::now()->format('Y-m-d'))->get();
+        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.lihatnilai')->with(compact('data','jumlahPeserta','absen','jumlahSoalPg','jumlahSoalEssay','id_jadwal','datanilai'));
+    }
+
     public function filter_absen(Request $request)
     {
         $id_jadwal = $request->id_jadwal;
         $data = JadwalModel::find($id_jadwal);
         $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
         $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta);
+
+        if($request->f_tgl_awal != null && $request->f_tgl_akhir != null){
+            $absen->whereBetween('tanggal', [Carbon::createFromFormat('d/m/Y',$request->f_tgl_awal)->format('Y-m-d'), Carbon::createFromFormat('d/m/Y',$request->f_tgl_akhir)->format('Y-m-d')]);
+        }
+
+        if($request->jenis_absen != null && $request->jenis_absen != null){
+            if($request->jenis_absen=="absen"){
+                $absen->whereNotNull('jam_cek_in');
+            }else if ($request->jenis_absen=="belumabsen"){
+                $absen->whereNull('jam_cek_in');
+            }
+        }
+
+        $absen->get();
+        $absen = $absen->get();
+
+        return view('jadwal.absen')->with(compact('absen','id_jadwal','data'));
+    }
+
+    public function filter_lihatnilai(Request $request)
+    {
+        $id_jadwal = $request->id_jadwal;
+        $data = JadwalModel::find($id_jadwal);
+        $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
+        // $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta);
+        $idjadwalmodul = JadwalModul::select('id')->where('id_jadwal',$id_jadwal)->get()->toArray();
+        $absen = PesertaQuis::whereIn('id_jadwal_modul',$idjadwalmodul)->get();
 
         if($request->f_tgl_awal != null && $request->f_tgl_akhir != null){
             $absen->whereBetween('tanggal', [Carbon::createFromFormat('d/m/Y',$request->f_tgl_awal)->format('Y-m-d'), Carbon::createFromFormat('d/m/Y',$request->f_tgl_akhir)->format('Y-m-d')]);

@@ -4,13 +4,15 @@
 <style>
     .custominp {
         border-radius: 5px !important;
-        border-color: #aaa !important;
         height: 80% !important;
+    }
+    .input-group{
+        width:100%;
     }
 
 </style>
 <section class="content-header">
-    <h1><a href="{{ url('mastermodul') }}" class="btn btn-md bg-purple"><i class="fa fa-arrow-left"></i></a>
+    <h1><a href="{{ url('mastertuk') }}" class="btn btn-md bg-purple"><i class="fa fa-arrow-left"></i></a>
         Tambah TUK Observasi PJK3 Mandiri
     </h1>
     <ol class="breadcrumb">
@@ -30,7 +32,7 @@
                                 <tr>
                                     <td colspan="3" style="padding-bottom: 2px">
                                         <div class="input-group">
-                                            <label>PJK3</label>
+                                            <!-- <label>PJK3</label> -->
                                             <select class="form-control select2" name="id_badan_usaha"
                                                 id="id_badan_usaha">
                                                 <option selected disabled value="">PJK3</option>
@@ -45,8 +47,8 @@
                                 </tr>
                                 <tr>
                                     <td colspan="3">
-                                        <div class="input-group" style="width:100%">
-                                            <label>Nama TUK Observasi</label>
+                                        <div class="input-group">
+                                            <!-- <label>Nama TUK Observasi</label> -->
                                             <input type="text" class="form-control custominp" id="id_nama_tuk"
                                                 name="id_nama_tuk" placeholder="Nama TUK Observasi">
                                         </div>
@@ -54,13 +56,13 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" style="width:100%">
-                                        <!-- <div class="input-group"> -->
-                                        <label>Alamat Jalan dan Nomor, Kelurahan, Kecamatan (Tanpa Kota)</label>
-                                        <input type="text" class="form-control custominp" id="id_alamat_tuk"
-                                            name="id_alamat_tuk"
-                                            placeholder="Alamat Jalan dan Nomor, Kelurahan, Kecamatan (Tanpa Kota)">
-                                        <!-- </div> -->
+                                    <td colspan="3" >
+                                        <div class="input-group">
+                                            <!-- <label>Alamat Jalan dan Nomor, Kelurahan, Kecamatan (Tanpa Kota)</label> -->
+                                            <input type="text" class="form-control custominp" id="id_alamat_tuk"
+                                                name="id_alamat_tuk"
+                                                placeholder="Alamat Jalan dan Nomor, Kelurahan, Kecamatan (Tanpa Kota)">
+                                        </div>
                                         <span id="id_alamat_tuk"
                                             class="help-block customspan">{{ $errors->first('id_alamat_tuk') }}</span>
                                     </td>
@@ -68,7 +70,7 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group">
-                                            <label>Provinsi</label>
+                                            <!-- <label>Provinsi</label> -->
                                             <select class="form-control select2" name="id_provinsi" id="id_provinsi">
                                                 <option selected disabled value="">Provinsi</option>
                                                 @foreach($provinsi as $key)
@@ -88,7 +90,7 @@
 
                                     <td style="width:49%">
                                         <div class="input-group">
-                                            <label>Kota</label>
+                                            <!-- <label>Kota</label> -->
                                             <select class="form-control select2" name="id_kota" id="id_kota">
                                                 <option selected disabled value="">Kota</option>
                                                 <!-- @foreach($kota as $key)
@@ -104,7 +106,7 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <label>No Tlp</label>
+                                            <!-- <label>No Tlp</label> -->
                                             <input type="text" class="form-control custominp" id="id_no_tlp"
                                                 name="id_no_tlp" placeholder="No Tlp">
                                         </div>
@@ -119,7 +121,7 @@
 
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <label>Email</label>
+                                            <!-- <label>Email</label> -->
                                             <input type="text" class="form-control custominp" id="id_email"
                                                 name="id_email" placeholder="Email">
                                         </div>
@@ -129,7 +131,7 @@
                                 <tr>
                                     <td colspan="3">
                                         <div class="input-group" style="width:100%">
-                                            <label>Instansi Pengelola</label>
+                                            <!-- <label>Instansi Pengelola</label> -->
                                             <input type="text" class="form-control custominp" id="id_pengelola"
                                                 name="id_pengelola" placeholder="Instansi Pengelola">
                                         </div>
@@ -140,7 +142,7 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <label>Nama Kontak Person</label>
+                                            <!-- <label>Nama Kontak Person</label> -->
                                             <input type="text" class="form-control custominp" id="id_nama_kp"
                                                 name="id_nama_kp" placeholder="Nama Kontak Person">
                                         </div>
@@ -155,7 +157,7 @@
 
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <label>Jabatan Kontak Person</label>
+                                            <!-- <label>Jabatan Kontak Person</label> -->
                                             <input type="text" class="form-control custominp" id="id_jab_kp"
                                                 name="id_jab_kp" placeholder="Jabatan Kontak Person">
                                         </div>
@@ -166,7 +168,7 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <label>No HP Kontak Person</label>
+                                            <!-- <label>No HP Kontak Person</label> -->
                                             <input type="text" class="form-control custominp" id="id_hp_kp"
                                                 name="id_hp_kp" placeholder="No HP Kontak Person">
                                         </div>
@@ -181,18 +183,18 @@
 
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <label>Email Kontak Person</label>
-                                            <input type="text" class="form-control custominp" id="id_email_kp"
-                                                name="id_email_kp" placeholder="Email Kontak Person">
+                                            <!-- <label>Email Kontak Person</label> -->
+                                            <input type="text" class="form-control custominp" id="id_eml_kp"
+                                                name="id_eml_kp" placeholder="Email Kontak Person">
                                         </div>
-                                        <span id="id_email_kp" class="help-block customspan"></span>
+                                        <span id="id_eml_kp" class="help-block customspan"></span>
                                     </td>
                                 </tr>
 
                                 <tr>
                                     <td colspan="3" style="width:100%">
                                         <!-- <div class="input-group"> -->
-                                        <label>Keterangan</label>
+                                        <!-- <label>Keterangan</label> -->
                                         <input type="text" class="form-control custominp" id="id_keterangan"
                                             name="id_keterangan" placeholder="Keterangan">
                                         <!-- </div> -->
@@ -204,7 +206,7 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <label>No Rekening Bank</label>
+                                            <!-- <label>No Rekening Bank</label> -->
                                             <input type="text" class="form-control custominp" id="id_no_rek"
                                                 name="id_no_rek" placeholder="No Rekening Bank">
                                         </div>
@@ -219,7 +221,7 @@
 
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <label>Nama Rekening Bank</label>
+                                            <!-- <label>Nama Rekening Bank</label> -->
                                             <input type="text" class="form-control custominp" id="id_nama_rek"
                                                 name="id_nama_rek" placeholder="Nama Rekening Bank">
                                         </div>
@@ -230,9 +232,8 @@
                                 <tr>
                                     <td colspan="3" style="padding-bottom: 2px">
                                         <div class="input-group">
-                                            <label>Nama Bank</label>
-                                            <select class="form-control select2" name="id_bank"
-                                                id="id_bank">
+                                            <!-- <label>Nama Bank</label> -->
+                                            <select class="form-control select2" name="id_bank" id="id_bank">
                                                 <option selected disabled value="">Nama Bank</option>
                                                 @foreach($bank as $key)
                                                 <option value="{{ $key->id }}">{{ $key->nama_bank }}
@@ -328,7 +329,7 @@
             chainedProvinsi(url, 'id_provinsi', 'id_kota', "Kota");
         });
 
-        $('#id_no_tlp , #id_no_rek').on('input blur paste', function () {
+        $('#id_no_tlp , #id_no_rek , #id_hp_kp').on('input blur paste', function () {
             $(this).val($(this).val().replace(/\D/g, ''));
         });
 
@@ -340,7 +341,7 @@
     function store() {
         var formData = new FormData($('#formAdd')[0]);
 
-        var url = "{{ url('modul/save') }}";
+        var url = "{{ url('tuk/save') }}";
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -385,7 +386,7 @@
                 // console.log(a);
                 $(".textarea").css('border-color', 'rgb(118, 118, 118)');
                 $(".select2-selection").css('border-color', '#aaa');
-                $('.x').removeClass('has-error');
+                $('.input-group').removeClass('has-error');
                 $('.help-block').text("");
                 $.each(a.errors, function (key, value) {
                     tipeinput = $('#' + key).attr("class");
@@ -406,8 +407,9 @@
                             $('[name="' + key + '"]').next().text(
                                 value);
                         }
+                        $('span[id^="' + key + '"]').text(value);
                     }
-                    $('span[id^="' + key + '"]').show();
+
                 });
             },
             complete: function () {

@@ -143,6 +143,8 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::post('jadwal/lihatsoalpre','JadwalController@lihatsoalpre');
 		Route::post('jadwal/lihatsoalpost','JadwalController@lihatsoalpost');
 
+		Route::get('jadwal/lihatnilai/{id}','JadwalController@lihatnilai');
+		Route::post('jadwal/lihatnilai/filter', 'JadwalController@filter_lihatnilai');
 
 
 		// Daftar Kantor
@@ -185,9 +187,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Master tuk 
 	Route::resource('mastertuk', 'TukController');
-	// Route::get('mastermodul/{id}/edit','ModulController@edit');
+	Route::get('mastertuk/{id}/edit','TukController@edit');
 	// Route::get('mastermodul/update','ModulController@update');
-	// Route::post('modul/save','ModulController@store');
+	Route::post('tuk/save','TukController@store');
 
 	// Fungsi Chain
 	Route::post('bidang/chain','ChainController@bidang');
