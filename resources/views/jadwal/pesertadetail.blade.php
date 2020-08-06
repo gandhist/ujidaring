@@ -240,14 +240,16 @@
                                             @else
                                             
                                             @php
-                                            $jumlahsoalpre = DB::table('soal_pg_pre')->where('id_jadwal_modul','=',$key->id_jadwal_modul)->where('deleted_by','=',null)->count(); 
-                                            $jumlahsoalpost = DB::table('soal_pg_post')->where('id_jadwal_modul','=',$key->id_jadwal_modul)->where('deleted_by','=',null)->count(); 
                                             $rowspan = DB::table('modul_rundown')->where('id_rundown','=',$key->id_rundown)->where('deleted_by','=',null)->count();
                                             @endphp
                                             <td style="width:5%;text-align:center" rowspan="{{$rowspan}}">
                                                 {{ \Carbon\Carbon::parse($key->jadwal_rundown_r->tanggal)->isoFormat("DD MMMM YYYY") }}
                                             </td>
                                             @endif
+                                            @php
+                                            $jumlahsoalpre = DB::table('soal_pg_pre')->where('id_jadwal_modul','=',$key->id_jadwal_modul)->where('deleted_by','=',null)->count(); 
+                                            $jumlahsoalpost = DB::table('soal_pg_post')->where('id_jadwal_modul','=',$key->id_jadwal_modul)->where('deleted_by','=',null)->count(); 
+                                            @endphp
                                             <td>{{$key->jadwal_modul_r->modul_r->modul}}</td>
                                             <td style="width:5%;text-align:right">{{$jumlahsoalpre}}</td>
                                             @php
