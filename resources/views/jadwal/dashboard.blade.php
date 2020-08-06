@@ -215,7 +215,7 @@
                     <!-- small box -->
                     <div class="small-box bg-red">
                         <div class="inner">
-                            <h3>-</h3>
+                            <h3>{{$jumlahPeserta}}</h3>
                             <p>Lihat Nilai</p>
                         </div>
                         <div class="icon">

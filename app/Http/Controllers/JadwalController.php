@@ -17,6 +17,7 @@ use App\Imports\SoalPgImport;
 use App\Imports\SoalEssayImport;
 use App\Imports\SoalPgPreImport;
 use App\Imports\SoalPgPostImport;
+use App\Exports\PesertaQuisExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -555,6 +556,12 @@ class JadwalController extends Controller
         return view('jadwal.lihatnilai')->with(compact('data','jumlahPeserta','absen','jumlahSoalPg','jumlahSoalEssay','id_jadwal','datanilai'));
     }
 
+    public function nilaiexport($id)
+    {
+        return Excel::download(new PesertaQuisExport, 'NilaiPeserta.xlsx');
+        dd('x');
+    }
+
     public function filter_absen(Request $request)
     {
         $id_jadwal = $request->id_jadwal;
@@ -586,25 +593,25 @@ class JadwalController extends Controller
         $data = JadwalModel::find($id_jadwal);
         // $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
         // $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta);
-        // $idjadwalmodul = JadwalModul::select('id')->where('id_jadwal',$id_jadwal)->get()->toArray();
-        $absen = PesertaQuis::where('id_jadwal_modul',$idjadwalmodul)->get();
-
+        $idjadwalmodul = JadwalModul::select('id')->where('id_jadwal',$id_jadwal)->get()->toArray();
+        $datanilai = PesertaQuis::whereIn('id_jadwal_modul',$idjadwalmodul);
+        // dd(Carbon::createFromFormat('d/m/Y',$request->f_tgl_awal)->format('Y-m-d'));
         if($request->f_tgl_awal != null && $request->f_tgl_akhir != null){
-            $absen->whereBetween('tanggal', [Carbon::createFromFormat('d/m/Y',$request->f_tgl_awal)->format('Y-m-d'), Carbon::createFromFormat('d/m/Y',$request->f_tgl_akhir)->format('Y-m-d')]);
+            $datanilai->whereBetween('created_at', [Carbon::createFromFormat('d/m/Y',$request->f_tgl_awal)->format('Y-m-d 00:00:00'), Carbon::createFromFormat('d/m/Y',$request->f_tgl_akhir)->format('Y-m-d 23:59:59')]);
         }
 
-        if($request->jenis_absen != null && $request->jenis_absen != null){
-            if($request->jenis_absen=="absen"){
-                $absen->whereNotNull('jam_cek_in');
-            }else if ($request->jenis_absen=="belumabsen"){
-                $absen->whereNull('jam_cek_in');
-            }
-        }
+        // if($request->jenis_absen != null && $request->jenis_absen != null){
+        //     if($request->jenis_absen=="absen"){
+        //         $absen->whereNotNull('jam_cek_in');
+        //     }else if ($request->jenis_absen=="belumabsen"){
+        //         $absen->whereNull('jam_cek_in');
+        //     }
+        // }
 
-        $absen->get();
-        $absen = $absen->get();
+        $datanilai->get();
+        $datanilai = $datanilai->get();
 
-        return view('jadwal.absen')->with(compact('absen','id_jadwal','data'));
+        return view('jadwal.lihatnilai')->with(compact('datanilai','id_jadwal','data'));
     }
 
     public function instruktur($id)
