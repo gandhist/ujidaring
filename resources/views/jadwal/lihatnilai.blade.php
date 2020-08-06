@@ -2,29 +2,17 @@
 
 @section('content')
 <!-- Content Header (Page header) -->
-<style>
-    .customselect2 {
-        width: 45%;
-    }
-
-    .customselect2>.select2-container {
-        width: 100% !important;
-    }
-
-    .select2-selection__choice {
-        color: black !important;
-    }
-
-</style>
 <section class="content-header">
-    <h1><a href="{{ url('jadwal/'.$id_jadwal.'/dashboard') }}" class="btn btn-md bg-purple"><i
-                class="fa fa-arrow-left"></i></a> Atur Jadwal
+    <h1><a href="{{ url('jadwal/'.$data->id.'/dashboard') }}" class="btn btn-md bg-purple"><i
+                class="fa fa-arrow-left"></i></a> Daftar Nilai Peserta
         {{-- <small>it all starts here</small>  --}}
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active"><a href="#">Atur Jadwal</a></li>
+        <li class="active"><a href="#">Absen</a></li>
     </ol>
+
+
 </section>
 
 <!-- Main content -->
@@ -38,114 +26,91 @@
             </div>
             @endif
             <!-- MultiStep Form -->
-
+            <form action="{{ url('jadwal/absen/filter') }}" enctype="multipart/form-data" name="filterData"
+                id="filterData" method="post">
+                @csrf
+                <input type="hidden" name="id_jadwal" value="{{$data->id}}">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="box-body">
+                            <div class="table-responsive" style="margin-left: -18px;">
+                                <table class="table no-margin">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:5%">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon customInput">Tanggal</span>
+                                                    <input id="f_tgl_awal" name="f_tgl_awal"
+                                                        value="{{ request()->get('f_tgl_awal') }}" autocomplete="off"
+                                                        data-provide="datepicker" data-date-format="dd/mm/yyyy"
+                                                        type="text" class="form-control customInput"
+                                                        placeholder="Tgl Awal">
+                                                    <span class="input-group-addon customInput">s/d</span>
+                                                    <input id="f_tgl_akhir" name="f_tgl_akhir"
+                                                        value="{{ request()->get('f_tgl_akhir') }}" autocomplete="off"
+                                                        data-provide="datepicker" data-date-format="dd/mm/yyyy"
+                                                        type="text" class="form-control customInput"
+                                                        placeholder="Tgl Akhir">
+                                                </div>
+                                            </th>
+                                            <!-- <th style="width:16%">
+                                                <div class="input-group">
+                                                    <select class="form-control select2" name="jenis_absen"
+                                                        id="jenis_absen" required>
+                                                        <option value="all">All</option>
+                                                        <option value="absen" {{ request()->get("jenis_absen")=="absen" ? "selected" : "" }} >Sudah Absen</option>
+                                                        <option value="belumabsen" {{ request()->get("jenis_absen")=="belumabsen" ? "selected" : "" }} >Belum Absen</option>
+                                                    </select>
+                                                </div>
+                                            </th> -->
+                                            <th style="text-align:left;width:5%">
+                                                <button type="submit" class="btn btn-sm btn-info"> <i
+                                                        class="fa fa-filter"></i>
+                                                    Filter</button>
+                                            </th>
+                                            <th style="text-align:left">
+                                                <a href="{{ url('jadwal/absen', $id_jadwal) }}"
+                                                    class="btn btn-sm btn-default"> <i class="fa fa-refresh"></i>
+                                                    Reset</a>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
             <div class="row">
                 <div class="col-md-12">
-                    <h3>Jadwal Perhari</h3>
-                    <form action="{{ url('jadwal/aturjadwalstore') }}" class="form-horizontal" id="formAdd"
-                        name="formAdd" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="jumlah" value="{{count($rundown)}}">
-                        <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
-
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Tanggal</th>
-                                    <th>Instruktur</th>
-                                    <th>Modul</th>
-                                    <th>Quiz</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($rundown as $key)
-                                <tr>
-                                    <input type="hidden" name="id_rowdown_{{ $loop->iteration }}" value="{{$key->id}}">
-                                    <td style="width:1%">{{ $loop->iteration }}</td>
-                                    <td>
-                                        @switch(\Carbon\Carbon::parse($key->tanggal)->format('l'))
-                                        @case("Sunday")
-                                        Minggu,
-                                        @break
-
-                                        @case("Monday")
-                                        Senin,
-                                        @break
-
-                                        @case("Tuesday")
-                                        Selasa,
-                                        @break
-
-                                        @case("Wednesday")
-                                        Rabu,
-                                        @break
-
-                                        @case("Thursday")
-                                        Kamis,
-                                        @break
-
-                                        @case("Friday")
-                                        Jumat,
-                                        @break
-
-                                        @case("Saturday")
-                                        Sabtu,
-                                        @break
-
-                                        @default
-
-                                        @endswitch
-                                        {{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}</td>
-                                    <td
-                                        class="customselect2 {{( \Carbon\Carbon::now()->toDateTimeString() > $key->tanggal) ? 'select2-disabled' : '' }}">
-                                        <select class="js-example-basic-multiple"
-                                            name="instruktur_{{ $loop->iteration }}[]" multiple="multiple" required>
-                                            @foreach($instrukturjadwal as $datainstrukturjadwal)
-                                            <option value="{{$datainstrukturjadwal->id}}" @php
-                                                $selected=DB::table('instruktur_rundown')->
-                                                select('id')->where('id_jadwal_instruktur','=',$datainstrukturjadwal->id)->where('id_rundown','=',$key->id)->where('deleted_by','=',null)->first();
-                                                if($selected!=null){
-                                                echo "selected";
-                                                }
-                                                @endphp
-                                                >
-                                                {{$datainstrukturjadwal->instruktur_r->nama}}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td
-                                        class="customselect2 {{ ( \Carbon\Carbon::now()->toDateTimeString() > $key->tanggal ) ? 'select2-disabled' : '' }}">
-                                        <select class="js-example-basic-multiple" name="modul_{{ $loop->iteration }}[]"
-                                            multiple="multiple" required>
-                                            @foreach($JadwalModul as $dataJadwalModul)
-                                            <option value="{{$dataJadwalModul->id}}" @php
-                                                $selected=DB::table('modul_rundown')->
-                                                select('id')->where('id_jadwal_modul','=',$dataJadwalModul->id)->where('id_rundown','=',$key->id)->where('deleted_by','=',null)->first();
-                                                if($selected!=null){
-                                                echo "selected";
-                                                }
-                                                @endphp
-                                                >
-                                                {{$dataJadwalModul->modul_r->modul}}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-
-                                    <td style="text-align:center;width:5%">
-                                        <a class="btn btn-success btn-xs"
-                                            href="{{ url('aturjadwal/'.$id_jadwal.'/'.$key->id.'/uploadquiz') }}"><i
-                                                class="fa fa-upload"></i> Upload </a>                                   
-                                    </td>
-
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <div class="box-footer" style="text-align:left">
-                            <button type="submit" class="btn btn-md btn-info"> <i class="fa fa-save"></i>
-                                Simpan</button>
-                        </div>
-                    </form>
+                    <!-- <h3>Daftar Absensi Peserta</h3> -->
+                    <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>NIK</th>
+                                <th>Nama</th>
+                                <th>Tanggal</th>
+                                <th>Tipe Quiz</th>
+                                <th>Benar</th>
+                                <th>Salah</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($datanilai as $key)
+                            <tr>
+                                <td style="width:1%"></td>
+                                <td>{{ $key->peserta_r->nik }}</td>
+                                <td style="text-align:left;width:40%">{{ $key->peserta_r->nama }}</td>
+                                <td style="text-align:center;width:8%">
+                                    {{ \Carbon\Carbon::parse($key->created_at)->isoFormat("DD MMMM YYYY") }}</td>
+                                <td>{{ ucwords($key->tipe_quis) }}</td>
+                                <td>{{ $key->benar }}</td>
+                                <td>{{ $key->salah }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -155,7 +120,36 @@
     </div>
     <!-- /.box -->
 
-    <!-- modal lampiran -->
+    <!-- modal konfirmasi -->
+    <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formDelete"
+            name="formDelete" method="post" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" value="" name="idHapusData" id="idHapusData">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span
+                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Konfirmasi</h4>
+                    </div>
+                    <div class="modal-body" id="konfirmasi-body">
+                        Apakah anda ingin mengirim account peserta?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Tidak</button>
+                        <button type="submit" class="btn btn-danger" data-id=""
+                            data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Kirim..."
+                            id="confirm-delete">Ya</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- end of modal konfirmais -->
+
+    <!-- modal foto -->
     <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-md" role="document">
@@ -179,7 +173,7 @@
             </div>
         </div>
     </div>
-    <!-- end of modal lampiran -->
+    <!-- end of modal foto -->
 
 </section>
 <!-- /.content -->
@@ -197,11 +191,6 @@
 <script src="{{ asset('AdminLTE-2.3.11/plugins/input-mask/jquery.inputmask.extensions.js')}}"></script>
 <script type="text/javascript">
     $(function () {
-        $('.js-example-basic-multiple').select2();
-
-        $(".select2-disabled").find('.select2-container--default').css('pointer-events', 'none');
-        $(".select2-disabled > .select2-container--default > .selection > .select2-selection").css(
-            'background-color', 'silver');
 
         var dt = $('#custom-table').DataTable({
             "lengthMenu": [
@@ -211,7 +200,6 @@
             "scrollX": true,
             "scrollY": $(window).height() - 255,
             "scrollCollapse": true,
-            "searching": false,
             "autoWidth": false,
             "columnDefs": [{
                 "searchable": false,
@@ -219,7 +207,11 @@
                     [3, "desc"]
                 ],
                 "targets": [0, 1]
-            }]
+            }],
+            "aaSorting": [
+                [4, "desc"],
+                [3, "asc"]
+            ]
         });
 
         dt.on('order.dt search.dt', function () {
@@ -298,6 +290,7 @@
             }
         });
 
+        $('.select2').select2();
 
         // Fungsi Update durasi ujian
         function updateDurasi(durasi, idJadwal) {

@@ -556,7 +556,9 @@
 
     $('.waktu').datetimepicker({
         locale: 'id',
-        format: 'YYYY-MM-DD HH:mm:ss'
+        format: 'YYYY-MM-DD HH:mm:ss',
+        maxDate : 'now',
+        minDate : 'now'
     });
 
 </script>

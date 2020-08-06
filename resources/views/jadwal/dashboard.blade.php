@@ -210,6 +210,23 @@
                 </div>
                 @endif
 
+                <!-- absen -->
+                <div class="col-lg-3 col-xs-6">
+                    <!-- small box -->
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3>-</h3>
+                            <p>Lihat Nilai</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-address-card" aria-hidden="true"></i>
+                        </div>
+                        <a href="{{ url('jadwal/lihatnilai', $data->id) }}" class="small-box-footer">Lihat
+                            <i class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <!-- end of absen -->
+
                 <div class="col-lg-12 col-xs-12" style="text-align:center">
                     <button onclick='tampilFoto("{{ asset("/$data->pdf_jadwal") }}","Jadwal")' type="button"
                         class="btn btn-block btn-primary btn-flat" style="font-size:16px">Klik Untuk Melihat
@@ -458,7 +475,8 @@
                             confirmButtonColor: '#AAA'
                         }).then(function () {
                             if (response.icon == "success") {
-                                window.location.href ="{{ url('jadwal/lihatkelompok/'.$data->id) }}";
+                                window.location.href =
+                                    "{{ url('jadwal/lihatkelompok/'.$data->id) }}";
                             }
                         });
                     }

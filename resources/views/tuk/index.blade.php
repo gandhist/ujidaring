@@ -318,7 +318,7 @@
                 // alert('Harap pilih satu data untuk di ubah');
             } else {
                 url = id[0];
-                window.location.href = "{{ url('mastermodul') }}/" + url + "/edit";
+                window.location.href = "{{ url('mastertuk') }}/" + url + "/edit";
             }
         });
 

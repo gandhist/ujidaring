@@ -226,7 +226,7 @@
                                             <th>Post Quiz Benar</th>
                                             <th>Post Quiz Salah</th>
                                             <th>Tugas Mandiri</th>
-                                            <th>Nilai</th>
+                                            <th>Nilai (0-100)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -238,11 +238,11 @@
                                             @if($a==$key->jadwal_rundown_r->tanggal)
 
                                             @else
+                                            
                                             @php
                                             $jumlahsoalpre = DB::table('soal_pg_pre')->where('id_jadwal_modul','=',$key->id_jadwal_modul)->where('deleted_by','=',null)->count(); 
                                             $jumlahsoalpost = DB::table('soal_pg_post')->where('id_jadwal_modul','=',$key->id_jadwal_modul)->where('deleted_by','=',null)->count(); 
-                                            $rowspan =
-                                            DB::table('modul_rundown')->where('id_rundown','=',$key->id_rundown)->where('deleted_by','=',null)->count();
+                                            $rowspan = DB::table('modul_rundown')->where('id_rundown','=',$key->id_rundown)->where('deleted_by','=',null)->count();
                                             @endphp
                                             <td style="width:5%;text-align:center" rowspan="{{$rowspan}}">
                                                 {{ \Carbon\Carbon::parse($key->jadwal_rundown_r->tanggal)->isoFormat("DD MMMM YYYY") }}
