@@ -103,6 +103,7 @@
                                 <th>NIK</th>
                                 <th>Nama</th>
                                 <th>Tanggal</th>
+                                <th>Modul</th>
                                 <th style="white-space: nowrap">Tipe Quiz</th>
                                 <th style="white-space: nowrap">Jumlah Soal</th>
                                 <th>Benar</th>
@@ -114,9 +115,10 @@
                             <tr>
                                 <td style="width:1%"></td>
                                 <td>{{ $key->peserta_r->nik }}</td>
-                                <td style="text-align:left;width:40%">{{ $key->peserta_r->nama }}</td>
+                                <td style="text-align:left;width:15%">{{ $key->peserta_r->nama }}</td>
                                 <td style="text-align:center;width:8%">
                                     {{ \Carbon\Carbon::parse($key->created_at)->isoFormat("DD MMMM YYYY") }}</td>
+                                <td style="text-align:left;width:25%">{{$key->jadwal_modul_r->modul_r->modul}}</td>
                                 <td>{{ ucwords($key->tipe_quis) }}</td>
                                 <td style="width:1%">
                                     @if(strtolower($key->tipe_quis)=="pre")
