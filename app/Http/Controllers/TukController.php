@@ -124,7 +124,12 @@ class TukController extends Controller
      */
     public function edit($id)
     {
-        dd($id);
+        $tuk = MasterTuk::find($id);
+        $badanusaha = BadanUsaha::all();
+        $provinsi = MasterProvinsi::all();
+        $kota = MasterKota::all();
+        $bank = MasterDaftarBank::all();
+        return view('tuk.edit')->with(compact('badanusaha','provinsi','kota','bank','tuk'));
     }
 
     /**

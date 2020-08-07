@@ -291,7 +291,10 @@ class JadwalController extends Controller
         $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
-        return view('jadwal.dashboard')->with(compact('data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay','instruktur','modul','jumlahabsen','jumlahJadwal','jumlahkelompok'));
+
+        $idjadwalmodul = JadwalModul::select('id')->where('id_jadwal',$id)->get()->toArray();
+        $jumlahnilaipeserta = PesertaQuis::whereIn('id_jadwal_modul',$idjadwalmodul)->count();
+        return view('jadwal.dashboard')->with(compact('jumlahnilaipeserta','data','jumlahPeserta','Peserta','jumlahSoalPg','jumlahSoalEssay','instruktur','modul','jumlahabsen','jumlahJadwal','jumlahkelompok'));
     }
 
     public function peserta($id)
@@ -545,22 +548,21 @@ class JadwalController extends Controller
         
         $data = JadwalModel::find($id);
         $idjadwalmodul = JadwalModul::select('id')->where('id_jadwal',$id)->get()->toArray();
-        $datanilai = PesertaQuis::whereIn('id_jadwal_modul',$idjadwalmodul)->get();
+        $datanilai = PesertaQuis::whereIn('id_jadwal_modul',$idjadwalmodul)->orderBy('created_at','desc')->get();
         
         $id_jadwal = $id;
-        $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
-        $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta)->where('tanggal',Carbon::now()->format('Y-m-d'))->get();
-        $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
-        $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
-        $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
-        return view('jadwal.lihatnilai')->with(compact('data','jumlahPeserta','absen','jumlahSoalPg','jumlahSoalEssay','id_jadwal','datanilai'));
+        // $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
+        // $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta)->where('tanggal',Carbon::now()->format('Y-m-d'))->get();
+        // $jumlahPeserta = Peserta::where("id_kelompok","=",$data->id_klp_peserta)->count();
+        // $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
+        // $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
+        return view('jadwal.lihatnilai')->with(compact('data','id_jadwal','datanilai'));
     }
 
-    public function nilaiexport($id)
-    {
-        return Excel::download(new PesertaQuisExport, 'NilaiPeserta.xlsx');
-        dd('x');
-    }
+    // public function nilaiexport($tglawal,$tglakhir,$idjadwal)
+    // {
+    //     return Excel::download(new PesertaQuisExport($idjadwal), 'NilaiPeserta.xlsx');
+    // }
 
     public function filter_absen(Request $request)
     {
@@ -590,28 +592,29 @@ class JadwalController extends Controller
     public function filter_lihatnilai(Request $request)
     {
         $id_jadwal = $request->id_jadwal;
-        $data = JadwalModel::find($id_jadwal);
-        // $id_klp_peserta = Peserta::select('id')->where('id_kelompok','=',$data->id_klp_peserta)->get();
-        // $absen = AbsenModel::whereIn("id_peserta",$id_klp_peserta);
-        $idjadwalmodul = JadwalModul::select('id')->where('id_jadwal',$id_jadwal)->get()->toArray();
-        $datanilai = PesertaQuis::whereIn('id_jadwal_modul',$idjadwalmodul);
-        // dd(Carbon::createFromFormat('d/m/Y',$request->f_tgl_awal)->format('Y-m-d'));
-        if($request->f_tgl_awal != null && $request->f_tgl_akhir != null){
-            $datanilai->whereBetween('created_at', [Carbon::createFromFormat('d/m/Y',$request->f_tgl_awal)->format('Y-m-d 00:00:00'), Carbon::createFromFormat('d/m/Y',$request->f_tgl_akhir)->format('Y-m-d 23:59:59')]);
+
+        if($request->jenis=="filter"){
+            // Filter
+            $data = JadwalModel::find($id_jadwal);
+            $idjadwalmodul = JadwalModul::select('id')->where('id_jadwal',$id_jadwal)->get()->toArray();
+            $datanilai = PesertaQuis::whereIn('id_jadwal_modul',$idjadwalmodul)->orderBy('created_at','desc');
+    
+            if($request->f_tgl_awal != null && $request->f_tgl_akhir != null){
+                $datanilai->whereBetween('created_at', [Carbon::createFromFormat('d/m/Y',$request->f_tgl_awal)->format('Y-m-d 00:00:00'), Carbon::createFromFormat('d/m/Y',$request->f_tgl_akhir)->format('Y-m-d 23:59:59')]);
+            }
+    
+            $datanilai->get();
+            $datanilai = $datanilai->get();
+    
+            return view('jadwal.lihatnilai')->with(compact('datanilai','id_jadwal','data'));
+            // Akhir Filter
+
+        }else if ($request->jenis=="export"){
+            return Excel::download(new PesertaQuisExport($id_jadwal,$request->f_tgl_awal,$request->f_tgl_akhir), 'NilaiPeserta.xlsx');
+        }else{
+            return "Error";
         }
-
-        // if($request->jenis_absen != null && $request->jenis_absen != null){
-        //     if($request->jenis_absen=="absen"){
-        //         $absen->whereNotNull('jam_cek_in');
-        //     }else if ($request->jenis_absen=="belumabsen"){
-        //         $absen->whereNull('jam_cek_in');
-        //     }
-        // }
-
-        $datanilai->get();
-        $datanilai = $datanilai->get();
-
-        return view('jadwal.lihatnilai')->with(compact('datanilai','id_jadwal','data'));
+  
     }
 
     public function instruktur($id)
