@@ -307,13 +307,13 @@
                                             </td>
                                             <td style="width:7%;text-align:right"><b>
                                                         @if($nilaiakhir < 60 && $jumlahtm>0)
-                                                        60*
+                                                        <span style="color:yellow">60*</span>
                                                         @elseif($nilaiakhir>=60)
-                                                        {{$nilaiakhir}}
+                                                        <span style="color:green">{{$nilaiakhir}}</span>
                                                         @elseif($nilaiakhir==-1)
-                                                        Tidak Ada Quiz
+                                                        
                                                         @else
-                                                        {{$nilaiakhir}}
+                                                        <span style="color:red">{{$nilaiakhir}}</span>
                                                         @endif
                                                 </b></td>
                                             @php

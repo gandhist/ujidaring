@@ -26,34 +26,32 @@
             </div>
             @endif
             <!-- MultiStep Form -->
-            <form action="{{ url('jadwal/lihatnilai/filter') }}" enctype="multipart/form-data" name="filterData"
-                id="filterData" method="post">
-                @csrf
-                <input type="hidden" name="id_jadwal" value="{{$data->id}}">
-                <div class="row">
+
+            <div class="row">
+                <form action="{{ url('jadwal/lihatnilai/filter') }}" enctype="multipart/form-data" name="filterData"
+                    id="filterData" method="post">
+                    @csrf
+                    <input type="hidden" id="id_jadwal" name="id_jadwal" value="{{$data->id}}">
                     <div class="col-md-8">
-                        <div class="box-body">
-                            <div class="table-responsive" style="margin-left: -18px;">
-                                <table class="table no-margin">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:5%">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon customInput">Tanggal</span>
-                                                    <input id="f_tgl_awal" name="f_tgl_awal"
-                                                        value="{{ request()->get('f_tgl_awal') }}" autocomplete="off"
-                                                        data-provide="datepicker" data-date-format="dd/mm/yyyy"
-                                                        type="text" class="form-control customInput"
-                                                        placeholder="Tgl Awal">
-                                                    <span class="input-group-addon customInput">s/d</span>
-                                                    <input id="f_tgl_akhir" name="f_tgl_akhir"
-                                                        value="{{ request()->get('f_tgl_akhir') }}" autocomplete="off"
-                                                        data-provide="datepicker" data-date-format="dd/mm/yyyy"
-                                                        type="text" class="form-control customInput"
-                                                        placeholder="Tgl Akhir">
-                                                </div>
-                                            </th>
-                                            <!-- <th style="width:16%">
+                        <div class="table-responsive" style="margin-left: -18px;">
+                            <table class="table no-margin">
+                                <thead>
+                                    <tr>
+                                        <th style="width:5%">
+                                            <div class="input-group">
+                                                <span class="input-group-addon customInput">Tanggal</span>
+                                                <input id="f_tgl_awal" name="f_tgl_awal"
+                                                    value="{{ request()->get('f_tgl_awal') }}" autocomplete="off"
+                                                    data-provide="datepicker" data-date-format="dd/mm/yyyy" type="text"
+                                                    class="form-control customInput" placeholder="Tgl Awal">
+                                                <span class="input-group-addon customInput">s/d</span>
+                                                <input id="f_tgl_akhir" name="f_tgl_akhir"
+                                                    value="{{ request()->get('f_tgl_akhir') }}" autocomplete="off"
+                                                    data-provide="datepicker" data-date-format="dd/mm/yyyy" type="text"
+                                                    class="form-control customInput" placeholder="Tgl Akhir">
+                                            </div>
+                                        </th>
+                                        <!-- <th style="width:16%">
                                                 <div class="input-group">
                                                     <select class="form-control select2" name="jenis_absen"
                                                         id="jenis_absen" required>
@@ -63,20 +61,19 @@
                                                     </select>
                                                 </div>
                                             </th> -->
-                                            <th style="text-align:left;width:5%">
-                                                <button type="submit" class="btn btn-sm btn-info"> <i
-                                                        class="fa fa-filter"></i>
-                                                    Filter</button>
-                                            </th>
-                                            <th style="text-align:left">
-                                                <a href="{{ url('jadwal/lihatnilai', $id_jadwal) }}"
-                                                    class="btn btn-sm btn-default"> <i class="fa fa-refresh"></i>
-                                                    Reset</a>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
+                                        <th style="text-align:left;width:5%">
+                                            <button id="btnfilter" type="submit" class="btn btn-sm btn-info"> <i
+                                                    class="fa fa-filter"></i>
+                                                Filter</button>
+                                        </th>
+                                        <th style="text-align:left">
+                                            <a href="{{ url('jadwal/lihatnilai', $id_jadwal) }}"
+                                                class="btn btn-sm btn-default"> <i class="fa fa-refresh"></i>
+                                                Reset</a>
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -84,14 +81,18 @@
                             <table class="table no-margin">
                                 <thead>
                                     <tr>
-                                        <th style="text-align:right"><a href="{{ url('jadwal/lihatnilai/exportexcel',$data->id) }}" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export Excel</a></th>
+                                        <th style="text-align:right"><button type="submit" id="btnexport"
+                                                class="btn btn-sm btn-success"><i class="fa fa-file-excel-o"
+                                                    aria-hidden="true"></i> Export Excel</button></th>
                                     </tr>
                                 </thead>
                             </table>
                         </div>
                     </div>
-                </div>
-            </form>
+                    <input type="hidden" id="jenis" name="jenis" value="" >
+                </form>
+            </div>
+
             <div class="row">
                 <div class="col-md-12">
                     <!-- <h3>Daftar Absensi Peserta</h3> -->
@@ -118,7 +119,13 @@
                                     {{ \Carbon\Carbon::parse($key->created_at)->isoFormat("DD MMMM YYYY") }}</td>
                                 <td>{{ ucwords($key->tipe_quis) }}</td>
                                 <td style="width:1%">
+                                    @if(strtolower($key->tipe_quis)=="pre")
                                     {{count($key->jumlah_soal_pre_r)}}
+                                    @elseif (strtolower($key->tipe_quis)=="post")
+                                    {{count($key->jumlah_soal_post_r)}}
+                                    @else
+                                    Error
+                                    @endif
                                 </td>
                                 <td>{{ $key->benar }}</td>
                                 <td>{{ $key->salah }}</td>
@@ -136,7 +143,7 @@
     <!-- /.box -->
 
     <!-- modal konfirmasi -->
-    <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    <!-- <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
         <form action="{{ url('jadwal/kirimaccount/peserta') }}" class="form-horizontal" id="formDelete"
             name="formDelete" method="post" enctype="multipart/form-data">
@@ -161,11 +168,11 @@
                 </div>
             </div>
         </form>
-    </div>
+    </div> -->
     <!-- end of modal konfirmais -->
 
     <!-- modal foto -->
-    <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    <!-- <div class="modal fade" id="modalFoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-md" role="document">
             <div class="modal-content">
@@ -187,7 +194,7 @@
 
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- end of modal foto -->
 
 </section>
@@ -207,6 +214,16 @@
 <script type="text/javascript">
     $(function () {
 
+        $("#btnexport").on("click",function(){
+            $("#jenis").val('export');
+            return true;
+        });
+
+        $("#btnfilter").on("click",function(){
+            $("#jenis").val('filter');
+            return true;
+        });
+
         var dt = $('#custom-table').DataTable({
             "lengthMenu": [
                 [30, 50, 100],
@@ -224,8 +241,8 @@
                 "targets": [0, 1]
             }],
             "aaSorting": [
-                [4, "desc"],
-                [3, "asc"]
+                [3, "desc"],
+                [2, "asc"]
             ]
         });
 
@@ -239,141 +256,104 @@
         }).draw();
 
         // Kunci Input NIK Hanya Angka
-        $('.Inputbobot').on('input blur paste', function () {
-            $(this).val($(this).val().replace(/\D/g, ''))
-        });
+        // $('.Inputbobot').on('input blur paste', function () {
+        //     $(this).val($(this).val().replace(/\D/g, ''))
+        // });
 
-        $("#btnmulai").on('click', function () {
-            $("#durasi").css("border-color", "#ccc");
-            var durasi = $("#durasi").val();
-            var idJadwal = $("#idJadwal").val();
-            if (durasi == "") {
-                Swal.fire({
-                    title: "Durasi ujian belum diisi",
-                    type: 'warning',
-                    confirmButtonText: 'Close',
-                    confirmButtonColor: '#AAA'
-                });
-                $("#durasi").focus();
-                $("#durasi").css("border-color", "red");
-            } else {
-                Swal.fire({
-                    title: 'Mulai Ujian?',
-                    text: "Apakah anda yakin untuk memulai ujian?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Mulai'
-                }).then((result) => {
-                    if (result.value) {
-                        Swal.fire(
-                            'Ujian dimulai!',
-                            'Waktu dihitung mundur dari sekarang.',
-                            'success'
-                        )
-                    }
-                    updateDurasi(durasi, idJadwal);
+        // $("#btnmulai").on('click', function () {
+        //     $("#durasi").css("border-color", "#ccc");
+        //     var durasi = $("#durasi").val();
+        //     var idJadwal = $("#idJadwal").val();
+        //     if (durasi == "") {
+        //         Swal.fire({
+        //             title: "Durasi ujian belum diisi",
+        //             type: 'warning',
+        //             confirmButtonText: 'Close',
+        //             confirmButtonColor: '#AAA'
+        //         });
+        //         $("#durasi").focus();
+        //         $("#durasi").css("border-color", "red");
+        //     } else {
+        //         Swal.fire({
+        //             title: 'Mulai Ujian?',
+        //             text: "Apakah anda yakin untuk memulai ujian?",
+        //             icon: 'warning',
+        //             showCancelButton: true,
+        //             confirmButtonColor: '#3085d6',
+        //             cancelButtonColor: '#d33',
+        //             confirmButtonText: 'Mulai'
+        //         }).then((result) => {
+        //             if (result.value) {
+        //                 Swal.fire(
+        //                     'Ujian dimulai!',
+        //                     'Waktu dihitung mundur dari sekarang.',
+        //                     'success'
+        //                 )
+        //             }
+        //             updateDurasi(durasi, idJadwal);
 
-                });
+        //         });
 
-            }
-        });
+        //     }
+        // });
 
-        // Show Modal Penilaian
-        $('.btnnilai').on('click', function () {
-            $('#modaldetailAhli').modal('show');
-        });
+        // Export Excel
+        // $('#exportexcel').on('click', function () {
+        //     exportpeserta();
+        // });
 
-        $('#btnkirim').on('click', function (e) {
-            e.preventDefault();
-            var id = [];
-            $('.selection:checked').each(function () {
-                id.push($(this).data('id'));
-            });
-            $("#idHapusData").val(id);
-            if (id.length == 0) {
-                Swal.fire({
-                    title: "Tidak ada data yang terpilih",
-                    type: 'warning',
-                    confirmButtonText: 'Close',
-                    confirmButtonColor: '#AAA'
-                });
-                // alert('Tidak ada data yang terpilih');
-            } else {
-                $('#modal-konfirmasi').modal('show');
-            }
-        });
+        // $('#btnkirim').on('click', function (e) {
+        //     e.preventDefault();
+        //     var id = [];
+        //     $('.selection:checked').each(function () {
+        //         id.push($(this).data('id'));
+        //     });
+        //     $("#idHapusData").val(id);
+        //     if (id.length == 0) {
+        //         Swal.fire({
+        //             title: "Tidak ada data yang terpilih",
+        //             type: 'warning',
+        //             confirmButtonText: 'Close',
+        //             confirmButtonColor: '#AAA'
+        //         });
+        //         // alert('Tidak ada data yang terpilih');
+        //     } else {
+        //         $('#modal-konfirmasi').modal('show');
+        //     }
+        // });
 
-        $('.select2').select2();
+        // $('.select2').select2();
 
         // Fungsi Update durasi ujian
-        function updateDurasi(durasi, idJadwal) {
-            var url = "{{ url('updateDurasiUjian') }}";
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: url,
-                method: 'POST',
-                data: {
-                    durasi: durasi,
-                    idJadwal: idJadwal
-                },
-                success: function (data) {
+        function exportpeserta() {
+            var tglawal = $("#f_tgl_awal").val();
+            var tglakhir = $("#f_tgl_akhir").val();
+            var idjadwal = $("#id_jadwal").val();
+            // var url = "{{ url('jadwal/lihatnilai/exportexcel/"+tglawal+"/"+tglakhir+"/"+idjadwal+"') }}";
 
+            var url = "{{ url('jadwal/lihatnilai/exportexcel', [':tglawal', ':tglakhir',':idjadwal']) }}";
+            url = url.replace(':tglawal', tglawal).replace(':tglakhir', tglakhir).replace(':idjadwal',
+                idjadwal);
 
-                    // countdown
-                    var $clock = $('#clock'),
-                        eventTime = moment(data, 'YYYY-MM-DD HH:mm:ss').unix(),
-                        currentTime = moment().unix(),
-                        diffTime = eventTime - currentTime,
-                        duration = moment.duration(diffTime * 1000, 'milliseconds'),
-                        interval = 1000;
-
-                    if (diffTime > 0) {
-
-                        // Show clock
-                        // $clock.show();
-                        $('#clock').text("");
-                        var $d = $('<span class="days" ></span>').appendTo($clock),
-                            $h = $('<span class="hours" ></span>').appendTo($clock),
-                            $m = $('<span class="minutes" ></span>').appendTo($clock),
-                            $s = $('<span class="seconds" ></span>').appendTo($clock);
-
-                        setInterval(function () {
-
-                            duration = moment.duration(duration.asMilliseconds() -
-                                interval, 'milliseconds');
-                            var d = moment.duration(duration).days(),
-                                h = moment.duration(duration).hours(),
-                                m = moment.duration(duration).minutes(),
-                                s = moment.duration(duration).seconds();
-
-                            d = $.trim(d).length === 1 ? '0' + d : d;
-                            h = $.trim(h).length === 1 ? '0' + h : h;
-                            m = $.trim(m).length === 1 ? '0' + m : m;
-                            s = $.trim(s).length === 1 ? '0' + s : s;
-
-                            // show how many hours, minutes and seconds are left
-                            // $d.text(d + ":");
-                            $h.text(h + ":");
-                            $m.text(m + ":");
-                            $s.text(s);
-
-                        }, interval);
-
-                    }
-                    // Countdown
-                },
-                error: function (xhr, status) {
-                    alert('Error');
-                }
-            });
+            console.log(url);
+            window.location(url);
+            // $.ajaxSetup({
+            //     headers: {
+            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //     }
+            // });
+            // $.ajax({
+            //     url: url,
+            //     method: 'GET'
+            //     success: function (data) {
+            //         window.open(url);
+            //         console.log(data);
+            //     },
+            //     error: function (xhr, status) {
+            //         alert('Error');
+            //     }
+            // });
         }
-
     });
 
     $('.datepicker').datepicker({

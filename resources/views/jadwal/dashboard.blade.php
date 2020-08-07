@@ -215,8 +215,8 @@
                     <!-- small box -->
                     <div class="small-box bg-red">
                         <div class="inner">
-                            <h3>{{$jumlahPeserta}}</h3>
-                            <p>Lihat Nilai</p>
+                            <h3>{{$jumlahnilaipeserta}}</h3>
+                            <p>Nilai Peserta</p>
                         </div>
                         <div class="icon">
                             <i class="fa fa-address-card" aria-hidden="true"></i>

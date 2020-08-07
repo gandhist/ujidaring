@@ -145,7 +145,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 		Route::get('jadwal/lihatnilai/{id}','JadwalController@lihatnilai');
 		Route::post('jadwal/lihatnilai/filter', 'JadwalController@filter_lihatnilai');
-		Route::get('jadwal/lihatnilai/exportexcel/{id}', 'JadwalController@nilaiexport');
+		Route::get('jadwal/lihatnilai/exportexcel/{tglawal}/{tglakhir}/{idjadwal}', 'JadwalController@nilaiexport');
 
 		// Daftar Kantor
 		Route::resource('penilaian', 'PenilaianController');
