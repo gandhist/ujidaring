@@ -31,6 +31,12 @@
                   <li class="list-group-item">NIK : {{ $peserta->nik }}</li>
                 </ul>
                 @endif
+                @if($peserta->kelompok)
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">Kelompok : {{ $peserta->kelompok->no_kelompok }} (Ketua Kelompok {{ $peserta->kelompok->ketua_r->nama }} )
+                  </li>
+                </ul>
+                @endif
                 
               </div>
         </div>
