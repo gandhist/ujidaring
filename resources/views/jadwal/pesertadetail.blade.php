@@ -226,7 +226,7 @@
                                             <th>Post Quiz Benar</th>
                                             <th>Post Quiz Salah</th>
                                             <th>Tugas Mandiri</th>
-                                            <th>Nilai (0-100)</th>
+                                            <th>Nilai <b>(Batas Lulus >= 60)</b> </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -283,6 +283,7 @@
                                             }else{
                                                 $nilaiakhir = ($jawpre + $jawpost)/2;
                                             }
+                                            $nilaiakhir = round($nilaiakhir);
                                             @endphp
                                             <td style="width:5%;text-align:right">{{$prequizbenar}}</td>
                                             <td style="width:5%;text-align:right">{{$prequizsalah}}</td>
@@ -308,11 +309,11 @@
                                                         @if($nilaiakhir < 60 && $jumlahtm>0)
                                                         60*
                                                         @elseif($nilaiakhir>=60)
-                                                        {{$nilaiakhir}} (Lulus)
+                                                        {{$nilaiakhir}}
                                                         @elseif($nilaiakhir==-1)
                                                         Tidak Ada Quiz
                                                         @else
-                                                        {{$nilaiakhir}} (Tidak Lulus)
+                                                        {{$nilaiakhir}}
                                                         @endif
                                                 </b></td>
                                             @php

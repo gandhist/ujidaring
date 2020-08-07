@@ -16,4 +16,9 @@ class PesertaQuis extends Model
     public function peserta_r(){
         return $this->belongsTo('App\Peserta','id_peserta');
     }
+
+    // relasi ke bidang
+    public function jumlah_soal_pre_r(){
+        return $this->hasMany('App\SoalPgPreModel','id_jadwal_modul','id_jadwal_modul');
+    }
 }

@@ -26,7 +26,7 @@
             </div>
             @endif
             <!-- MultiStep Form -->
-            <form action="{{ url('jadwal/absen/filter') }}" enctype="multipart/form-data" name="filterData"
+            <form action="{{ url('jadwal/lihatnilai/filter') }}" enctype="multipart/form-data" name="filterData"
                 id="filterData" method="post">
                 @csrf
                 <input type="hidden" name="id_jadwal" value="{{$data->id}}">
@@ -69,7 +69,7 @@
                                                     Filter</button>
                                             </th>
                                             <th style="text-align:left">
-                                                <a href="{{ url('jadwal/absen', $id_jadwal) }}"
+                                                <a href="{{ url('jadwal/lihatnilai', $id_jadwal) }}"
                                                     class="btn btn-sm btn-default"> <i class="fa fa-refresh"></i>
                                                     Reset</a>
                                             </th>
@@ -77,6 +77,17 @@
                                     </thead>
                                 </table>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:right"><a href="{{ url('jadwal/lihatnilai/exportexcel',$data->id) }}" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export Excel</a></th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -91,7 +102,8 @@
                                 <th>NIK</th>
                                 <th>Nama</th>
                                 <th>Tanggal</th>
-                                <th>Tipe Quiz</th>
+                                <th style="white-space: nowrap">Tipe Quiz</th>
+                                <th style="white-space: nowrap">Jumlah Soal</th>
                                 <th>Benar</th>
                                 <th>Salah</th>
                             </tr>
@@ -105,6 +117,9 @@
                                 <td style="text-align:center;width:8%">
                                     {{ \Carbon\Carbon::parse($key->created_at)->isoFormat("DD MMMM YYYY") }}</td>
                                 <td>{{ ucwords($key->tipe_quis) }}</td>
+                                <td style="width:1%">
+                                    {{count($key->jumlah_soal_pre_r)}}
+                                </td>
                                 <td>{{ $key->benar }}</td>
                                 <td>{{ $key->salah }}</td>
                             </tr>
