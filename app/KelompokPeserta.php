@@ -16,5 +16,10 @@ class KelompokPeserta extends Model
     public function peserta_r(){
         return $this->belongsTo('App\Peserta','id_peserta');
     }
+
+     // relasi ke peserta
+     public function ketua_r(){
+        return $this->belongsTo('App\Peserta','id_ketua');
+    }
         
 }

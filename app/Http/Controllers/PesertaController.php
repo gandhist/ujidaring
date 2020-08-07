@@ -41,9 +41,11 @@ class PesertaController extends Controller
         $is_post_quis = $this->_is_post_quis();
         $peserta = Peserta::where('user_id',Auth::id())->first();
         $cek = JawabanEvaluasi::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->count();
-        if($cek == 0){
-           $this->_generate_soal_eva($peserta->id);
-        }
+        // if($cek == 0){
+        //    $this->_generate_soal_eva($peserta->id);
+        // }
+        // $this->_generate_soal_eva($peserta->id);
+
         $awal_uji = strtotime($peserta->jadwal_r->mulai_ujian);
         $akhir_uji = strtotime($peserta->jadwal_r->akhir_ujian);
         $pst_mulai_uji = $peserta->mulai_ujian ? strtotime($peserta->mulai_ujian) : Carbon::now()->timestamp;
@@ -128,9 +130,11 @@ class PesertaController extends Controller
     public function kuisioner(){
         $peserta = Peserta::where('user_id',Auth::id())->first();
         $cek = JawabanEvaluasi::where('id_peserta',$peserta->id)->where('id_jadwal',$peserta->jadwal_r->id)->count();
-        if($cek == 0){
-           $this->_generate_soal_eva($peserta->id);
-        }
+        // if($cek == 0){
+        //    $this->_generate_soal_eva($peserta->id);
+        // }
+        $this->_generate_soal_eva($peserta->id);
+
 
         $rd = JadwalRundown::where('id_jadwal',$peserta->jadwal_r->id)->where('tanggal',Carbon::now()->isoFormat('YYYY-MM-DD'))->first();
         \LogActivity::addToLog("peserta membuka halaman pengisian kuisioner/evaluasi pada ". Carbon::now()->toDateTimeString());
@@ -198,14 +202,23 @@ class PesertaController extends Controller
         $image_base64 = base64_decode($image_parts[1]);
         $fileName = Auth::id()."_".Carbon::now()->timestamp . '.png';
         $file = $folderPath . $fileName;
-        $masuk = new AbsenModel;
-        $masuk->id_peserta = Peserta::where('user_id',Auth::id())->first()->id;
-        $masuk->jam_cek_in = Carbon::now()->toDateTimeString();
-        $masuk->created_by = Auth::id();
-        $masuk->created_at = Carbon::now()->toDateTimeString();
-        $masuk->tanggal = Carbon::now()->isoFormat("YYYY-MM-DD");
-        $masuk->foto_cek_in = $fileName;
-        $masuk->save();
+        // $masuk = new AbsenModel;
+        // $masuk->id_peserta = Peserta::where('user_id',Auth::id())->first()->id;
+        // $masuk->jam_cek_in = Carbon::now()->toDateTimeString();
+        // $masuk->created_by = Auth::id();
+        // $masuk->created_at = Carbon::now()->toDateTimeString();
+        // $masuk->tanggal = Carbon::now()->isoFormat("YYYY-MM-DD");
+        // $masuk->foto_cek_in = $fileName;
+        // $masuk->save();
+        AbsenModel::updateOrCreate([
+            'id_peserta' => Peserta::where('user_id',Auth::id())->first()->id,
+            'tanggal' => Carbon::now()->isoFormat("YYYY-MM-DD"),
+        ],[
+            'jam_cek_in' => Carbon::now()->toDateTimeString(),
+            'foto_cek_in' => $fileName,
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'created_by' => Auth::id(),
+        ]);
         file_put_contents($file, $image_base64);
         \LogActivity::addToLog("peserta melakukan absen masuk pada ". Carbon::now()->toDateTimeString());
     
@@ -224,14 +237,23 @@ class PesertaController extends Controller
         $image_base64 = base64_decode($image_parts[1]);
         $fileName = Auth::id()."_".Carbon::now()->timestamp . '.png';
         $file = $folderPath . $fileName;
-        $masuk = AbsenModel::where('id_peserta',Peserta::where('user_id',Auth::id())->first()->id)->orderBy('id','desc')->first();
-        $masuk->id_peserta = Peserta::where('user_id',Auth::id())->first()->id;
-        $masuk->jam_cekout = Carbon::now()->toDateTimeString();
-        $masuk->updated_by = Auth::id();
-        $masuk->updated_at = Carbon::now()->toDateTimeString();
-        // $masuk->tanggal = Carbon::now()->isoFormat("YYYY-MM-DD");
-        $masuk->foto_cekout = $fileName;
-        $masuk->save();
+        // $masuk = AbsenModel::where('id_peserta',Peserta::where('user_id',Auth::id())->first()->id)->orderBy('id','desc')->first();
+        // $masuk->id_peserta = Peserta::where('user_id',Auth::id())->first()->id;
+        // $masuk->jam_cekout = Carbon::now()->toDateTimeString();
+        // $masuk->updated_by = Auth::id();
+        // $masuk->updated_at = Carbon::now()->toDateTimeString();
+        // // $masuk->tanggal = Carbon::now()->isoFormat("YYYY-MM-DD");
+        // $masuk->foto_cekout = $fileName;
+        // $masuk->save();
+        AbsenModel::updateOrCreate([
+            'id_peserta' => Peserta::where('user_id',Auth::id())->first()->id,
+            'tanggal' => Carbon::now()->isoFormat("YYYY-MM-DD"),
+        ],[
+            'jam_cekout' => Carbon::now()->toDateTimeString(),
+            'foto_cekout' => $fileName,
+            'updated_at' => Carbon::now()->toDateTimeString(),
+            'updated_by' => Auth::id(),
+        ]);
         file_put_contents($file, $image_base64);
         \LogActivity::addToLog("peserta melakukan absen pulang pada ". Carbon::now()->toDateTimeString());
         return response()->json([
@@ -694,13 +716,28 @@ $a = false;
         foreach($jml_ins as $key){
             foreach($key->ins_rundown_r as $ins){
                 foreach($data as $eva){
-                    $jwb = new JawabanEvaluasi;
-                    $jwb->id_evaluasi = $eva->id;
-                    $jwb->id_jadwal = $peserta->jadwal_r->id;
-                    $jwb->id_peserta = $peserta->id;
-                    $jwb->id_instruktur = $ins->jadwal_instruktur_r->instruktur_r->id;
-                    $jwb->tanggal = $key->tanggal;
-                    $jwb->save();
+                    JawabanEvaluasi::updateOrCreate([
+                        'id_jadwal' => $peserta->jadwal_r->id,
+                        'id_evaluasi' => $eva->id,
+                        'id_peserta' => $peserta->id,
+                        'id_instruktur' => $ins->jadwal_instruktur_r->instruktur_r->id,
+                        'tanggal' => $key->tanggal,
+                    ],[
+                        // 'id_jadwal' => $peserta->jadwal_r->id,
+                        // 'id_evaluasi' => $eva->id,
+                        // 'id_peserta' => $peserta->id,
+                        'id_instruktur' => $ins->jadwal_instruktur_r->instruktur_r->id,
+                        // 'tanggal' => $key->tanggal,
+                        'created_at' => Carbon::now()->toDateTimeString(),
+                        'created_by' => Auth::id(),
+                    ]);
+                    // $jwb = new JawabanEvaluasi;
+                    // $jwb->id_evaluasi = $eva->id;
+                    // $jwb->id_jadwal = $peserta->jadwal_r->id;
+                    // $jwb->id_peserta = $peserta->id;
+                    // $jwb->id_instruktur = $ins->jadwal_instruktur_r->instruktur_r->id;
+                    // $jwb->tanggal = $key->tanggal;
+                    // $jwb->save();
                 }
                 // echo $ins->jadwal_instruktur_r->instruktur_r->id."<br>"; // id instruktur
                 // echo $key->tanggal."<br>";
@@ -780,7 +817,7 @@ $a = false;
     // function check is allow absen masuk
     public function is_allow_masuk(){
         $peserta = Peserta::where('user_id',Auth::id())->first();
-        $cek_cekin = AbsenModel::where('tanggal', Carbon::now()->isoFormat('YYYY-MM-DD'))->where('id_peserta', $peserta->id)->first();
+        $cek_cekin = AbsenModel::where('tanggal', Carbon::now()->isoFormat('YYYY-MM-DD'))->whereNotNull('jam_cek_in')->where('id_peserta', $peserta->id)->first();
         if($cek_cekin){
             $allow = false;
         }
@@ -793,7 +830,7 @@ $a = false;
     // function check is allow absen pulang
     public function is_allow_pulang(){
         $peserta = Peserta::where('user_id',Auth::id())->first();
-        $cek_cekin = AbsenModel::where('tanggal', Carbon::now()->isoFormat('YYYY-MM-DD'))->where('id_peserta', $peserta->id)->whereNotNull('jam_cekout')->first();
+        $cek_cekin = AbsenModel::where('tanggal', Carbon::now()->isoFormat('YYYY-MM-DD'))->whereNotNull('jam_cekout')->where('id_peserta', $peserta->id)->whereNotNull('jam_cekout')->first();
         if($cek_cekin){
             $allow = false;
         }
