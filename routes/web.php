@@ -188,8 +188,8 @@ Route::group(['middleware' => 'auth'], function () {
 	// Master tuk 
 	Route::resource('mastertuk', 'TukController');
 	Route::get('mastertuk/{id}/edit','TukController@edit');
-	// Route::get('mastermodul/update','ModulController@update');
-	Route::post('tuk/save','TukController@store');
+	Route::post('mastertuk/update','TukController@update');
+	Route::post('mastertuk/save','TukController@store');
 
 	// Fungsi Chain
 	Route::post('bidang/chain','ChainController@bidang');

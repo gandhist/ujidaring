@@ -123,12 +123,11 @@
                         <div class="btn-group">
                             <button class="btn btn-success" id="btnEdit" name="btnEdit"> <i
                                     class="fa fa-pencil-square-o"></i>
-                                Edit</button>
+                                Ubah</button>
                             <a href="{{ route('mastertuk.create') }}" class="btn btn-info"> <i class="fa fa-plus"></i>
                                 Tambah</a>
-
-                            <!--  <button class="btn btn-danger" id="btnHapus" name="btnHapus"> <i class="fa fa-trash"></i>
-                                Hapus</button> -->
+                             <button class="btn btn-danger" id="btnHapus" name="btnHapus"> <i class="fa fa-trash"></i>
+                                Hapus</button>
                         </div>
                     </div>
                 </div>
@@ -217,7 +216,7 @@
 <!-- modal konfirmasi -->
 <div class="modal fade" id="modal-konfirmasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
-    <form action="{{ url('badanusaha/destroy') }}" class="form-horizontal" id="formDelete" name="formDelete"
+    <form action="{{ url('mastertuk/destroy') }}" class="form-horizontal" id="formDelete" name="formDelete"
         method="post" enctype="multipart/form-data">
         @method("DELETE")
         @csrf
@@ -245,7 +244,7 @@
 <!-- end of modal konfirmais -->
 
 <!-- modal lampiran -->
-<div class="modal fade" id="modalLampiran" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<!-- <div class="modal fade" id="modalLampiran" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -268,7 +267,7 @@
 
         </div>
     </div>
-</div>
+</div> -->
 <!-- end of modal lampiran -->
 @endsection
 
@@ -310,7 +309,7 @@
                 // alert('Tidak ada data yang terpilih');
             } else if (id.length > 1) {
                 Swal.fire({
-                    title: "Harap pilih satu data untuk diedit",
+                    title: "Harap pilih satu data untuk diubah",
                     type: 'warning',
                     confirmButtonText: 'Close',
                     confirmButtonColor: '#AAA'
