@@ -32,7 +32,7 @@
                                 <tr>
                                     <td colspan="3" style="padding-bottom: 2px">
                                         <div class="input-group">
-                                            <!-- <label>PJK3</label> -->
+                                            <label>PJK3</label>
                                             <select class="form-control select2" name="id_badan_usaha"
                                                 id="id_badan_usaha">
                                                 <option selected disabled value="">PJK3</option>
@@ -48,7 +48,7 @@
                                 <tr>
                                     <td colspan="3">
                                         <div class="input-group">
-                                            <!-- <label>Nama TUK Observasi</label> -->
+                                            <label>Nama TUK Observasi</label>
                                             <input type="text" class="form-control custominp" id="id_nama_tuk"
                                                 name="id_nama_tuk" placeholder="Nama TUK Observasi">
                                         </div>
@@ -58,7 +58,7 @@
                                 <tr>
                                     <td colspan="3" >
                                         <div class="input-group">
-                                            <!-- <label>Alamat Jalan dan Nomor, Kelurahan, Kecamatan (Tanpa Kota)</label> -->
+                                            <label>Alamat Jalan dan Nomor, Kelurahan, Kecamatan (Tanpa Kota)</label>
                                             <input type="text" class="form-control custominp" id="id_alamat_tuk"
                                                 name="id_alamat_tuk"
                                                 placeholder="Alamat Jalan dan Nomor, Kelurahan, Kecamatan (Tanpa Kota)">
@@ -70,7 +70,7 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group">
-                                            <!-- <label>Provinsi</label> -->
+                                            <label>Provinsi</label>
                                             <select class="form-control select2" name="id_provinsi" id="id_provinsi">
                                                 <option selected disabled value="">Provinsi</option>
                                                 @foreach($provinsi as $key)
@@ -90,7 +90,7 @@
 
                                     <td style="width:49%">
                                         <div class="input-group">
-                                            <!-- <label>Kota</label> -->
+                                            <label>Kota</label>
                                             <select class="form-control select2" name="id_kota" id="id_kota">
                                                 <option selected disabled value="">Kota</option>
                                                 <!-- @foreach($kota as $key)
@@ -106,7 +106,7 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>No Tlp</label> -->
+                                            <label>No Tlp</label>
                                             <input type="text" class="form-control custominp" id="id_no_tlp"
                                                 name="id_no_tlp" placeholder="No Tlp">
                                         </div>
@@ -121,7 +121,7 @@
 
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>Email</label> -->
+                                            <label>Email</label>
                                             <input type="text" class="form-control custominp" id="id_email"
                                                 name="id_email" placeholder="Email">
                                         </div>
@@ -131,7 +131,7 @@
                                 <tr>
                                     <td colspan="3">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>Instansi Pengelola</label> -->
+                                            <label>Instansi Pengelola</label>
                                             <input type="text" class="form-control custominp" id="id_pengelola"
                                                 name="id_pengelola" placeholder="Instansi Pengelola">
                                         </div>
@@ -142,7 +142,7 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>Nama Kontak Person</label> -->
+                                            <label>Nama Kontak Person</label>
                                             <input type="text" class="form-control custominp" id="id_nama_kp"
                                                 name="id_nama_kp" placeholder="Nama Kontak Person">
                                         </div>
@@ -157,7 +157,7 @@
 
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>Jabatan Kontak Person</label> -->
+                                            <label>Jabatan Kontak Person</label>
                                             <input type="text" class="form-control custominp" id="id_jab_kp"
                                                 name="id_jab_kp" placeholder="Jabatan Kontak Person">
                                         </div>
@@ -168,7 +168,7 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>No HP Kontak Person</label> -->
+                                            <label>No HP Kontak Person</label>
                                             <input type="text" class="form-control custominp" id="id_hp_kp"
                                                 name="id_hp_kp" placeholder="No HP Kontak Person">
                                         </div>
@@ -183,7 +183,7 @@
 
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>Email Kontak Person</label> -->
+                                            <label>Email Kontak Person</label>
                                             <input type="text" class="form-control custominp" id="id_eml_kp"
                                                 name="id_eml_kp" placeholder="Email Kontak Person">
                                         </div>
@@ -194,7 +194,7 @@
                                 <tr>
                                     <td colspan="3" style="width:100%">
                                         <!-- <div class="input-group"> -->
-                                        <!-- <label>Keterangan</label> -->
+                                        <label>Keterangan</label>
                                         <input type="text" class="form-control custominp" id="id_keterangan"
                                             name="id_keterangan" placeholder="Keterangan">
                                         <!-- </div> -->
@@ -206,7 +206,7 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>No Rekening Bank</label> -->
+                                            <label>No Rekening Bank</label>
                                             <input type="text" class="form-control custominp" id="id_no_rek"
                                                 name="id_no_rek" placeholder="No Rekening Bank">
                                         </div>
@@ -221,7 +221,7 @@
 
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>Nama Rekening Bank</label> -->
+                                            <label>Nama Rekening Bank</label>
                                             <input type="text" class="form-control custominp" id="id_nama_rek"
                                                 name="id_nama_rek" placeholder="Nama Rekening Bank">
                                         </div>
@@ -232,7 +232,7 @@
                                 <tr>
                                     <td colspan="3" style="padding-bottom: 2px">
                                         <div class="input-group">
-                                            <!-- <label>Nama Bank</label> -->
+                                            <label>Nama Bank</label>
                                             <select class="form-control select2" name="id_bank" id="id_bank">
                                                 <option selected disabled value="">Nama Bank</option>
                                                 @foreach($bank as $key)
@@ -341,7 +341,7 @@
     function store() {
         var formData = new FormData($('#formAdd')[0]);
 
-        var url = "{{ url('tuk/save') }}";
+        var url = "{{ url('mastertuk/save') }}";
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -376,7 +376,7 @@
                         if (response.icon == "warning") {
 
                         } else {
-                            window.history.back();
+                            window.location.replace("{{ url('mastertuk') }}");
                         }
                     });
                 }

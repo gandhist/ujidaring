@@ -6,14 +6,15 @@
         border-radius: 5px !important;
         height: 80% !important;
     }
-    .input-group{
-        width:100%;
+
+    .input-group {
+        width: 100%;
     }
 
 </style>
 <section class="content-header">
     <h1><a href="{{ url('mastertuk') }}" class="btn btn-md bg-purple"><i class="fa fa-arrow-left"></i></a>
-        Tambah TUK Observasi PJK3 Mandiri
+        Ubah TUK Observasi PJK3 Mandiri
     </h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Master TUK</a></li>
@@ -23,7 +24,9 @@
     <div class="box box-content">
         <div class="box-body">
             <form class="form-horizontal" id="formAdd" name="formAdd" method="post" enctype="multipart/form-data">
+                @method('PATCH')
                 @csrf
+                <input type="hidden" name="id_tuk" id="id_tuk" value="{{$tuk->id}}">
                 <div class="row">
                     <div class="col-md-12">
                         <br>
@@ -32,11 +35,13 @@
                                 <tr>
                                     <td colspan="3" style="padding-bottom: 2px">
                                         <div class="input-group">
+                                            <label>PJK3</label>
                                             <select class="form-control select2" name="id_badan_usaha"
                                                 id="id_badan_usaha">
-                                                <option selected disabled value="">PJK3</option>
+                                                <option disabled value="">PJK3</option>
                                                 @foreach($badanusaha as $key)
-                                                <option {{ $tuk->pjk3 == $key->id ? "selected" : ""}}  value="{{ $key->id }}">{{ $key->nama_bu }}
+                                                <option {{ $tuk->pjk3 == $key->id ? "selected" : ""}}
+                                                    value="{{ $key->id }}">{{ $key->nama_bu }}
                                                 </option>
                                                 @endforeach
                                             </select>
@@ -47,20 +52,22 @@
                                 <tr>
                                     <td colspan="3">
                                         <div class="input-group">
-                                            <!-- <label>Nama TUK Observasi</label> -->
+                                            <label>Nama TUK Observasi</label>
                                             <input type="text" class="form-control custominp" id="id_nama_tuk"
-                                                name="id_nama_tuk" placeholder="Nama TUK Observasi">
+                                                name="id_nama_tuk" placeholder="Nama TUK Observasi"
+                                                value="{{$tuk->nama_tuk}}">
                                         </div>
                                         <span id="id_nama_tuk" class="help-block customspan"></span>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="3" >
+                                    <td colspan="3">
                                         <div class="input-group">
-                                            <!-- <label>Alamat Jalan dan Nomor, Kelurahan, Kecamatan (Tanpa Kota)</label> -->
+                                            <label>Alamat Jalan dan Nomor, Kelurahan, Kecamatan (Tanpa Kota)</label>
                                             <input type="text" class="form-control custominp" id="id_alamat_tuk"
                                                 name="id_alamat_tuk"
-                                                placeholder="Alamat Jalan dan Nomor, Kelurahan, Kecamatan (Tanpa Kota)">
+                                                placeholder="Alamat Jalan dan Nomor, Kelurahan, Kecamatan (Tanpa Kota)"
+                                                value="{{$tuk->alamat}}">
                                         </div>
                                         <span id="id_alamat_tuk"
                                             class="help-block customspan">{{ $errors->first('id_alamat_tuk') }}</span>
@@ -69,11 +76,12 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group">
-                                            <!-- <label>Provinsi</label> -->
+                                            <label>Provinsi</label>
                                             <select class="form-control select2" name="id_provinsi" id="id_provinsi">
-                                                <option selected disabled value="">Provinsi</option>
+                                                <option disabled value="">Provinsi</option>
                                                 @foreach($provinsi as $key)
-                                                <option value="{{ $key->id }}">{{ $key->nama }}
+                                                <option {{ $tuk->prov == $key->id ? "selected" : ""}}
+                                                    value="{{ $key->id }}">{{ $key->nama }}
                                                 </option>
                                                 @endforeach
                                             </select>
@@ -89,13 +97,14 @@
 
                                     <td style="width:49%">
                                         <div class="input-group">
-                                            <!-- <label>Kota</label> -->
+                                            <label>Kota</label>
                                             <select class="form-control select2" name="id_kota" id="id_kota">
-                                                <option selected disabled value="">Kota</option>
-                                                <!-- @foreach($kota as $key)
-                                                <option value="{{ $key->id }}">{{ $key->nama }}
+                                                <option disabled value="">Kota</option>
+                                                @foreach($kota as $key)
+                                                <option {{ $tuk->kota == $key->id ? "selected" : ""}}
+                                                    value="{{ $key->id }}">{{ $key->nama }}
                                                 </option>
-                                                @endforeach -->
+                                                @endforeach
                                             </select>
                                         </div>
                                         <span id="id_kota" class="help-block customspan"></span>
@@ -105,9 +114,9 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>No Tlp</label> -->
+                                            <label>No Tlp</label>
                                             <input type="text" class="form-control custominp" id="id_no_tlp"
-                                                name="id_no_tlp" placeholder="No Tlp">
+                                                name="id_no_tlp" placeholder="No Tlp" value="{{$tuk->no_hp}}">
                                         </div>
                                         <span id="id_no_tlp" class="help-block customspan"></span>
                                     </td>
@@ -120,9 +129,9 @@
 
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>Email</label> -->
+                                            <label>Email</label>
                                             <input type="text" class="form-control custominp" id="id_email"
-                                                name="id_email" placeholder="Email">
+                                                name="id_email" placeholder="Email" value="{{$tuk->email}}">
                                         </div>
                                         <span id="id_email" class="help-block customspan"></span>
                                     </td>
@@ -130,9 +139,10 @@
                                 <tr>
                                     <td colspan="3">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>Instansi Pengelola</label> -->
+                                            <label>Instansi Pengelola</label>
                                             <input type="text" class="form-control custominp" id="id_pengelola"
-                                                name="id_pengelola" placeholder="Instansi Pengelola">
+                                                name="id_pengelola" placeholder="Instansi Pengelola"
+                                                value="{{$tuk->pengelola}}">
                                         </div>
                                         <span id="id_pengelola" class="help-block customspan"></span>
                                     </td>
@@ -141,9 +151,10 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>Nama Kontak Person</label> -->
+                                            <label>Nama Kontak Person</label>
                                             <input type="text" class="form-control custominp" id="id_nama_kp"
-                                                name="id_nama_kp" placeholder="Nama Kontak Person">
+                                                name="id_nama_kp" placeholder="Nama Kontak Person"
+                                                value="{{$tuk->kontak_p}}">
                                         </div>
                                         <span id="id_nama_kp" class="help-block customspan"></span>
                                     </td>
@@ -156,9 +167,10 @@
 
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>Jabatan Kontak Person</label> -->
+                                            <label>Jabatan Kontak Person</label>
                                             <input type="text" class="form-control custominp" id="id_jab_kp"
-                                                name="id_jab_kp" placeholder="Jabatan Kontak Person">
+                                                name="id_jab_kp" placeholder="Jabatan Kontak Person"
+                                                value="{{$tuk->jab_kontak_p}}">
                                         </div>
                                         <span id="id_jab_kp" class="help-block customspan"></span>
                                     </td>
@@ -167,9 +179,10 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>No HP Kontak Person</label> -->
+                                            <label>No HP Kontak Person</label>
                                             <input type="text" class="form-control custominp" id="id_hp_kp"
-                                                name="id_hp_kp" placeholder="No HP Kontak Person">
+                                                name="id_hp_kp" placeholder="No HP Kontak Person"
+                                                value="{{$tuk->no_hp_kontak_p}}">
                                         </div>
                                         <span id="id_hp_kp" class="help-block customspan"></span>
                                     </td>
@@ -182,9 +195,10 @@
 
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>Email Kontak Person</label> -->
+                                            <label>Email Kontak Person</label>
                                             <input type="text" class="form-control custominp" id="id_eml_kp"
-                                                name="id_eml_kp" placeholder="Email Kontak Person">
+                                                name="id_eml_kp" placeholder="Email Kontak Person"
+                                                value="{{$tuk->email_kontak_p}}">
                                         </div>
                                         <span id="id_eml_kp" class="help-block customspan"></span>
                                     </td>
@@ -193,9 +207,9 @@
                                 <tr>
                                     <td colspan="3" style="width:100%">
                                         <!-- <div class="input-group"> -->
-                                        <!-- <label>Keterangan</label> -->
+                                        <label>Keterangan</label>
                                         <input type="text" class="form-control custominp" id="id_keterangan"
-                                            name="id_keterangan" placeholder="Keterangan">
+                                            name="id_keterangan" placeholder="Keterangan" value="{{$tuk->keterangan}}">
                                         <!-- </div> -->
                                         <span id="id_keterangan"
                                             class="help-block customspan">{{ $errors->first('id_keterangan') }}</span>
@@ -205,9 +219,10 @@
                                 <tr>
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>No Rekening Bank</label> -->
+                                            <label>No Rekening Bank</label>
                                             <input type="text" class="form-control custominp" id="id_no_rek"
-                                                name="id_no_rek" placeholder="No Rekening Bank">
+                                                name="id_no_rek" placeholder="No Rekening Bank"
+                                                value="{{$tuk->no_rek}}">
                                         </div>
                                         <span id="id_no_rek" class="help-block customspan"></span>
                                     </td>
@@ -220,9 +235,10 @@
 
                                     <td style="width:49%">
                                         <div class="input-group" style="width:100%">
-                                            <!-- <label>Nama Rekening Bank</label> -->
+                                            <label>Nama Rekening Bank</label>
                                             <input type="text" class="form-control custominp" id="id_nama_rek"
-                                                name="id_nama_rek" placeholder="Nama Rekening Bank">
+                                                name="id_nama_rek" placeholder="Nama Rekening Bank"
+                                                value="{{$tuk->nama_rek}}">
                                         </div>
                                         <span id="id_nama_rek" class="help-block customspan"></span>
                                     </td>
@@ -231,11 +247,12 @@
                                 <tr>
                                     <td colspan="3" style="padding-bottom: 2px">
                                         <div class="input-group">
-                                            <!-- <label>Nama Bank</label> -->
+                                            <label>Nama Bank</label>
                                             <select class="form-control select2" name="id_bank" id="id_bank">
-                                                <option selected disabled value="">Nama Bank</option>
+                                                <option disabled value="">Nama Bank</option>
                                                 @foreach($bank as $key)
-                                                <option value="{{ $key->id }}">{{ $key->nama_bank }}
+                                                <option {{ $tuk->id_bank == $key->id ? "selected" : ""}}
+                                                    value="{{ $key->id }}">{{ $key->nama_bank }}
                                                 </option>
                                                 @endforeach
                                             </select>
@@ -340,7 +357,7 @@
     function store() {
         var formData = new FormData($('#formAdd')[0]);
 
-        var url = "{{ url('tuk/save') }}";
+        var url = "{{ url('mastertuk/update') }}";
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -375,7 +392,7 @@
                         if (response.icon == "warning") {
 
                         } else {
-                            window.history.back();
+                            window.location.replace("{{ url('mastertuk') }}");
                         }
                     });
                 }
