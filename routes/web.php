@@ -107,6 +107,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('jadwal/{id}/dashboard','JadwalController@dashboard');
 
 		Route::get('jadwal/instruktur/{id}','JadwalController@instruktur');
+		Route::get('jadwal/instruktur/kuisioner/{id_jadwal}/{id_inst}/{id_peserta}','JadwalController@instrukturKuisioner');
 		Route::post('getdatainstruktur','JadwalController@getdatainstruktur');
 		Route::post('jadwal/instruktur/update','JadwalController@instrukturupdate');
 		Route::post('jadwal/kirimaccount/instruktur','JadwalController@AccountInstruktur');

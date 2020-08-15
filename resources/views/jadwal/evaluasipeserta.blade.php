@@ -59,7 +59,9 @@
                                     {{ \Carbon\Carbon::parse($key->tgl_lahir)->isoFormat("DD MMMM YYYY") }}</td>
                                 <td style="text-align:center;width:8%"><button value="{{$id_jaw_evaluasi}}"
                                         idpeserta="{{$key->id}}" type="button"
-                                        class="btn btn-sm btn-success btnLihat">Lihat</button></td>
+                                        class="btn btn-sm btn-success btnLihat">Lihat</button>
+                                            <a target="_blank" href="{{ url('jadwal/instruktur/kuisioner') }}/{{ $id_jadwal }}/{{ $id_instruktur }}/{{ $key->id }}" class="btn btn-sm btn-info"> <i class="fa fa-download" ></i></button>
+                                    </td>
                             </tr>
                             @endforeach
                         </tbody>
