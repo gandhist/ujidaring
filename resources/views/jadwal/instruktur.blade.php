@@ -147,6 +147,7 @@
                                     <button type="button" class="btn btn-sm btn-info">Login</button>
                                     @endif
                                 </td>
+                               
                             </tr>
                             @endforeach
                         </tbody>

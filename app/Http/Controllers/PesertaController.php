@@ -186,6 +186,7 @@ class PesertaController extends Controller
     public function absen(){
         $peserta = Peserta::where('user_id',Auth::id())->first();
         $allow_tugas = $this->is_make_eva($peserta->id);
+        $this->_generate_soal_eva($peserta->id); // membuat soal evaluasi dan mengupdate
         $allow_cekin = $this->is_allow_masuk();
         $allow_cekout = $this->is_allow_pulang();
         $data = AbsenModel::where('id_peserta',$peserta->id)->get();

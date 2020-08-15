@@ -38,6 +38,7 @@ use App\JawabanPesertaPgPost;
 use App\JawabanPesertaPgPre;
 use App\PesertaQuis;
 use App\KelompokPeserta;
+use PDF;
 
 class JadwalController extends Controller
 {
@@ -630,6 +631,19 @@ class JadwalController extends Controller
         $jumlahSoalPg = SoalPgModel::where("kelompok_soal","=",$data->id_klp_soal_pg)->count();
         $jumlahSoalEssay = SoalEssayModel::where("kelompok_soal","=",$data->id_klp_soal_essay)->count();
         return view('jadwal.instruktur')->with(compact('data','jumlahPeserta','Instruktur','jumlahSoalPg','jumlahSoalEssay'));
+    }
+
+    public function instrukturKuisioner($id_jadwal, $id_inst, $id_peserta){
+        $jadwal = JadwalModel::find($id_jadwal);
+        $inst = JawabanEvaluasi::where('id_jadwal',$id_jadwal)->where('id_instruktur',$id_inst)->where('id_peserta',$id_peserta)->get();
+        $tanggal = $inst[0]->tanggal;
+        $peserta = Peserta::find($id_peserta);
+        $instruktur = InstrukturModel::find($id_inst);
+        $jadwal_rn = JadwalRundown::where('id_jadwal',$id_jadwal)->where('tanggal',$tanggal)->first();
+        $modul = ModulRundown::where('id_rundown',$jadwal_rn->id)->get();
+        $pdf = PDF::loadview('instruktur.hasil_kuisioner',compact('inst','jadwal','peserta','instruktur','modul','tanggal'));
+        $pdf->setPaper('A4','potrait');
+        return $pdf->stream("kuisioner.pdf");
     }
 
     public function evaluasi($id)

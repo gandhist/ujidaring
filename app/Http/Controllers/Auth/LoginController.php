@@ -118,7 +118,7 @@ class LoginController extends Controller
             }
         }
         if (Auth::user()->role_id == 3 || Auth::user()->role_id == 3){
-                return redirect('peserta/dashboard');
+                return redirect('instruktur/dashboardinstruktur');
         }
         
     }

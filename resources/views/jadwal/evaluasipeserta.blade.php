@@ -66,7 +66,9 @@
                                 @if($jaw_eval>0)
                                 <td style="text-align:center;width:8%"><button value="{{$id_jaw_evaluasi}}"
                                         idpeserta="{{$key->id}}" type="button"
-                                        class="btn btn-sm btn-success btnLihat">Lihat</button></td>
+                                        class="btn btn-sm btn-success btnLihat">Lihat</button>
+                                        <a target="_blank" href="{{ url('jadwal/instruktur/kuisioner') }}/{{ $id_jadwal }}/{{ $id_instruktur }}/{{ $key->id }}" class="btn btn-sm btn-info"> <i class="fa fa-download" ></i></a>
+                                        </td>
                                 @else
                                 <td style="text-align:center;width:8%"><button type="button"
                                         class="btn btn-sm btn-danger">Belum Menilai</button></td>

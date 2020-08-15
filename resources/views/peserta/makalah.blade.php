@@ -15,6 +15,7 @@
         <div class="col-lg-6">
             @if($peserta->jadwal_r->f_pkl)
             <h3>Tugas PKL yang diberikan oleh instruktur</h3>
+            <h3>Link PKL :  <a target="_blank" href="{{ $peserta->jadwal_r->l_pkl }}">Link PKL</a> </h3>
             <div class="embed-responsive embed-responsive-16by9">
                 <iframe class="embed-responsive-item" src="{{ url("uploads/pkl/".$peserta->jadwal_r->f_pkl) }}" ></iframe>
             </div>
