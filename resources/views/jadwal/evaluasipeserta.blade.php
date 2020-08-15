@@ -34,7 +34,6 @@
             @endif
             <!-- MultiStep Form -->
             <div class="row">
-
                 <div class="col-md-12">
                     <!-- <h3>Daftar Peserta</h3> -->
                     <table id="custom-table" class="table table-striped table-bordered dataTable customTable">
@@ -57,9 +56,21 @@
                                 <td style="width:10%">{{ $key->tmp_lahir }}</td>
                                 <td style="text-align:center;width:8%">
                                     {{ \Carbon\Carbon::parse($key->tgl_lahir)->isoFormat("DD MMMM YYYY") }}</td>
+                                @php
+                                $cek = DB::table('jawaban_evaluasi')->select('tanggal','id_instruktur','id_jadwal')->where('id','=',$id_jaw_evaluasi)->where('deleted_at',null)->first();
+                                $tanggal = $cek->tanggal;
+                                $id_jadwal = $cek->id_jadwal;
+                                $idinstruktur = $cek->id_instruktur;
+                                $jaw_eval = DB::table('jawaban_evaluasi')->where('tanggal','=',$tanggal)->where('id_jadwal',$id_jadwal)->where('id_peserta',$key->id)->where('id_instruktur',$idinstruktur)->where('deleted_at',null)->whereNotNull('nilai')->count();
+                                @endphp
+                                @if($jaw_eval>0)
                                 <td style="text-align:center;width:8%"><button value="{{$id_jaw_evaluasi}}"
                                         idpeserta="{{$key->id}}" type="button"
                                         class="btn btn-sm btn-success btnLihat">Lihat</button></td>
+                                @else
+                                <td style="text-align:center;width:8%"><button type="button"
+                                        class="btn btn-sm btn-danger">Belum Menilai</button></td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>
