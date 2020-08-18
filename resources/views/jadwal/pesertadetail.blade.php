@@ -240,27 +240,27 @@
                                             @else
                                             
                                             @php
-                                            $rowspan = DB::table('modul_rundown')->where('id_rundown','=',$key->id_rundown)->where('deleted_by','=',null)->count();
+                                            $rowspan = DB::table('modul_rundown')->where('id_rundown','=',$key->id_rundown)->where('deleted_at','=',null)->count();
                                             @endphp
                                             <td style="width:5%;text-align:center" rowspan="{{$rowspan}}">
                                                 {{ \Carbon\Carbon::parse($key->jadwal_rundown_r->tanggal)->isoFormat("DD MMMM YYYY") }}
                                             </td>
                                             @endif
                                             @php
-                                            $jumlahsoalpre = DB::table('soal_pg_pre')->where('id_jadwal_modul','=',$key->id_jadwal_modul)->where('deleted_by','=',null)->count(); 
-                                            $jumlahsoalpost = DB::table('soal_pg_post')->where('id_jadwal_modul','=',$key->id_jadwal_modul)->where('deleted_by','=',null)->count(); 
+                                            $jumlahsoalpre = DB::table('soal_pg_pre')->where('id_jadwal_modul','=',$key->id_jadwal_modul)->where('deleted_at','=',null)->count(); 
+                                            $jumlahsoalpost = DB::table('soal_pg_post')->where('id_jadwal_modul','=',$key->id_jadwal_modul)->where('deleted_at','=',null)->count(); 
                                             @endphp
                                             <td>{{$key->jadwal_modul_r->modul_r->modul}}</td>
                                             <td style="width:5%;text-align:right">{{$jumlahsoalpre}}</td>
                                             @php
                                             $prequizbenar =
-                                            DB::table('jawaban_peserta_pg_pre')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',1)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                            DB::table('jawaban_peserta_pg_pre')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',1)->where('id_peserta','=',$Peserta->id)->where('deleted_at','=',null)->count();
                                             $prequizsalah =
-                                            DB::table('jawaban_peserta_pg_pre')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',0)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                            DB::table('jawaban_peserta_pg_pre')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',0)->where('id_peserta','=',$Peserta->id)->where('deleted_at','=',null)->count();
                                             $postquizbenar =
-                                            DB::table('jawaban_peserta_pg_post')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',1)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                            DB::table('jawaban_peserta_pg_post')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',1)->where('id_peserta','=',$Peserta->id)->where('deleted_at','=',null)->count();
                                             $postquizsalah =
-                                            DB::table('jawaban_peserta_pg_post')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',0)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                            DB::table('jawaban_peserta_pg_post')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('is_true','=',0)->where('id_peserta','=',$Peserta->id)->where('deleted_at','=',null)->count();
                                             
                                             if($jumlahsoalpre>0){
                                                 $jawpre = $prequizbenar/$jumlahsoalpre*100;
@@ -293,7 +293,7 @@
                                             <td style="width:5%;text-align:center">
                                                 @php
                                                 $jumlahtm =
-                                                DB::table('jawaban_tm')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->count();
+                                                DB::table('jawaban_tm')->where('id_jadwal_modul','=',$key->jadwal_modul_r->id)->where('id_peserta','=',$Peserta->id)->where('deleted_at','=',null)->count();
                                                 @endphp
 
                                                 @if($jumlahtm>0)
@@ -360,7 +360,7 @@
                                             @else
                                             @php
                                             $rowspanqs =
-                                            DB::table('jawaban_evaluasi')->groupBy('id_instruktur')->select('id_instruktur')->where('id_jadwal','=',$key->id_jadwal)->where('id_peserta','=',$key->id_peserta)->where('tanggal','=',$key->tanggal)->where('deleted_by','=',null)->get();
+                                            DB::table('jawaban_evaluasi')->groupBy('id_instruktur')->select('id_instruktur')->where('id_jadwal','=',$key->id_jadwal)->where('id_peserta','=',$key->id_peserta)->where('tanggal','=',$key->tanggal)->where('deleted_at','=',null)->get();
                                             @endphp
                                             <td style="width:5%;text-align:center" rowspan="{{count($rowspanqs)}}">
                                                 {{ \Carbon\Carbon::parse($key->tanggal)->isoFormat("DD MMMM YYYY") }}
@@ -403,7 +403,7 @@
                                             </td>
                                             @php
                                             $dataabsen =
-                                            DB::table('absen')->where('tanggal','=',$key->tanggal)->where('id_peserta','=',$Peserta->id)->where('deleted_by','=',null)->first();
+                                            DB::table('absen')->where('tanggal','=',$key->tanggal)->where('id_peserta','=',$Peserta->id)->where('deleted_at','=',null)->first();
                                             @endphp
 
                                             @if($dataabsen==null)

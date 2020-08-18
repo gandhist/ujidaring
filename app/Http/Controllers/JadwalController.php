@@ -384,8 +384,12 @@ class JadwalController extends Controller
                 'deleted_by' => Auth::id(),
                 'deleted_at' => Carbon::now()->toDateTimeString()
             ];
+            $jadwalrundown = JadwalRundown::select('tanggal','id_jadwal')->where('id',$idrundown)->first();
+            $tanggal = $jadwalrundown['tanggal'];
+            $idjadwal = $jadwalrundown['id_jadwal'];
+
             InsRundown::where('id_rundown','=',$idrundown)->whereNotIn('id', $dataNotdeleteIns)->update($user_data);
-            JawabanEvaluasi::where('id_jadwal','=',$idrundown)->whereNotIn('id', $dataNotdeleteIns)->update($user_data);
+            JawabanEvaluasi::where('id_jadwal',$idjadwal)->where('tanggal',$tanggal)->whereNotIn('id_instruktur', $dataNotdeleteIns)->update($user_data);
 
             // Insert ke table modul rowndown
             $x = "modul_".$i;
