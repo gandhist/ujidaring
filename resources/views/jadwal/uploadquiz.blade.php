@@ -559,7 +559,6 @@
         format: 'YYYY-MM-DD HH:mm:ss',
         maxDate : '{{ \Carbon\Carbon::parse($tanggal)->format("Y-m-d 23:59:59") }}',
         minDate : '{{ \Carbon\Carbon::parse($tanggal)->format("Y-m-d 00:00:00") }}',
-
     });
 
 </script>
