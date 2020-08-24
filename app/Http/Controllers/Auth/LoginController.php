@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
-use App\Traits\GlobalFunction;
+use App\Traits\Ujidaring\GlobalFunction;
 
 class LoginController extends Controller
 {

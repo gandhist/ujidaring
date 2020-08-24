@@ -2,8 +2,8 @@
 
 namespace App\Helpers;
 use Request;
-use App\LogActivity as LogAc;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Ujidaring\LogActivity as LogAc;
+use Auth;
 
 
 class LogActivity {
